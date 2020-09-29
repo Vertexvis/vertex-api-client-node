@@ -1,3 +1,4 @@
+import { Environment } from '.';
 import { Configuration } from '..';
 import {
   FilesApi,
@@ -19,7 +20,7 @@ import {
 interface BuildArgs {
   clientId?: string;
   clientSecret?: string;
-  environment?: 'platdev' | 'platstaging' | 'platprod';
+  environment?: Environment;
 }
 
 const refreshToken = async (
