@@ -12,3 +12,11 @@ export interface SceneTemplateItem {
   suppliedId: string;
   transform?: Matrix4;
 }
+
+export type Environment = 'platdev' | 'platstaging' | 'platprod';
+
+export const Environments: Environment[] = [
+  'platdev',
+  'platstaging',
+  'platprod',
+];
