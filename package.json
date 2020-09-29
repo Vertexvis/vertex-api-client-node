@@ -24,7 +24,6 @@
     "clean-build": "npm run clean && npm run build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
     "generate": "npm run clean && openapi-generator generate --input-spec ../../vertex-api/src/main/resources/api-resolved.yml -g typescript-axios -c config.yml && npm run format && cp ../../vertex-api/src/main/resources/api-resolved.yml ./client/spec.yml && npm run verify",
-    "prepublishOnly": "npm run verify",
     "verify": "npm run clean-build && node dist/verify.js"
   },
   "dependencies": {
