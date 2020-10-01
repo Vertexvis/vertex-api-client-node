@@ -1,4 +1,4 @@
-import { CreateFileRequest, FileMetadata } from '../..';
+import { CreateFileRequest } from '../..';
 import { throwOnError, VertexClient } from '..';
 
 interface UploadFileArgs {
@@ -22,7 +22,7 @@ export const uploadFileIfNotExists = async (
     throwOnError(getFilesRes, `Error getting file by suppliedId '${fileName}'`);
 
     if (getFilesRes.data.data.length > 0) {
-      const file: FileMetadata = getFilesRes.data.data[0];
+      const file = getFilesRes.data.data[0];
       if (file.data.attributes.status === 'complete') {
         fileId = file.data.id;
         if (args.verbose) {
