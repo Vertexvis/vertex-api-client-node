@@ -1,4 +1,4 @@
-import { CreateFileRequest } from '../..';
+import { CreateFileRequest, FileMetadata } from '../..';
 import { throwOnError, VertexClient } from '..';
 
 interface UploadFileArgs {
@@ -22,10 +22,28 @@ export const uploadFileIfNotExists = async (
     throwOnError(getFilesRes, `Error getting file by suppliedId '${fileName}'`);
 
     if (getFilesRes.data.data.length > 0) {
-      fileId = getFilesRes.data.data[0].data.id;
-      console.log(
-        `File with suppliedId '${fileName}' already exists, using it, ${fileId}`
-      );
+      const file: FileMetadata = getFilesRes.data.data[0];
+      if (file.data.attributes.status === 'complete') {
+        fileId = file.data.id;
+        if (args.verbose) {
+          console.log(
+            `File with suppliedId '${fileName}' already exists, using it, ${fileId}`
+          );
+        }
+      } else {
+        // TODO: Temporary until we can resume file uploads
+        if (args.verbose) {
+          console.log(
+            `Deleting file '${fileName}' in status ${file.data.attributes.status}, ${fileId}`
+          );
+        }
+
+        await args.client.files.deleteFile(file.data.id);
+        throwOnError(
+          getFilesRes,
+          `Error deleting file by suppliedId '${fileName}'`
+        );
+      }
     }
   }
 

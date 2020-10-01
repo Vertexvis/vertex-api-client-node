@@ -17,26 +17,41 @@ import {
   TranslationInspectionsApi,
 } from '../api';
 
+type BaseOptions = Record<string, unknown>;
+
 interface BuildArgs {
+  baseOptions?: BaseOptions;
   clientId?: string;
   clientSecret?: string;
   environment?: Environment;
 }
 
-const refreshToken = async (
-  basePath: string,
-  auth: Oauth2Api
-): Promise<Configuration> =>
+interface RefreshTokenArgs {
+  auth: Oauth2Api;
+  baseOptions: BaseOptions;
+  basePath: string;
+}
+
+type CtorArgs = RefreshTokenArgs & { config: Configuration };
+
+// See https://github.com/axios/axios#request-config
+const createBaseOptions = (baseOptions: BaseOptions) => ({
+  validateStatus: () => true, // Always return response instead of rejecting
+  maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
+  maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
+  ...(baseOptions || {}),
+});
+
+const refreshToken = async ({
+  auth,
+  baseOptions,
+  basePath,
+}: RefreshTokenArgs): Promise<Configuration> =>
   new Configuration({
     accessToken: (await auth.createToken('client_credentials')).data
       .access_token,
+    baseOptions: createBaseOptions(baseOptions),
     basePath: basePath,
-    // See https://github.com/axios/axios#request-config
-    baseOptions: {
-      validateStatus: () => true, // Always return response instead of rejecting
-      maxContentLength: -1, // Rely on API's limit instead
-      maxBodyLength: -1, // Rely on API's limit instead
-    },
   });
 
 export class VertexClient {
@@ -55,17 +70,13 @@ export class VertexClient {
   public translationInspections: TranslationInspectionsApi;
 
   private basePath: string;
-  private config: Configuration;
+  private baseOptions: BaseOptions;
   private auth: Oauth2Api;
 
-  private constructor(
-    basePath: string,
-    auth: Oauth2Api,
-    config: Configuration
-  ) {
-    this.basePath = basePath;
+  private constructor({ auth, baseOptions, basePath, config }: CtorArgs) {
     this.auth = auth;
-    this.config = config;
+    this.baseOptions = baseOptions || {};
+    this.basePath = basePath;
     this.files = new FilesApi(config);
     this.geometrySets = new GeometrySetsApi(config);
     this.hits = new HitsApi(config);
@@ -83,22 +94,30 @@ export class VertexClient {
 
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
     const basePath = `https://platform.${
-      args.environment || 'platprod'
+      args?.environment || 'platprod'
     }.vertexvis.io`;
+    const baseOptions = args?.baseOptions || {};
     const auth = new Oauth2Api(
       new Configuration({
-        username: args.clientId || process.env.VERTEX_CLIENT_ID,
-        password: args.clientSecret || process.env.VERTEX_CLIENT_SECRET,
-        basePath: basePath,
+        baseOptions: createBaseOptions(baseOptions),
+        basePath,
+        username: args?.clientId || process.env.VERTEX_CLIENT_ID,
+        password: args?.clientSecret || process.env.VERTEX_CLIENT_SECRET,
       })
     );
-    const config = await refreshToken(basePath, auth);
-    return new VertexClient(basePath, auth, config);
+    const refreshArgs = { auth, baseOptions, basePath };
+    return new VertexClient({
+      ...refreshArgs,
+      config: await refreshToken(refreshArgs),
+    });
   };
 
   public refreshToken = async (): Promise<void> => {
-    this.config = await refreshToken(this.basePath, this.auth);
-    const config = this.config;
+    const config = await refreshToken({
+      auth: this.auth,
+      baseOptions: this.baseOptions,
+      basePath: this.basePath,
+    });
     this.files = new FilesApi(config);
     this.geometrySets = new GeometrySetsApi(config);
     this.hits = new HitsApi(config);

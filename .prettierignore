@@ -1,7 +1,7 @@
 .prettierignore
 .openapi-generator-ignore
-package-lock.json
 pull_request_template.md
+yarn.lock
 
 dist/
 node_modules/
