@@ -2623,17 +2623,14 @@ components:
         x:
           description: x-axis coordinate.
           example: 1
-          format: float
           type: number
         'y':
           description: y-axis coordinate.
           example: 0
-          format: float
           type: number
         z:
           description: z-axis coordinate.
           example: 0
-          format: float
           type: number
       required:
         - x
@@ -2647,22 +2644,18 @@ components:
         w:
           description: w value.
           example: 0
-          format: float
           type: number
         x:
           description: x-axis coordinate.
           example: 1
-          format: float
           type: number
         'y':
           description: y-axis coordinate.
           example: 0
-          format: float
           type: number
         z:
           description: z-axis coordinate.
           example: 0
-          format: float
           type: number
       required:
         - w
@@ -4230,13 +4223,13 @@ paths:
 
         |▹▹▹ r0|Vector4|true|4D vector.|
 
-        |▹▹▹▹ w|number(float)|true|w value.|
+        |▹▹▹▹ w|number|true|w value.|
 
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹ r1|Vector4|true|4D vector.|
 
@@ -4434,13 +4427,13 @@ paths:
 
         |▹▹▹ r0|Vector4|true|4D vector.|
 
-        |▹▹▹▹ w|number(float)|true|w value.|
+        |▹▹▹▹ w|number|true|w value.|
 
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹ r1|Vector4|true|4D vector.|
 
@@ -4889,11 +4882,11 @@ paths:
 
         |▹▹▹▹ lookAt|Vector3|true|3D vector.|
 
-        |▹▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹▹ position|Vector3|true|3D vector.|
 
@@ -5502,13 +5495,13 @@ paths:
 
         |▹▹▹ r0|Vector4|true|4D vector.|
 
-        |▹▹▹▹ w|number(float)|true|w value.|
+        |▹▹▹▹ w|number|true|w value.|
 
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹ r1|Vector4|true|4D vector.|
 
@@ -5698,11 +5691,11 @@ paths:
 
         |▹▹▹ lookAt|Vector3|true|3D vector.|
 
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹ position|Vector3|true|3D vector.|
 
@@ -5868,11 +5861,11 @@ paths:
 
         |▹▹▹▹ lookAt|Vector3|true|3D vector.|
 
-        |▹▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹▹ position|Vector3|true|3D vector.|
 
@@ -6305,13 +6298,13 @@ paths:
 
         |▹▹▹ r0|Vector4|true|4D vector.|
 
-        |▹▹▹▹ w|number(float)|true|w value.|
+        |▹▹▹▹ w|number|true|w value.|
 
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
 
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
 
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
 
         |▹▹▹ r1|Vector4|true|4D vector.|
 
@@ -6458,9 +6451,9 @@ paths:
         |▹ attributes|CreateSceneViewRequest_data_attributes|true||
         |▹▹ camera|Camera|false|Camera placement in 3D space.|
         |▹▹▹ lookAt|Vector3|true|3D vector.|
-        |▹▹▹▹ x|number(float)|true|x-axis coordinate.|
-        |▹▹▹▹ y|number(float)|true|y-axis coordinate.|
-        |▹▹▹▹ z|number(float)|true|z-axis coordinate.|
+        |▹▹▹▹ x|number|true|x-axis coordinate.|
+        |▹▹▹▹ y|number|true|y-axis coordinate.|
+        |▹▹▹▹ z|number|true|z-axis coordinate.|
         |▹▹▹ position|Vector3|true|3D vector.|
         |▹▹▹ up|Vector3|true|3D vector.|
         |▹ type|string|true|Resource object type.|

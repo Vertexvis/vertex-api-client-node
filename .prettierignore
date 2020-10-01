@@ -1,6 +1,7 @@
 .prettierignore
 .openapi-generator-ignore
 package-lock.json
+pull_request_template.md
 
 dist/
 node_modules/

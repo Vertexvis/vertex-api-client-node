@@ -37,12 +37,12 @@ jobs:
         with:
           node-version: 14.x
           registry-url: https://registry.npmjs.org
-          scope: "@vertexvis"
+          scope: '@vertexvis'
       - name: Publish
         env:
-            NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            REPOSITORY: ${{ github.repository }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPOSITORY: ${{ github.repository }}
         run: |
           npm ci
           npm run verify
