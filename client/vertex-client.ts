@@ -32,7 +32,11 @@ const refreshToken = async (
       .access_token,
     basePath: basePath,
     // See https://github.com/axios/axios#request-config
-    baseOptions: { validateStatus: () => true }, // Always return response instead of rejecting
+    baseOptions: {
+      validateStatus: () => true, // Always return response instead of rejecting
+      maxContentLength: -1, // Rely on API's limit instead
+      maxBodyLength: -1, // Rely on API's limit instead
+    },
   });
 
 export class VertexClient {

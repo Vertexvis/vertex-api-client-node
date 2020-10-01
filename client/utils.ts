@@ -5,16 +5,23 @@ const PollIntervalMs = 5000;
 export const Utf8 = 'utf8';
 
 export const arrayEq = (a: number[], b: number[]): boolean =>
-  Array.isArray(a) &&
-  Array.isArray(b) &&
-  a.length === b.length &&
-  a.every((v, idx) => v === b[idx]);
+  arrayLenEq(a, b) && a.every((v, idx) => v === b[idx]);
 
-export const isIdentity = (transform: number[][]): boolean =>
-  arrayEq(transform[0], [1, 0, 0, 0]) &&
-  arrayEq(transform[1], [0, 1, 0, 0]) &&
-  arrayEq(transform[2], [0, 0, 1, 0]) &&
-  arrayEq(transform[3], [0, 0, 0, 1]);
+export const arrayEq2d = (a: number[][], b: number[][]): boolean => {
+  if (!arrayLenEq(a, b)) return false;
+
+  for (let i = 0; i < a.length; i++) if (!arrayEq(a[i], b[i])) return false;
+
+  return true;
+};
+
+export const is4x4Identity = (transform: number[][]): boolean =>
+  arrayEq2d(transform, [
+    [1, 0, 0, 0],
+    [0, 1, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1],
+  ]);
 
 export const multiply = (a: number[][], b: number[][]): number[][] => {
   const m = new Array(a.length).fill(0);
@@ -84,3 +91,6 @@ export const toTransform = (t: number[][]) => ({
   r2: { x: t[2][0], y: t[2][1], z: t[2][2], w: t[2][3] },
   r3: { x: t[3][0], y: t[3][1], z: t[3][2], w: t[3][3] },
 });
+
+const arrayLenEq = (a: number[] | number[][], b: number[] | number[][]) =>
+  Array.isArray(a) && Array.isArray(b) && a.length === b.length;
