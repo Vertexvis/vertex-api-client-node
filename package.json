@@ -28,7 +28,7 @@
     "clean": "rm -rf dist/",
     "clean-build": "npm run clean && npm run build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
-    "generate": "npm run clean && openapi-generator generate --input-spec ../../vertex-api/src/main/resources/api-resolved.yml -g typescript-axios -c config.yml && npm run format && cp ../../vertex-api/src/main/resources/api-resolved.yml ./client/spec.yml && npm run verify",
+    "generate": "npm run clean && openapi-generator generate --input-spec ../vertex-api/src/universal/api-resolved.yml -g typescript-axios -c config.yml && npm run format && cp ../vertex-api/src/universal/api-resolved.yml ./client/spec.yml && npm run verify",
     "test": "jest",
     "verify": "npm run clean-build && npm run test && node dist/verify.js",
     "watch": "jest --watch"
