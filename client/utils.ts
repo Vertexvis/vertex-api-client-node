@@ -72,6 +72,9 @@ export const pollQueuedJob = async <T extends { data: { id: string } }>(
 export const prettyJson = (obj: unknown): string =>
   JSON.stringify(obj, null, 2);
 
+export const sleep = async (ms: number) =>
+  new Promise((resolve) => setTimeout(resolve, ms));
+
 export const throwOnError = (res: AxiosResponse, msg: string): void => {
   if (res.status >= 400) throw new Error(`${msg}\n${prettyJson(res.data)}`);
 };
