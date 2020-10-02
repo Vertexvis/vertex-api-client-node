@@ -15,6 +15,13 @@ export const arrayEq2d = (a: number[][], b: number[][]): boolean => {
   return true;
 };
 
+export const arrayChunked = <T>(a: T[], chunkSize: number): T[][] =>
+  a.reduce((all: T[][], one: T, idx: number) => {
+    const chunk = Math.floor(idx / chunkSize);
+    all[chunk] = ([] as T[]).concat(all[chunk] || [], one);
+    return all;
+  }, [] as T[][]);
+
 export const createToken = async (auth: Oauth2Api): Promise<OAuth2Token> =>
   (await auth.createToken('client_credentials')).data;
 
