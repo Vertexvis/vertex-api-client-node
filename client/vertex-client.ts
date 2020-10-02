@@ -121,6 +121,7 @@ export class VertexClient {
     if (tokenValid) return this.token.access_token;
 
     this.token = await createToken(this.auth);
+    this.tokenFetchedEpochMs = nowEpochMs();
     return this.token.access_token;
   };
 }
