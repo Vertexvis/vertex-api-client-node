@@ -20,3 +20,9 @@ export const Environments: Environment[] = [
   'platstaging',
   'platprod',
 ];
+
+export interface RenderRequest {
+  id: string;
+  height?: number;
+  width?: number;
+}

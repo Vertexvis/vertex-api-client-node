@@ -50,7 +50,11 @@ export const pollQueuedJob = async <T extends { data: { id: string } }>(
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
         const res = await getQueuedJob(id);
-        if (res.data.data.attributes.status === 'error') {
+        if (
+          !res.data.data ||
+          !res.data.data.attributes ||
+          res.data.data.attributes.status === 'error'
+        ) {
           return reject(
             new Error(
               `Error getting queued job ${id}.\n${prettyJson(res.data)}`
