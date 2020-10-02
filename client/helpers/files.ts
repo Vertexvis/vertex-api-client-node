@@ -12,15 +12,13 @@ export const uploadFileIfNotExists = async (
   args: UploadFileArgs
 ): Promise<string> => {
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
-  const fileName = suppliedId || args.createFileReq.data.attributes.name;
-
   if (suppliedId) {
     const getFilesRes = await args.client.files.getFiles(undefined, 1, [
       suppliedId,
     ]);
     throwOnError(
       getFilesRes,
-      `Error getting files by suppliedId '${fileName}'`
+      `Error getting files by suppliedId '${suppliedId}'`
     );
 
     if (getFilesRes.data.data.length > 0) {
@@ -29,7 +27,7 @@ export const uploadFileIfNotExists = async (
       if (file.data.attributes.status === 'complete') {
         if (args.verbose) {
           console.log(
-            `File with suppliedId '${fileName}' already exists, using it, ${fileId}`
+            `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
           );
         }
 
@@ -38,14 +36,14 @@ export const uploadFileIfNotExists = async (
         // TODO: Temporary until we can resume file uploads
         if (args.verbose) {
           console.log(
-            `Deleting file '${fileName}' in status ${file.data.attributes.status}, ${fileId}`
+            `Deleting file with suppliedId '${suppliedId}' in status ${file.data.attributes.status}, ${fileId}`
           );
         }
 
         await args.client.files.deleteFile(fileId);
         throwOnError(
           getFilesRes,
-          `Error deleting file by suppliedId '${fileName}'`
+          `Error deleting file by suppliedId '${suppliedId}'`
         );
       }
     }

@@ -10,6 +10,7 @@ const main = async () => {
     'id',
     fileAsBuffer
   );
+
   try {
     strictEqual(uploadFileParams.options.data, fileAsBuffer);
     console.log('[success] Client verification passed.');
