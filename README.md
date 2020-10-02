@@ -42,14 +42,14 @@ main();
 
 ```bash
 # Install dependencies
-npm install
+yarn
 
 # Transpile TypeScript to JavaScript
-npm run build
+yarn build
 
 # Format code
-npm run format
+yarn format
 
-# Publish to NPM
-npm publish
+# Version in preparation for publish
+npm version <major|minor|patch>
 ```

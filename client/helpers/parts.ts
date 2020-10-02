@@ -21,7 +21,7 @@ export const createPartFromFile = async (
   });
 
   // TODO: Temporary until race condition fixed
-  await sleep(500);
+  await sleep(1000);
 
   const req = args.createPartReq(fileId);
   const createPartRes = await args.client.parts.createPart(req);

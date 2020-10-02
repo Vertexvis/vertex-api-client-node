@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -26,11 +26,11 @@
   "scripts": {
     "build": "tsc --outDir dist/",
     "clean": "rm -rf dist/",
-    "clean-build": "npm run clean && npm run build",
+    "clean-build": "yarn clean && yarn build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
-    "generate": "npm run clean && openapi-generator generate --input-spec ../vertex-api/src/universal/api-resolved.yml -g typescript-axios -c config.yml && npm run format && cp ../vertex-api/src/universal/api-resolved.yml ./spec.yml && npm run verify",
+    "generate": "yarn clean && openapi-generator generate --input-spec ../vertex-api/src/universal/api-resolved.yml -g typescript-axios -c config.yml && yarn format && cp ../vertex-api/src/universal/api-resolved.yml ./spec.yml",
     "test": "jest",
-    "verify": "npm run clean-build && npm run test && node dist/verify.js",
+    "verify": "yarn clean-build && yarn test && node dist/verify.js",
     "watch": "jest --watch"
   },
   "dependencies": {
@@ -53,7 +53,7 @@
   },
   "lint-staged": {
     "**/*": [
-      "npm run format"
+      "yarn format"
     ]
   }
 }
