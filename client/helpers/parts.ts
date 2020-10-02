@@ -72,5 +72,6 @@ export const createPartFromFileIfNotExists = async (
     )
   ).data.id;
 
+  if (args.verbose) console.log(`Created part-revision ${partRevId}`);
   return partRevId;
 };

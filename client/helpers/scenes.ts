@@ -47,6 +47,7 @@ export const createSceneFromTemplateFile = async (
       args.client.sceneTemplates.getQueuedSceneTemplate(id)
     )
   ).data.id;
+  if (args.verbose) console.log(`Created scene-template ${templateId}`);
 
   const createSceneReq = args.createSceneReq(templateId);
   const createSceneRes = await args.client.scenes.createScene(createSceneReq);
