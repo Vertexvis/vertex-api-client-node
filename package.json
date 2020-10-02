@@ -30,7 +30,7 @@
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
     "generate": "yarn clean && ./scripts/generate.sh && yarn format",
     "test": "jest",
-    "verify": "yarn clean-build && yarn test && node dist/verify.js",
+    "verify": "yarn clean-build && node dist/verify.js",
     "watch": "jest --watch"
   },
   "dependencies": {
