@@ -1,7 +1,10 @@
+.gitignore
 .prettierignore
 .openapi-generator-ignore
 pull_request_template.md
 yarn.lock
 
+.openapi-generator/
 dist/
 node_modules/
+scripts/

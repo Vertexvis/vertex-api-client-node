@@ -1,4 +1,5 @@
-// tslint:disable
+/* tslint:disable */
+/* eslint-disable */
 /**
  * Vertex Platform API
  * The Vertex platform includes a set of APIs and SDKs, which together provide a powerful toolset for building scalable applications based on 3D data.   See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.
@@ -19,7 +20,11 @@ export interface ConfigurationParameters {
     | ((name: string) => Promise<string>);
   username?: string;
   password?: string;
-  accessToken?: string | ((name?: string, scopes?: string[]) => string);
+  accessToken?:
+    | string
+    | Promise<string>
+    | ((name?: string, scopes?: string[]) => string)
+    | ((name?: string, scopes?: string[]) => Promise<string>);
   basePath?: string;
   baseOptions?: any;
 }
@@ -55,7 +60,11 @@ export class Configuration {
    * @param scopes oauth2 scope
    * @memberof Configuration
    */
-  accessToken?: string | ((name?: string, scopes?: string[]) => string);
+  accessToken?:
+    | string
+    | Promise<string>
+    | ((name?: string, scopes?: string[]) => string)
+    | ((name?: string, scopes?: string[]) => Promise<string>);
   /**
    * override base path
    *

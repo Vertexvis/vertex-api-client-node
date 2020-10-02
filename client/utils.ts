@@ -1,4 +1,4 @@
-import { QueuedJob } from '..';
+import { Oauth2Api, OAuth2Token, QueuedJob } from '..';
 import { AxiosResponse } from 'axios';
 
 const PollIntervalMs = 5000;
@@ -14,6 +14,9 @@ export const arrayEq2d = (a: number[][], b: number[][]): boolean => {
 
   return true;
 };
+
+export const createToken = async (auth: Oauth2Api): Promise<OAuth2Token> =>
+  (await auth.createToken('client_credentials')).data;
 
 export const is4x4Identity = (transform: number[][]): boolean =>
   arrayEq2d(transform, [
@@ -35,6 +38,8 @@ export const multiply = (a: number[][], b: number[][]): number[][] => {
   }
   return m;
 };
+
+export const nowEpochMs = (): number => new Date().getTime();
 
 export const pollQueuedJob = async <T extends { data: { id: string } }>(
   id: string,

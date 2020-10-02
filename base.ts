@@ -1,4 +1,5 @@
-// tslint:disable
+/* tslint:disable */
+/* eslint-disable */
 /**
  * Vertex Platform API
  * The Vertex platform includes a set of APIs and SDKs, which together provide a powerful toolset for building scalable applications based on 3D data.   See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.
@@ -31,6 +32,21 @@ export const COLLECTION_FORMATS = {
   tsv: '\t',
   pipes: '|',
 };
+
+/**
+ *
+ * @export
+ */
+export const JSON_MIME_PATTERN = new RegExp('application\\/json(;.*)?', 'i');
+
+/**
+ *
+ * @export
+ */
+export const JSON_VENDOR_MIME_PATTERN = new RegExp(
+  'application\\/vnd.(.*)+json(;.*)?',
+  'i'
+);
 
 /**
  *

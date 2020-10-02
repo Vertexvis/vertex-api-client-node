@@ -28,7 +28,7 @@
     "clean": "rm -rf dist/",
     "clean-build": "yarn clean && yarn build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
-    "generate": "yarn clean && openapi-generator generate --input-spec ../vertex-api/src/universal/api-resolved.yml -g typescript-axios -c config.yml && yarn format && cp ../vertex-api/src/universal/api-resolved.yml ./spec.yml",
+    "generate": "yarn clean && ./scripts/generate.sh && yarn format",
     "test": "jest",
     "verify": "yarn clean-build && yarn test && node dist/verify.js",
     "watch": "jest --watch"
