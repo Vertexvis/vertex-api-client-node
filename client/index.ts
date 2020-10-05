@@ -13,13 +13,7 @@ export interface SceneTemplateItem {
   transform?: Matrix4;
 }
 
-export type Environment = 'platdev' | 'platstaging' | 'platprod';
-
-export const Environments: Environment[] = [
-  'platdev',
-  'platstaging',
-  'platprod',
-];
+export type Environment = 'platdev' | 'platstaging' | 'platprod' | string;
 
 export interface RenderRequest {
   id: string;
