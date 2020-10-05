@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -28,12 +28,13 @@
     "clean": "rm -rf dist/",
     "clean-build": "yarn clean && yarn build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
-    "generate": "yarn clean && openapi-generator generate --input-spec ../vertex-api/src/universal/api-resolved.yml -g typescript-axios -c config.yml && yarn format && cp ../vertex-api/src/universal/api-resolved.yml ./spec.yml",
+    "generate": "yarn clean && ./scripts/generate.sh && yarn format",
     "test": "jest",
     "verify": "yarn clean-build && yarn test && node dist/verify.js",
     "watch": "jest --watch"
   },
   "dependencies": {
+    "@vertexvis/utils": "^0.9.6",
     "axios": "^0.20.0"
   },
   "devDependencies": {

@@ -1,9 +1,11 @@
+import { AxiosResponse } from 'axios';
 import {
   CreateFileRequest,
   CreateSceneRequest,
   CreateSceneTemplateRequest,
 } from '../..';
 import { pollQueuedJob, throwOnError, VertexClient } from '..';
+import { RenderImageArgs } from '.';
 import { uploadFile } from './files';
 
 interface CreateSceneFromTemplateFileArgs {
@@ -45,6 +47,7 @@ export const createSceneFromTemplateFile = async (
       args.client.sceneTemplates.getQueuedSceneTemplate(id)
     )
   ).data.id;
+  if (args.verbose) console.log(`Created scene-template ${templateId}`);
 
   const createSceneReq = args.createSceneReq(templateId);
   const createSceneRes = await args.client.scenes.createScene(createSceneReq);
@@ -64,3 +67,14 @@ export const createSceneFromTemplateFile = async (
 
   return sceneId;
 };
+
+// Returns Stream in Node, `(await renderScene(...)).data.pipe(createWriteStream('image.jpeg'))`
+export const renderScene = async (
+  args: RenderImageArgs
+): Promise<AxiosResponse<any>> =>
+  await args.client.scenes.renderScene(
+    args.renderReq.id,
+    args.renderReq.height,
+    args.renderReq.width,
+    { responseType: 'stream' }
+  );

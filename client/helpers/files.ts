@@ -11,44 +11,45 @@ interface UploadFileArgs {
 export const uploadFileIfNotExists = async (
   args: UploadFileArgs
 ): Promise<string> => {
-  const fileSuppliedId = args.createFileReq.data.attributes.suppliedId;
-  const fileName = fileSuppliedId || args.createFileReq.data.attributes.name;
-  let fileId;
-
-  if (fileSuppliedId) {
+  const suppliedId = args.createFileReq.data.attributes.suppliedId;
+  if (suppliedId) {
     const getFilesRes = await args.client.files.getFiles(undefined, 1, [
-      fileSuppliedId,
+      suppliedId,
     ]);
-    throwOnError(getFilesRes, `Error getting file by suppliedId '${fileName}'`);
+    throwOnError(
+      getFilesRes,
+      `Error getting files by suppliedId '${suppliedId}'`
+    );
 
     if (getFilesRes.data.data.length > 0) {
       const file = getFilesRes.data.data[0];
+      const fileId = file.data.id;
       if (file.data.attributes.status === 'complete') {
-        fileId = file.data.id;
         if (args.verbose) {
           console.log(
-            `File with suppliedId '${fileName}' already exists, using it, ${fileId}`
+            `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
           );
         }
+
+        return fileId;
       } else {
         // TODO: Temporary until we can resume file uploads
         if (args.verbose) {
           console.log(
-            `Deleting file '${fileName}' in status ${file.data.attributes.status}, ${fileId}`
+            `Deleting file with suppliedId '${suppliedId}' in status ${file.data.attributes.status}, ${fileId}`
           );
         }
 
-        await args.client.files.deleteFile(file.data.id);
+        await args.client.files.deleteFile(fileId);
         throwOnError(
           getFilesRes,
-          `Error deleting file by suppliedId '${fileName}'`
+          `Error deleting file by suppliedId '${suppliedId}'`
         );
       }
     }
   }
 
-  if (!fileId) fileId = await uploadFile(args);
-
+  const fileId = await uploadFile(args);
   return fileId;
 };
 

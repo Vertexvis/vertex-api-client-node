@@ -11,11 +11,13 @@ import {
   SceneViewsApi,
   StreamKeysApi,
   Oauth2Api,
+  OAuth2Token,
   PartsApi,
   ScenesApi,
   SceneTemplatesApi,
   TranslationInspectionsApi,
 } from '../api';
+import { createToken, nowEpochMs } from './utils';
 
 type BaseOptions = Record<string, unknown>;
 
@@ -26,13 +28,15 @@ interface BuildArgs {
   environment?: Environment;
 }
 
-interface RefreshTokenArgs {
+interface CtorArgs {
   auth: Oauth2Api;
-  baseOptions: BaseOptions;
+  baseOptions?: BaseOptions;
   basePath: string;
+  token: OAuth2Token;
 }
 
-type CtorArgs = RefreshTokenArgs & { config: Configuration };
+const TokenExpiryBufferMs = 60000;
+const SecToMs = 1000;
 
 // See https://github.com/axios/axios#request-config
 const createBaseOptions = (baseOptions: BaseOptions) => ({
@@ -41,18 +45,6 @@ const createBaseOptions = (baseOptions: BaseOptions) => ({
   maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
   ...(baseOptions || {}),
 });
-
-const refreshToken = async ({
-  auth,
-  baseOptions,
-  basePath,
-}: RefreshTokenArgs): Promise<Configuration> =>
-  new Configuration({
-    accessToken: (await auth.createToken('client_credentials')).data
-      .access_token,
-    baseOptions: createBaseOptions(baseOptions),
-    basePath: basePath,
-  });
 
 export class VertexClient {
   public files: FilesApi;
@@ -69,14 +61,20 @@ export class VertexClient {
   public sceneTemplates: SceneTemplatesApi;
   public translationInspections: TranslationInspectionsApi;
 
-  private basePath: string;
-  private baseOptions: BaseOptions;
   private auth: Oauth2Api;
+  private token: OAuth2Token;
+  private tokenFetchedEpochMs: number;
 
-  private constructor({ auth, baseOptions, basePath, config }: CtorArgs) {
+  private constructor({ auth, baseOptions, basePath, token }: CtorArgs) {
     this.auth = auth;
-    this.baseOptions = baseOptions || {};
-    this.basePath = basePath;
+    this.token = token;
+    this.tokenFetchedEpochMs = nowEpochMs();
+    const config = new Configuration({
+      accessToken: this.accessTokenRefresher,
+      baseOptions,
+      basePath,
+    });
+
     this.files = new FilesApi(config);
     this.geometrySets = new GeometrySetsApi(config);
     this.hits = new HitsApi(config);
@@ -105,31 +103,25 @@ export class VertexClient {
         password: args?.clientSecret || process.env.VERTEX_CLIENT_SECRET,
       })
     );
-    const refreshArgs = { auth, baseOptions, basePath };
+
+    const token = await createToken(auth);
     return new VertexClient({
-      ...refreshArgs,
-      config: await refreshToken(refreshArgs),
+      auth,
+      baseOptions: createBaseOptions(baseOptions),
+      basePath,
+      token,
     });
   };
 
-  public refreshToken = async (): Promise<void> => {
-    const config = await refreshToken({
-      auth: this.auth,
-      baseOptions: this.baseOptions,
-      basePath: this.basePath,
-    });
-    this.files = new FilesApi(config);
-    this.geometrySets = new GeometrySetsApi(config);
-    this.hits = new HitsApi(config);
-    this.partRevisions = new PartRevisionsApi(config);
-    this.parts = new PartsApi(config);
-    this.sceneAlterations = new SceneAlterationsApi(config);
-    this.sceneItemOverrides = new SceneItemOverridesApi(config);
-    this.sceneItems = new SceneItemsApi(config);
-    this.scenes = new ScenesApi(config);
-    this.sceneViews = new SceneViewsApi(config);
-    this.streamKeys = new StreamKeysApi(config);
-    this.sceneTemplates = new SceneTemplatesApi(config);
-    this.translationInspections = new TranslationInspectionsApi(config);
+  private accessTokenRefresher = async (): Promise<string> => {
+    const nowMs = nowEpochMs();
+    const expiresAtMs =
+      this.tokenFetchedEpochMs + this.token.expires_in * SecToMs;
+    const tokenValid = expiresAtMs > nowMs - TokenExpiryBufferMs;
+    if (tokenValid) return this.token.access_token;
+
+    this.token = await createToken(this.auth);
+    this.tokenFetchedEpochMs = nowEpochMs();
+    return this.token.access_token;
   };
 }

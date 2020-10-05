@@ -1,4 +1,5 @@
-// tslint:disable
+/* tslint:disable */
+/* eslint-disable */
 /**
  * Vertex Platform API
  * The Vertex platform includes a set of APIs and SDKs, which together provide a powerful toolset for building scalable applications based on 3D data.   See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.
@@ -11,7 +12,6 @@
  * Do not edit the class manually.
  */
 
-import * as globalImportUrl from 'url';
 import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
@@ -19,6 +19,8 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import {
   BASE_PATH,
   COLLECTION_FORMATS,
+  JSON_MIME_PATTERN,
+  JSON_VENDOR_MIME_PATTERN,
   RequestArgs,
   BaseAPI,
   RequiredError,
@@ -940,12 +942,14 @@ export interface DeprecatedGeometrySetRelationship {
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedGeometrySetRelationship
+   * @deprecated
    */
   related?: DeprecatedLink;
   /**
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedGeometrySetRelationship
+   * @deprecated
    */
   self?: DeprecatedLink;
 }
@@ -980,12 +984,14 @@ export interface DeprecatedPartRelationship {
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedPartRelationship
+   * @deprecated
    */
   related?: DeprecatedLink;
   /**
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedPartRelationship
+   * @deprecated
    */
   self?: DeprecatedLink;
 }
@@ -1001,12 +1007,14 @@ export interface DeprecatedPartRevisionRelationship {
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedPartRevisionRelationship
+   * @deprecated
    */
   related?: DeprecatedLink;
   /**
    *
    * @type {DeprecatedLink}
    * @memberof DeprecatedPartRevisionRelationship
+   * @deprecated
    */
   self?: DeprecatedLink;
 }
@@ -1056,10 +1064,10 @@ export interface ErrorSource {
 export interface Failure {
   /**
    *
-   * @type {Array<Error>}
+   * @type {Set<Error>}
    * @memberof Failure
    */
-  errors: Array<Error>;
+  errors: Set<Error>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2203,10 +2211,10 @@ export interface QueuedJobData {
 export interface QueuedJobDataAttributes {
   /**
    *
-   * @type {Array<Error>}
+   * @type {Set<Error>}
    * @memberof QueuedJobDataAttributes
    */
-  errors?: Array<Error>;
+  errors?: Set<Error>;
   /**
    *
    * @type {string}
@@ -3476,7 +3484,8 @@ export const FilesApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/files`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -3494,21 +3503,22 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3516,9 +3526,11 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createFileRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createFileRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createFileRequest !== undefined ? createFileRequest : {}
@@ -3526,7 +3538,8 @@ export const FilesApiAxiosParamCreator = function (
         : createFileRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -3548,7 +3561,8 @@ export const FilesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -3566,19 +3580,20 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3588,7 +3603,8 @@ export const FilesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -3610,7 +3626,8 @@ export const FilesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -3628,19 +3645,20 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3650,7 +3668,8 @@ export const FilesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -3669,7 +3688,8 @@ export const FilesApiAxiosParamCreator = function (
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/files`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -3687,8 +3707,8 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -3705,13 +3725,14 @@ export const FilesApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3721,7 +3742,8 @@ export const FilesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -3755,7 +3777,8 @@ export const FilesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -3773,21 +3796,22 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3795,13 +3819,18 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const needsSerialization = false;
+      const contentType = localVarRequestOptions.headers['Content-Type'];
+      const needsSerialization =
+        typeof body !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(body !== undefined ? body : {})
         : body || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4142,7 +4171,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/geometry-sets`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4160,21 +4190,22 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4182,9 +4213,11 @@ export const GeometrySetsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createGeometrySetRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createGeometrySetRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createGeometrySetRequest !== undefined
@@ -4194,7 +4227,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
         : createGeometrySetRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4219,7 +4253,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4237,19 +4272,20 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4259,7 +4295,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4276,7 +4313,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/geometry-sets`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4294,8 +4332,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -4308,13 +4346,14 @@ export const GeometrySetsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4324,7 +4363,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4570,7 +4610,8 @@ export const HitsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4588,21 +4629,22 @@ export const HitsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4610,15 +4652,18 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createHitRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createHitRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4652,7 +4697,8 @@ export const HitsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4670,21 +4716,22 @@ export const HitsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4692,15 +4739,18 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createHitRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createHitRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4889,7 +4939,8 @@ export const Oauth2ApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/oauth2/token`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4923,13 +4974,14 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] =
         'application/x-www-form-urlencoded';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4940,7 +4992,8 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarRequestOptions.data = localVarFormParams.toString();
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -4965,7 +5018,8 @@ export const Oauth2ApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/oauth2/revoke`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -4989,13 +5043,14 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5003,9 +5058,11 @@ export const Oauth2ApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof revokeOAuth2TokenRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof revokeOAuth2TokenRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             revokeOAuth2TokenRequest !== undefined
@@ -5015,7 +5072,8 @@ export const Oauth2ApiAxiosParamCreator = function (
         : revokeOAuth2TokenRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5195,7 +5253,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5213,19 +5272,20 @@ export const PartRevisionsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5235,7 +5295,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5262,7 +5323,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5280,8 +5342,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -5290,13 +5352,14 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['suppliedId'] = suppliedId;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5306,7 +5369,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5484,7 +5548,8 @@ export const PartsApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/parts`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5502,21 +5567,22 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5524,9 +5590,11 @@ export const PartsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createPartRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createPartRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createPartRequest !== undefined ? createPartRequest : {}
@@ -5534,7 +5602,8 @@ export const PartsApiAxiosParamCreator = function (
         : createPartRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5556,7 +5625,8 @@ export const PartsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5574,19 +5644,20 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5596,7 +5667,8 @@ export const PartsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5615,7 +5687,8 @@ export const PartsApiAxiosParamCreator = function (
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/parts`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5633,8 +5706,8 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -5651,13 +5724,14 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['suppliedId'] = suppliedId;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5667,7 +5741,8 @@ export const PartsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5916,7 +5991,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -5934,21 +6010,22 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5956,9 +6033,11 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneAlterationRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneAlterationRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneAlterationRequest !== undefined
@@ -5968,7 +6047,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         : createSceneAlterationRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -5993,7 +6073,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6011,19 +6092,20 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6033,7 +6115,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6058,7 +6141,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6076,19 +6160,20 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6098,7 +6183,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6123,7 +6209,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6141,19 +6228,20 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6163,7 +6251,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6468,7 +6557,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6486,21 +6576,22 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6508,9 +6599,11 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneItemOverrideRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneItemOverrideRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemOverrideRequest !== undefined
@@ -6520,7 +6613,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         : createSceneItemOverrideRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6545,7 +6639,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6563,19 +6658,20 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6585,7 +6681,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6610,7 +6707,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6628,19 +6726,20 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6650,7 +6749,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -6687,7 +6787,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -6705,21 +6806,22 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6727,9 +6829,11 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneItemOverrideRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof updateSceneItemOverrideRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemOverrideRequest !== undefined
@@ -6739,7 +6843,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         : updateSceneItemOverrideRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7055,7 +7160,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7073,21 +7179,22 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7095,9 +7202,11 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneItemRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneItemRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemRequest !== undefined ? createSceneItemRequest : {}
@@ -7105,7 +7214,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         : createSceneItemRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7130,7 +7240,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7148,19 +7259,20 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7170,7 +7282,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7195,7 +7308,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7213,19 +7327,20 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7235,7 +7350,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7268,7 +7384,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7286,8 +7403,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -7308,13 +7425,14 @@ export const SceneItemsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[parent]'] = filterParent;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7324,7 +7442,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7361,7 +7480,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7379,21 +7499,22 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7401,9 +7522,11 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneItemRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof updateSceneItemRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemRequest !== undefined ? updateSceneItemRequest : {}
@@ -7411,7 +7534,8 @@ export const SceneItemsApiAxiosParamCreator = function (
         : updateSceneItemRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7802,7 +7926,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/scene-templates`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7820,21 +7945,22 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7842,9 +7968,11 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneTemplateRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneTemplateRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneTemplateRequest !== undefined
@@ -7854,7 +7982,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         : createSceneTemplateRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7879,7 +8008,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7897,19 +8027,20 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7919,7 +8050,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -7944,7 +8076,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -7962,19 +8095,20 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7984,7 +8118,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8001,7 +8136,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scene-templates`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8019,8 +8155,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -8033,13 +8169,14 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8049,7 +8186,8 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8348,7 +8486,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8366,21 +8505,22 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8388,9 +8528,11 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneViewRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneViewRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneViewRequest !== undefined ? createSceneViewRequest : {}
@@ -8398,7 +8540,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         : createSceneViewRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8423,7 +8566,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8441,19 +8585,20 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8463,7 +8608,8 @@ export const SceneViewsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8488,7 +8634,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8506,19 +8653,20 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8528,7 +8676,8 @@ export const SceneViewsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8557,7 +8706,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8575,8 +8725,8 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -8589,13 +8739,14 @@ export const SceneViewsApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8605,7 +8756,8 @@ export const SceneViewsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -8642,7 +8794,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -8660,21 +8813,22 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8682,9 +8836,11 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneViewRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof updateSceneViewRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneViewRequest !== undefined ? updateSceneViewRequest : {}
@@ -8692,7 +8848,8 @@ export const SceneViewsApiAxiosParamCreator = function (
         : updateSceneViewRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9047,7 +9204,8 @@ export const ScenesApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/scenes`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9065,21 +9223,22 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9087,9 +9246,11 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createSceneRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneRequest !== undefined ? createSceneRequest : {}
@@ -9097,7 +9258,8 @@ export const ScenesApiAxiosParamCreator = function (
         : createSceneRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9122,7 +9284,8 @@ export const ScenesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9140,19 +9303,20 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9162,7 +9326,8 @@ export const ScenesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9184,7 +9349,8 @@ export const ScenesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9202,19 +9368,20 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9224,7 +9391,8 @@ export const ScenesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9241,7 +9409,8 @@ export const ScenesApiAxiosParamCreator = function (
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9259,8 +9428,8 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -9273,13 +9442,14 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9289,7 +9459,8 @@ export const ScenesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9318,7 +9489,8 @@ export const ScenesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9336,8 +9508,8 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
@@ -9350,13 +9522,14 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9366,7 +9539,8 @@ export const ScenesApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9400,7 +9574,8 @@ export const ScenesApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9418,21 +9593,22 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9440,9 +9616,11 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof updateSceneRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneRequest !== undefined ? updateSceneRequest : {}
@@ -9450,7 +9628,8 @@ export const ScenesApiAxiosParamCreator = function (
         : updateSceneRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -9869,7 +10048,8 @@ export const StreamKeysApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -9887,21 +10067,22 @@ export const StreamKeysApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9909,9 +10090,11 @@ export const StreamKeysApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createStreamKeyRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createStreamKeyRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createStreamKeyRequest !== undefined ? createStreamKeyRequest : {}
@@ -9919,7 +10102,8 @@ export const StreamKeysApiAxiosParamCreator = function (
         : createStreamKeyRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -10047,7 +10231,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         );
       }
       const localVarPath = `/translation-inspections`;
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -10065,21 +10250,22 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10087,9 +10273,11 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createTranslationInspectionRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        typeof createTranslationInspectionRequest !== 'string' &&
+        (contentType.match(JSON_MIME_PATTERN) ||
+          contentType.match(JSON_VENDOR_MIME_PATTERN));
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createTranslationInspectionRequest !== undefined
@@ -10099,7 +10287,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         : createTranslationInspectionRequest || '';
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -10124,7 +10313,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -10142,19 +10332,20 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10164,7 +10355,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
@@ -10189,7 +10381,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
-      const localVarUrlObj = globalImportUrl.parse(localVarPath, true);
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
       let baseOptions;
       if (configuration) {
         baseOptions = configuration.baseOptions;
@@ -10207,19 +10400,20 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration && configuration.accessToken) {
         const localVarAccessTokenValue =
           typeof configuration.accessToken === 'function'
-            ? configuration.accessToken('OAuth2', [])
-            : configuration.accessToken;
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      localVarUrlObj.query = {
-        ...localVarUrlObj.query,
-        ...localVarQueryParameter,
-        ...options.query,
-      };
-      // fix override query string Detail: https://stackoverflow.com/a/7517673/1077943
-      delete localVarUrlObj.search;
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10229,7 +10423,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
 
       return {
-        url: globalImportUrl.format(localVarUrlObj),
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
         options: localVarRequestOptions,
       };
     },
