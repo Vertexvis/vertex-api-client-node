@@ -34,6 +34,7 @@
     "watch": "jest --watch"
   },
   "dependencies": {
+    "@vertexvis/utils": "^0.9.6",
     "axios": "^0.20.0"
   },
   "devDependencies": {

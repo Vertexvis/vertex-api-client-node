@@ -1,4 +1,5 @@
 .gitignore
+.npmrc
 .prettierignore
 .openapi-generator-ignore
 pull_request_template.md

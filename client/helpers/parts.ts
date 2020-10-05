@@ -1,6 +1,6 @@
+import { Async } from '@vertexvis/utils';
 import { pollQueuedJob, throwOnError, VertexClient } from '..';
 import { CreateFileRequest, CreatePartRequest } from '../..';
-import { sleep } from '../utils';
 import { uploadFileIfNotExists } from './files';
 
 interface CreatePartFromFileArgs {
@@ -22,7 +22,7 @@ export const createPartFromFileIfNotExists = async (
   });
 
   // TODO: Temporary until race condition fixed
-  await sleep(1000);
+  await Async.delay(1000);
 
   const req = args.createPartReq(fileId);
   const suppliedId = req.data.attributes.suppliedId;
