@@ -19,8 +19,6 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import {
   BASE_PATH,
   COLLECTION_FORMATS,
-  JSON_MIME_PATTERN,
-  JSON_VENDOR_MIME_PATTERN,
   RequestArgs,
   BaseAPI,
   RequiredError,
@@ -925,100 +923,6 @@ export interface CreateTranslationInspectionRequestData {
   type: string;
 }
 /**
- *
- * @export
- * @interface DeprecatedGeometrySetRelationship
- */
-export interface DeprecatedGeometrySetRelationship {
-  [key: string]: object | any;
-
-  /**
-   *
-   * @type {GeometrySetRelationshipData}
-   * @memberof DeprecatedGeometrySetRelationship
-   */
-  data: GeometrySetRelationshipData;
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedGeometrySetRelationship
-   * @deprecated
-   */
-  related?: DeprecatedLink;
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedGeometrySetRelationship
-   * @deprecated
-   */
-  self?: DeprecatedLink;
-}
-/**
- *
- * @export
- * @interface DeprecatedLink
- */
-export interface DeprecatedLink {
-  /**
-   *
-   * @type {string}
-   * @memberof DeprecatedLink
-   */
-  href: string;
-}
-/**
- *
- * @export
- * @interface DeprecatedPartRelationship
- */
-export interface DeprecatedPartRelationship {
-  [key: string]: object | any;
-
-  /**
-   *
-   * @type {PartRelationshipData}
-   * @memberof DeprecatedPartRelationship
-   */
-  data: PartRelationshipData;
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedPartRelationship
-   * @deprecated
-   */
-  related?: DeprecatedLink;
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedPartRelationship
-   * @deprecated
-   */
-  self?: DeprecatedLink;
-}
-/**
- *
- * @export
- * @interface DeprecatedPartRevisionRelationship
- */
-export interface DeprecatedPartRevisionRelationship {
-  [key: string]: object | any;
-
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedPartRevisionRelationship
-   * @deprecated
-   */
-  related?: DeprecatedLink;
-  /**
-   *
-   * @type {DeprecatedLink}
-   * @memberof DeprecatedPartRevisionRelationship
-   * @deprecated
-   */
-  self?: DeprecatedLink;
-}
-/**
  * An item\'s height and width.
  * @export
  * @interface Dimensions
@@ -1703,6 +1607,12 @@ export interface Part {
   data: PartData;
   /**
    *
+   * @type {Array<PartRevision>}
+   * @memberof Part
+   */
+  included?: Array<PartRevision>;
+  /**
+   *
    * @type {{ [key: string]: Link; }}
    * @memberof Part
    */
@@ -1772,11 +1682,39 @@ export interface PartDataAttributes {
 export interface PartDataRelationships {
   /**
    *
-   * @type {DeprecatedPartRevisionRelationship}
+   * @type {Array<PartDataRelationshipsPartRevisions>}
    * @memberof PartDataRelationships
    */
-  partRevisions: DeprecatedPartRevisionRelationship;
+  partRevisions: Array<PartDataRelationshipsPartRevisions>;
 }
+/**
+ *
+ * @export
+ * @interface PartDataRelationshipsPartRevisions
+ */
+export interface PartDataRelationshipsPartRevisions {
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartDataRelationshipsPartRevisions
+   */
+  id: string;
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PartDataRelationshipsPartRevisions
+   */
+  type: PartDataRelationshipsPartRevisionsTypeEnum;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum PartDataRelationshipsPartRevisionsTypeEnum {
+  PartRevision = 'part-revision',
+}
+
 /**
  *
  * @export
@@ -1901,16 +1839,16 @@ export interface PartRevisionDataAttributes {
 export interface PartRevisionDataRelationships {
   /**
    *
-   * @type {DeprecatedGeometrySetRelationship}
+   * @type {GeometrySetRelationshipData}
    * @memberof PartRevisionDataRelationships
    */
-  geometrySet?: DeprecatedGeometrySetRelationship;
+  geometrySet?: GeometrySetRelationshipData;
   /**
    *
-   * @type {DeprecatedPartRelationship}
+   * @type {PartRelationshipData}
    * @memberof PartRevisionDataRelationships
    */
-  part?: DeprecatedPartRelationship;
+  part?: PartRelationshipData;
 }
 /**
  *
@@ -3526,11 +3464,9 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createFileRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createFileRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createFileRequest !== undefined ? createFileRequest : {}
@@ -3819,11 +3755,7 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
-      const needsSerialization =
-        typeof body !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+      const needsSerialization = false;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(body !== undefined ? body : {})
         : body || '';
@@ -4213,11 +4145,9 @@ export const GeometrySetsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createGeometrySetRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createGeometrySetRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createGeometrySetRequest !== undefined
@@ -4652,11 +4582,9 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createHitRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createHitRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
@@ -4739,11 +4667,9 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createHitRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createHitRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
@@ -5058,11 +4984,9 @@ export const Oauth2ApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof revokeOAuth2TokenRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof revokeOAuth2TokenRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             revokeOAuth2TokenRequest !== undefined
@@ -5303,13 +5227,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevisions: async (
       id: string,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -5348,8 +5272,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      if (suppliedId) {
-        localVarQueryParameter['suppliedId'] = suppliedId;
+      if (filterSuppliedId) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
       const query = new URLSearchParams(localVarUrlObj.search);
@@ -5412,13 +5336,13 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPartRevisions(
       id: string,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options?: any
     ): Promise<
       (
@@ -5428,7 +5352,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
         configuration
-      ).getPartRevisions(id, suppliedId, options);
+      ).getPartRevisions(id, filterSuppliedId, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -5467,17 +5391,17 @@ export const PartRevisionsApiFactory = function (
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevisions(
       id: string,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options?: any
     ): AxiosPromise<PartRevisionList> {
       return PartRevisionsApiFp(configuration)
-        .getPartRevisions(id, suppliedId, options)
+        .getPartRevisions(id, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -5506,18 +5430,18 @@ export class PartRevisionsApi extends BaseAPI {
   /**
    *  Get `part-revisions`.
    * @param {string} id The &#x60;part&#x60; ID.
-   * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
   public getPartRevisions(
     id: string,
-    suppliedId?: Array<string>,
+    filterSuppliedId?: Array<string>,
     options?: any
   ) {
     return PartRevisionsApiFp(this.configuration)
-      .getPartRevisions(id, suppliedId, options)
+      .getPartRevisions(id, filterSuppliedId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -5590,11 +5514,9 @@ export const PartsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createPartRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createPartRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createPartRequest !== undefined ? createPartRequest : {}
@@ -5676,14 +5598,14 @@ export const PartsApiAxiosParamCreator = function (
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getParts: async (
       pageCursor?: string,
       pageSize?: number,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/parts`;
@@ -5720,8 +5642,8 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      if (suppliedId) {
-        localVarQueryParameter['suppliedId'] = suppliedId;
+      if (filterSuppliedId) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
       const query = new URLSearchParams(localVarUrlObj.search);
@@ -5811,21 +5733,21 @@ export const PartsApiFp = function (configuration?: Configuration) {
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getParts(
       pageCursor?: string,
       pageSize?: number,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>
     > {
       const localVarAxiosArgs = await PartsApiAxiosParamCreator(
         configuration
-      ).getParts(pageCursor, pageSize, suppliedId, options);
+      ).getParts(pageCursor, pageSize, filterSuppliedId, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -5879,18 +5801,18 @@ export const PartsApiFactory = function (
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getParts(
       pageCursor?: string,
       pageSize?: number,
-      suppliedId?: Array<string>,
+      filterSuppliedId?: Array<string>,
       options?: any
     ): AxiosPromise<PartList> {
       return PartsApiFp(configuration)
-        .getParts(pageCursor, pageSize, suppliedId, options)
+        .getParts(pageCursor, pageSize, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -5933,7 +5855,7 @@ export class PartsApi extends BaseAPI {
    *  Get `parts`.
    * @param {string} [pageCursor] The cursor for the next page of items.
    * @param {number} [pageSize] The number of items to return.
-   * @param {Array<string>} [suppliedId] Filter with the given suppliedId.
+   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartsApi
@@ -5941,11 +5863,11 @@ export class PartsApi extends BaseAPI {
   public getParts(
     pageCursor?: string,
     pageSize?: number,
-    suppliedId?: Array<string>,
+    filterSuppliedId?: Array<string>,
     options?: any
   ) {
     return PartsApiFp(this.configuration)
-      .getParts(pageCursor, pageSize, suppliedId, options)
+      .getParts(pageCursor, pageSize, filterSuppliedId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -6033,11 +5955,9 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneAlterationRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneAlterationRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneAlterationRequest !== undefined
@@ -6599,11 +6519,9 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneItemOverrideRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneItemOverrideRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemOverrideRequest !== undefined
@@ -6829,11 +6747,9 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneItemOverrideRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof updateSceneItemOverrideRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemOverrideRequest !== undefined
@@ -7202,11 +7118,9 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneItemRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneItemRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemRequest !== undefined ? createSceneItemRequest : {}
@@ -7522,11 +7436,9 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneItemRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof updateSceneItemRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemRequest !== undefined ? updateSceneItemRequest : {}
@@ -7968,11 +7880,9 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneTemplateRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneTemplateRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneTemplateRequest !== undefined
@@ -8528,11 +8438,9 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneViewRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneViewRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneViewRequest !== undefined ? createSceneViewRequest : {}
@@ -8836,11 +8744,9 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneViewRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof updateSceneViewRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneViewRequest !== undefined ? updateSceneViewRequest : {}
@@ -9246,11 +9152,9 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createSceneRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createSceneRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneRequest !== undefined ? createSceneRequest : {}
@@ -9616,11 +9520,9 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof updateSceneRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof updateSceneRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneRequest !== undefined ? updateSceneRequest : {}
@@ -10090,11 +9992,9 @@ export const StreamKeysApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createStreamKeyRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createStreamKeyRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createStreamKeyRequest !== undefined ? createStreamKeyRequest : {}
@@ -10273,11 +10173,9 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const contentType = localVarRequestOptions.headers['Content-Type'];
       const needsSerialization =
-        typeof createTranslationInspectionRequest !== 'string' &&
-        (contentType.match(JSON_MIME_PATTERN) ||
-          contentType.match(JSON_VENDOR_MIME_PATTERN));
+        typeof createTranslationInspectionRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createTranslationInspectionRequest !== undefined

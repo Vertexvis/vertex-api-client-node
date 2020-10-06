@@ -147,18 +147,6 @@ components:
         maxItems: 1024
         type: array
       style: form
-    SuppliedIds:
-      description: Filter with the given suppliedId.
-      explode: true
-      in: query
-      name: suppliedId
-      required: false
-      schema:
-        items:
-          $ref: '#/components/schemas/NonEmptyString'
-        maxItems: 1024
-        type: array
-      style: form
     Width:
       description: The width of the image to render.
       explode: true
@@ -884,50 +872,6 @@ components:
       example: '2020-01-01T12:00:00Z'
       format: date-time
       type: string
-    DeprecatedGeometrySetRelationship:
-      additionalProperties: true
-      properties:
-        data:
-          $ref: '#/components/schemas/GeometrySetRelationshipData'
-        related:
-          $ref: '#/components/schemas/DeprecatedLink'
-        self:
-          $ref: '#/components/schemas/DeprecatedLink'
-      required:
-        - data
-      type: object
-    DeprecatedLink:
-      additionalProperties: false
-      deprecated: true
-      properties:
-        href:
-          example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-          type: string
-      required:
-        - href
-      type: object
-    DeprecatedPartRelationship:
-      additionalProperties: true
-      properties:
-        data:
-          $ref: '#/components/schemas/PartRelationshipData'
-        related:
-          $ref: '#/components/schemas/DeprecatedLink'
-        self:
-          $ref: '#/components/schemas/DeprecatedLink'
-      required:
-        - data
-      type: object
-    DeprecatedPartRevisionRelationship:
-      additionalProperties: true
-      properties:
-        related:
-          $ref: '#/components/schemas/DeprecatedLink'
-        self:
-          $ref: '#/components/schemas/DeprecatedLink'
-      required:
-        - data
-      type: object
     Dimensions:
       additionalProperties: false
       description: An item's height and width.
@@ -1460,6 +1404,10 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/Part_data'
+        included:
+          items:
+            $ref: '#/components/schemas/PartRevision'
+          type: array
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -1614,9 +1562,9 @@ components:
     PartRevision_data_relationships:
       properties:
         geometrySet:
-          $ref: '#/components/schemas/DeprecatedGeometrySetRelationship'
+          $ref: '#/components/schemas/GeometrySetRelationshipData'
         part:
-          $ref: '#/components/schemas/DeprecatedPartRelationship'
+          $ref: '#/components/schemas/PartRelationshipData'
       type: object
     Part_data:
       properties:
@@ -1661,9 +1609,30 @@ components:
     Part_data_relationships:
       properties:
         partRevisions:
-          $ref: '#/components/schemas/DeprecatedPartRevisionRelationship'
+          items:
+            $ref: '#/components/schemas/Part_data_relationships_partRevisions'
+          type: array
       required:
         - partRevisions
+      type: object
+    Part_data_relationships_partRevisions:
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        type:
+          description: Resource object type.
+          enum:
+            - part-revision
+          example: part-revision
+          maxLength: 25
+          type: string
+      required:
+        - id
+        - type
       type: object
     Point:
       additionalProperties: false
@@ -3444,10 +3413,10 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Filter with the given suppliedId.
+        - description: Filter with the given suppliedId(s).
           explode: true
           in: query
-          name: suppliedId
+          name: 'filter[suppliedId]'
           required: false
           schema:
             items:
@@ -3665,10 +3634,10 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
-        - description: Filter with the given suppliedId.
+        - description: Filter with the given suppliedId(s).
           explode: true
           in: query
-          name: suppliedId
+          name: 'filter[suppliedId]'
           required: false
           schema:
             items:

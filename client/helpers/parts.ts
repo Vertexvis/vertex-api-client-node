@@ -1,6 +1,5 @@
-import { Async } from '@vertexvis/utils';
 import { pollQueuedJob, throwOnError, VertexClient } from '..';
-import { CreateFileRequest, CreatePartRequest } from '../..';
+import { CreateFileRequest, CreatePartRequest, Part } from '../..';
 import { uploadFileIfNotExists } from './files';
 
 interface CreatePartFromFileArgs {
@@ -21,9 +20,6 @@ export const createPartFromFileIfNotExists = async (
     createFileReq: args.createFileReq,
   });
 
-  // TODO: Temporary until race condition fixed
-  await Async.delay(1000);
-
   const req = args.createPartReq(fileId);
   const suppliedId = req.data.attributes.suppliedId;
   const suppliedRevisionId = req.data.attributes.suppliedRevisionId;
@@ -36,24 +32,29 @@ export const createPartFromFileIfNotExists = async (
 
   if (getPartRes.data.data.length > 0) {
     const part = getPartRes.data.data[0];
-    const getPartRevRes = await args.client.partRevisions.getPartRevisions(
-      part.data.id,
-      [suppliedRevisionId]
-    );
-    throwOnError(
-      getPartRevRes,
-      `Error getting part-revisions by suppliedId '${suppliedRevisionId}'`
-    );
+    if (part.data.attributes.suppliedId === suppliedId) {
+      const getPartRevRes = await args.client.partRevisions.getPartRevisions(
+        part.data.id,
+        [suppliedRevisionId]
+      );
+      throwOnError(
+        getPartRevRes,
+        `Error getting part-revisions by suppliedId '${suppliedRevisionId}'`
+      );
 
-    if (getPartRevRes.data.data.length > 0) {
-      const partRevId = getPartRevRes.data.data[0].data.id;
-      if (args.verbose) {
-        console.log(
-          `Part with suppliedId '${suppliedId}' and suppliedRevisionId '${suppliedRevisionId}' already exists, using it, ${partRevId}`
-        );
+      if (getPartRevRes.data.data.length > 0) {
+        const partRev = getPartRevRes.data.data[0];
+        if (partRev.data.attributes.suppliedId === suppliedRevisionId) {
+          if (args.verbose) {
+            console.log(
+              `part-revision with suppliedId '${suppliedId}' and suppliedRevisionId ` +
+                `'${suppliedRevisionId}' already exists, using it, ${partRev.data.id}`
+            );
+          }
+
+          return partRev.data.id;
+        }
       }
-
-      return partRevId;
     }
   }
 
@@ -66,12 +67,18 @@ export const createPartFromFileIfNotExists = async (
       `Created part with queued-translation ${queuedId}, file ${fileId}`
     );
 
-  const partRevId = (
-    await pollQueuedJob(queuedId, (id) =>
-      args.client.translationInspections.getQueuedTranslation(id)
-    )
-  ).data.id;
+  const part = await pollQueuedJob<Part>(queuedId, (id) =>
+    args.client.translationInspections.getQueuedTranslation(id)
+  );
+  const partRevIds = part.included
+    ?.filter((pr) => pr.data.attributes.suppliedId === suppliedRevisionId)
+    .map((pr) => pr.data.id);
+  const partRevId = partRevIds?.length ? partRevIds[0] : '';
 
-  if (args.verbose) console.log(`Created part-revision ${partRevId}`);
+  if (args.verbose)
+    console.log(
+      // TODO: Temporary until redirect to /parts is deployed everywhere
+      `Created ${partRevId ? `part-revision ${partRevId}` : part.data.id}`
+    );
   return partRevId;
 };
