@@ -1,4 +1,4 @@
-import { Oauth2Api, OAuth2Token, QueuedJob } from '..';
+import { Oauth2Api, OAuth2Token, QueuedJob } from '../api';
 import { AxiosResponse } from 'axios';
 
 const PollIntervalMs = 5000;
