@@ -13,7 +13,11 @@ export interface SceneTemplateItem {
   transform?: Matrix4;
 }
 
-export type Environment = 'platdev' | 'platstaging' | 'platprod' | string;
+export type BasePath =
+  | 'https://platform.platdev.vertexvis.io'
+  | 'https://platform.platstaging.vertexvis.io'
+  | 'https://platform.platprod.vertexvis.io'
+  | string;
 
 export interface RenderRequest {
   id: string;

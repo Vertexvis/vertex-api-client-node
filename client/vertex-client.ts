@@ -1,4 +1,4 @@
-import { Environment } from '.';
+import { BasePath } from '.';
 import { Configuration } from '..';
 import {
   FilesApi,
@@ -25,7 +25,7 @@ interface BuildArgs {
   baseOptions?: BaseOptions;
   clientId?: string;
   clientSecret?: string;
-  environment?: Environment;
+  basePath?: BasePath;
 }
 
 interface CtorArgs {
@@ -91,9 +91,7 @@ export class VertexClient {
   }
 
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
-    const basePath = `https://platform.${
-      args?.environment || 'platprod'
-    }.vertexvis.io`;
+    const basePath = args?.basePath || `https://platform.platprod.vertexvis.io`;
     const baseOptions = args?.baseOptions || {};
     const auth = new Oauth2Api(
       new Configuration({
