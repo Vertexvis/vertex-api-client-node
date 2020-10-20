@@ -17,10 +17,7 @@ import { Configuration } from './configuration';
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 
-export const BASE_PATH = 'https://platform.platprod.vertexvis.io'.replace(
-  /\/+$/,
-  ''
-);
+export const BASE_PATH = 'https://platform.vertexvis.com'.replace(/\/+$/, '');
 
 /**
  *

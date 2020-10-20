@@ -91,7 +91,7 @@ export class VertexClient {
   }
 
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
-    const basePath = args?.basePath || `https://platform.platprod.vertexvis.io`;
+    const basePath = args?.basePath || `https://platform.vertexvis.com`;
     const baseOptions = args?.baseOptions || {};
     const auth = new Oauth2Api(
       new Configuration({

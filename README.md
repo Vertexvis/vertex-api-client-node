@@ -27,7 +27,7 @@ const main = async () => {
   const client = await VertexClient.build({
     clientId: process.env.VERTEX_CLIENT_ID,
     clientSecret: process.env.VERTEX_CLIENT_SECRET,
-    environment: 'platprod',
+    basePath: 'https://platform.vertexvis.com',
   });
 
   const getFilesRes = await client.files.getFiles(undefined, 1);
