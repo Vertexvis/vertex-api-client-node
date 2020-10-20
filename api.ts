@@ -102,6 +102,34 @@ export enum ChangeMaterialOperationTypeEnum {
 /**
  *
  * @export
+ * @interface ChangeTransformOperation
+ */
+export interface ChangeTransformOperation {
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof ChangeTransformOperation
+   */
+  transform: Matrix4;
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ChangeTransformOperation
+   */
+  type: ChangeTransformOperationTypeEnum;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum ChangeTransformOperationTypeEnum {
+  ChangeTransform = 'change-transform',
+}
+
+/**
+ *
+ * @export
  * @interface ChangeVisibilityOperation
  */
 export interface ChangeVisibilityOperation {
@@ -147,6 +175,28 @@ export interface ClearMaterialOperation {
  */
 export enum ClearMaterialOperationTypeEnum {
   ClearMaterial = 'clear-material',
+}
+
+/**
+ *
+ * @export
+ * @interface ClearTransformOperation
+ */
+export interface ClearTransformOperation {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ClearTransformOperation
+   */
+  type: ClearTransformOperationTypeEnum;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum ClearTransformOperationTypeEnum {
+  ClearTransform = 'clear-transform',
 }
 
 /**
@@ -2675,11 +2725,15 @@ export interface SceneList {
 export interface SceneOperation {
   /**
    * List of operations to perform on `scene-items` matching the query.
-   * @type {Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation>}
+   * @type {Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation | ChangeTransformOperation | ClearTransformOperation>}
    * @memberof SceneOperation
    */
   operations: Array<
-    ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation
+    | ChangeVisibilityOperation
+    | ChangeMaterialOperation
+    | ClearMaterialOperation
+    | ChangeTransformOperation
+    | ClearTransformOperation
   >;
   /**
    * Query `scene-items`. Use `query-by-collection` to combine multiple queries.
@@ -5881,7 +5935,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ChangeTransformOperation|false|| |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹▹▹▹ w|number|true|w value.| |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹▹▹▹ r3|Vector4|true|4D vector.| |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearTransformOperation|false|| |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
      * @param {*} [options] Override http request option.
@@ -6186,7 +6240,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
 export const SceneAlterationsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ChangeTransformOperation|false|| |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹▹▹▹ w|number|true|w value.| |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹▹▹▹ r3|Vector4|true|4D vector.| |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearTransformOperation|false|| |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
      * @param {*} [options] Override http request option.
@@ -6311,7 +6365,7 @@ export const SceneAlterationsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ChangeTransformOperation|false|| |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹▹▹▹ w|number|true|w value.| |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹▹▹▹ r3|Vector4|true|4D vector.| |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearTransformOperation|false|| |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
      * @param {*} [options] Override http request option.
@@ -6379,7 +6433,7 @@ export const SceneAlterationsApiFactory = function (
  */
 export class SceneAlterationsApi extends BaseAPI {
   /**
-   *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ChangeTransformOperation|false|| |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹▹▹▹ w|number|true|w value.| |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹▹▹▹ r3|Vector4|true|4D vector.| |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearTransformOperation|false|| |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {string} id The &#x60;scene-view&#x60; ID.
    * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
    * @param {*} [options] Override http request option.

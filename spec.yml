@@ -290,6 +290,22 @@ components:
         - material
         - type
       type: object
+    ChangeTransformOperation:
+      additionalProperties: false
+      properties:
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+        type:
+          description: Resource object type.
+          enum:
+            - change-transform
+          example: change-transform
+          maxLength: 25
+          type: string
+      required:
+        - transform
+        - type
+      type: object
     ChangeVisibilityOperation:
       additionalProperties: false
       properties:
@@ -316,6 +332,19 @@ components:
           enum:
             - clear-material
           example: clear-material
+          maxLength: 25
+          type: string
+      required:
+        - type
+      type: object
+    ClearTransformOperation:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - clear-transform
+          example: clear-transform
           maxLength: 25
           type: string
       required:
@@ -2111,6 +2140,8 @@ components:
               - $ref: '#/components/schemas/ChangeVisibilityOperation'
               - $ref: '#/components/schemas/ChangeMaterialOperation'
               - $ref: '#/components/schemas/ClearMaterialOperation'
+              - $ref: '#/components/schemas/ChangeTransformOperation'
+              - $ref: '#/components/schemas/ClearTransformOperation'
           maxItems: 1024
           type: array
         query:
@@ -5248,6 +5279,35 @@ paths:
 
         |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.|
 
+        |▹▹▹▹ *anonymous*|ChangeTransformOperation|false||
+
+        |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see
+        [Transformation
+        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        for details.|
+
+        |▹▹▹▹▹▹ r0|Vector4|true|4D vector.|
+
+        |▹▹▹▹▹▹▹ w|number|true|w value.|
+
+        |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.|
+
+        |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.|
+
+        |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.|
+
+        |▹▹▹▹▹▹ r1|Vector4|true|4D vector.|
+
+        |▹▹▹▹▹▹ r2|Vector4|true|4D vector.|
+
+        |▹▹▹▹▹▹ r3|Vector4|true|4D vector.|
+
+        |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.|
+
+        |▹▹▹▹ *anonymous*|ClearTransformOperation|false||
+
+        |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.|
+
         |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to
         combine multiple queries.|
 
@@ -6733,7 +6793,7 @@ paths:
       tags:
         - translation-inspections
 servers:
-  - url: 'https://platform.platprod.vertexvis.io'
+  - url: 'https://platform.vertexvis.com'
   - url: 'https://platform.platdev.vertexvis.io'
 tags:
   - description: >-

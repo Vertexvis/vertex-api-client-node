@@ -27,7 +27,7 @@ const main = async () => {
   const client = await VertexClient.build({
     clientId: process.env.VERTEX_CLIENT_ID,
     clientSecret: process.env.VERTEX_CLIENT_SECRET,
-    environment: 'platprod',
+    basePath: 'https://platform.vertexvis.com',
   });
 
   const getFilesRes = await client.files.getFiles(undefined, 1);
@@ -51,5 +51,5 @@ yarn build
 yarn format
 
 # Version in preparation for publish
-npm version <major|minor|patch>
+yarn version --patch
 ```

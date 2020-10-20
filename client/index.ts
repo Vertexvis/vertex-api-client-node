@@ -16,7 +16,7 @@ export interface SceneTemplateItem {
 export type BasePath =
   | 'https://platform.platdev.vertexvis.io'
   | 'https://platform.platstaging.vertexvis.io'
-  | 'https://platform.platprod.vertexvis.io'
+  | 'https://platform.vertexvis.com'
   | string;
 
 export interface RenderRequest {
