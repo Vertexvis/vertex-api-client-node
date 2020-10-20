@@ -51,5 +51,5 @@ yarn build
 yarn format
 
 # Version in preparation for publish
-npm version <major|minor|patch>
+yarn version --patch
 ```
