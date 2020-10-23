@@ -23,16 +23,21 @@ Then, create a client and start using the Vertex API,
 import { prettyJson, VertexClient } from '.';
 
 const main = async () => {
-  // Shown with default values
-  const client = await VertexClient.build({
-    clientId: process.env.VERTEX_CLIENT_ID,
-    clientSecret: process.env.VERTEX_CLIENT_SECRET,
-    basePath: 'https://platform.vertexvis.com',
-  });
+  try {
+    // Shown with default values
+    const client = await VertexClient.build({
+      clientId: process.env.VERTEX_CLIENT_ID,
+      clientSecret: process.env.VERTEX_CLIENT_SECRET,
+      basePath: 'https://platform.vertexvis.com',
+    });
 
-  const getFilesRes = await client.files.getFiles(undefined, 1);
+    const getFilesRes = await client.files.getFiles(undefined, 1);
 
-  console.log(prettyJson(getFilesRes.data));
+    console.log(prettyJson(getFilesRes.data));
+  } catch (error) {
+    if (error.vertexErrorMessage) console.error(error.vertexErrorMessage);
+    else throw error;
+  }
 };
 
 main();
