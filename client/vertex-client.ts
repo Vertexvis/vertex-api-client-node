@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { BasePath } from '.';
 import { Configuration } from '..';
 import {
@@ -17,7 +18,7 @@ import {
   SceneTemplatesApi,
   TranslationInspectionsApi,
 } from '../api';
-import { createToken, nowEpochMs } from './utils';
+import { createToken, nowEpochMs, prettyJson } from './utils';
 
 type BaseOptions = Record<string, unknown>;
 
@@ -40,7 +41,7 @@ const SecToMs = 1000;
 
 // See https://github.com/axios/axios#request-config
 const createBaseOptions = (baseOptions: BaseOptions) => ({
-  validateStatus: () => true, // Always return response instead of rejecting
+  validateStatus: (status: number) => status < 400,
   maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
   maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
   ...(baseOptions || {}),
@@ -75,19 +76,37 @@ export class VertexClient {
       basePath,
     });
 
-    this.files = new FilesApi(config);
-    this.geometrySets = new GeometrySetsApi(config);
-    this.hits = new HitsApi(config);
-    this.partRevisions = new PartRevisionsApi(config);
-    this.parts = new PartsApi(config);
-    this.sceneAlterations = new SceneAlterationsApi(config);
-    this.sceneItemOverrides = new SceneItemOverridesApi(config);
-    this.sceneItems = new SceneItemsApi(config);
-    this.scenes = new ScenesApi(config);
-    this.sceneViews = new SceneViewsApi(config);
-    this.streamKeys = new StreamKeysApi(config);
-    this.sceneTemplates = new SceneTemplatesApi(config);
-    this.translationInspections = new TranslationInspectionsApi(config);
+    const inst = axios.create();
+    inst.interceptors.response.use(
+      (response) => response,
+      (error) => {
+        if (error.isAxiosError) {
+          const r = error.response;
+          const c = r.config;
+          error.vertexErrorMessage = `${c.method.toUpperCase()} '${
+            c.url
+          }' error.\nReq: ${c.data}\nRes: ${prettyJson(r.data)}`;
+        }
+        return Promise.reject(error);
+      }
+    );
+    this.files = new FilesApi(config, null, inst);
+    this.geometrySets = new GeometrySetsApi(config, null, inst);
+    this.hits = new HitsApi(config, null, inst);
+    this.partRevisions = new PartRevisionsApi(config, null, inst);
+    this.parts = new PartsApi(config, null, inst);
+    this.sceneAlterations = new SceneAlterationsApi(config, null, inst);
+    this.sceneItemOverrides = new SceneItemOverridesApi(config, null, inst);
+    this.sceneItems = new SceneItemsApi(config, null, inst);
+    this.scenes = new ScenesApi(config, null, inst);
+    this.sceneViews = new SceneViewsApi(config, null, inst);
+    this.streamKeys = new StreamKeysApi(config, null, inst);
+    this.sceneTemplates = new SceneTemplatesApi(config, null, inst);
+    this.translationInspections = new TranslationInspectionsApi(
+      config,
+      null,
+      inst
+    );
   }
 
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {

@@ -99,6 +99,15 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    PartRevisionId:
+      description: The `part-revision` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     SceneId:
       description: The `scene` ID.
       explode: false
@@ -1026,7 +1035,9 @@ components:
     FileMetadata_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -1046,7 +1057,9 @@ components:
           minLength: 1
           type: string
         uploaded:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
       required:
         - created
         - name
@@ -1158,7 +1171,9 @@ components:
     GeometrySet_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
       required:
         - created
       type: object
@@ -1578,7 +1593,9 @@ components:
     PartRevision_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         suppliedId:
           example: some-string
           maxLength: 1024
@@ -1619,7 +1636,9 @@ components:
     Part_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -2017,7 +2036,9 @@ components:
     SceneItemOverride_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         material:
           $ref: '#/components/schemas/ColorMaterial'
         transform:
@@ -2261,7 +2282,9 @@ components:
     SceneTemplate_data_attributes:
       properties:
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -2343,7 +2366,9 @@ components:
         camera:
           $ref: '#/components/schemas/Camera'
         created:
-          $ref: '#/components/schemas/DateTime'
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
       required:
         - camera
         - created
@@ -2396,6 +2421,21 @@ components:
         - data
         - links
       type: object
+    StreamKeyList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/StreamKey'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     StreamKey_data:
       properties:
         attributes:
@@ -2419,6 +2459,10 @@ components:
       type: object
     StreamKey_data_attributes:
       properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         expiry:
           example: 600
           format: int32
@@ -2427,8 +2471,8 @@ components:
           example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
           type: string
       required:
+        - created
         - expiry
-        - key
       type: object
     TranslationInspectionJob:
       additionalProperties: false
@@ -2473,6 +2517,64 @@ components:
       required:
         - missing
         - status
+      type: object
+    UpdatePartRevisionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdatePartRevisionRequest_data'
+      required:
+        - data
+      type: object
+    UpdatePartRevisionRequest_data:
+      properties:
+        attributes:
+          $ref: '#/components/schemas/UpdatePartRevisionRequest_data_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        type:
+          description: Resource object type.
+          example: part-revision
+          maxLength: 25
+          type: string
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    UpdatePartRevisionRequest_data_attributes:
+      properties:
+        metadata:
+          additionalProperties:
+            $ref: >-
+              #/components/schemas/UpdatePartRevisionRequest_data_attributes_metadata
+          description: Metadata about the `part-revision`.
+          type: object
+      type: object
+    UpdatePartRevisionRequest_data_attributes_metadata:
+      properties:
+        type:
+          description: Type of metadata value.
+          enum:
+            - string
+            - long
+            - float
+            - date
+            - 'null'
+          example: string
+          maxLength: 25
+          type: string
+        value:
+          description: Metadata value.
+          example: string
+          maxLength: 1024
+          type: string
+      required:
+        - type
       type: object
     UpdateSceneItemOverrideRequest:
       additionalProperties: false
@@ -3415,6 +3517,111 @@ paths:
       tags:
         - part-revisions
       x-scala-package: translations
+    patch:
+      description: >+
+
+        Update a `part-revision`.
+
+
+        ###### Body Params
+
+
+        |Name|Type|Required|Description|
+
+        |---|---|---|---|
+
+        |data|UpdatePartRevisionRequest_data|true||
+
+        |▹ attributes|UpdatePartRevisionRequest_data_attributes|true||
+
+        |▹▹ metadata|object|false|Metadata about the `part-revision`.|
+
+        |▹▹▹
+        **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false||
+
+        |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata
+        value.|
+
+        |▹▹▹▹ value|string|false|Metadata value.|
+
+        |▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹ type|string|true|Resource object type.|
+
+      operationId: updatePartRevision
+      parameters:
+        - description: The `part-revision` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartRevisionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PartRevision'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: BadRequest
+                    status: '400'
+                    title: 'Invalid, missing, or out-of-range request parameters.'
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-revisions
   /parts:
     get:
       description: |+
@@ -6613,6 +6820,130 @@ paths:
           headers:
             location:
               $ref: '#/components/headers/Location'
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - stream-keys
+  /stream-keys:
+    get:
+      description: |+
+
+        Get `stream-key`s.
+
+      operationId: getStreamKeys
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: 'page[cursor]'
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: 'page[size]'
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/StreamKeyList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - stream-keys
+  '/stream-keys/{id}':
+    delete:
+      description: |+
+
+        Delete a `stream-key`.
+
+      operationId: deleteStreamKey
+      parameters:
+        - description: The `stream-key` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
         '401':
           content:
             application/vnd.api+json:

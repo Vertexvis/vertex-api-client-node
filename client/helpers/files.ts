@@ -1,5 +1,5 @@
 import { CreateFileRequest } from '../..';
-import { throwOnError, VertexClient } from '..';
+import { VertexClient } from '..';
 
 interface UploadFileArgs {
   client: VertexClient;
@@ -16,10 +16,6 @@ export const uploadFileIfNotExists = async (
     const getFilesRes = await args.client.files.getFiles(undefined, 1, [
       suppliedId,
     ]);
-    throwOnError(
-      getFilesRes,
-      `Error getting files by suppliedId '${suppliedId}'`
-    );
 
     if (getFilesRes.data.data.length > 0) {
       const file = getFilesRes.data.data[0];
@@ -41,28 +37,21 @@ export const uploadFileIfNotExists = async (
         }
 
         await args.client.files.deleteFile(fileId);
-        throwOnError(
-          getFilesRes,
-          `Error deleting file by suppliedId '${suppliedId}'`
-        );
       }
     }
   }
 
-  const fileId = await uploadFile(args);
-  return fileId;
+  return await uploadFile(args);
 };
 
 export const uploadFile = async (args: UploadFileArgs): Promise<string> => {
   const fileName = args.createFileReq.data.attributes.name;
   const createRes = await args.client.files.createFile(args.createFileReq);
-  throwOnError(createRes, `Error creating file ${fileName}`);
 
   const fileId = createRes.data.data.id;
   if (args.verbose) console.log(`Created file '${fileName}', ${fileId}`);
 
-  const uploadRes = await args.client.files.uploadFile(fileId, args.fileData);
-  throwOnError(uploadRes, `Error uploading file ${fileName}`);
+  await args.client.files.uploadFile(fileId, args.fileData);
 
   if (args.verbose) console.log(`Uploaded file ${fileId}`);
 
