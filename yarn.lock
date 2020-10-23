@@ -586,10 +586,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-14.11.2.tgz#2de1ed6670439387da1c9f549a2ade2b0a799256"
   integrity sha512-jiE3QIxJ8JLNcb1Ps6rDbysDhN4xa8DJJvuC9prr6w+1tIh+QAbYyNF3tyiZNLDBIuBCf4KEcV2UvQm/V60xfA==
 
-"@types/node@^14.14.0":
-  version "14.14.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.0.tgz#f1091b6ad5de18e8e91bdbd43ec63f13de372538"
-  integrity sha512-BfbIHP9IapdupGhq/hc+jT5dyiBVZ2DdeC5WwJWQWDb0GijQlzUFAeIQn/2GtvZcd2HVUU7An8felIICFTC2qg==
+"@types/node@^14.14.2":
+  version "14.14.2"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-14.14.2.tgz#d25295f9e4ca5989a2c610754dc02a9721235eeb"
+  integrity sha512-jeYJU2kl7hL9U5xuI/BhKPZ4vqGM/OmK6whiFAXVhlstzZhVamWhDSmHyGLIp+RVyuF9/d0dqr2P85aFj4BvJg==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
@@ -628,10 +628,10 @@
   dependencies:
     "@types/yargs-parser" "*"
 
-"@vertexvis/utils@^0.9.7":
-  version "0.9.7"
-  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.7.tgz#d61151256b640be07476b8ae3f5921d213177510"
-  integrity sha512-YScaTL4Ia2nd4CaLCIM4uYAfmVLX4VGcwk9zSDFSDj+aV5lDy+iftXvGws0CG3yG9OLr3lPBJ3cLoMlGfHfdVg==
+"@vertexvis/utils@^0.9.8":
+  version "0.9.8"
+  resolved "https://registry.yarnpkg.com/@vertexvis/utils/-/utils-0.9.8.tgz#ad9b0e7bb03eadc0e90054b248754a51e3fb7db9"
+  integrity sha512-Z7viQ7yC81X854NQsEKsjhY5v5dmwB3Nf0J3BEjbVuRGWsvgb6W5nTQIEs8CF+GMZVJXMJMIZZ4UGRSh0WRWuA==
   dependencies:
     "@types/uuid" "^3.4.3"
     is-plain-object "^3.0.0"

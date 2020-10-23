@@ -4,7 +4,7 @@ import {
   CreateSceneRequest,
   CreateSceneTemplateRequest,
 } from '../..';
-import { pollQueuedJob, throwOnError, VertexClient } from '..';
+import { pollQueuedJob, VertexClient } from '..';
 import { RenderImageArgs } from '.';
 import { uploadFile } from './files';
 
@@ -31,11 +31,6 @@ export const createSceneFromTemplateFile = async (
   const createTemplateRes = await args.client.sceneTemplates.createSceneTemplate(
     createTemplateReq
   );
-  throwOnError(
-    createTemplateRes,
-    `Error creating scene template for file ${fileId}`
-  );
-
   const queuedSceneTemplateId = createTemplateRes.data.data.id;
   if (args.verbose)
     console.log(
@@ -51,8 +46,6 @@ export const createSceneFromTemplateFile = async (
 
   const createSceneReq = args.createSceneReq(templateId);
   const createSceneRes = await args.client.scenes.createScene(createSceneReq);
-  throwOnError(createTemplateRes, `Error creating scene`);
-
   const queuedSceneId = createSceneRes.data.data.id;
   if (args.verbose)
     console.log(

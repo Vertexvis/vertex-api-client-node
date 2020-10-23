@@ -3093,6 +3093,12 @@ export interface StreamKeyData {
 export interface StreamKeyDataAttributes {
   /**
    *
+   * @type {string}
+   * @memberof StreamKeyDataAttributes
+   */
+  created: string;
+  /**
+   *
    * @type {number}
    * @memberof StreamKeyDataAttributes
    */
@@ -3102,7 +3108,26 @@ export interface StreamKeyDataAttributes {
    * @type {string}
    * @memberof StreamKeyDataAttributes
    */
-  key: string;
+  key?: string;
+}
+/**
+ *
+ * @export
+ * @interface StreamKeyList
+ */
+export interface StreamKeyList {
+  /**
+   *
+   * @type {Array<StreamKey>}
+   * @memberof StreamKeyList
+   */
+  data: Array<StreamKey>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof StreamKeyList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -3167,6 +3192,89 @@ export interface TranslationInspectionJobDataAttributes {
    */
   status: string;
 }
+/**
+ *
+ * @export
+ * @interface UpdatePartRevisionRequest
+ */
+export interface UpdatePartRevisionRequest {
+  /**
+   *
+   * @type {UpdatePartRevisionRequestData}
+   * @memberof UpdatePartRevisionRequest
+   */
+  data: UpdatePartRevisionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRevisionRequestData
+ */
+export interface UpdatePartRevisionRequestData {
+  /**
+   *
+   * @type {UpdatePartRevisionRequestDataAttributes}
+   * @memberof UpdatePartRevisionRequestData
+   */
+  attributes: UpdatePartRevisionRequestDataAttributes;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestData
+   */
+  id: string;
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestData
+   */
+  type: string;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRevisionRequestDataAttributes
+ */
+export interface UpdatePartRevisionRequestDataAttributes {
+  /**
+   * Metadata about the `part-revision`.
+   * @type {{ [key: string]: UpdatePartRevisionRequestDataAttributesMetadata; }}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  metadata?: { [key: string]: UpdatePartRevisionRequestDataAttributesMetadata };
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRevisionRequestDataAttributesMetadata
+ */
+export interface UpdatePartRevisionRequestDataAttributesMetadata {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributesMetadata
+   */
+  type: UpdatePartRevisionRequestDataAttributesMetadataTypeEnum;
+  /**
+   * Metadata value.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributesMetadata
+   */
+  value?: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum UpdatePartRevisionRequestDataAttributesMetadataTypeEnum {
+  String = 'string',
+  Long = 'long',
+  Float = 'float',
+  Date = 'date',
+  Null = 'null',
+}
+
 /**
  *
  * @export
@@ -5352,6 +5460,98 @@ export const PartRevisionsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePartRevision: async (
+      id: string,
+      updatePartRevisionRequest: UpdatePartRevisionRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling updatePartRevision.'
+        );
+      }
+      // verify required parameter 'updatePartRevisionRequest' is not null or undefined
+      if (
+        updatePartRevisionRequest === null ||
+        updatePartRevisionRequest === undefined
+      ) {
+        throw new RequiredError(
+          'updatePartRevisionRequest',
+          'Required parameter updatePartRevisionRequest was null or undefined when calling updatePartRevision.'
+        );
+      }
+      const localVarPath = `/part-revisions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      const needsSerialization =
+        typeof updatePartRevisionRequest !== 'string' ||
+        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+      localVarRequestOptions.data = needsSerialization
+        ? JSON.stringify(
+            updatePartRevisionRequest !== undefined
+              ? updatePartRevisionRequest
+              : {}
+          )
+        : updatePartRevisionRequest || '';
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -5418,6 +5618,34 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
         return axios.request(axiosRequestArgs);
       };
     },
+    /**
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updatePartRevision(
+      id: string,
+      updatePartRevisionRequest: UpdatePartRevisionRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
+    > {
+      const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
+        configuration
+      ).updatePartRevision(id, updatePartRevisionRequest, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
   };
 };
 
@@ -5458,6 +5686,22 @@ export const PartRevisionsApiFactory = function (
         .getPartRevisions(id, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePartRevision(
+      id: string,
+      updatePartRevisionRequest: UpdatePartRevisionRequest,
+      options?: any
+    ): AxiosPromise<PartRevision> {
+      return PartRevisionsApiFp(configuration)
+        .updatePartRevision(id, updatePartRevisionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -5496,6 +5740,24 @@ export class PartRevisionsApi extends BaseAPI {
   ) {
     return PartRevisionsApiFp(this.configuration)
       .getPartRevisions(id, filterSuppliedId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+   * @param {string} id The &#x60;part-revision&#x60; ID.
+   * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRevisionsApi
+   */
+  public updatePartRevision(
+    id: string,
+    updatePartRevisionRequest: UpdatePartRevisionRequest,
+    options?: any
+  ) {
+    return PartRevisionsApiFp(this.configuration)
+      .updatePartRevision(id, updatePartRevisionRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -10061,6 +10323,142 @@ export const StreamKeysApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     *  Delete a `stream-key`.
+     * @param {string} id The &#x60;stream-key&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteStreamKey: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling deleteStreamKey.'
+        );
+      }
+      const localVarPath = `/stream-keys/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *  Get `stream-key`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStreamKeys: async (
+      pageCursor?: string,
+      pageSize?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/stream-keys`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      const query = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        query.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        query.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(query).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -10087,6 +10485,60 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await StreamKeysApiAxiosParamCreator(
         configuration
       ).createSceneStreamKey(id, createStreamKeyRequest, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *  Delete a `stream-key`.
+     * @param {string} id The &#x60;stream-key&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteStreamKey(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await StreamKeysApiAxiosParamCreator(
+        configuration
+      ).deleteStreamKey(id, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *  Get `stream-key`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getStreamKeys(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKeyList>
+    > {
+      const localVarAxiosArgs = await StreamKeysApiAxiosParamCreator(
+        configuration
+      ).getStreamKeys(pageCursor, pageSize, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -10127,6 +10579,33 @@ export const StreamKeysApiFactory = function (
         .createSceneStreamKey(id, createStreamKeyRequest, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     *  Delete a `stream-key`.
+     * @param {string} id The &#x60;stream-key&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteStreamKey(id: string, options?: any): AxiosPromise<void> {
+      return StreamKeysApiFp(configuration)
+        .deleteStreamKey(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Get `stream-key`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getStreamKeys(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<StreamKeyList> {
+      return StreamKeysApiFp(configuration)
+        .getStreamKeys(pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -10152,6 +10631,33 @@ export class StreamKeysApi extends BaseAPI {
   ) {
     return StreamKeysApiFp(this.configuration)
       .createSceneStreamKey(id, createStreamKeyRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Delete a `stream-key`.
+   * @param {string} id The &#x60;stream-key&#x60; ID.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof StreamKeysApi
+   */
+  public deleteStreamKey(id: string, options?: any) {
+    return StreamKeysApiFp(this.configuration)
+      .deleteStreamKey(id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Get `stream-key`s.
+   * @param {string} [pageCursor] The cursor for the next page of items.
+   * @param {number} [pageSize] The number of items to return.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof StreamKeysApi
+   */
+  public getStreamKeys(pageCursor?: string, pageSize?: number, options?: any) {
+    return StreamKeysApiFp(this.configuration)
+      .getStreamKeys(pageCursor, pageSize, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
