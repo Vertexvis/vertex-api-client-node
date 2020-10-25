@@ -1,5 +1,8 @@
+.github/CODEOWNERS
 .gitignore
+.npmignore
 .npmrc
+.nvmrc
 .prettierignore
 .openapi-generator-ignore
 pull_request_template.md

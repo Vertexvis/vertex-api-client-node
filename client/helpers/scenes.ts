@@ -1,12 +1,13 @@
 import { AxiosResponse } from 'axios';
 import {
   CreateFileRequest,
+  CreateSceneItemRequest,
   CreateSceneRequest,
   CreateSceneTemplateRequest,
 } from '../..';
-import { pollQueuedJob, VertexClient } from '..';
+import { uploadFile, VertexClient } from '..';
+import { pollQueuedJob } from '../utils';
 import { RenderImageArgs } from '.';
-import { uploadFile } from './files';
 
 interface CreateSceneFromTemplateFileArgs {
   client: VertexClient;
@@ -15,6 +16,14 @@ interface CreateSceneFromTemplateFileArgs {
   createFileReq: CreateFileRequest;
   createSceneReq: (templateId: string) => CreateSceneRequest;
   createSceneTemplateReq: (fileId: string) => CreateSceneTemplateRequest;
+}
+
+interface CreateSceneWithSceneItemsArgs {
+  client: VertexClient;
+  parallelism: number;
+  verbose: boolean;
+  createSceneReq: () => CreateSceneRequest;
+  createSceneItemsReq: () => CreateSceneItemRequest[];
 }
 
 export const createSceneFromTemplateFile = async (

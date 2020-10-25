@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { BasePath } from '.';
 import { Configuration } from '..';
 import {
@@ -39,14 +39,6 @@ interface CtorArgs {
 const TokenExpiryBufferMs = 60000;
 const SecToMs = 1000;
 
-// See https://github.com/axios/axios#request-config
-const createBaseOptions = (baseOptions: BaseOptions) => ({
-  validateStatus: (status: number) => status < 400,
-  maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
-  maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
-  ...(baseOptions || {}),
-});
-
 export class VertexClient {
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
@@ -62,6 +54,9 @@ export class VertexClient {
   public sceneTemplates: SceneTemplatesApi;
   public translationInspections: TranslationInspectionsApi;
 
+  public axiosInstance: AxiosInstance;
+  public config: Configuration;
+
   private auth: Oauth2Api;
   private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
@@ -70,14 +65,13 @@ export class VertexClient {
     this.auth = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
-    const config = new Configuration({
+    this.config = new Configuration({
       accessToken: this.accessTokenRefresher,
       baseOptions,
       basePath,
     });
-
-    const inst = axios.create();
-    inst.interceptors.response.use(
+    this.axiosInstance = axios.create();
+    this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.isAxiosError) {
@@ -90,22 +84,42 @@ export class VertexClient {
         return Promise.reject(error);
       }
     );
-    this.files = new FilesApi(config, null, inst);
-    this.geometrySets = new GeometrySetsApi(config, null, inst);
-    this.hits = new HitsApi(config, null, inst);
-    this.partRevisions = new PartRevisionsApi(config, null, inst);
-    this.parts = new PartsApi(config, null, inst);
-    this.sceneAlterations = new SceneAlterationsApi(config, null, inst);
-    this.sceneItemOverrides = new SceneItemOverridesApi(config, null, inst);
-    this.sceneItems = new SceneItemsApi(config, null, inst);
-    this.scenes = new ScenesApi(config, null, inst);
-    this.sceneViews = new SceneViewsApi(config, null, inst);
-    this.streamKeys = new StreamKeysApi(config, null, inst);
-    this.sceneTemplates = new SceneTemplatesApi(config, null, inst);
-    this.translationInspections = new TranslationInspectionsApi(
-      config,
+    this.files = new FilesApi(this.config, null, this.axiosInstance);
+    this.geometrySets = new GeometrySetsApi(
+      this.config,
       null,
-      inst
+      this.axiosInstance
+    );
+    this.hits = new HitsApi(this.config, null, this.axiosInstance);
+    this.partRevisions = new PartRevisionsApi(
+      this.config,
+      null,
+      this.axiosInstance
+    );
+    this.parts = new PartsApi(this.config, null, this.axiosInstance);
+    this.sceneAlterations = new SceneAlterationsApi(
+      this.config,
+      null,
+      this.axiosInstance
+    );
+    this.sceneItemOverrides = new SceneItemOverridesApi(
+      this.config,
+      null,
+      this.axiosInstance
+    );
+    this.sceneItems = new SceneItemsApi(this.config, null, this.axiosInstance);
+    this.scenes = new ScenesApi(this.config, null, this.axiosInstance);
+    this.sceneViews = new SceneViewsApi(this.config, null, this.axiosInstance);
+    this.streamKeys = new StreamKeysApi(this.config, null, this.axiosInstance);
+    this.sceneTemplates = new SceneTemplatesApi(
+      this.config,
+      null,
+      this.axiosInstance
+    );
+    this.translationInspections = new TranslationInspectionsApi(
+      this.config,
+      null,
+      this.axiosInstance
     );
   }
 
@@ -140,5 +154,15 @@ export class VertexClient {
     this.token = await createToken(this.auth);
     this.tokenFetchedEpochMs = nowEpochMs();
     return this.token.access_token;
+  };
+}
+
+// See https://github.com/axios/axios#request-config
+function createBaseOptions(baseOptions: BaseOptions) {
+  return {
+    validateStatus: (status: number) => status < 400,
+    maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
+    maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
+    ...(baseOptions || {}),
   };
 }
