@@ -1,11 +1,14 @@
 import axios, { AxiosInstance } from 'axios';
-import { BasePath } from '.';
-import { Configuration } from '..';
 import {
+  BasePath,
+  Configuration,
+  createToken,
   FilesApi,
   GeometrySetsApi,
   HitsApi,
+  nowEpochMs,
   PartRevisionsApi,
+  prettyJson,
   SceneAlterationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
@@ -17,8 +20,7 @@ import {
   ScenesApi,
   SceneTemplatesApi,
   TranslationInspectionsApi,
-} from '../api';
-import { createToken, nowEpochMs, prettyJson } from './utils';
+} from '..';
 
 type BaseOptions = Record<string, unknown>;
 

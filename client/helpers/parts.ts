@@ -1,15 +1,17 @@
 import { Async } from '@vertexvis/utils';
-import { pollQueuedJob, VertexClient } from '..';
 import {
   CreateFileRequest,
   CreatePartRequest,
+  getBySuppliedId,
+  head,
   Part,
   PartList,
   PartRevision,
   PartRevisionList,
+  pollQueuedJob,
+  uploadFileIfNotExists,
+  VertexClient,
 } from '../..';
-import { getBySuppliedId, head } from '../utils';
-import { uploadFileIfNotExists } from './files';
 
 interface CreatePartFromFileArgs {
   client: VertexClient;

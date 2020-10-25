@@ -1,6 +1,10 @@
-import { CreateFileRequest, FileMetadata, FileList } from '../..';
-import { getBySuppliedId } from '../utils';
-import { VertexClient } from '..';
+import {
+  CreateFileRequest,
+  FileMetadata,
+  FileList,
+  getBySuppliedId,
+  VertexClient,
+} from '../..';
 
 interface UploadFileArgs {
   client: VertexClient;

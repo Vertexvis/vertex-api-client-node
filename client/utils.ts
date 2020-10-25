@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Oauth2Api, OAuth2Token, QueuedJob } from '../api';
+import { Oauth2Api, OAuth2Token, QueuedJob } from '..';
 
 const PollIntervalMs = 5000;
 export const Utf8 = 'utf8';
