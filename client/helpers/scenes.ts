@@ -1,10 +1,16 @@
 import { AxiosResponse } from 'axios';
 import {
+  arrayChunked,
+  CameraFitTypeEnum,
   CreateFileRequest,
+  createSceneItem,
+  CreateSceneItemRequest,
   CreateSceneRequest,
   CreateSceneTemplateRequest,
   pollQueuedJob,
   RenderImageArgs,
+  SceneItem,
+  SceneRelationshipDataTypeEnum,
   uploadFile,
   VertexClient,
 } from '../..';
@@ -16,6 +22,25 @@ interface CreateSceneFromTemplateFileArgs {
   createFileReq: CreateFileRequest;
   createSceneReq: (templateId: string) => CreateSceneRequest;
   createSceneTemplateReq: (fileId: string) => CreateSceneTemplateRequest;
+}
+
+interface CreateSceneWithSceneItemsArgs {
+  client: VertexClient;
+  parallelism: number;
+  verbose: boolean;
+  createSceneReq: () => CreateSceneRequest;
+  /*
+  2D-array by depth. This allows awaiting creation of each depth in order to set
+  the parent relationship for children at lower depths.
+    [
+      [...] // Items at depth 0 (root items)
+      [...] // Items at depth 1
+      ...
+    ]
+  */
+  createSceneItemReqFactoriesByDepth: ((
+    suppliedIdToSceneItemId: Map<string, string>
+  ) => CreateSceneItemRequest)[][];
 }
 
 export const createSceneFromTemplateFile = async (
@@ -61,6 +86,67 @@ export const createSceneFromTemplateFile = async (
 
   return sceneId;
 };
+
+export async function createSceneWithSceneItems(
+  args: CreateSceneWithSceneItemsArgs
+): Promise<string> {
+  const createSceneRes = await args.client.scenes.createScene({
+    data: {
+      attributes: {},
+      type: SceneRelationshipDataTypeEnum.Scene,
+    },
+  });
+  const sceneId = createSceneRes.data.data.id;
+  const suppliedIdToSceneItemId = new Map<string, string>();
+
+  /* eslint-disable no-await-in-loop */
+  for (const reqFactoriesAtDepth of args.createSceneItemReqFactoriesByDepth) {
+    const chunks = arrayChunked(reqFactoriesAtDepth, args.parallelism);
+    for (const chunk of chunks) {
+      const responses = await Promise.allSettled(
+        chunk.map((reqFactory) =>
+          createSceneItem({
+            client: args.client,
+            verbose: args.verbose,
+            sceneId,
+            createSceneItemReq: () => reqFactory(suppliedIdToSceneItemId),
+          })
+        )
+      );
+      const failures = (responses.filter(
+        (p) => p.status === 'rejected'
+      ) as PromiseRejectedResult[]).map((p) =>
+        p.reason.vertexErrorMessage
+          ? p.reason.vertexErrorMessage
+          : p.reason.message
+      );
+
+      // If any in this group failed, exit with error.
+      if (failures.length > 0) throw new Error(failures.join('\n\n'));
+
+      (responses.filter(
+        (p) => p.status === 'fulfilled'
+      ) as PromiseFulfilledResult<SceneItem>[]).forEach((si) =>
+        suppliedIdToSceneItemId.set(
+          si.value.data.attributes.suppliedId,
+          si.value.data.id
+        )
+      );
+    }
+  }
+  /* eslint-enable no-await-in-loop */
+
+  await args.client.scenes.updateScene(sceneId, {
+    data: {
+      attributes: {
+        camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+      },
+      type: SceneRelationshipDataTypeEnum.Scene,
+    },
+  });
+
+  return sceneId;
+}
 
 // Returns Stream in Node, `(await renderScene(...)).data.pipe(createWriteStream('image.jpeg'))`
 export const renderScene = async (

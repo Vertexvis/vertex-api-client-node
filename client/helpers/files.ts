@@ -17,10 +17,12 @@ export async function uploadFileIfNotExists(
   args: UploadFileArgs
 ): Promise<string> {
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
-  const existingFile = await getBySuppliedId<FileMetadata, FileList>(
-    () => args.client.files.getFiles(undefined, 1, [suppliedId]),
-    suppliedId
-  );
+  const existingFile = suppliedId
+    ? await getBySuppliedId<FileMetadata, FileList>(
+        () => args.client.files.getFiles(undefined, 1, [suppliedId]),
+        suppliedId
+      )
+    : undefined;
 
   if (existingFile) {
     const fileId = existingFile.data.id;

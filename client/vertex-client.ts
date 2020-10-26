@@ -86,41 +86,53 @@ export class VertexClient {
         return Promise.reject(error);
       }
     );
-    this.files = new FilesApi(this.config, null, this.axiosInstance);
+    this.files = new FilesApi(this.config, undefined, this.axiosInstance);
     this.geometrySets = new GeometrySetsApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
-    this.hits = new HitsApi(this.config, null, this.axiosInstance);
+    this.hits = new HitsApi(this.config, undefined, this.axiosInstance);
     this.partRevisions = new PartRevisionsApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
-    this.parts = new PartsApi(this.config, null, this.axiosInstance);
+    this.parts = new PartsApi(this.config, undefined, this.axiosInstance);
     this.sceneAlterations = new SceneAlterationsApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
     this.sceneItemOverrides = new SceneItemOverridesApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
-    this.sceneItems = new SceneItemsApi(this.config, null, this.axiosInstance);
-    this.scenes = new ScenesApi(this.config, null, this.axiosInstance);
-    this.sceneViews = new SceneViewsApi(this.config, null, this.axiosInstance);
-    this.streamKeys = new StreamKeysApi(this.config, null, this.axiosInstance);
+    this.sceneItems = new SceneItemsApi(
+      this.config,
+      undefined,
+      this.axiosInstance
+    );
+    this.scenes = new ScenesApi(this.config, undefined, this.axiosInstance);
+    this.sceneViews = new SceneViewsApi(
+      this.config,
+      undefined,
+      this.axiosInstance
+    );
+    this.streamKeys = new StreamKeysApi(
+      this.config,
+      undefined,
+      this.axiosInstance
+    );
     this.sceneTemplates = new SceneTemplatesApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
     this.translationInspections = new TranslationInspectionsApi(
       this.config,
-      null,
+      undefined,
       this.axiosInstance
     );
   }
