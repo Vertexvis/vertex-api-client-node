@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "target": "es6",
+    "lib": ["dom", "es2020"],
     "module": "commonjs",
     "noImplicitAny": true,
     "outDir": "dist",
     "rootDir": ".",
+    "strict": true,
+    "strictNullChecks": true,
+    "target": "es6",
     "typeRoots": ["node_modules/@types"]
   },
   "exclude": ["dist", "node_modules"]
