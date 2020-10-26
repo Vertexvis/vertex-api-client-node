@@ -3,10 +3,11 @@ import {
   CreateFileRequest,
   CreateSceneRequest,
   CreateSceneTemplateRequest,
+  pollQueuedJob,
+  RenderImageArgs,
+  uploadFile,
+  VertexClient,
 } from '../..';
-import { pollQueuedJob, VertexClient } from '..';
-import { RenderImageArgs } from '.';
-import { uploadFile } from './files';
 
 interface CreateSceneFromTemplateFileArgs {
   client: VertexClient;

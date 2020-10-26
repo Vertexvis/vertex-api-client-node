@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { RenderImageArgs } from '.';
+import { RenderImageArgs } from '../..';
 
 // Returns Stream in Node, `(await renderSceneView(...)).data.pipe(createWriteStream('image.jpeg'))`
 export const renderSceneView = async (

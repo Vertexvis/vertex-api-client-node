@@ -1,5 +1,10 @@
-import { CreateFileRequest } from '../..';
-import { VertexClient } from '..';
+import {
+  CreateFileRequest,
+  FileMetadata,
+  FileList,
+  getBySuppliedId,
+  VertexClient,
+} from '../..';
 
 interface UploadFileArgs {
   client: VertexClient;
@@ -8,43 +13,41 @@ interface UploadFileArgs {
   createFileReq: CreateFileRequest;
 }
 
-export const uploadFileIfNotExists = async (
+export async function uploadFileIfNotExists(
   args: UploadFileArgs
-): Promise<string> => {
+): Promise<string> {
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
-  if (suppliedId) {
-    const getFilesRes = await args.client.files.getFiles(undefined, 1, [
-      suppliedId,
-    ]);
+  const existingFile = await getBySuppliedId<FileMetadata, FileList>(
+    () => args.client.files.getFiles(undefined, 1, [suppliedId]),
+    suppliedId
+  );
 
-    if (getFilesRes.data.data.length > 0) {
-      const file = getFilesRes.data.data[0];
-      const fileId = file.data.id;
-      if (file.data.attributes.status === 'complete') {
-        if (args.verbose) {
-          console.log(
-            `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
-          );
-        }
-
-        return fileId;
-      } else {
-        // TODO: Temporary until we can resume file uploads
-        if (args.verbose) {
-          console.log(
-            `Deleting file with suppliedId '${suppliedId}' in status ${file.data.attributes.status}, ${fileId}`
-          );
-        }
-
-        await args.client.files.deleteFile(fileId);
+  if (existingFile) {
+    const fileId = existingFile.data.id;
+    if (existingFile.data.attributes.status === 'complete') {
+      if (args.verbose) {
+        console.log(
+          `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
+        );
       }
+
+      return fileId;
+    } else {
+      // TODO: Temporary until we can resume file uploads
+      if (args.verbose) {
+        console.log(
+          `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.data.attributes.status}, ${fileId}`
+        );
+      }
+
+      await args.client.files.deleteFile(fileId);
     }
   }
 
   return await uploadFile(args);
-};
+}
 
-export const uploadFile = async (args: UploadFileArgs): Promise<string> => {
+export async function uploadFile(args: UploadFileArgs): Promise<string> {
   const fileName = args.createFileReq.data.attributes.name;
   const createRes = await args.client.files.createFile(args.createFileReq);
 
@@ -56,4 +59,4 @@ export const uploadFile = async (args: UploadFileArgs): Promise<string> => {
   if (args.verbose) console.log(`Uploaded file ${fileId}`);
 
   return fileId;
-};
+}

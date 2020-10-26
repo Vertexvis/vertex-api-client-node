@@ -20,7 +20,7 @@ export VERTEX_CLIENT_SECRET={CLIENT_SECRET}
 Then, create a client and start using the Vertex API,
 
 ```ts
-import { prettyJson, VertexClient } from '.';
+import { prettyJson, VertexClient } from '@vertexvis/vertex-api-client';
 
 const main = async () => {
   try {

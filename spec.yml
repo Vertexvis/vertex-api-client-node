@@ -736,13 +736,13 @@ components:
       type: object
     CreateSceneItemRequest_data_relationships:
       properties:
+        parent:
+          $ref: '#/components/schemas/SceneItemRelationship'
         source:
           anyOf:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
           description: Relationship to a `geometry-set` or `part-revision`.
-      required:
-        - source
       type: object
     CreateSceneRequest:
       additionalProperties: false
@@ -6552,7 +6552,15 @@ paths:
 
         |▹ relationships|CreateSceneItemRequest_data_relationships|true||
 
-        |▹▹ source|any|true|Relationship to a `geometry-set` or
+        |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.|
+
+        |▹▹▹ data|SceneItemRelationship_data|true||
+
+        |▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹▹▹▹ type|enum(scene-item)|true|Resource object type.|
+
+        |▹▹ source|any|false|Relationship to a `geometry-set` or
         `part-revision`.|
 
         |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a

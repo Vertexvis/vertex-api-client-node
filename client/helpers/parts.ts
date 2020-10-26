@@ -1,6 +1,17 @@
-import { pollQueuedJob, VertexClient } from '..';
-import { CreateFileRequest, CreatePartRequest, Part } from '../..';
-import { uploadFileIfNotExists } from './files';
+import { Async } from '@vertexvis/utils';
+import {
+  CreateFileRequest,
+  CreatePartRequest,
+  getBySuppliedId,
+  head,
+  Part,
+  PartList,
+  PartRevision,
+  PartRevisionList,
+  pollQueuedJob,
+  uploadFileIfNotExists,
+  VertexClient,
+} from '../..';
 
 interface CreatePartFromFileArgs {
   client: VertexClient;
@@ -10,9 +21,15 @@ interface CreatePartFromFileArgs {
   createPartReq: (fileId: string) => CreatePartRequest;
 }
 
-export const createPartFromFileIfNotExists = async (
+interface GetPartRevisionBySuppliedIdArgs {
+  client: VertexClient;
+  suppliedPartId: string;
+  suppliedRevisionId: string;
+}
+
+export async function createPartFromFileIfNotExists(
   args: CreatePartFromFileArgs
-): Promise<string> => {
+): Promise<string> {
   const fileId = await uploadFileIfNotExists({
     client: args.client,
     verbose: args.verbose,
@@ -20,37 +37,25 @@ export const createPartFromFileIfNotExists = async (
     createFileReq: args.createFileReq,
   });
 
+  // TODO: Temporary until race condition fixed
+  await Async.delay(1000);
+
   const req = args.createPartReq(fileId);
-  const suppliedId = req.data.attributes.suppliedId;
+  const suppliedPartId = req.data.attributes.suppliedId;
   const suppliedRevisionId = req.data.attributes.suppliedRevisionId;
-
-  // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
-  const getPartRes = await args.client.parts.getParts(undefined, 1, [
-    suppliedId,
-  ]);
-
-  if (getPartRes.data.data.length > 0) {
-    const part = getPartRes.data.data[0];
-    if (part.data.attributes.suppliedId === suppliedId) {
-      const getPartRevRes = await args.client.partRevisions.getPartRevisions(
-        part.data.id,
-        [suppliedRevisionId]
+  const existingPartRev = await getPartRevisionBySuppliedId({
+    client: args.client,
+    suppliedPartId,
+    suppliedRevisionId,
+  });
+  if (existingPartRev) {
+    if (args.verbose) {
+      console.log(
+        `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
+          `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.data.id}`
       );
-
-      if (getPartRevRes.data.data.length > 0) {
-        const partRev = getPartRevRes.data.data[0];
-        if (partRev.data.attributes.suppliedId === suppliedRevisionId) {
-          if (args.verbose) {
-            console.log(
-              `part-revision with suppliedId '${suppliedId}' and suppliedRevisionId ` +
-                `'${suppliedRevisionId}' already exists, using it, ${partRev.data.id}`
-            );
-          }
-
-          return partRev.data.id;
-        }
-      }
     }
+    return existingPartRev.data.id;
   }
 
   const createPartRes = await args.client.parts.createPart(req);
@@ -66,12 +71,31 @@ export const createPartFromFileIfNotExists = async (
   const partRevIds = part.included
     ?.filter((pr) => pr.data.attributes.suppliedId === suppliedRevisionId)
     .map((pr) => pr.data.id);
-  const partRevId = partRevIds?.length ? partRevIds[0] : '';
+  const partRevId = partRevIds ? head(partRevIds) : '';
 
-  if (args.verbose)
-    console.log(
-      // TODO: Temporary until redirect to /parts is deployed everywhere
-      `Created ${partRevId ? `part-revision ${partRevId}` : part.data.id}`
-    );
+  if (args.verbose) console.log(`Created part-revision ${partRevId}`);
   return partRevId;
-};
+}
+
+export async function getPartRevisionBySuppliedId(
+  args: GetPartRevisionBySuppliedIdArgs
+): Promise<PartRevision | undefined> {
+  // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
+  const existingPart = await getBySuppliedId<Part, PartList>(
+    () => args.client.parts.getParts(undefined, 1, [args.suppliedPartId]),
+    args.suppliedPartId
+  );
+  if (existingPart) {
+    const existingPartRev = await getBySuppliedId<
+      PartRevision,
+      PartRevisionList
+    >(
+      () =>
+        args.client.partRevisions.getPartRevisions(existingPart.data.id, [
+          args.suppliedRevisionId,
+        ]),
+      args.suppliedRevisionId
+    );
+    if (existingPartRev) return existingPartRev;
+  }
+}

@@ -3,7 +3,9 @@ import { readFileSync } from 'fs';
 import { Configuration } from '.';
 import { FilesApiAxiosParamCreator } from './api';
 
-const main = async () => {
+verify();
+
+async function verify() {
   const config = new Configuration();
   const fileAsBuffer = readFileSync('package.json');
   const uploadFileParams = await FilesApiAxiosParamCreator(config).uploadFile(
@@ -21,6 +23,4 @@ const main = async () => {
     );
     process.exit(1);
   }
-};
-
-main();
+}
