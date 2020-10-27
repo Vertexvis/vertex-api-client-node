@@ -103,34 +103,19 @@ export async function createSceneWithSceneItems(
   for (const reqFactoriesAtDepth of args.createSceneItemReqFactoriesByDepth) {
     const chunks = arrayChunked(reqFactoriesAtDepth, args.parallelism);
     for (const chunk of chunks) {
-      const responses = await Promise.allSettled(
-        chunk.map((reqFactory) =>
-          createSceneItem({
-            client: args.client,
-            verbose: args.verbose,
-            sceneId,
-            createSceneItemReq: () => reqFactory(suppliedIdToSceneItemId),
-          })
+      (
+        await Promise.all(
+          chunk.map((reqFactory) =>
+            createSceneItem({
+              client: args.client,
+              verbose: args.verbose,
+              sceneId,
+              createSceneItemReq: () => reqFactory(suppliedIdToSceneItemId),
+            })
+          )
         )
-      );
-      const failures = (responses.filter(
-        (p) => p.status === 'rejected'
-      ) as PromiseRejectedResult[]).map((p) =>
-        p.reason.vertexErrorMessage
-          ? p.reason.vertexErrorMessage
-          : p.reason.message
-      );
-
-      // If any in this group failed, exit with error.
-      if (failures.length > 0) throw new Error(failures.join('\n\n'));
-
-      (responses.filter(
-        (p) => p.status === 'fulfilled'
-      ) as PromiseFulfilledResult<SceneItem>[]).forEach((si) =>
-        suppliedIdToSceneItemId.set(
-          si.value.data.attributes.suppliedId,
-          si.value.data.id
-        )
+      ).forEach((si) =>
+        suppliedIdToSceneItemId.set(si.data.attributes.suppliedId, si.data.id)
       );
     }
   }
