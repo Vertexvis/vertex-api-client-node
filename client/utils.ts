@@ -28,6 +28,10 @@ export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
   return (await auth.createToken('client_credentials')).data;
 }
 
+export function encodeIfNotEncoded(s: string) {
+  return isEncoded(s) ? s : encodeURIComponent(s);
+}
+
 export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
   items.reduce((acc, cur) => {
     const group = getKey(cur);
@@ -47,6 +51,10 @@ export function is4x4Identity(transform: number[][]): boolean {
     [0, 0, 1, 0],
     [0, 0, 0, 1],
   ]);
+}
+
+export function isEncoded(s: string) {
+  return s !== decodeURIComponent(s);
 }
 
 export function multiply(a: number[][], b: number[][]): number[][] {

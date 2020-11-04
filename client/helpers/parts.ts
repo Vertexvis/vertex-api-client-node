@@ -2,6 +2,7 @@ import { Async } from '@vertexvis/utils';
 import {
   CreateFileRequest,
   CreatePartRequest,
+  encodeIfNotEncoded,
   getBySuppliedId,
   head,
   Part,
@@ -82,7 +83,12 @@ export async function getPartRevisionBySuppliedId(
 ): Promise<PartRevision | undefined> {
   // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
   const existingPart = await getBySuppliedId<Part, PartList>(
-    () => args.client.parts.getParts(undefined, 1, args.suppliedPartId),
+    () =>
+      args.client.parts.getParts(
+        undefined,
+        1,
+        encodeIfNotEncoded(args.suppliedPartId)
+      ),
     args.suppliedPartId
   );
   if (existingPart) {
@@ -95,7 +101,7 @@ export async function getPartRevisionBySuppliedId(
           existingPart.data.id,
           undefined,
           undefined,
-          args.suppliedRevisionId
+          encodeIfNotEncoded(args.suppliedRevisionId)
         ),
       args.suppliedRevisionId
     );
