@@ -1,5 +1,6 @@
 import {
   CreateFileRequest,
+  encodeIfNotEncoded,
   FileMetadata,
   FileList,
   getBySuppliedId,
@@ -19,7 +20,12 @@ export async function uploadFileIfNotExists(
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
     ? await getBySuppliedId<FileMetadata, FileList>(
-        () => args.client.files.getFiles(undefined, 1, [suppliedId]),
+        () =>
+          args.client.files.getFiles(
+            undefined,
+            1,
+            encodeIfNotEncoded(suppliedId)
+          ),
         suppliedId
       )
     : undefined;

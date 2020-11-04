@@ -79,16 +79,16 @@ components:
         type: integer
       style: form
     ParentIdFilter:
-      description: Filter with the given parent ID.
+      description: Parent ID to filter on.
       explode: true
       in: query
       name: 'filter[parent]'
       required: false
       schema:
-        items:
-          $ref: '#/components/schemas/Uuid'
-        maxItems: 1024
-        type: array
+        example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        format: uuid
+        maxLength: 36
+        type: string
       style: form
     PartId:
       description: The `part` ID.
@@ -99,6 +99,20 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    PartRevisionFields:
+      description: >-
+        Comma-separated list of fields to return in response. An empty value
+        returns no fields. Due to its potential size, metadata is only returned
+        if explictly requested.
+      explode: true
+      in: query
+      name: 'fields[part-revisions]'
+      required: false
+      schema:
+        example: 'created,suppliedId'
+        maxLength: 32
+        type: string
+      style: form
     PartRevisionId:
       description: The `part-revision` ID.
       explode: false
@@ -145,16 +159,15 @@ components:
         $ref: '#/components/schemas/Uuid'
       style: simple
     SuppliedIdFilter:
-      description: Filter with the given suppliedId(s).
+      description: Comma-separated list of supplied IDs to filter on.
       explode: true
       in: query
       name: 'filter[suppliedId]'
       required: false
       schema:
-        items:
-          $ref: '#/components/schemas/NonEmptyString'
-        maxItems: 1024
-        type: array
+        example: 'some-id-1,some-id-2'
+        maxLength: 1024
+        type: string
       style: form
     Width:
       description: The width of the image to render.
@@ -278,7 +291,7 @@ components:
           enum:
             - fit-visible-scene-items
           example: fit-visible-scene-items
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - type
@@ -293,7 +306,7 @@ components:
           enum:
             - change-material
           example: change-material
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - material
@@ -309,7 +322,7 @@ components:
           enum:
             - change-transform
           example: change-transform
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - transform
@@ -323,7 +336,7 @@ components:
           enum:
             - change-visibility
           example: change-visibility
-          maxLength: 25
+          maxLength: 32
           type: string
         visible:
           description: Item visibility.
@@ -341,7 +354,7 @@ components:
           enum:
             - clear-material
           example: clear-material
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - type
@@ -354,7 +367,7 @@ components:
           enum:
             - clear-transform
           example: clear-transform
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - type
@@ -529,7 +542,7 @@ components:
         type:
           description: Resource object type.
           example: geometry-set
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - relationships
@@ -557,7 +570,7 @@ components:
         type:
           description: Resource object type.
           example: hit
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -590,7 +603,7 @@ components:
         type:
           description: Resource object type.
           example: part
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -632,7 +645,7 @@ components:
         type:
           description: Resource object type.
           example: scene-alteration
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -667,7 +680,7 @@ components:
         type:
           description: Resource object type.
           example: scene-item-override
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -709,7 +722,7 @@ components:
         type:
           description: Resource object type.
           example: scene-item
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -761,7 +774,7 @@ components:
         type:
           description: Resource object type.
           example: scene
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -791,7 +804,7 @@ components:
         type:
           description: Resource object type.
           example: scene-template
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -830,7 +843,7 @@ components:
         type:
           description: Resource object type.
           example: scene-view
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -856,7 +869,7 @@ components:
         type:
           description: Resource object type.
           example: stream-key
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -900,7 +913,7 @@ components:
         type:
           description: Resource object type.
           example: translation-inspection
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - relationships
@@ -1087,7 +1100,7 @@ components:
           enum:
             - file
           example: file
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -1144,7 +1157,7 @@ components:
           enum:
             - geometry-set
           example: geometry-set
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -1393,6 +1406,27 @@ components:
       additionalProperties:
         type: string
       type: object
+    MetadataValue:
+      properties:
+        type:
+          description: Type of metadata value.
+          enum:
+            - string
+            - long
+            - float
+            - date
+            - 'null'
+          example: string
+          maxLength: 32
+          type: string
+        value:
+          description: Metadata value.
+          example: Rev A
+          maxLength: 1024
+          type: string
+      required:
+        - type
+      type: object
     NonEmptyString:
       example: some-string
       maxLength: 1024
@@ -1489,7 +1523,7 @@ components:
           enum:
             - part
           example: part
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -1544,7 +1578,7 @@ components:
           enum:
             - part-revision
           example: part-revision
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -1596,14 +1630,15 @@ components:
           example: '2020-01-01T12:00:00Z'
           format: date-time
           type: string
+        metadata:
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+          type: object
         suppliedId:
           example: some-string
           maxLength: 1024
           minLength: 1
           type: string
-      required:
-        - created
-        - suppliedId
       type: object
     PartRevision_data_relationships:
       properties:
@@ -1660,8 +1695,6 @@ components:
           items:
             $ref: '#/components/schemas/Part_data_relationships_partRevisions'
           type: array
-      required:
-        - partRevisions
       type: object
     Part_data_relationships_partRevisions:
       properties:
@@ -1676,7 +1709,7 @@ components:
           enum:
             - part-revision
           example: part-revision
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -1705,7 +1738,7 @@ components:
       enum:
         - all
       example: all
-      maxLength: 25
+      maxLength: 32
       type: string
     QueryByCollection:
       additionalProperties: false
@@ -1724,7 +1757,7 @@ components:
           enum:
             - query-by-collection
           example: query-by-collection
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -1738,7 +1771,7 @@ components:
             - and
             - or
           example: and
-          maxLength: 25
+          maxLength: 32
           type: string
         values:
           description: Query `scene-items`.
@@ -1767,7 +1800,7 @@ components:
           enum:
             - query-by-id
           example: query-by-id
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -1781,7 +1814,7 @@ components:
             - id
             - suppliedId
           example: suppliedId
-          maxLength: 25
+          maxLength: 32
           type: string
         value:
           description: ID of the resource.
@@ -1871,7 +1904,7 @@ components:
         type:
           description: Resource object type.
           example: oauth2
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2081,7 +2114,7 @@ components:
           enum:
             - scene-item
           example: scene-item
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -2199,7 +2232,7 @@ components:
           enum:
             - scene
           example: scene
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -2255,7 +2288,7 @@ components:
           enum:
             - scene-template
           example: scene-template
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -2334,7 +2367,7 @@ components:
           enum:
             - scene-view
           example: scene-view
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - id
@@ -2539,7 +2572,7 @@ components:
         type:
           description: Resource object type.
           example: part-revision
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2550,31 +2583,9 @@ components:
       properties:
         metadata:
           additionalProperties:
-            $ref: >-
-              #/components/schemas/UpdatePartRevisionRequest_data_attributes_metadata
-          description: Metadata about the `part-revision`.
+            $ref: '#/components/schemas/MetadataValue'
+          description: Metadata about the `part` and/or `part-revision`.
           type: object
-      type: object
-    UpdatePartRevisionRequest_data_attributes_metadata:
-      properties:
-        type:
-          description: Type of metadata value.
-          enum:
-            - string
-            - long
-            - float
-            - date
-            - 'null'
-          example: string
-          maxLength: 25
-          type: string
-        value:
-          description: Metadata value.
-          example: string
-          maxLength: 1024
-          type: string
-      required:
-        - type
       type: object
     UpdateSceneItemOverrideRequest:
       additionalProperties: false
@@ -2597,7 +2608,7 @@ components:
         type:
           description: Resource object type.
           example: scene-item-override
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2631,7 +2642,7 @@ components:
         type:
           description: Resource object type.
           example: scene-item
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2663,7 +2674,7 @@ components:
         type:
           description: Resource object type.
           example: scene
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2681,7 +2692,7 @@ components:
             - draft
             - commit
           example: commit
-          maxLength: 25
+          maxLength: 32
           type: string
       type: object
     UpdateSceneViewRequest:
@@ -2699,7 +2710,7 @@ components:
         type:
           description: Resource object type.
           example: scene-view
-          maxLength: 25
+          maxLength: 32
           type: string
       required:
         - attributes
@@ -2829,16 +2840,15 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Filter with the given suppliedId(s).
+        - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
           name: 'filter[suppliedId]'
           required: false
           schema:
-            items:
-              $ref: '#/components/schemas/NonEmptyString'
-            maxItems: 1024
-            type: array
+            example: 'some-id-1,some-id-2'
+            maxLength: 1024
+            type: string
           style: form
       responses:
         '200':
@@ -3469,6 +3479,19 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: >-
+            Comma-separated list of fields to return in response. An empty value
+            returns no fields. Due to its potential size, metadata is only
+            returned if explictly requested.
+          explode: true
+          in: query
+          name: 'fields[part-revisions]'
+          required: false
+          schema:
+            example: 'created,suppliedId'
+            maxLength: 32
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -3534,10 +3557,10 @@ paths:
 
         |▹ attributes|UpdatePartRevisionRequest_data_attributes|true||
 
-        |▹▹ metadata|object|false|Metadata about the `part-revision`.|
+        |▹▹ metadata|object|false|Metadata about the `part` and/or
+        `part-revision`.|
 
-        |▹▹▹
-        **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false||
+        |▹▹▹ **additionalProperties**|MetadataValue|false||
 
         |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata
         value.|
@@ -3651,16 +3674,15 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Filter with the given suppliedId(s).
+        - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
           name: 'filter[suppliedId]'
           required: false
           schema:
-            items:
-              $ref: '#/components/schemas/NonEmptyString'
-            maxItems: 1024
-            type: array
+            example: 'some-id-1,some-id-2'
+            maxLength: 1024
+            type: string
           style: form
       responses:
         '200':
@@ -3872,16 +3894,36 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
-        - description: Filter with the given suppliedId(s).
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: 'page[cursor]'
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: 'page[size]'
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
           name: 'filter[suppliedId]'
           required: false
           schema:
-            items:
-              $ref: '#/components/schemas/NonEmptyString'
-            maxItems: 1024
-            type: array
+            example: 'some-id-1,some-id-2'
+            maxLength: 1024
+            type: string
           style: form
       responses:
         '200':
@@ -6413,27 +6455,26 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Filter with the given suppliedId(s).
+        - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
           name: 'filter[suppliedId]'
           required: false
           schema:
-            items:
-              $ref: '#/components/schemas/NonEmptyString'
-            maxItems: 1024
-            type: array
+            example: 'some-id-1,some-id-2'
+            maxLength: 1024
+            type: string
           style: form
-        - description: Filter with the given parent ID.
+        - description: Parent ID to filter on.
           explode: true
           in: query
           name: 'filter[parent]'
           required: false
           schema:
-            items:
-              $ref: '#/components/schemas/Uuid'
-            maxItems: 1024
-            type: array
+            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            format: uuid
+            maxLength: 36
+            type: string
           style: form
       responses:
         '200':
