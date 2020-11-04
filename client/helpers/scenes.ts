@@ -9,7 +9,6 @@ import {
   CreateSceneTemplateRequest,
   pollQueuedJob,
   RenderImageArgs,
-  SceneItem,
   SceneRelationshipDataTypeEnum,
   uploadFile,
   VertexClient,

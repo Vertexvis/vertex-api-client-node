@@ -82,7 +82,7 @@ export async function getPartRevisionBySuppliedId(
 ): Promise<PartRevision | undefined> {
   // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
   const existingPart = await getBySuppliedId<Part, PartList>(
-    () => args.client.parts.getParts(undefined, 1, [args.suppliedPartId]),
+    () => args.client.parts.getParts(undefined, 1, args.suppliedPartId),
     args.suppliedPartId
   );
   if (existingPart) {
@@ -91,9 +91,12 @@ export async function getPartRevisionBySuppliedId(
       PartRevisionList
     >(
       () =>
-        args.client.partRevisions.getPartRevisions(existingPart.data.id, [
-          args.suppliedRevisionId,
-        ]),
+        args.client.partRevisions.getPartRevisions(
+          existingPart.data.id,
+          undefined,
+          undefined,
+          args.suppliedRevisionId
+        ),
       args.suppliedRevisionId
     );
     if (existingPartRev) return existingPartRev;

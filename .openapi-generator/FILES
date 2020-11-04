@@ -1,6 +1,4 @@
-.gitignore
 .npmignore
 api.ts
 base.ts
 configuration.ts
-tsconfig.json

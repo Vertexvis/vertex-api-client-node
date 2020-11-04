@@ -1547,6 +1547,38 @@ export interface Matrix4Nullable {
 /**
  *
  * @export
+ * @interface MetadataValue
+ */
+export interface MetadataValue {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof MetadataValue
+   */
+  type: MetadataValueTypeEnum;
+  /**
+   * Metadata value.
+   * @type {string}
+   * @memberof MetadataValue
+   */
+  value?: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum MetadataValueTypeEnum {
+  String = 'string',
+  Long = 'long',
+  Float = 'float',
+  Date = 'date',
+  Null = 'null',
+}
+
+/**
+ *
+ * @export
  * @interface ModelError
  */
 export interface ModelError {
@@ -1741,7 +1773,7 @@ export interface PartDataRelationships {
    * @type {Array<PartDataRelationshipsPartRevisions>}
    * @memberof PartDataRelationships
    */
-  partRevisions: Array<PartDataRelationshipsPartRevisions>;
+  partRevisions?: Array<PartDataRelationshipsPartRevisions>;
 }
 /**
  *
@@ -1879,13 +1911,19 @@ export interface PartRevisionDataAttributes {
    * @type {string}
    * @memberof PartRevisionDataAttributes
    */
-  created: string;
+  created?: string;
+  /**
+   *
+   * @type {{ [key: string]: MetadataValue; }}
+   * @memberof PartRevisionDataAttributes
+   */
+  metadata?: { [key: string]: MetadataValue };
   /**
    *
    * @type {string}
    * @memberof PartRevisionDataAttributes
    */
-  suppliedId: string;
+  suppliedId?: string;
 }
 /**
  *
@@ -3243,44 +3281,12 @@ export interface UpdatePartRevisionRequestData {
  */
 export interface UpdatePartRevisionRequestDataAttributes {
   /**
-   * Metadata about the `part-revision`.
-   * @type {{ [key: string]: UpdatePartRevisionRequestDataAttributesMetadata; }}
+   * Metadata about the `part` and/or `part-revision`.
+   * @type {{ [key: string]: MetadataValue; }}
    * @memberof UpdatePartRevisionRequestDataAttributes
    */
-  metadata?: { [key: string]: UpdatePartRevisionRequestDataAttributesMetadata };
+  metadata?: { [key: string]: MetadataValue };
 }
-/**
- *
- * @export
- * @interface UpdatePartRevisionRequestDataAttributesMetadata
- */
-export interface UpdatePartRevisionRequestDataAttributesMetadata {
-  /**
-   * Type of metadata value.
-   * @type {string}
-   * @memberof UpdatePartRevisionRequestDataAttributesMetadata
-   */
-  type: UpdatePartRevisionRequestDataAttributesMetadataTypeEnum;
-  /**
-   * Metadata value.
-   * @type {string}
-   * @memberof UpdatePartRevisionRequestDataAttributesMetadata
-   */
-  value?: string;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum UpdatePartRevisionRequestDataAttributesMetadataTypeEnum {
-  String = 'string',
-  Long = 'long',
-  Float = 'float',
-  Date = 'date',
-  Null = 'null',
-}
-
 /**
  *
  * @export
@@ -3781,14 +3787,14 @@ export const FilesApiAxiosParamCreator = function (
      *  Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getFiles: async (
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/files`;
@@ -3825,7 +3831,7 @@ export const FilesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      if (filterSuppliedId) {
+      if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
@@ -4025,14 +4031,14 @@ export const FilesApiFp = function (configuration?: Configuration) {
      *  Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getFiles(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>
@@ -4132,14 +4138,14 @@ export const FilesApiFactory = function (
      *  Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getFiles(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<FileList> {
       return FilesApiFp(configuration)
@@ -4211,7 +4217,7 @@ export class FilesApi extends BaseAPI {
    *  Get `files`.
    * @param {string} [pageCursor] The cursor for the next page of items.
    * @param {number} [pageSize] The number of items to return.
-   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
@@ -4219,7 +4225,7 @@ export class FilesApi extends BaseAPI {
   public getFiles(
     pageCursor?: string,
     pageSize?: number,
-    filterSuppliedId?: Array<string>,
+    filterSuppliedId?: string,
     options?: any
   ) {
     return FilesApiFp(this.configuration)
@@ -5327,11 +5333,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevision: async (
       id: string,
+      fieldsPartRevisions?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -5370,6 +5378,10 @@ export const PartRevisionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
+      if (fieldsPartRevisions !== undefined) {
+        localVarQueryParameter['fields[part-revisions]'] = fieldsPartRevisions;
+      }
+
       const query = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
         query.set(key, localVarQueryParameter[key]);
@@ -5395,13 +5407,17 @@ export const PartRevisionsApiAxiosParamCreator = function (
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevisions: async (
       id: string,
-      filterSuppliedId?: Array<string>,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -5440,7 +5456,15 @@ export const PartRevisionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      if (filterSuppliedId) {
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
@@ -5467,7 +5491,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -5570,18 +5594,20 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPartRevision(
       id: string,
+      fieldsPartRevisions?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
     > {
       const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
         configuration
-      ).getPartRevision(id, options);
+      ).getPartRevision(id, fieldsPartRevisions, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -5596,13 +5622,17 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPartRevisions(
       id: string,
-      filterSuppliedId?: Array<string>,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
       options?: any
     ): Promise<
       (
@@ -5612,7 +5642,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
         configuration
-      ).getPartRevisions(id, filterSuppliedId, options);
+      ).getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -5625,7 +5655,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       };
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -5668,32 +5698,41 @@ export const PartRevisionsApiFactory = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getPartRevision(id: string, options?: any): AxiosPromise<PartRevision> {
+    getPartRevision(
+      id: string,
+      fieldsPartRevisions?: string,
+      options?: any
+    ): AxiosPromise<PartRevision> {
       return PartRevisionsApiFp(configuration)
-        .getPartRevision(id, options)
+        .getPartRevision(id, fieldsPartRevisions, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *  Get `part-revisions`.
      * @param {string} id The &#x60;part&#x60; ID.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevisions(
       id: string,
-      filterSuppliedId?: Array<string>,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<PartRevisionList> {
       return PartRevisionsApiFp(configuration)
-        .getPartRevisions(id, filterSuppliedId, options)
+        .getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -5721,36 +5760,45 @@ export class PartRevisionsApi extends BaseAPI {
   /**
    *  Get a `part-revision` by ID.
    * @param {string} id The &#x60;part-revision&#x60; ID.
+   * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
-  public getPartRevision(id: string, options?: any) {
+  public getPartRevision(
+    id: string,
+    fieldsPartRevisions?: string,
+    options?: any
+  ) {
     return PartRevisionsApiFp(this.configuration)
-      .getPartRevision(id, options)
+      .getPartRevision(id, fieldsPartRevisions, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `part-revisions`.
    * @param {string} id The &#x60;part&#x60; ID.
-   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+   * @param {string} [pageCursor] The cursor for the next page of items.
+   * @param {number} [pageSize] The number of items to return.
+   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
   public getPartRevisions(
     id: string,
-    filterSuppliedId?: Array<string>,
+    pageCursor?: string,
+    pageSize?: number,
+    filterSuppliedId?: string,
     options?: any
   ) {
     return PartRevisionsApiFp(this.configuration)
-      .getPartRevisions(id, filterSuppliedId, options)
+      .getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
-   *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part-revision`.| |▹▹▹ **additionalProperties**|UpdatePartRevisionRequest_data_attributes_metadata|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+   *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
    * @param {string} id The &#x60;part-revision&#x60; ID.
    * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
    * @param {*} [options] Override http request option.
@@ -5920,14 +5968,14 @@ export const PartsApiAxiosParamCreator = function (
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getParts: async (
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/parts`;
@@ -5964,7 +6012,7 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      if (filterSuppliedId) {
+      if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
@@ -6055,14 +6103,14 @@ export const PartsApiFp = function (configuration?: Configuration) {
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getParts(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>
@@ -6123,14 +6171,14 @@ export const PartsApiFactory = function (
      *  Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getParts(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
+      filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<PartList> {
       return PartsApiFp(configuration)
@@ -6177,7 +6225,7 @@ export class PartsApi extends BaseAPI {
    *  Get `parts`.
    * @param {string} [pageCursor] The cursor for the next page of items.
    * @param {number} [pageSize] The number of items to return.
-   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
+   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartsApi
@@ -6185,7 +6233,7 @@ export class PartsApi extends BaseAPI {
   public getParts(
     pageCursor?: string,
     pageSize?: number,
-    filterSuppliedId?: Array<string>,
+    filterSuppliedId?: string,
     options?: any
   ) {
     return PartsApiFp(this.configuration)
@@ -7596,8 +7644,8 @@ export const SceneItemsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
-     * @param {Array<string>} [filterParent] Filter with the given parent ID.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterParent] Parent ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7605,8 +7653,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
-      filterParent?: Array<string>,
+      filterSuppliedId?: string,
+      filterParent?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -7653,11 +7701,11 @@ export const SceneItemsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      if (filterSuppliedId) {
+      if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      if (filterParent) {
+      if (filterParent !== undefined) {
         localVarQueryParameter['filter[parent]'] = filterParent;
       }
 
@@ -7867,8 +7915,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
-     * @param {Array<string>} [filterParent] Filter with the given parent ID.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterParent] Parent ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7876,8 +7924,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
-      filterParent?: Array<string>,
+      filterSuppliedId?: string,
+      filterParent?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>
@@ -7987,8 +8035,8 @@ export const SceneItemsApiFactory = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
-     * @param {Array<string>} [filterParent] Filter with the given parent ID.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterParent] Parent ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7996,8 +8044,8 @@ export const SceneItemsApiFactory = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: Array<string>,
-      filterParent?: Array<string>,
+      filterSuppliedId?: string,
+      filterParent?: string,
       options?: any
     ): AxiosPromise<SceneItemList> {
       return SceneItemsApiFp(configuration)
@@ -8086,8 +8134,8 @@ export class SceneItemsApi extends BaseAPI {
    * @param {string} id The &#x60;scene&#x60; ID.
    * @param {string} [pageCursor] The cursor for the next page of items.
    * @param {number} [pageSize] The number of items to return.
-   * @param {Array<string>} [filterSuppliedId] Filter with the given suppliedId(s).
-   * @param {Array<string>} [filterParent] Filter with the given parent ID.
+   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+   * @param {string} [filterParent] Parent ID to filter on.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
@@ -8096,8 +8144,8 @@ export class SceneItemsApi extends BaseAPI {
     id: string,
     pageCursor?: string,
     pageSize?: number,
-    filterSuppliedId?: Array<string>,
-    filterParent?: Array<string>,
+    filterSuppliedId?: string,
+    filterParent?: string,
     options?: any
   ) {
     return SceneItemsApiFp(this.configuration)
