@@ -38,7 +38,7 @@ interface CtorArgs {
   token: OAuth2Token;
 }
 
-const TokenExpiryBufferMs = 60000;
+const TenMinsInMs = 600_000;
 const SecToMs = 1000;
 
 export class VertexClient {
@@ -162,7 +162,7 @@ export class VertexClient {
     const nowMs = nowEpochMs();
     const expiresAtMs =
       this.tokenFetchedEpochMs + this.token.expires_in * SecToMs;
-    const tokenValid = expiresAtMs > nowMs - TokenExpiryBufferMs;
+    const tokenValid = expiresAtMs > nowMs - TenMinsInMs;
     if (tokenValid) return this.token.access_token;
 
     this.token = await createToken(this.auth);

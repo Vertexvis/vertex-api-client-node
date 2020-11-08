@@ -1319,10 +1319,10 @@ export interface Hit {
   data: HitData;
   /**
    *
-   * @type {Array<HitResult | SceneItem>}
+   * @type {Array<HitResultData | SceneItemData>}
    * @memberof Hit
    */
-  included: Array<HitResult | SceneItem>;
+  included: Array<HitResultData | SceneItemData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -1373,25 +1373,6 @@ export interface HitDataRelationships {
    * @memberof HitDataRelationships
    */
   results: Array<RelationshipData>;
-}
-/**
- *
- * @export
- * @interface HitResult
- */
-export interface HitResult {
-  /**
-   *
-   * @type {HitResultData}
-   * @memberof HitResult
-   */
-  data: HitResultData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof HitResult
-   */
-  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2480,7 +2461,7 @@ export interface SceneItem {
    * @type {{ [key: string]: Link; }}
    * @memberof SceneItem
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -3602,6 +3583,7 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -3623,14 +3605,14 @@ export const FilesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3638,9 +3620,13 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createFileRequest !== 'string';
       const needsSerialization =
-        typeof createFileRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createFileRequest !== undefined ? createFileRequest : {}
@@ -3677,6 +3663,7 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'DELETE',
         ...baseOptions,
@@ -3696,14 +3683,14 @@ export const FilesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3742,6 +3729,7 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -3761,14 +3749,14 @@ export const FilesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3804,6 +3792,7 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -3835,14 +3824,14 @@ export const FilesApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3893,6 +3882,7 @@ export const FilesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -3914,14 +3904,14 @@ export const FilesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -3929,7 +3919,13 @@ export const FilesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
-      const needsSerialization = false;
+      const nonString = typeof body !== 'string';
+      const needsSerialization =
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(body !== undefined ? body : {})
         : body || '';
@@ -4168,6 +4164,97 @@ export const FilesApiFactory = function (
 };
 
 /**
+ * Request parameters for createFile operation in FilesApi.
+ * @export
+ * @interface FilesApiCreateFileRequest
+ */
+export interface FilesApiCreateFileRequest {
+  /**
+   *
+   * @type {CreateFileRequest}
+   * @memberof FilesApiCreateFile
+   */
+  readonly createFileRequest: CreateFileRequest;
+}
+
+/**
+ * Request parameters for deleteFile operation in FilesApi.
+ * @export
+ * @interface FilesApiDeleteFileRequest
+ */
+export interface FilesApiDeleteFileRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiDeleteFile
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getFile operation in FilesApi.
+ * @export
+ * @interface FilesApiGetFileRequest
+ */
+export interface FilesApiGetFileRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiGetFile
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getFiles operation in FilesApi.
+ * @export
+ * @interface FilesApiGetFilesRequest
+ */
+export interface FilesApiGetFilesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof FilesApiGetFiles
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof FilesApiGetFiles
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof FilesApiGetFiles
+   */
+  readonly filterSuppliedId?: string;
+}
+
+/**
+ * Request parameters for uploadFile operation in FilesApi.
+ * @export
+ * @interface FilesApiUploadFileRequest
+ */
+export interface FilesApiUploadFileRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiUploadFile
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {any}
+   * @memberof FilesApiUploadFile
+   */
+  readonly body: any;
+}
+
+/**
  * FilesApi - object-oriented interface
  * @export
  * @class FilesApi
@@ -4176,74 +4263,83 @@ export const FilesApiFactory = function (
 export class FilesApi extends BaseAPI {
   /**
    *  Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateFileRequest_data|true|| |▹ attributes|CreateFileRequest_data_attributes|true|| |▹▹ name|string|true|Name matching that of the file you are uploading, including file extension.| |▹▹ rootFileName|string|false|File name of the root part or assembly, including file extension. Required if `name` references an archive file extension, ignored otherwise.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ type|string|true|Resource object type.|
-   * @param {CreateFileRequest} createFileRequest
+   * @param {FilesApiCreateFileRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
    */
-  public createFile(createFileRequest: CreateFileRequest, options?: any) {
+  public createFile(
+    requestParameters: FilesApiCreateFileRequest,
+    options?: any
+  ) {
     return FilesApiFp(this.configuration)
-      .createFile(createFileRequest, options)
+      .createFile(requestParameters.createFileRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Delete a `file`.
-   * @param {string} id The &#x60;file&#x60; ID.
+   * @param {FilesApiDeleteFileRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
    */
-  public deleteFile(id: string, options?: any) {
+  public deleteFile(
+    requestParameters: FilesApiDeleteFileRequest,
+    options?: any
+  ) {
     return FilesApiFp(this.configuration)
-      .deleteFile(id, options)
+      .deleteFile(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `file` by ID.
-   * @param {string} id The &#x60;file&#x60; ID.
+   * @param {FilesApiGetFileRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
    */
-  public getFile(id: string, options?: any) {
+  public getFile(requestParameters: FilesApiGetFileRequest, options?: any) {
     return FilesApiFp(this.configuration)
-      .getFile(id, options)
+      .getFile(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `files`.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
-   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+   * @param {FilesApiGetFilesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
    */
   public getFiles(
-    pageCursor?: string,
-    pageSize?: number,
-    filterSuppliedId?: string,
+    requestParameters: FilesApiGetFilesRequest = {},
     options?: any
   ) {
     return FilesApiFp(this.configuration)
-      .getFiles(pageCursor, pageSize, filterSuppliedId, options)
+      .getFiles(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
-   * @param {string} id The &#x60;file&#x60; ID.
-   * @param {any} body
+   * @param {FilesApiUploadFileRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof FilesApi
    */
-  public uploadFile(id: string, body: any, options?: any) {
+  public uploadFile(
+    requestParameters: FilesApiUploadFileRequest,
+    options?: any
+  ) {
     return FilesApiFp(this.configuration)
-      .uploadFile(id, body, options)
+      .uploadFile(requestParameters.id, requestParameters.body, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -4283,6 +4379,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -4304,14 +4401,14 @@ export const GeometrySetsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4319,9 +4416,13 @@ export const GeometrySetsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createGeometrySetRequest !== 'string';
       const needsSerialization =
-        typeof createGeometrySetRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createGeometrySetRequest !== undefined
@@ -4363,6 +4464,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -4382,14 +4484,14 @@ export const GeometrySetsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4423,6 +4525,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -4450,14 +4553,14 @@ export const GeometrySetsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4622,6 +4725,55 @@ export const GeometrySetsApiFactory = function (
 };
 
 /**
+ * Request parameters for createGeometrySet operation in GeometrySetsApi.
+ * @export
+ * @interface GeometrySetsApiCreateGeometrySetRequest
+ */
+export interface GeometrySetsApiCreateGeometrySetRequest {
+  /**
+   *
+   * @type {CreateGeometrySetRequest}
+   * @memberof GeometrySetsApiCreateGeometrySet
+   */
+  readonly createGeometrySetRequest: CreateGeometrySetRequest;
+}
+
+/**
+ * Request parameters for getGeometrySet operation in GeometrySetsApi.
+ * @export
+ * @interface GeometrySetsApiGetGeometrySetRequest
+ */
+export interface GeometrySetsApiGetGeometrySetRequest {
+  /**
+   * The &#x60;geometry-set&#x60; ID.
+   * @type {string}
+   * @memberof GeometrySetsApiGetGeometrySet
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getGeometrySets operation in GeometrySetsApi.
+ * @export
+ * @interface GeometrySetsApiGetGeometrySetsRequest
+ */
+export interface GeometrySetsApiGetGeometrySetsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof GeometrySetsApiGetGeometrySets
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof GeometrySetsApiGetGeometrySets
+   */
+  readonly pageSize?: number;
+}
+
+/**
  * GeometrySetsApi - object-oriented interface
  * @export
  * @class GeometrySetsApi
@@ -4630,48 +4782,53 @@ export const GeometrySetsApiFactory = function (
 export class GeometrySetsApi extends BaseAPI {
   /**
    *  Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateGeometrySetRequest_data|true|| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {CreateGeometrySetRequest} createGeometrySetRequest
+   * @param {GeometrySetsApiCreateGeometrySetRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof GeometrySetsApi
    */
   public createGeometrySet(
-    createGeometrySetRequest: CreateGeometrySetRequest,
+    requestParameters: GeometrySetsApiCreateGeometrySetRequest,
     options?: any
   ) {
     return GeometrySetsApiFp(this.configuration)
-      .createGeometrySet(createGeometrySetRequest, options)
+      .createGeometrySet(requestParameters.createGeometrySetRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `geometry-set` by ID.
-   * @param {string} id The &#x60;geometry-set&#x60; ID.
+   * @param {GeometrySetsApiGetGeometrySetRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof GeometrySetsApi
    */
-  public getGeometrySet(id: string, options?: any) {
+  public getGeometrySet(
+    requestParameters: GeometrySetsApiGetGeometrySetRequest,
+    options?: any
+  ) {
     return GeometrySetsApiFp(this.configuration)
-      .getGeometrySet(id, options)
+      .getGeometrySet(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `geometry-sets`.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
+   * @param {GeometrySetsApiGetGeometrySetsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof GeometrySetsApi
    */
   public getGeometrySets(
-    pageCursor?: string,
-    pageSize?: number,
+    requestParameters: GeometrySetsApiGetGeometrySetsRequest = {},
     options?: any
   ) {
     return GeometrySetsApiFp(this.configuration)
-      .getGeometrySets(pageCursor, pageSize, options)
+      .getGeometrySets(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -4688,12 +4845,16 @@ export const HitsApiAxiosParamCreator = function (
      *  Create a `hit` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneHit: async (
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -4720,6 +4881,7 @@ export const HitsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -4739,16 +4901,24 @@ export const HitsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
+      }
+
+      if (fieldsSource !== undefined) {
+        localVarQueryParameter['fields[source]'] = fieldsSource;
+      }
+
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4756,9 +4926,13 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createHitRequest !== 'string';
       const needsSerialization =
-        typeof createHitRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
@@ -4773,12 +4947,16 @@ export const HitsApiAxiosParamCreator = function (
      *  Create a `hit` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneViewHit: async (
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -4805,6 +4983,7 @@ export const HitsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -4824,16 +5003,24 @@ export const HitsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
+      }
+
+      if (fieldsSource !== undefined) {
+        localVarQueryParameter['fields[source]'] = fieldsSource;
+      }
+
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -4841,9 +5028,13 @@ export const HitsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createHitRequest !== 'string';
       const needsSerialization =
-        typeof createHitRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(createHitRequest !== undefined ? createHitRequest : {})
         : createHitRequest || '';
@@ -4867,19 +5058,23 @@ export const HitsApiFp = function (configuration?: Configuration) {
      *  Create a `hit` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createSceneHit(
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
       const localVarAxiosArgs = await HitsApiAxiosParamCreator(
         configuration
-      ).createSceneHit(id, createHitRequest, options);
+      ).createSceneHit(id, createHitRequest, include, fieldsSource, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -4895,19 +5090,29 @@ export const HitsApiFp = function (configuration?: Configuration) {
      *  Create a `hit` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createSceneViewHit(
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
       const localVarAxiosArgs = await HitsApiAxiosParamCreator(
         configuration
-      ).createSceneViewHit(id, createHitRequest, options);
+      ).createSceneViewHit(
+        id,
+        createHitRequest,
+        include,
+        fieldsSource,
+        options
+      );
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -4936,36 +5141,120 @@ export const HitsApiFactory = function (
      *  Create a `hit` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneHit(
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options?: any
     ): AxiosPromise<Hit> {
       return HitsApiFp(configuration)
-        .createSceneHit(id, createHitRequest, options)
+        .createSceneHit(id, createHitRequest, include, fieldsSource, options)
         .then((request) => request(axios, basePath));
     },
     /**
      *  Create a `hit` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneViewHit(
       id: string,
       createHitRequest: CreateHitRequest,
+      include?: string,
+      fieldsSource?: string,
       options?: any
     ): AxiosPromise<Hit> {
       return HitsApiFp(configuration)
-        .createSceneViewHit(id, createHitRequest, options)
+        .createSceneViewHit(
+          id,
+          createHitRequest,
+          include,
+          fieldsSource,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
   };
 };
+
+/**
+ * Request parameters for createSceneHit operation in HitsApi.
+ * @export
+ * @interface HitsApiCreateSceneHitRequest
+ */
+export interface HitsApiCreateSceneHitRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof HitsApiCreateSceneHit
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateHitRequest}
+   * @memberof HitsApiCreateSceneHit
+   */
+  readonly createHitRequest: CreateHitRequest;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof HitsApiCreateSceneHit
+   */
+  readonly include?: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * @type {string}
+   * @memberof HitsApiCreateSceneHit
+   */
+  readonly fieldsSource?: string;
+}
+
+/**
+ * Request parameters for createSceneViewHit operation in HitsApi.
+ * @export
+ * @interface HitsApiCreateSceneViewHitRequest
+ */
+export interface HitsApiCreateSceneViewHitRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof HitsApiCreateSceneViewHit
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateHitRequest}
+   * @memberof HitsApiCreateSceneViewHit
+   */
+  readonly createHitRequest: CreateHitRequest;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof HitsApiCreateSceneViewHit
+   */
+  readonly include?: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * @type {string}
+   * @memberof HitsApiCreateSceneViewHit
+   */
+  readonly fieldsSource?: string;
+}
 
 /**
  * HitsApi - object-oriented interface
@@ -4976,37 +5265,45 @@ export const HitsApiFactory = function (
 export class HitsApi extends BaseAPI {
   /**
    *  Create a `hit` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {CreateHitRequest} createHitRequest
+   * @param {HitsApiCreateSceneHitRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HitsApi
    */
   public createSceneHit(
-    id: string,
-    createHitRequest: CreateHitRequest,
+    requestParameters: HitsApiCreateSceneHitRequest,
     options?: any
   ) {
     return HitsApiFp(this.configuration)
-      .createSceneHit(id, createHitRequest, options)
+      .createSceneHit(
+        requestParameters.id,
+        requestParameters.createHitRequest,
+        requestParameters.include,
+        requestParameters.fieldsSource,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Create a `hit` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateHitRequest_data|true|| |▹ attributes|CreateHitRequest_data_attributes|true|| |▹▹ point|Point|true|2D point.| |▹▹▹ dx|integer(int32)|true|x-axis coordinate.| |▹▹▹ dy|integer(int32)|true|y-axis coordinate.| |▹▹ viewport|Dimensions|true|An item\'s height and width.| |▹▹▹ height|integer(int32)|true|Item\'s height.| |▹▹▹ width|integer(int32)|true|Item\'s width.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-view&#x60; ID.
-   * @param {CreateHitRequest} createHitRequest
+   * @param {HitsApiCreateSceneViewHitRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof HitsApi
    */
   public createSceneViewHit(
-    id: string,
-    createHitRequest: CreateHitRequest,
+    requestParameters: HitsApiCreateSceneViewHitRequest,
     options?: any
   ) {
     return HitsApiFp(this.configuration)
-      .createSceneViewHit(id, createHitRequest, options)
+      .createSceneViewHit(
+        requestParameters.id,
+        requestParameters.createHitRequest,
+        requestParameters.include,
+        requestParameters.fieldsSource,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -5045,6 +5342,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -5074,14 +5372,14 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] =
         'application/x-www-form-urlencoded';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5124,6 +5422,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -5143,14 +5442,14 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5158,9 +5457,13 @@ export const Oauth2ApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof revokeOAuth2TokenRequest !== 'string';
       const needsSerialization =
-        typeof revokeOAuth2TokenRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             revokeOAuth2TokenRequest !== undefined
@@ -5285,6 +5588,41 @@ export const Oauth2ApiFactory = function (
 };
 
 /**
+ * Request parameters for createToken operation in Oauth2Api.
+ * @export
+ * @interface Oauth2ApiCreateTokenRequest
+ */
+export interface Oauth2ApiCreateTokenRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly grantType: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly scope?: string;
+}
+
+/**
+ * Request parameters for revokeToken operation in Oauth2Api.
+ * @export
+ * @interface Oauth2ApiRevokeTokenRequest
+ */
+export interface Oauth2ApiRevokeTokenRequest {
+  /**
+   *
+   * @type {RevokeOAuth2TokenRequest}
+   * @memberof Oauth2ApiRevokeToken
+   */
+  readonly revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest;
+}
+
+/**
  * Oauth2Api - object-oriented interface
  * @export
  * @class Oauth2Api
@@ -5293,31 +5631,37 @@ export const Oauth2ApiFactory = function (
 export class Oauth2Api extends BaseAPI {
   /**
    *  Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |grant_type|string|true|| |scope|string|false||
-   * @param {string} grantType
-   * @param {string} [scope]
+   * @param {Oauth2ApiCreateTokenRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof Oauth2Api
    */
-  public createToken(grantType: string, scope?: string, options?: any) {
+  public createToken(
+    requestParameters: Oauth2ApiCreateTokenRequest,
+    options?: any
+  ) {
     return Oauth2ApiFp(this.configuration)
-      .createToken(grantType, scope, options)
+      .createToken(
+        requestParameters.grantType,
+        requestParameters.scope,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Revoke an OAuth2 access token.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|RevokeOAuth2TokenRequest_data|true|| |▹ attributes|RevokeOAuth2TokenRequest_data_attributes|true|| |▹▹ token|string|true|Token to revoke.| |▹ type|string|true|Resource object type.|
-   * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest
+   * @param {Oauth2ApiRevokeTokenRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof Oauth2Api
    */
   public revokeToken(
-    revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
+    requestParameters: Oauth2ApiRevokeTokenRequest,
     options?: any
   ) {
     return Oauth2ApiFp(this.configuration)
-      .revokeToken(revokeOAuth2TokenRequest, options)
+      .revokeToken(requestParameters.revokeOAuth2TokenRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -5359,6 +5703,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -5382,14 +5727,14 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['fields[part-revisions]'] = fieldsPartRevisions;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5437,6 +5782,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -5468,14 +5814,14 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5529,6 +5875,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'PATCH',
         ...baseOptions,
@@ -5550,14 +5897,14 @@ export const PartRevisionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5565,9 +5912,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof updatePartRevisionRequest !== 'string';
       const needsSerialization =
-        typeof updatePartRevisionRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updatePartRevisionRequest !== undefined
@@ -5751,6 +6102,83 @@ export const PartRevisionsApiFactory = function (
 };
 
 /**
+ * Request parameters for getPartRevision operation in PartRevisionsApi.
+ * @export
+ * @interface PartRevisionsApiGetPartRevisionRequest
+ */
+export interface PartRevisionsApiGetPartRevisionRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof PartRevisionsApiGetPartRevision
+   */
+  readonly id: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * @type {string}
+   * @memberof PartRevisionsApiGetPartRevision
+   */
+  readonly fieldsPartRevisions?: string;
+}
+
+/**
+ * Request parameters for getPartRevisions operation in PartRevisionsApi.
+ * @export
+ * @interface PartRevisionsApiGetPartRevisionsRequest
+ */
+export interface PartRevisionsApiGetPartRevisionsRequest {
+  /**
+   * The &#x60;part&#x60; ID.
+   * @type {string}
+   * @memberof PartRevisionsApiGetPartRevisions
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PartRevisionsApiGetPartRevisions
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PartRevisionsApiGetPartRevisions
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof PartRevisionsApiGetPartRevisions
+   */
+  readonly filterSuppliedId?: string;
+}
+
+/**
+ * Request parameters for updatePartRevision operation in PartRevisionsApi.
+ * @export
+ * @interface PartRevisionsApiUpdatePartRevisionRequest
+ */
+export interface PartRevisionsApiUpdatePartRevisionRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof PartRevisionsApiUpdatePartRevision
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdatePartRevisionRequest}
+   * @memberof PartRevisionsApiUpdatePartRevision
+   */
+  readonly updatePartRevisionRequest: UpdatePartRevisionRequest;
+}
+
+/**
  * PartRevisionsApi - object-oriented interface
  * @export
  * @class PartRevisionsApi
@@ -5759,59 +6187,63 @@ export const PartRevisionsApiFactory = function (
 export class PartRevisionsApi extends BaseAPI {
   /**
    *  Get a `part-revision` by ID.
-   * @param {string} id The &#x60;part-revision&#x60; ID.
-   * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * @param {PartRevisionsApiGetPartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
   public getPartRevision(
-    id: string,
-    fieldsPartRevisions?: string,
+    requestParameters: PartRevisionsApiGetPartRevisionRequest,
     options?: any
   ) {
     return PartRevisionsApiFp(this.configuration)
-      .getPartRevision(id, fieldsPartRevisions, options)
+      .getPartRevision(
+        requestParameters.id,
+        requestParameters.fieldsPartRevisions,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `part-revisions`.
-   * @param {string} id The &#x60;part&#x60; ID.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
-   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+   * @param {PartRevisionsApiGetPartRevisionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
   public getPartRevisions(
-    id: string,
-    pageCursor?: string,
-    pageSize?: number,
-    filterSuppliedId?: string,
+    requestParameters: PartRevisionsApiGetPartRevisionsRequest,
     options?: any
   ) {
     return PartRevisionsApiFp(this.configuration)
-      .getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options)
+      .getPartRevisions(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;part-revision&#x60; ID.
-   * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
+   * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartRevisionsApi
    */
   public updatePartRevision(
-    id: string,
-    updatePartRevisionRequest: UpdatePartRevisionRequest,
+    requestParameters: PartRevisionsApiUpdatePartRevisionRequest,
     options?: any
   ) {
     return PartRevisionsApiFp(this.configuration)
-      .updatePartRevision(id, updatePartRevisionRequest, options)
+      .updatePartRevision(
+        requestParameters.id,
+        requestParameters.updatePartRevisionRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -5848,6 +6280,7 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -5869,14 +6302,14 @@ export const PartsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5884,9 +6317,13 @@ export const PartsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createPartRequest !== 'string';
       const needsSerialization =
-        typeof createPartRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createPartRequest !== undefined ? createPartRequest : {}
@@ -5923,6 +6360,7 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -5942,14 +6380,14 @@ export const PartsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5985,6 +6423,7 @@ export const PartsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -6016,14 +6455,14 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6189,6 +6628,62 @@ export const PartsApiFactory = function (
 };
 
 /**
+ * Request parameters for createPart operation in PartsApi.
+ * @export
+ * @interface PartsApiCreatePartRequest
+ */
+export interface PartsApiCreatePartRequest {
+  /**
+   *
+   * @type {CreatePartRequest}
+   * @memberof PartsApiCreatePart
+   */
+  readonly createPartRequest: CreatePartRequest;
+}
+
+/**
+ * Request parameters for getPart operation in PartsApi.
+ * @export
+ * @interface PartsApiGetPartRequest
+ */
+export interface PartsApiGetPartRequest {
+  /**
+   * The &#x60;part&#x60; ID.
+   * @type {string}
+   * @memberof PartsApiGetPart
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getParts operation in PartsApi.
+ * @export
+ * @interface PartsApiGetPartsRequest
+ */
+export interface PartsApiGetPartsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PartsApiGetParts
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PartsApiGetParts
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof PartsApiGetParts
+   */
+  readonly filterSuppliedId?: string;
+}
+
+/**
  * PartsApi - object-oriented interface
  * @export
  * @class PartsApi
@@ -6197,47 +6692,51 @@ export const PartsApiFactory = function (
 export class PartsApi extends BaseAPI {
   /**
    *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {CreatePartRequest} createPartRequest
+   * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartsApi
    */
-  public createPart(createPartRequest: CreatePartRequest, options?: any) {
+  public createPart(
+    requestParameters: PartsApiCreatePartRequest,
+    options?: any
+  ) {
     return PartsApiFp(this.configuration)
-      .createPart(createPartRequest, options)
+      .createPart(requestParameters.createPartRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `part` by ID.
-   * @param {string} id The &#x60;part&#x60; ID.
+   * @param {PartsApiGetPartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartsApi
    */
-  public getPart(id: string, options?: any) {
+  public getPart(requestParameters: PartsApiGetPartRequest, options?: any) {
     return PartsApiFp(this.configuration)
-      .getPart(id, options)
+      .getPart(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `parts`.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
-   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+   * @param {PartsApiGetPartsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PartsApi
    */
   public getParts(
-    pageCursor?: string,
-    pageSize?: number,
-    filterSuppliedId?: string,
+    requestParameters: PartsApiGetPartsRequest = {},
     options?: any
   ) {
     return PartsApiFp(this.configuration)
-      .getParts(pageCursor, pageSize, filterSuppliedId, options)
+      .getParts(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -6289,6 +6788,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -6310,14 +6810,14 @@ export const SceneAlterationsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6325,9 +6825,13 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneAlterationRequest !== 'string';
       const needsSerialization =
-        typeof createSceneAlterationRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneAlterationRequest !== undefined
@@ -6369,6 +6873,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -6388,14 +6893,14 @@ export const SceneAlterationsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6437,6 +6942,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -6456,14 +6962,14 @@ export const SceneAlterationsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6505,6 +7011,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -6524,14 +7031,14 @@ export const SceneAlterationsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6742,6 +7249,69 @@ export const SceneAlterationsApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneAlteration operation in SceneAlterationsApi.
+ * @export
+ * @interface SceneAlterationsApiCreateSceneAlterationRequest
+ */
+export interface SceneAlterationsApiCreateSceneAlterationRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneAlterationsApiCreateSceneAlteration
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneAlterationRequest}
+   * @memberof SceneAlterationsApiCreateSceneAlteration
+   */
+  readonly createSceneAlterationRequest: CreateSceneAlterationRequest;
+}
+
+/**
+ * Request parameters for getQueuedSceneAlteration operation in SceneAlterationsApi.
+ * @export
+ * @interface SceneAlterationsApiGetQueuedSceneAlterationRequest
+ */
+export interface SceneAlterationsApiGetQueuedSceneAlterationRequest {
+  /**
+   * The &#x60;queued-scene-alteration&#x60; ID.
+   * @type {string}
+   * @memberof SceneAlterationsApiGetQueuedSceneAlteration
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneAlteration operation in SceneAlterationsApi.
+ * @export
+ * @interface SceneAlterationsApiGetSceneAlterationRequest
+ */
+export interface SceneAlterationsApiGetSceneAlterationRequest {
+  /**
+   * The &#x60;scene-alteration&#x60; ID.
+   * @type {string}
+   * @memberof SceneAlterationsApiGetSceneAlteration
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneAlterations operation in SceneAlterationsApi.
+ * @export
+ * @interface SceneAlterationsApiGetSceneAlterationsRequest
+ */
+export interface SceneAlterationsApiGetSceneAlterationsRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneAlterationsApiGetSceneAlterations
+   */
+  readonly id: string;
+}
+
+/**
  * SceneAlterationsApi - object-oriented interface
  * @export
  * @class SceneAlterationsApi
@@ -6750,58 +7320,69 @@ export const SceneAlterationsApiFactory = function (
 export class SceneAlterationsApi extends BaseAPI {
   /**
    *  Create a `scene-alteration` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneAlterationRequest_data|true|| |▹ attributes|CreateSceneAlterationRequest_data_attributes|true|| |▹▹ alterations|[SceneOperation]|true|List of alterations to apply.| |▹▹▹ operations|[anyOf]|true|List of operations to perform on `scene-items` matching the query.| |▹▹▹▹ *anonymous*|ChangeVisibilityOperation|false|| |▹▹▹▹▹ type|enum(change-visibility)|true|Resource object type.| |▹▹▹▹▹ visible|boolean|true|Item visibility.| |▹▹▹▹ *anonymous*|ChangeMaterialOperation|false|| |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a material looks.| |▹▹▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹▹▹ specular|Color3|true|RGB color.| |▹▹▹▹▹ type|enum(change-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearMaterialOperation|false|| |▹▹▹▹▹ type|enum(clear-material)|true|Resource object type.| |▹▹▹▹ *anonymous*|ChangeTransformOperation|false|| |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹▹▹▹ w|number|true|w value.| |▹▹▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹▹▹▹ r3|Vector4|true|4D vector.| |▹▹▹▹▹ type|enum(change-transform)|true|Resource object type.| |▹▹▹▹ *anonymous*|ClearTransformOperation|false|| |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.| |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to combine multiple queries.| |▹▹▹▹ *anonymous*|QueryById|false|| |▹▹▹▹▹ data|QueryById_data|true|| |▹▹▹▹▹▹ attributes|QueryById_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(id, suppliedId)|true|Resource object type.| |▹▹▹▹▹▹▹ value|string|true|ID of the resource.| |▹▹▹▹▹▹ type|enum(query-by-id)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryByCollection|false|| |▹▹▹▹▹ data|QueryByCollection_data|true|| |▹▹▹▹▹▹ attributes|QueryByCollection_data_attributes|true|| |▹▹▹▹▹▹▹ type|enum(and, or)|true|Resource object type.| |▹▹▹▹▹▹▹ values|[QueryById]|true|Query `scene-items`.| |▹▹▹▹▹▹ type|enum(query-by-collection)|true|Resource object type.| |▹▹▹▹ *anonymous*|QueryAll|false|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-view&#x60; ID.
-   * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
+   * @param {SceneAlterationsApiCreateSceneAlterationRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneAlterationsApi
    */
   public createSceneAlteration(
-    id: string,
-    createSceneAlterationRequest: CreateSceneAlterationRequest,
+    requestParameters: SceneAlterationsApiCreateSceneAlterationRequest,
     options?: any
   ) {
     return SceneAlterationsApiFp(this.configuration)
-      .createSceneAlteration(id, createSceneAlterationRequest, options)
+      .createSceneAlteration(
+        requestParameters.id,
+        requestParameters.createSceneAlterationRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `queued-scene-alteration` by ID.
-   * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
+   * @param {SceneAlterationsApiGetQueuedSceneAlterationRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneAlterationsApi
    */
-  public getQueuedSceneAlteration(id: string, options?: any) {
+  public getQueuedSceneAlteration(
+    requestParameters: SceneAlterationsApiGetQueuedSceneAlterationRequest,
+    options?: any
+  ) {
     return SceneAlterationsApiFp(this.configuration)
-      .getQueuedSceneAlteration(id, options)
+      .getQueuedSceneAlteration(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `scene-alteration` by ID.
-   * @param {string} id The &#x60;scene-alteration&#x60; ID.
+   * @param {SceneAlterationsApiGetSceneAlterationRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneAlterationsApi
    */
-  public getSceneAlteration(id: string, options?: any) {
+  public getSceneAlteration(
+    requestParameters: SceneAlterationsApiGetSceneAlterationRequest,
+    options?: any
+  ) {
     return SceneAlterationsApiFp(this.configuration)
-      .getSceneAlteration(id, options)
+      .getSceneAlteration(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `scene-alterations`.
-   * @param {string} id The &#x60;scene-view&#x60; ID.
+   * @param {SceneAlterationsApiGetSceneAlterationsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneAlterationsApi
    */
-  public getSceneAlterations(id: string, options?: any) {
+  public getSceneAlterations(
+    requestParameters: SceneAlterationsApiGetSceneAlterationsRequest,
+    options?: any
+  ) {
     return SceneAlterationsApiFp(this.configuration)
-      .getSceneAlterations(id, options)
+      .getSceneAlterations(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -6853,6 +7434,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -6874,14 +7456,14 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6889,9 +7471,13 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneItemOverrideRequest !== 'string';
       const needsSerialization =
-        typeof createSceneItemOverrideRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemOverrideRequest !== undefined
@@ -6933,6 +7519,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'DELETE',
         ...baseOptions,
@@ -6952,14 +7539,14 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7001,6 +7588,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -7020,14 +7608,14 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7081,6 +7669,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'PATCH',
         ...baseOptions,
@@ -7102,14 +7691,14 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7117,9 +7706,13 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof updateSceneItemOverrideRequest !== 'string';
       const needsSerialization =
-        typeof updateSceneItemOverrideRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemOverrideRequest !== undefined
@@ -7336,6 +7929,76 @@ export const SceneItemOverridesApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneItemOverride operation in SceneItemOverridesApi.
+ * @export
+ * @interface SceneItemOverridesApiCreateSceneItemOverrideRequest
+ */
+export interface SceneItemOverridesApiCreateSceneItemOverrideRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemOverridesApiCreateSceneItemOverride
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneItemOverrideRequest}
+   * @memberof SceneItemOverridesApiCreateSceneItemOverride
+   */
+  readonly createSceneItemOverrideRequest: CreateSceneItemOverrideRequest;
+}
+
+/**
+ * Request parameters for deleteSceneItemOverride operation in SceneItemOverridesApi.
+ * @export
+ * @interface SceneItemOverridesApiDeleteSceneItemOverrideRequest
+ */
+export interface SceneItemOverridesApiDeleteSceneItemOverrideRequest {
+  /**
+   * The &#x60;scene-item-override&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemOverridesApiDeleteSceneItemOverride
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneItemOverrides operation in SceneItemOverridesApi.
+ * @export
+ * @interface SceneItemOverridesApiGetSceneItemOverridesRequest
+ */
+export interface SceneItemOverridesApiGetSceneItemOverridesRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemOverridesApiGetSceneItemOverrides
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for updateSceneItemOverride operation in SceneItemOverridesApi.
+ * @export
+ * @interface SceneItemOverridesApiUpdateSceneItemOverrideRequest
+ */
+export interface SceneItemOverridesApiUpdateSceneItemOverrideRequest {
+  /**
+   * The &#x60;scene-item-override&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemOverridesApiUpdateSceneItemOverride
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneItemOverrideRequest}
+   * @memberof SceneItemOverridesApiUpdateSceneItemOverride
+   */
+  readonly updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest;
+}
+
+/**
  * SceneItemOverridesApi - object-oriented interface
  * @export
  * @class SceneItemOverridesApi
@@ -7344,63 +8007,73 @@ export const SceneItemOverridesApiFactory = function (
 export class SceneItemOverridesApi extends BaseAPI {
   /**
    *  Create a `scene-item-override` for a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemOverrideRequest_data|true|| |▹ attributes|CreateSceneItemOverrideRequest_data_attributes|true|| |▹▹ material|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemOverrideRequest_data_relationships|true|| |▹▹ sceneItem|SceneItemRelationship|true|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-view&#x60; ID.
-   * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest
+   * @param {SceneItemOverridesApiCreateSceneItemOverrideRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemOverridesApi
    */
   public createSceneItemOverride(
-    id: string,
-    createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
+    requestParameters: SceneItemOverridesApiCreateSceneItemOverrideRequest,
     options?: any
   ) {
     return SceneItemOverridesApiFp(this.configuration)
-      .createSceneItemOverride(id, createSceneItemOverrideRequest, options)
+      .createSceneItemOverride(
+        requestParameters.id,
+        requestParameters.createSceneItemOverrideRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Delete a `scene-item-override`.
-   * @param {string} id The &#x60;scene-item-override&#x60; ID.
+   * @param {SceneItemOverridesApiDeleteSceneItemOverrideRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemOverridesApi
    */
-  public deleteSceneItemOverride(id: string, options?: any) {
+  public deleteSceneItemOverride(
+    requestParameters: SceneItemOverridesApiDeleteSceneItemOverrideRequest,
+    options?: any
+  ) {
     return SceneItemOverridesApiFp(this.configuration)
-      .deleteSceneItemOverride(id, options)
+      .deleteSceneItemOverride(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `scene-item-overrides` for a `scene-view`.
-   * @param {string} id The &#x60;scene-view&#x60; ID.
+   * @param {SceneItemOverridesApiGetSceneItemOverridesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemOverridesApi
    */
-  public getSceneItemOverrides(id: string, options?: any) {
+  public getSceneItemOverrides(
+    requestParameters: SceneItemOverridesApiGetSceneItemOverridesRequest,
+    options?: any
+  ) {
     return SceneItemOverridesApiFp(this.configuration)
-      .getSceneItemOverrides(id, options)
+      .getSceneItemOverrides(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Update a `scene-item-override`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdateSceneItemOverrideRequest_data|true|| |▹ attributes|UpdateSceneItemOverrideRequest_data_attributes|true|| |▹▹ material|ColorMaterialNullable¦null|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ transform|Matrix4Nullable¦null|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean¦null|false|Item visibility.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-item-override&#x60; ID.
-   * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest
+   * @param {SceneItemOverridesApiUpdateSceneItemOverrideRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemOverridesApi
    */
   public updateSceneItemOverride(
-    id: string,
-    updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
+    requestParameters: SceneItemOverridesApiUpdateSceneItemOverrideRequest,
     options?: any
   ) {
     return SceneItemOverridesApiFp(this.configuration)
-      .updateSceneItemOverride(id, updateSceneItemOverrideRequest, options)
+      .updateSceneItemOverride(
+        requestParameters.id,
+        requestParameters.updateSceneItemOverrideRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -7452,6 +8125,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -7473,14 +8147,14 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7488,9 +8162,13 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneItemRequest !== 'string';
       const needsSerialization =
-        typeof createSceneItemRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneItemRequest !== undefined ? createSceneItemRequest : {}
@@ -7530,6 +8208,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -7549,14 +8228,14 @@ export const SceneItemsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7598,6 +8277,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -7617,14 +8297,14 @@ export const SceneItemsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7674,6 +8354,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -7709,14 +8390,14 @@ export const SceneItemsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[parent]'] = filterParent;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7770,6 +8451,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'PATCH',
         ...baseOptions,
@@ -7791,14 +8473,14 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7806,9 +8488,13 @@ export const SceneItemsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof updateSceneItemRequest !== 'string';
       const needsSerialization =
-        typeof updateSceneItemRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneItemRequest !== undefined ? updateSceneItemRequest : {}
@@ -8079,6 +8765,118 @@ export const SceneItemsApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneItem operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiCreateSceneItemRequest
+ */
+export interface SceneItemsApiCreateSceneItemRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiCreateSceneItem
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneItemRequest}
+   * @memberof SceneItemsApiCreateSceneItem
+   */
+  readonly createSceneItemRequest: CreateSceneItemRequest;
+}
+
+/**
+ * Request parameters for getQueuedSceneItem operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiGetQueuedSceneItemRequest
+ */
+export interface SceneItemsApiGetQueuedSceneItemRequest {
+  /**
+   * The &#x60;queued-scene-item&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiGetQueuedSceneItem
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneItem operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiGetSceneItemRequest
+ */
+export interface SceneItemsApiGetSceneItemRequest {
+  /**
+   * The &#x60;scene-item&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItem
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneItems operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiGetSceneItemsRequest
+ */
+export interface SceneItemsApiGetSceneItemsRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly filterSuppliedId?: string;
+
+  /**
+   * Parent ID to filter on.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly filterParent?: string;
+}
+
+/**
+ * Request parameters for updateSceneItem operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiUpdateSceneItemRequest
+ */
+export interface SceneItemsApiUpdateSceneItemRequest {
+  /**
+   * The &#x60;scene-item&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiUpdateSceneItem
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneItemRequest}
+   * @memberof SceneItemsApiUpdateSceneItem
+   */
+  readonly updateSceneItemRequest: UpdateSceneItemRequest;
+}
+
+/**
  * SceneItemsApi - object-oriented interface
  * @export
  * @class SceneItemsApi
@@ -8087,74 +8885,74 @@ export const SceneItemsApiFactory = function (
 export class SceneItemsApi extends BaseAPI {
   /**
    *  Create a `scene-item` for a `scene`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartRevisionRelationship_data|true|| |▹▹▹▹▹ id|any|true|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false|| |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {CreateSceneItemRequest} createSceneItemRequest
+   * @param {SceneItemsApiCreateSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
    */
   public createSceneItem(
-    id: string,
-    createSceneItemRequest: CreateSceneItemRequest,
+    requestParameters: SceneItemsApiCreateSceneItemRequest,
     options?: any
   ) {
     return SceneItemsApiFp(this.configuration)
-      .createSceneItem(id, createSceneItemRequest, options)
+      .createSceneItem(
+        requestParameters.id,
+        requestParameters.createSceneItemRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.
-   * @param {string} id The &#x60;queued-scene-item&#x60; ID.
+   * @param {SceneItemsApiGetQueuedSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
    */
-  public getQueuedSceneItem(id: string, options?: any) {
+  public getQueuedSceneItem(
+    requestParameters: SceneItemsApiGetQueuedSceneItemRequest,
+    options?: any
+  ) {
     return SceneItemsApiFp(this.configuration)
-      .getQueuedSceneItem(id, options)
+      .getQueuedSceneItem(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `scene-item` by ID.
-   * @param {string} id The &#x60;scene-item&#x60; ID.
+   * @param {SceneItemsApiGetSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
    */
-  public getSceneItem(id: string, options?: any) {
+  public getSceneItem(
+    requestParameters: SceneItemsApiGetSceneItemRequest,
+    options?: any
+  ) {
     return SceneItemsApiFp(this.configuration)
-      .getSceneItem(id, options)
+      .getSceneItem(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `scenes-items` for a `scene`.
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
-   * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-   * @param {string} [filterParent] Parent ID to filter on.
+   * @param {SceneItemsApiGetSceneItemsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
    */
   public getSceneItems(
-    id: string,
-    pageCursor?: string,
-    pageSize?: number,
-    filterSuppliedId?: string,
-    filterParent?: string,
+    requestParameters: SceneItemsApiGetSceneItemsRequest,
     options?: any
   ) {
     return SceneItemsApiFp(this.configuration)
       .getSceneItems(
-        id,
-        pageCursor,
-        pageSize,
-        filterSuppliedId,
-        filterParent,
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        requestParameters.filterParent,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -8162,19 +8960,21 @@ export class SceneItemsApi extends BaseAPI {
 
   /**
    *  Update a `scene-item`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdateSceneItemRequest_data|true|| |▹ attributes|UpdateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|MaterialOverride|false|Color material override.| |▹▹▹ value|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹▹ specular|Color3|true|RGB color.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-item&#x60; ID.
-   * @param {UpdateSceneItemRequest} updateSceneItemRequest
+   * @param {SceneItemsApiUpdateSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneItemsApi
    */
   public updateSceneItem(
-    id: string,
-    updateSceneItemRequest: UpdateSceneItemRequest,
+    requestParameters: SceneItemsApiUpdateSceneItemRequest,
     options?: any
   ) {
     return SceneItemsApiFp(this.configuration)
-      .updateSceneItem(id, updateSceneItemRequest, options)
+      .updateSceneItem(
+        requestParameters.id,
+        requestParameters.updateSceneItemRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -8214,6 +9014,7 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -8235,14 +9036,14 @@ export const SceneTemplatesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8250,9 +9051,13 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneTemplateRequest !== 'string';
       const needsSerialization =
-        typeof createSceneTemplateRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneTemplateRequest !== undefined
@@ -8294,6 +9099,7 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -8313,14 +9119,14 @@ export const SceneTemplatesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8362,6 +9168,7 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -8381,14 +9188,14 @@ export const SceneTemplatesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8422,6 +9229,7 @@ export const SceneTemplatesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -8449,14 +9257,14 @@ export const SceneTemplatesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8658,6 +9466,69 @@ export const SceneTemplatesApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneTemplate operation in SceneTemplatesApi.
+ * @export
+ * @interface SceneTemplatesApiCreateSceneTemplateRequest
+ */
+export interface SceneTemplatesApiCreateSceneTemplateRequest {
+  /**
+   *
+   * @type {CreateSceneTemplateRequest}
+   * @memberof SceneTemplatesApiCreateSceneTemplate
+   */
+  readonly createSceneTemplateRequest: CreateSceneTemplateRequest;
+}
+
+/**
+ * Request parameters for getQueuedSceneTemplate operation in SceneTemplatesApi.
+ * @export
+ * @interface SceneTemplatesApiGetQueuedSceneTemplateRequest
+ */
+export interface SceneTemplatesApiGetQueuedSceneTemplateRequest {
+  /**
+   * The &#x60;queued-scene-template&#x60; ID.
+   * @type {string}
+   * @memberof SceneTemplatesApiGetQueuedSceneTemplate
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneTemplate operation in SceneTemplatesApi.
+ * @export
+ * @interface SceneTemplatesApiGetSceneTemplateRequest
+ */
+export interface SceneTemplatesApiGetSceneTemplateRequest {
+  /**
+   * The &#x60;scene-template&#x60; ID.
+   * @type {string}
+   * @memberof SceneTemplatesApiGetSceneTemplate
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneTemplates operation in SceneTemplatesApi.
+ * @export
+ * @interface SceneTemplatesApiGetSceneTemplatesRequest
+ */
+export interface SceneTemplatesApiGetSceneTemplatesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneTemplatesApiGetSceneTemplates
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneTemplatesApiGetSceneTemplates
+   */
+  readonly pageSize?: number;
+}
+
+/**
  * SceneTemplatesApi - object-oriented interface
  * @export
  * @class SceneTemplatesApi
@@ -8666,61 +9537,72 @@ export const SceneTemplatesApiFactory = function (
 export class SceneTemplatesApi extends BaseAPI {
   /**
    *  Create a `scene-template`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneTemplateRequest_data|true|| |▹ attributes|CreateSceneTemplateRequest_data_attributes|true|| |▹▹ name|string|false|Name of the scene template.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {CreateSceneTemplateRequest} createSceneTemplateRequest
+   * @param {SceneTemplatesApiCreateSceneTemplateRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneTemplatesApi
    */
   public createSceneTemplate(
-    createSceneTemplateRequest: CreateSceneTemplateRequest,
+    requestParameters: SceneTemplatesApiCreateSceneTemplateRequest,
     options?: any
   ) {
     return SceneTemplatesApiFp(this.configuration)
-      .createSceneTemplate(createSceneTemplateRequest, options)
+      .createSceneTemplate(
+        requestParameters.createSceneTemplateRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `queued-scene-template`.
-   * @param {string} id The &#x60;queued-scene-template&#x60; ID.
+   * @param {SceneTemplatesApiGetQueuedSceneTemplateRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneTemplatesApi
    */
-  public getQueuedSceneTemplate(id: string, options?: any) {
+  public getQueuedSceneTemplate(
+    requestParameters: SceneTemplatesApiGetQueuedSceneTemplateRequest,
+    options?: any
+  ) {
     return SceneTemplatesApiFp(this.configuration)
-      .getQueuedSceneTemplate(id, options)
+      .getQueuedSceneTemplate(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `scene-template` by ID.
-   * @param {string} id The &#x60;scene-template&#x60; ID.
+   * @param {SceneTemplatesApiGetSceneTemplateRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneTemplatesApi
    */
-  public getSceneTemplate(id: string, options?: any) {
+  public getSceneTemplate(
+    requestParameters: SceneTemplatesApiGetSceneTemplateRequest,
+    options?: any
+  ) {
     return SceneTemplatesApiFp(this.configuration)
-      .getSceneTemplate(id, options)
+      .getSceneTemplate(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `scene-templates`.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
+   * @param {SceneTemplatesApiGetSceneTemplatesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneTemplatesApi
    */
   public getSceneTemplates(
-    pageCursor?: string,
-    pageSize?: number,
+    requestParameters: SceneTemplatesApiGetSceneTemplatesRequest = {},
     options?: any
   ) {
     return SceneTemplatesApiFp(this.configuration)
-      .getSceneTemplates(pageCursor, pageSize, options)
+      .getSceneTemplates(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -8772,6 +9654,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -8793,14 +9676,14 @@ export const SceneViewsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8808,9 +9691,13 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneViewRequest !== 'string';
       const needsSerialization =
-        typeof createSceneViewRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneViewRequest !== undefined ? createSceneViewRequest : {}
@@ -8850,6 +9737,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'DELETE',
         ...baseOptions,
@@ -8869,14 +9757,14 @@ export const SceneViewsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8918,6 +9806,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -8937,14 +9826,14 @@ export const SceneViewsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8990,6 +9879,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -9017,14 +9907,14 @@ export const SceneViewsApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9078,6 +9968,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'PATCH',
         ...baseOptions,
@@ -9099,14 +9990,14 @@ export const SceneViewsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9114,9 +10005,13 @@ export const SceneViewsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof updateSceneViewRequest !== 'string';
       const needsSerialization =
-        typeof updateSceneViewRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneViewRequest !== undefined ? updateSceneViewRequest : {}
@@ -9365,6 +10260,104 @@ export const SceneViewsApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneView operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiCreateSceneViewRequest
+ */
+export interface SceneViewsApiCreateSceneViewRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiCreateSceneView
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneViewRequest}
+   * @memberof SceneViewsApiCreateSceneView
+   */
+  readonly createSceneViewRequest: CreateSceneViewRequest;
+}
+
+/**
+ * Request parameters for deleteSceneView operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiDeleteSceneViewRequest
+ */
+export interface SceneViewsApiDeleteSceneViewRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiDeleteSceneView
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneView operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiGetSceneViewRequest
+ */
+export interface SceneViewsApiGetSceneViewRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiGetSceneView
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for renderSceneView operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiRenderSceneViewRequest
+ */
+export interface SceneViewsApiRenderSceneViewRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiRenderSceneView
+   */
+  readonly id: string;
+
+  /**
+   * The height of the image to render.
+   * @type {number}
+   * @memberof SceneViewsApiRenderSceneView
+   */
+  readonly height?: number;
+
+  /**
+   * The width of the image to render.
+   * @type {number}
+   * @memberof SceneViewsApiRenderSceneView
+   */
+  readonly width?: number;
+}
+
+/**
+ * Request parameters for updateSceneView operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiUpdateSceneViewRequest
+ */
+export interface SceneViewsApiUpdateSceneViewRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiUpdateSceneView
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneViewRequest}
+   * @memberof SceneViewsApiUpdateSceneView
+   */
+  readonly updateSceneViewRequest: UpdateSceneViewRequest;
+}
+
+/**
  * SceneViewsApi - object-oriented interface
  * @export
  * @class SceneViewsApi
@@ -9373,83 +10366,94 @@ export const SceneViewsApiFactory = function (
 export class SceneViewsApi extends BaseAPI {
   /**
    *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {CreateSceneViewRequest} createSceneViewRequest
+   * @param {SceneViewsApiCreateSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneViewsApi
    */
   public createSceneView(
-    id: string,
-    createSceneViewRequest: CreateSceneViewRequest,
+    requestParameters: SceneViewsApiCreateSceneViewRequest,
     options?: any
   ) {
     return SceneViewsApiFp(this.configuration)
-      .createSceneView(id, createSceneViewRequest, options)
+      .createSceneView(
+        requestParameters.id,
+        requestParameters.createSceneViewRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Delete a `scene-view`.
-   * @param {string} id The &#x60;scene-view&#x60; ID.
+   * @param {SceneViewsApiDeleteSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneViewsApi
    */
-  public deleteSceneView(id: string, options?: any) {
+  public deleteSceneView(
+    requestParameters: SceneViewsApiDeleteSceneViewRequest,
+    options?: any
+  ) {
     return SceneViewsApiFp(this.configuration)
-      .deleteSceneView(id, options)
+      .deleteSceneView(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `scene-view` by ID.
-   * @param {string} id The &#x60;scene-view&#x60; ID.
+   * @param {SceneViewsApiGetSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneViewsApi
    */
-  public getSceneView(id: string, options?: any) {
+  public getSceneView(
+    requestParameters: SceneViewsApiGetSceneViewRequest,
+    options?: any
+  ) {
     return SceneViewsApiFp(this.configuration)
-      .getSceneView(id, options)
+      .getSceneView(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-   * @param {string} id The &#x60;scene-view&#x60; ID.
-   * @param {number} [height] The height of the image to render.
-   * @param {number} [width] The width of the image to render.
+   * @param {SceneViewsApiRenderSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneViewsApi
    */
   public renderSceneView(
-    id: string,
-    height?: number,
-    width?: number,
+    requestParameters: SceneViewsApiRenderSceneViewRequest,
     options?: any
   ) {
     return SceneViewsApiFp(this.configuration)
-      .renderSceneView(id, height, width, options)
+      .renderSceneView(
+        requestParameters.id,
+        requestParameters.height,
+        requestParameters.width,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Update a `scene-view`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdateSceneViewRequest_data|true|| |▹ attributes|UpdateSceneViewRequest_data_attributes|true|| |▹▹ camera|any|false|| |▹▹▹ *anonymous*|Camera|false|Camera placement in 3D space.| |▹▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹ position|Vector3|true|3D vector.| |▹▹▹▹ up|Vector3|true|3D vector.| |▹▹▹ *anonymous*|CameraFit|false|Fit camera in 3D space based on items in scene.| |▹▹▹▹ type|enum(fit-visible-scene-items)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene-view&#x60; ID.
-   * @param {UpdateSceneViewRequest} updateSceneViewRequest
+   * @param {SceneViewsApiUpdateSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof SceneViewsApi
    */
   public updateSceneView(
-    id: string,
-    updateSceneViewRequest: UpdateSceneViewRequest,
+    requestParameters: SceneViewsApiUpdateSceneViewRequest,
     options?: any
   ) {
     return SceneViewsApiFp(this.configuration)
-      .updateSceneView(id, updateSceneViewRequest, options)
+      .updateSceneView(
+        requestParameters.id,
+        requestParameters.updateSceneViewRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -9486,6 +10490,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -9507,14 +10512,14 @@ export const ScenesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9522,9 +10527,13 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createSceneRequest !== 'string';
       const needsSerialization =
-        typeof createSceneRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createSceneRequest !== undefined ? createSceneRequest : {}
@@ -9564,6 +10573,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -9583,14 +10593,14 @@ export const ScenesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9629,6 +10639,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -9648,14 +10659,14 @@ export const ScenesApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9689,6 +10700,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -9716,14 +10728,14 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9769,6 +10781,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -9796,14 +10809,14 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9854,6 +10867,7 @@ export const ScenesApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'PATCH',
         ...baseOptions,
@@ -9875,14 +10889,14 @@ export const ScenesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9890,9 +10904,13 @@ export const ScenesApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof updateSceneRequest !== 'string';
       const needsSerialization =
-        typeof updateSceneRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             updateSceneRequest !== undefined ? updateSceneRequest : {}
@@ -10181,6 +11199,118 @@ export const ScenesApiFactory = function (
 };
 
 /**
+ * Request parameters for createScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiCreateSceneRequest
+ */
+export interface ScenesApiCreateSceneRequest {
+  /**
+   *
+   * @type {CreateSceneRequest}
+   * @memberof ScenesApiCreateScene
+   */
+  readonly createSceneRequest: CreateSceneRequest;
+}
+
+/**
+ * Request parameters for getQueuedScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiGetQueuedSceneRequest
+ */
+export interface ScenesApiGetQueuedSceneRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof ScenesApiGetQueuedScene
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiGetSceneRequest
+ */
+export interface ScenesApiGetSceneRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof ScenesApiGetScene
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getScenes operation in ScenesApi.
+ * @export
+ * @interface ScenesApiGetScenesRequest
+ */
+export interface ScenesApiGetScenesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for renderScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiRenderSceneRequest
+ */
+export interface ScenesApiRenderSceneRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof ScenesApiRenderScene
+   */
+  readonly id: string;
+
+  /**
+   * The height of the image to render.
+   * @type {number}
+   * @memberof ScenesApiRenderScene
+   */
+  readonly height?: number;
+
+  /**
+   * The width of the image to render.
+   * @type {number}
+   * @memberof ScenesApiRenderScene
+   */
+  readonly width?: number;
+}
+
+/**
+ * Request parameters for updateScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiUpdateSceneRequest
+ */
+export interface ScenesApiUpdateSceneRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof ScenesApiUpdateScene
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneRequest}
+   * @memberof ScenesApiUpdateScene
+   */
+  readonly updateSceneRequest: UpdateSceneRequest;
+}
+
+/**
  * ScenesApi - object-oriented interface
  * @export
  * @class ScenesApi
@@ -10189,92 +11319,107 @@ export const ScenesApiFactory = function (
 export class ScenesApi extends BaseAPI {
   /**
    *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneTemplateRelationship|true|Relationship to a `scene-template`.| |▹▹▹ data|SceneTemplateRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-template)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {CreateSceneRequest} createSceneRequest
+   * @param {ScenesApiCreateSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
-  public createScene(createSceneRequest: CreateSceneRequest, options?: any) {
+  public createScene(
+    requestParameters: ScenesApiCreateSceneRequest,
+    options?: any
+  ) {
     return ScenesApiFp(this.configuration)
-      .createScene(createSceneRequest, options)
+      .createScene(requestParameters.createSceneRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `queued-scene`.
-   * @param {string} id The &#x60;scene&#x60; ID.
+   * @param {ScenesApiGetQueuedSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
-  public getQueuedScene(id: string, options?: any) {
+  public getQueuedScene(
+    requestParameters: ScenesApiGetQueuedSceneRequest,
+    options?: any
+  ) {
     return ScenesApiFp(this.configuration)
-      .getQueuedScene(id, options)
+      .getQueuedScene(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `scene` by ID.
-   * @param {string} id The &#x60;scene&#x60; ID.
+   * @param {ScenesApiGetSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
-  public getScene(id: string, options?: any) {
+  public getScene(requestParameters: ScenesApiGetSceneRequest, options?: any) {
     return ScenesApiFp(this.configuration)
-      .getScene(id, options)
+      .getScene(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `scenes`.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
+   * @param {ScenesApiGetScenesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
-  public getScenes(pageCursor?: string, pageSize?: number, options?: any) {
+  public getScenes(
+    requestParameters: ScenesApiGetScenesRequest = {},
+    options?: any
+  ) {
     return ScenesApiFp(this.configuration)
-      .getScenes(pageCursor, pageSize, options)
+      .getScenes(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {number} [height] The height of the image to render.
-   * @param {number} [width] The width of the image to render.
+   * @param {ScenesApiRenderSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
   public renderScene(
-    id: string,
-    height?: number,
-    width?: number,
+    requestParameters: ScenesApiRenderSceneRequest,
     options?: any
   ) {
     return ScenesApiFp(this.configuration)
-      .renderScene(id, height, width, options)
+      .renderScene(
+        requestParameters.id,
+        requestParameters.height,
+        requestParameters.width,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdateSceneRequest_data|true|| |▹ attributes|UpdateSceneRequest_data_attributes|true|| |▹▹ camera|any|false|| |▹▹▹ *anonymous*|Camera|false|Camera placement in 3D space.| |▹▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹▹ position|Vector3|true|3D vector.| |▹▹▹▹ up|Vector3|true|3D vector.| |▹▹▹ *anonymous*|CameraFit|false|Fit camera in 3D space based on items in scene.| |▹▹▹▹ type|enum(fit-visible-scene-items)|true|Resource object type.| |▹▹ state|enum(draft, commit)|false|State of the scene.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {UpdateSceneRequest} updateSceneRequest
+   * @param {ScenesApiUpdateSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
   public updateScene(
-    id: string,
-    updateSceneRequest: UpdateSceneRequest,
+    requestParameters: ScenesApiUpdateSceneRequest,
     options?: any
   ) {
     return ScenesApiFp(this.configuration)
-      .updateScene(id, updateSceneRequest, options)
+      .updateScene(
+        requestParameters.id,
+        requestParameters.updateSceneRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -10326,6 +11471,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -10347,14 +11493,14 @@ export const StreamKeysApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10362,9 +11508,13 @@ export const StreamKeysApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createStreamKeyRequest !== 'string';
       const needsSerialization =
-        typeof createStreamKeyRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createStreamKeyRequest !== undefined ? createStreamKeyRequest : {}
@@ -10404,6 +11554,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'DELETE',
         ...baseOptions,
@@ -10423,14 +11574,14 @@ export const StreamKeysApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10464,6 +11615,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -10491,14 +11643,14 @@ export const StreamKeysApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10664,6 +11816,62 @@ export const StreamKeysApiFactory = function (
 };
 
 /**
+ * Request parameters for createSceneStreamKey operation in StreamKeysApi.
+ * @export
+ * @interface StreamKeysApiCreateSceneStreamKeyRequest
+ */
+export interface StreamKeysApiCreateSceneStreamKeyRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof StreamKeysApiCreateSceneStreamKey
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateStreamKeyRequest}
+   * @memberof StreamKeysApiCreateSceneStreamKey
+   */
+  readonly createStreamKeyRequest: CreateStreamKeyRequest;
+}
+
+/**
+ * Request parameters for deleteStreamKey operation in StreamKeysApi.
+ * @export
+ * @interface StreamKeysApiDeleteStreamKeyRequest
+ */
+export interface StreamKeysApiDeleteStreamKeyRequest {
+  /**
+   * The &#x60;stream-key&#x60; ID.
+   * @type {string}
+   * @memberof StreamKeysApiDeleteStreamKey
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getStreamKeys operation in StreamKeysApi.
+ * @export
+ * @interface StreamKeysApiGetStreamKeysRequest
+ */
+export interface StreamKeysApiGetStreamKeysRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof StreamKeysApiGetStreamKeys
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof StreamKeysApiGetStreamKeys
+   */
+  readonly pageSize?: number;
+}
+
+/**
  * StreamKeysApi - object-oriented interface
  * @export
  * @class StreamKeysApi
@@ -10672,46 +11880,57 @@ export const StreamKeysApiFactory = function (
 export class StreamKeysApi extends BaseAPI {
   /**
    *  Create a `stream-key` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateStreamKeyRequest_data|true|| |▹ attributes|CreateStreamKeyRequest_data_attributes|true|| |▹▹ expiry|integer(int32)|false|Number of seconds before the `stream-key` expires.| |▹ type|string|true|Resource object type.|
-   * @param {string} id The &#x60;scene&#x60; ID.
-   * @param {CreateStreamKeyRequest} createStreamKeyRequest
+   * @param {StreamKeysApiCreateSceneStreamKeyRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof StreamKeysApi
    */
   public createSceneStreamKey(
-    id: string,
-    createStreamKeyRequest: CreateStreamKeyRequest,
+    requestParameters: StreamKeysApiCreateSceneStreamKeyRequest,
     options?: any
   ) {
     return StreamKeysApiFp(this.configuration)
-      .createSceneStreamKey(id, createStreamKeyRequest, options)
+      .createSceneStreamKey(
+        requestParameters.id,
+        requestParameters.createStreamKeyRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Delete a `stream-key`.
-   * @param {string} id The &#x60;stream-key&#x60; ID.
+   * @param {StreamKeysApiDeleteStreamKeyRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof StreamKeysApi
    */
-  public deleteStreamKey(id: string, options?: any) {
+  public deleteStreamKey(
+    requestParameters: StreamKeysApiDeleteStreamKeyRequest,
+    options?: any
+  ) {
     return StreamKeysApiFp(this.configuration)
-      .deleteStreamKey(id, options)
+      .deleteStreamKey(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get `stream-key`s.
-   * @param {string} [pageCursor] The cursor for the next page of items.
-   * @param {number} [pageSize] The number of items to return.
+   * @param {StreamKeysApiGetStreamKeysRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof StreamKeysApi
    */
-  public getStreamKeys(pageCursor?: string, pageSize?: number, options?: any) {
+  public getStreamKeys(
+    requestParameters: StreamKeysApiGetStreamKeysRequest = {},
+    options?: any
+  ) {
     return StreamKeysApiFp(this.configuration)
-      .getStreamKeys(pageCursor, pageSize, options)
+      .getStreamKeys(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -10751,6 +11970,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'POST',
         ...baseOptions,
@@ -10772,14 +11992,14 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10787,9 +12007,13 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+      const nonString = typeof createTranslationInspectionRequest !== 'string';
       const needsSerialization =
-        typeof createTranslationInspectionRequest !== 'string' ||
-        localVarRequestOptions.headers['Content-Type'] === 'application/json';
+        nonString && configuration && configuration.isJsonMime
+          ? configuration.isJsonMime(
+              localVarRequestOptions.headers['Content-Type']
+            )
+          : nonString;
       localVarRequestOptions.data = needsSerialization
         ? JSON.stringify(
             createTranslationInspectionRequest !== undefined
@@ -10831,6 +12055,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -10850,14 +12075,14 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10899,6 +12124,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       if (configuration) {
         baseOptions = configuration.baseOptions;
       }
+
       const localVarRequestOptions = {
         method: 'GET',
         ...baseOptions,
@@ -10918,14 +12144,14 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      const query = new URLSearchParams(localVarUrlObj.search);
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
       for (const key in localVarQueryParameter) {
-        query.set(key, localVarQueryParameter[key]);
+        queryParameters.set(key, localVarQueryParameter[key]);
       }
       for (const key in options.query) {
-        query.set(key, options.query[key]);
+        queryParameters.set(key, options.query[key]);
       }
-      localVarUrlObj.search = new URLSearchParams(query).toString();
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11097,6 +12323,48 @@ export const TranslationInspectionsApiFactory = function (
 };
 
 /**
+ * Request parameters for createTranslationInspection operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiCreateTranslationInspectionRequest
+ */
+export interface TranslationInspectionsApiCreateTranslationInspectionRequest {
+  /**
+   *
+   * @type {CreateTranslationInspectionRequest}
+   * @memberof TranslationInspectionsApiCreateTranslationInspection
+   */
+  readonly createTranslationInspectionRequest: CreateTranslationInspectionRequest;
+}
+
+/**
+ * Request parameters for getInspectionJob operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiGetInspectionJobRequest
+ */
+export interface TranslationInspectionsApiGetInspectionJobRequest {
+  /**
+   * The &#x60;translation-inspection&#x60; ID.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetInspectionJob
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedTranslation operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiGetQueuedTranslationRequest
+ */
+export interface TranslationInspectionsApiGetQueuedTranslationRequest {
+  /**
+   * The &#x60;queued-translation&#x60; ID.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslation
+   */
+  readonly id: string;
+}
+
+/**
  * TranslationInspectionsApi - object-oriented interface
  * @export
  * @class TranslationInspectionsApi
@@ -11105,43 +12373,52 @@ export const TranslationInspectionsApiFactory = function (
 export class TranslationInspectionsApi extends BaseAPI {
   /**
    *  Create a `translation-inspection`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateTranslationInspectionRequest_data|true|| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest
+   * @param {TranslationInspectionsApiCreateTranslationInspectionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TranslationInspectionsApi
    */
   public createTranslationInspection(
-    createTranslationInspectionRequest: CreateTranslationInspectionRequest,
+    requestParameters: TranslationInspectionsApiCreateTranslationInspectionRequest,
     options?: any
   ) {
     return TranslationInspectionsApiFp(this.configuration)
-      .createTranslationInspection(createTranslationInspectionRequest, options)
+      .createTranslationInspection(
+        requestParameters.createTranslationInspectionRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `translation-inspection` by ID.
-   * @param {string} id The &#x60;translation-inspection&#x60; ID.
+   * @param {TranslationInspectionsApiGetInspectionJobRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TranslationInspectionsApi
    */
-  public getInspectionJob(id: string, options?: any) {
+  public getInspectionJob(
+    requestParameters: TranslationInspectionsApiGetInspectionJobRequest,
+    options?: any
+  ) {
     return TranslationInspectionsApiFp(this.configuration)
-      .getInspectionJob(id, options)
+      .getInspectionJob(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
    *  Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.
-   * @param {string} id The &#x60;queued-translation&#x60; ID.
+   * @param {TranslationInspectionsApiGetQueuedTranslationRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof TranslationInspectionsApi
    */
-  public getQueuedTranslation(id: string, options?: any) {
+  public getQueuedTranslation(
+    requestParameters: TranslationInspectionsApiGetQueuedTranslationRequest,
+    options?: any
+  ) {
     return TranslationInspectionsApiFp(this.configuration)
-      .getQueuedTranslation(id, options)
+      .getQueuedTranslation(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
