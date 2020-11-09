@@ -19,13 +19,17 @@ export function arrayEq2d(a: number[][], b: number[][]): boolean {
 export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   return a.reduce((all: T[][], one: T, idx: number) => {
     const chunk = Math.floor(idx / chunkSize);
-    all[chunk] = ([] as T[]).concat(all[chunk] || [], one);
+    all[chunk] = ([] as T[]).concat(all[chunk] ?? [], one);
     return all;
   }, [] as T[][]);
 }
 
 export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
   return (await auth.createToken({ grantType: 'client_credentials' })).data;
+}
+
+export async function delay(ms: number): Promise<unknown> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 export function encodeIfNotEncoded(s: string) {
@@ -88,6 +92,8 @@ export async function getBySuppliedId<
     const sceneItem = head(res.data.data);
     if (sceneItem.data.attributes.suppliedId === suppliedId) return sceneItem;
   }
+
+  return undefined;
 }
 
 export async function pollQueuedJob<T extends { data: { id: string } }>(
@@ -127,7 +133,7 @@ export function prettyJson(obj: unknown): string {
 }
 
 export function toFloats(fallback: string, a?: string): number[] {
-  return (a || fallback).split(',').map(parseFloat);
+  return (a ?? fallback).split(',').map(parseFloat);
 }
 
 export function to4x4Transform(
