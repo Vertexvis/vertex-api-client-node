@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.1.0",
+  "version": "0.0.16",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -23,6 +23,11 @@
     "!dist/**/__tests__",
     "LICENSE"
   ],
+  "keywords": [
+    "vertexvis",
+    "api-client",
+    "typescript"
+  ],
   "scripts": {
     "build": "tsc --outDir dist/",
     "clean": "rm -rf dist/",
@@ -35,7 +40,6 @@
     "watch": "jest --watch"
   },
   "dependencies": {
-    "@vertexvis/utils": "^0.9.8",
     "axios": "^0.21.0"
   },
   "devDependencies": {

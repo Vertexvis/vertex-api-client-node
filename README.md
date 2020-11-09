@@ -31,7 +31,7 @@ const main = async () => {
       basePath: 'https://platform.vertexvis.com',
     });
 
-    const getFilesRes = await client.files.getFiles(undefined, 1);
+    const getFilesRes = await client.files.getFiles({ pageSize: 1 });
 
     console.log(prettyJson(getFilesRes.data));
   } catch (error) {

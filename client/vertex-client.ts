@@ -138,14 +138,14 @@ export class VertexClient {
   }
 
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
-    const basePath = args?.basePath || `https://platform.vertexvis.com`;
-    const baseOptions = args?.baseOptions || {};
+    const basePath = args?.basePath ?? `https://platform.vertexvis.com`;
+    const baseOptions = args?.baseOptions ?? {};
     const auth = new Oauth2Api(
       new Configuration({
         baseOptions: createBaseOptions(baseOptions),
         basePath,
-        username: args?.clientId || process.env.VERTEX_CLIENT_ID,
-        password: args?.clientSecret || process.env.VERTEX_CLIENT_SECRET,
+        username: args?.clientId ?? process?.env?.VERTEX_CLIENT_ID,
+        password: args?.clientSecret ?? process?.env?.VERTEX_CLIENT_SECRET,
       })
     );
 
@@ -177,6 +177,6 @@ function createBaseOptions(baseOptions: BaseOptions) {
     validateStatus: (status: number) => status < 400,
     maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
     maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
-    ...(baseOptions || {}),
+    ...(baseOptions ?? {}),
   };
 }

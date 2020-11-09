@@ -1,7 +1,7 @@
-import { Async } from '@vertexvis/utils';
 import {
   CreateFileRequest,
   CreatePartRequest,
+  delay,
   encodeIfNotEncoded,
   getBySuppliedId,
   head,
@@ -39,7 +39,7 @@ export async function createPartFromFileIfNotExists(
   });
 
   // TODO: Temporary until race condition fixed
-  await Async.delay(1000);
+  await delay(1000);
 
   const createPartRequest = args.createPartReq(fileId);
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
@@ -108,4 +108,6 @@ export async function getPartRevisionBySuppliedId(
     );
     if (existingPartRev) return existingPartRev;
   }
+
+  return undefined;
 }
