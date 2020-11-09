@@ -7,9 +7,11 @@ export const renderSceneView = async (
 ): Promise<AxiosResponse<any>> =>
   (
     await args.client.sceneViews.renderSceneView(
-      args.renderReq.id,
-      args.renderReq.height,
-      args.renderReq.width,
+      {
+        id: args.renderReq.id,
+        height: args.renderReq.height,
+        width: args.renderReq.width,
+      },
       { responseType: 'stream' }
     )
   ).data;

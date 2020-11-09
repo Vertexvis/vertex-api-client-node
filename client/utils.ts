@@ -25,7 +25,7 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
 }
 
 export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
-  return (await auth.createToken('client_credentials')).data;
+  return (await auth.createToken({ grantType: 'client_credentials' })).data;
 }
 
 export function encodeIfNotEncoded(s: string) {

@@ -52,9 +52,11 @@ export const createSceneFromTemplateFile = async (
     createFileReq: args.createFileReq,
   });
 
-  const createTemplateReq = args.createSceneTemplateReq(fileId);
+  const createSceneTemplateRequest = args.createSceneTemplateReq(fileId);
   const createTemplateRes = await args.client.sceneTemplates.createSceneTemplate(
-    createTemplateReq
+    {
+      createSceneTemplateRequest,
+    }
   );
   const queuedSceneTemplateId = createTemplateRes.data.data.id;
   if (args.verbose)
@@ -64,13 +66,15 @@ export const createSceneFromTemplateFile = async (
 
   const templateId = (
     await pollQueuedJob(queuedSceneTemplateId, (id) =>
-      args.client.sceneTemplates.getQueuedSceneTemplate(id)
+      args.client.sceneTemplates.getQueuedSceneTemplate({ id })
     )
   ).data.id;
   if (args.verbose) console.log(`Created scene-template ${templateId}`);
 
-  const createSceneReq = args.createSceneReq(templateId);
-  const createSceneRes = await args.client.scenes.createScene(createSceneReq);
+  const createSceneRequest = args.createSceneReq(templateId);
+  const createSceneRes = await args.client.scenes.createScene({
+    createSceneRequest,
+  });
   const queuedSceneId = createSceneRes.data.data.id;
   if (args.verbose)
     console.log(
@@ -79,7 +83,7 @@ export const createSceneFromTemplateFile = async (
 
   const sceneId = (
     await pollQueuedJob(queuedSceneId, (id) =>
-      args.client.scenes.getQueuedScene(id)
+      args.client.scenes.getQueuedScene({ id })
     )
   ).data.id;
 
@@ -90,9 +94,11 @@ export async function createSceneWithSceneItems(
   args: CreateSceneWithSceneItemsArgs
 ): Promise<string> {
   const createSceneRes = await args.client.scenes.createScene({
-    data: {
-      attributes: {},
-      type: SceneRelationshipDataTypeEnum.Scene,
+    createSceneRequest: {
+      data: {
+        attributes: {},
+        type: SceneRelationshipDataTypeEnum.Scene,
+      },
     },
   });
   const sceneId = createSceneRes.data.data.id;
@@ -120,12 +126,15 @@ export async function createSceneWithSceneItems(
   }
   /* eslint-enable no-await-in-loop */
 
-  await args.client.scenes.updateScene(sceneId, {
-    data: {
-      attributes: {
-        camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+  await args.client.scenes.updateScene({
+    id: sceneId,
+    updateSceneRequest: {
+      data: {
+        attributes: {
+          camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+        },
+        type: SceneRelationshipDataTypeEnum.Scene,
       },
-      type: SceneRelationshipDataTypeEnum.Scene,
     },
   });
 
@@ -137,8 +146,10 @@ export const renderScene = async (
   args: RenderImageArgs
 ): Promise<AxiosResponse<any>> =>
   await args.client.scenes.renderScene(
-    args.renderReq.id,
-    args.renderReq.height,
-    args.renderReq.width,
+    {
+      id: args.renderReq.id,
+      height: args.renderReq.height,
+      width: args.renderReq.width,
+    },
     { responseType: 'stream' }
   );

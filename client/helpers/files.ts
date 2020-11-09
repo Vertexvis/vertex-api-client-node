@@ -21,11 +21,10 @@ export async function uploadFileIfNotExists(
   const existingFile = suppliedId
     ? await getBySuppliedId<FileMetadata, FileList>(
         () =>
-          args.client.files.getFiles(
-            undefined,
-            1,
-            encodeIfNotEncoded(suppliedId)
-          ),
+          args.client.files.getFiles({
+            pageSize: 1,
+            filterSuppliedId: encodeIfNotEncoded(suppliedId),
+          }),
         suppliedId
       )
     : undefined;
@@ -48,7 +47,7 @@ export async function uploadFileIfNotExists(
         );
       }
 
-      await args.client.files.deleteFile(fileId);
+      await args.client.files.deleteFile({ id: fileId });
     }
   }
 
@@ -57,12 +56,14 @@ export async function uploadFileIfNotExists(
 
 export async function uploadFile(args: UploadFileArgs): Promise<string> {
   const fileName = args.createFileReq.data.attributes.name;
-  const createRes = await args.client.files.createFile(args.createFileReq);
+  const createRes = await args.client.files.createFile({
+    createFileRequest: args.createFileReq,
+  });
 
   const fileId = createRes.data.data.id;
   if (args.verbose) console.log(`Created file '${fileName}', ${fileId}`);
 
-  await args.client.files.uploadFile(fileId, args.fileData);
+  await args.client.files.uploadFile({ id: fileId, body: args.fileData });
 
   if (args.verbose) console.log(`Uploaded file ${fileId}`);
 
