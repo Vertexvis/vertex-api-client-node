@@ -1313,10 +1313,10 @@ export interface Hit {
   data: HitData;
   /**
    *
-   * @type {Array<HitResultData | SceneItemData>}
+   * @type {Array<HitResultData | SceneItemData | PartRevisionData>}
    * @memberof Hit
    */
-  included: Array<HitResultData | SceneItemData>;
+  included: Array<HitResultData | SceneItemData | PartRevisionData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -1862,6 +1862,12 @@ export interface PartRevisionData {
    * @memberof PartRevisionData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartRevisionData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {PartRevisionDataRelationships}
@@ -2475,6 +2481,12 @@ export interface SceneItemData {
    * @memberof SceneItemData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneItemData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {SceneItemDataRelationships}
@@ -6333,10 +6345,15 @@ export const PartsApiAxiosParamCreator = function (
     /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getPart: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    getPart: async (
+      id: string,
+      include?: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       if (id === null || id === undefined) {
         throw new RequiredError(
@@ -6372,6 +6389,10 @@ export const PartsApiAxiosParamCreator = function (
             : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
+      }
+
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
       }
 
       const queryParameters = new URLSearchParams(localVarUrlObj.search);
@@ -6509,18 +6530,20 @@ export const PartsApiFp = function (configuration?: Configuration) {
     /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPart(
       id: string,
+      include?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Part>
     > {
       const localVarAxiosArgs = await PartsApiAxiosParamCreator(
         configuration
-      ).getPart(id, options);
+      ).getPart(id, include, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -6592,12 +6615,13 @@ export const PartsApiFactory = function (
     /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getPart(id: string, options?: any): AxiosPromise<Part> {
+    getPart(id: string, include?: string, options?: any): AxiosPromise<Part> {
       return PartsApiFp(configuration)
-        .getPart(id, options)
+        .getPart(id, include, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6647,6 +6671,13 @@ export interface PartsApiGetPartRequest {
    * @memberof PartsApiGetPart
    */
   readonly id: string;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof PartsApiGetPart
+   */
+  readonly include?: string;
 }
 
 /**
@@ -6709,7 +6740,7 @@ export class PartsApi extends BaseAPI {
    */
   public getPart(requestParameters: PartsApiGetPartRequest, options?: any) {
     return PartsApiFp(this.configuration)
-      .getPart(requestParameters.id, options)
+      .getPart(requestParameters.id, requestParameters.include, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -8176,6 +8207,75 @@ export const SceneItemsApiAxiosParamCreator = function (
       };
     },
     /**
+     *  Delete a `scene-item`.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneItem: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling deleteSceneItem.'
+        );
+      }
+      const localVarPath = `/scene-items/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        queryParameters.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        queryParameters.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      *  Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.
      * @param {string} id The &#x60;queued-scene-item&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -8539,6 +8639,32 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       };
     },
     /**
+     *  Delete a `scene-item`.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteSceneItem(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await SceneItemsApiAxiosParamCreator(
+        configuration
+      ).deleteSceneItem(id, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
      *  Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.
      * @param {string} id The &#x60;queued-scene-item&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -8689,6 +8815,17 @@ export const SceneItemsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     *  Delete a `scene-item`.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneItem(id: string, options?: any): AxiosPromise<void> {
+      return SceneItemsApiFp(configuration)
+        .deleteSceneItem(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      *  Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.
      * @param {string} id The &#x60;queued-scene-item&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -8777,6 +8914,20 @@ export interface SceneItemsApiCreateSceneItemRequest {
    * @memberof SceneItemsApiCreateSceneItem
    */
   readonly createSceneItemRequest: CreateSceneItemRequest;
+}
+
+/**
+ * Request parameters for deleteSceneItem operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiDeleteSceneItemRequest
+ */
+export interface SceneItemsApiDeleteSceneItemRequest {
+  /**
+   * The &#x60;scene-item&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiDeleteSceneItem
+   */
+  readonly id: string;
 }
 
 /**
@@ -8894,6 +9045,22 @@ export class SceneItemsApi extends BaseAPI {
         requestParameters.createSceneItemRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Delete a `scene-item`.
+   * @param {SceneItemsApiDeleteSceneItemRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneItemsApi
+   */
+  public deleteSceneItem(
+    requestParameters: SceneItemsApiDeleteSceneItemRequest,
+    options?: any
+  ) {
+    return SceneItemsApiFp(this.configuration)
+      .deleteSceneItem(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

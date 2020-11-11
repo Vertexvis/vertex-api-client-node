@@ -1232,6 +1232,7 @@ components:
             oneOf:
               - $ref: '#/components/schemas/HitResultData'
               - $ref: '#/components/schemas/SceneItemData'
+              - $ref: '#/components/schemas/PartRevisionData'
           type: array
         links:
           additionalProperties:
@@ -1547,7 +1548,7 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/PartRevision_data'
+          $ref: '#/components/schemas/PartRevisionData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -1555,6 +1556,55 @@ components:
       required:
         - data
         - links
+      type: object
+    PartRevisionData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/PartRevisionData_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        relationships:
+          $ref: '#/components/schemas/PartRevisionData_relationships'
+        type:
+          example: part-revision
+          type: string
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    PartRevisionData_attributes:
+      properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
+        metadata:
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+          type: object
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      type: object
+    PartRevisionData_relationships:
+      properties:
+        geometrySet:
+          $ref: '#/components/schemas/GeometrySetRelationshipData'
+        part:
+          $ref: '#/components/schemas/PartRelationshipData'
       type: object
     PartRevisionList:
       additionalProperties: false
@@ -1616,50 +1666,6 @@ components:
       required:
         - suppliedPartId
         - suppliedRevisionId
-      type: object
-    PartRevision_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/PartRevision_data_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        relationships:
-          $ref: '#/components/schemas/PartRevision_data_relationships'
-        type:
-          example: part-revision
-          type: string
-      required:
-        - attributes
-        - id
-        - relationships
-        - type
-      type: object
-    PartRevision_data_attributes:
-      properties:
-        created:
-          example: '2020-01-01T12:00:00Z'
-          format: date-time
-          type: string
-        metadata:
-          additionalProperties:
-            $ref: '#/components/schemas/MetadataValue'
-          type: object
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      type: object
-    PartRevision_data_relationships:
-      properties:
-        geometrySet:
-          $ref: '#/components/schemas/GeometrySetRelationshipData'
-        part:
-          $ref: '#/components/schemas/PartRelationshipData'
       type: object
     Part_data:
       properties:
@@ -2026,6 +2032,10 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
         relationships:
           $ref: '#/components/schemas/SceneItemData_relationships'
         type:
@@ -3837,6 +3847,16 @@ paths:
 
       operationId: getPart
       parameters:
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: results.sceneItem.source
+            maxLength: 32
+            type: string
+          style: form
         - description: The `part` ID.
           explode: false
           in: path
@@ -4581,6 +4601,64 @@ paths:
       tags:
         - scene-item-overrides
   '/scene-items/{id}':
+    delete:
+      description: |+
+
+        Delete a `scene-item`.
+
+      operationId: deleteSceneItem
+      parameters:
+        - description: The `scene-item` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-items
     get:
       description: |+
 
@@ -5258,14 +5336,6 @@ paths:
 
       operationId: createSceneViewHit
       parameters:
-        - description: The `scene-view` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
         - description: Comma-separated list of relationships to include in response.
           explode: true
           in: query
@@ -5276,6 +5346,14 @@ paths:
             maxLength: 32
             type: string
           style: form
+        - description: The `scene-view` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
         - description: >-
             Comma-separated list of fields to return in response. An empty value
             returns no fields. Due to its potential size, metadata is only
@@ -6291,14 +6369,6 @@ paths:
 
       operationId: createSceneHit
       parameters:
-        - description: The `scene` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
         - description: Comma-separated list of relationships to include in response.
           explode: true
           in: query
@@ -6309,6 +6379,14 @@ paths:
             maxLength: 32
             type: string
           style: form
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
         - description: >-
             Comma-separated list of fields to return in response. An empty value
             returns no fields. Due to its potential size, metadata is only
