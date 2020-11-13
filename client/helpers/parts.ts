@@ -6,8 +6,9 @@ import {
   getBySuppliedId,
   head,
   Part,
+  PartData,
   PartList,
-  PartRevision,
+  PartRevisionData,
   PartRevisionList,
   pollQueuedJob,
   uploadFileIfNotExists,
@@ -54,10 +55,10 @@ export async function createPartFromFileIfNotExists(
     if (args.verbose) {
       console.log(
         `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
-          `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.data.id}`
+          `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
       );
     }
-    return existingPartRev.data.id;
+    return existingPartRev.id;
   }
 
   const createPartRes = await args.client.parts.createPart({
@@ -73,8 +74,8 @@ export async function createPartFromFileIfNotExists(
     args.client.translationInspections.getQueuedTranslation({ id })
   );
   const partRevIds = part.included
-    ?.filter((pr) => pr.data.attributes.suppliedId === suppliedRevisionId)
-    .map((pr) => pr.data.id);
+    ?.filter((pr) => pr.attributes.suppliedId === suppliedRevisionId)
+    .map((pr) => pr.id);
   const partRevId = partRevIds ? head(partRevIds) : '';
 
   if (args.verbose) console.log(`Created part-revision ${partRevId}`);
@@ -83,9 +84,9 @@ export async function createPartFromFileIfNotExists(
 
 export async function getPartRevisionBySuppliedId(
   args: GetPartRevisionBySuppliedIdArgs
-): Promise<PartRevision | undefined> {
+): Promise<PartRevisionData | undefined> {
   // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
-  const existingPart = await getBySuppliedId<Part, PartList>(
+  const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
       args.client.parts.getParts({
         pageSize: 1,
@@ -95,12 +96,12 @@ export async function getPartRevisionBySuppliedId(
   );
   if (existingPart) {
     const existingPartRev = await getBySuppliedId<
-      PartRevision,
+      PartRevisionData,
       PartRevisionList
     >(
       () =>
         args.client.partRevisions.getPartRevisions({
-          id: existingPart.data.id,
+          id: existingPart.id,
           pageSize: 1,
           filterSuppliedId: encodeIfNotEncoded(args.suppliedRevisionId),
         }),

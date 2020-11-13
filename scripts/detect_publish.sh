@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# shellcheck source=./utils.sh
 . "$(pwd)"/scripts/utils.sh
 
 # Internal script used by CI to detect if we need to publish packages to NPM.

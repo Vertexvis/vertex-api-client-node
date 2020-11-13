@@ -55,7 +55,18 @@ components:
         minimum: 1
         type: integer
       style: form
-    Include:
+    IncludePartRevisions:
+      description: Comma-separated list of relationships to include in response.
+      explode: true
+      in: query
+      name: include
+      required: false
+      schema:
+        example: partRevisions
+        maxLength: 32
+        type: string
+      style: form
+    IncludeSource:
       description: Comma-separated list of relationships to include in response.
       explode: true
       in: query
@@ -117,7 +128,7 @@ components:
         if explictly requested.
       explode: true
       in: query
-      name: 'fields[part-revisions]'
+      name: 'fields[part-revision]'
       required: false
       schema:
         example: 'created,suppliedId'
@@ -169,20 +180,6 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
-    SourceFields:
-      description: >-
-        Comma-separated list of fields to return in response. An empty value
-        returns no fields. Due to its potential size, metadata is only returned
-        if explictly requested.
-      explode: true
-      in: query
-      name: 'fields[source]'
-      required: false
-      schema:
-        example: 'created,suppliedId'
-        maxLength: 32
-        type: string
-      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -1029,7 +1026,7 @@ components:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/FileMetadata'
+            $ref: '#/components/schemas/FileMetadataData'
           type: array
         links:
           additionalProperties:
@@ -1043,25 +1040,29 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/FileMetadata_data'
+          $ref: '#/components/schemas/FileMetadataData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
-    FileMetadata_data:
+    FileMetadataData:
+      additionalProperties: false
       properties:
         attributes:
-          $ref: '#/components/schemas/FileMetadata_data_attributes'
+          $ref: '#/components/schemas/FileMetadataData_attributes'
         id:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           format: uuid
           maxLength: 36
           type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
         type:
           example: file
           type: string
@@ -1070,7 +1071,7 @@ components:
         - id
         - type
       type: object
-    FileMetadata_data_attributes:
+    FileMetadataData_attributes:
       properties:
         created:
           example: '2020-01-01T12:00:00Z'
@@ -1135,21 +1136,43 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/GeometrySet_data'
+          $ref: '#/components/schemas/GeometrySetData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
+      type: object
+    GeometrySetData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/Hit_data_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        type:
+          example: geometry-set
+          type: string
+      required:
+        - attributes
+        - id
+        - type
       type: object
     GeometrySetList:
       additionalProperties: false
       properties:
         data:
           items:
-            $ref: '#/components/schemas/GeometrySet'
+            $ref: '#/components/schemas/GeometrySetData'
           type: array
         links:
           additionalProperties:
@@ -1188,33 +1211,6 @@ components:
         - id
         - type
       type: object
-    GeometrySet_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/GeometrySet_data_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        type:
-          example: geometry-set
-          type: string
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    GeometrySet_data_attributes:
-      properties:
-        created:
-          example: '2020-01-01T12:00:00Z'
-          format: date-time
-          type: string
-      required:
-        - created
-      type: object
     Glossiness:
       description: Glossiness from 0 to 128.
       example: 0
@@ -1241,7 +1237,6 @@ components:
       required:
         - data
         - included
-        - links
       type: object
     HitResultData:
       additionalProperties: false
@@ -1285,7 +1280,7 @@ components:
     Hit_data:
       properties:
         attributes:
-          $ref: '#/components/schemas/GeometrySet_data_attributes'
+          $ref: '#/components/schemas/Hit_data_attributes'
         id:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
@@ -1302,6 +1297,15 @@ components:
         - id
         - relationships
         - type
+      type: object
+    Hit_data_attributes:
+      properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
+      required:
+        - created
       type: object
     Hit_data_relationships:
       properties:
@@ -1496,10 +1500,10 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/Part_data'
+          $ref: '#/components/schemas/PartData'
         included:
           items:
-            $ref: '#/components/schemas/PartRevision'
+            $ref: '#/components/schemas/PartRevisionData'
           type: array
         links:
           additionalProperties:
@@ -1507,14 +1511,87 @@ components:
           type: object
       required:
         - data
-        - links
+      type: object
+    PartData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/PartData_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        relationships:
+          $ref: '#/components/schemas/PartData_relationships'
+        type:
+          example: part
+          type: string
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    PartData_attributes:
+      properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - created
+        - name
+        - suppliedId
+      type: object
+    PartData_relationships:
+      properties:
+        partRevisions:
+          items:
+            $ref: '#/components/schemas/PartData_relationships_partRevisions'
+          type: array
+      required:
+        - partRevisions
+      type: object
+    PartData_relationships_partRevisions:
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        type:
+          description: Resource object type.
+          enum:
+            - part-revision
+          example: part-revision
+          maxLength: 32
+          type: string
+      required:
+        - id
+        - type
       type: object
     PartList:
       additionalProperties: false
       properties:
         data:
           items:
-            $ref: '#/components/schemas/Part'
+            $ref: '#/components/schemas/PartData'
           type: array
         links:
           additionalProperties:
@@ -1555,7 +1632,6 @@ components:
           type: object
       required:
         - data
-        - links
       type: object
     PartRevisionData:
       additionalProperties: false
@@ -1611,7 +1687,7 @@ components:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/PartRevision'
+            $ref: '#/components/schemas/PartRevisionData'
           type: array
         links:
           additionalProperties:
@@ -1666,74 +1742,6 @@ components:
       required:
         - suppliedPartId
         - suppliedRevisionId
-      type: object
-    Part_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/Part_data_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        relationships:
-          $ref: '#/components/schemas/Part_data_relationships'
-        type:
-          example: part
-          type: string
-      required:
-        - attributes
-        - id
-        - relationships
-        - type
-      type: object
-    Part_data_attributes:
-      properties:
-        created:
-          example: '2020-01-01T12:00:00Z'
-          format: date-time
-          type: string
-        name:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - created
-        - name
-        - suppliedId
-      type: object
-    Part_data_relationships:
-      properties:
-        partRevisions:
-          items:
-            $ref: '#/components/schemas/Part_data_relationships_partRevisions'
-          type: array
-      type: object
-    Part_data_relationships_partRevisions:
-      properties:
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        type:
-          description: Resource object type.
-          enum:
-            - part-revision
-          example: part-revision
-          maxLength: 32
-          type: string
-      required:
-        - id
-        - type
       type: object
     Point:
       additionalProperties: false
@@ -1855,7 +1863,6 @@ components:
           type: object
       required:
         - data
-        - links
       type: object
     QueuedJob_data:
       properties:
@@ -1944,55 +1951,43 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/Scene_data'
+          $ref: '#/components/schemas/SceneData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
     SceneAlteration:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/SceneAlteration_data'
+          $ref: '#/components/schemas/SceneAlterationData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
-    SceneAlterationList:
+    SceneAlterationData:
       additionalProperties: false
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SceneAlteration'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
-      type: object
-    SceneAlteration_data:
-      properties:
         attributes:
-          $ref: '#/components/schemas/GeometrySet_data_attributes'
+          $ref: '#/components/schemas/Hit_data_attributes'
         id:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           format: uuid
           maxLength: 36
           type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
         relationships:
-          $ref: '#/components/schemas/SceneAlteration_data_relationships'
+          $ref: '#/components/schemas/SceneAlterationData_relationships'
         type:
           example: scene-alteration
           type: string
@@ -2002,12 +1997,60 @@ components:
         - relationships
         - type
       type: object
-    SceneAlteration_data_relationships:
+    SceneAlterationData_relationships:
       properties:
         sceneView:
           $ref: '#/components/schemas/SceneViewRelationship'
       required:
         - sceneView
+      type: object
+    SceneAlterationList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SceneAlterationData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    SceneData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/SceneData_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        type:
+          example: scene
+          type: string
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SceneData_attributes:
+      properties:
+        camera:
+          $ref: '#/components/schemas/Camera'
+        state:
+          example: draft
+          type: string
+      required:
+        - state
       type: object
     SceneItem:
       additionalProperties: false
@@ -2080,7 +2123,7 @@ components:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/SceneItem'
+            $ref: '#/components/schemas/SceneItemData'
           type: array
         links:
           additionalProperties:
@@ -2094,42 +2137,31 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/SceneItemOverride_data'
+          $ref: '#/components/schemas/SceneItemOverrideData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
-    SceneItemOverrideList:
+    SceneItemOverrideData:
       additionalProperties: false
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SceneItemOverride'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
-      type: object
-    SceneItemOverride_data:
-      properties:
         attributes:
-          $ref: '#/components/schemas/SceneItemOverride_data_attributes'
+          $ref: '#/components/schemas/SceneItemOverrideData_attributes'
         id:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           format: uuid
           maxLength: 36
           type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
         relationships:
-          $ref: '#/components/schemas/SceneItemOverride_data_relationships'
+          $ref: '#/components/schemas/SceneItemOverrideData_relationships'
         type:
           example: scene-item-override
           type: string
@@ -2139,7 +2171,7 @@ components:
         - relationships
         - type
       type: object
-    SceneItemOverride_data_attributes:
+    SceneItemOverrideData_attributes:
       properties:
         created:
           example: '2020-01-01T12:00:00Z'
@@ -2155,7 +2187,7 @@ components:
       required:
         - created
       type: object
-    SceneItemOverride_data_relationships:
+    SceneItemOverrideData_relationships:
       properties:
         sceneItem:
           $ref: '#/components/schemas/SceneItemRelationship'
@@ -2164,6 +2196,21 @@ components:
       required:
         - sceneItem
         - sceneView
+      type: object
+    SceneItemOverrideList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SceneItemOverrideData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
       type: object
     SceneItemRelationship:
       additionalProperties: false
@@ -2198,7 +2245,7 @@ components:
       properties:
         data:
           items:
-            $ref: '#/components/schemas/Scene'
+            $ref: '#/components/schemas/SceneData'
           type: array
         links:
           additionalProperties:
@@ -2266,21 +2313,63 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/SceneTemplate_data'
+          $ref: '#/components/schemas/SceneTemplateData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
+      type: object
+    SceneTemplateData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/SceneTemplateData_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        type:
+          example: scene-template
+          type: string
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SceneTemplateData_attributes:
+      properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - created
+        - suppliedId
       type: object
     SceneTemplateList:
       additionalProperties: false
       properties:
         data:
           items:
-            $ref: '#/components/schemas/SceneTemplate'
+            $ref: '#/components/schemas/SceneTemplateData'
           type: array
         links:
           additionalProperties:
@@ -2318,44 +2407,6 @@ components:
         - id
         - type
       type: object
-    SceneTemplate_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/SceneTemplate_data_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        type:
-          example: scene-template
-          type: string
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    SceneTemplate_data_attributes:
-      properties:
-        created:
-          example: '2020-01-01T12:00:00Z'
-          format: date-time
-          type: string
-        name:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - created
-        - suppliedId
-      type: object
     SceneView:
       additionalProperties: false
       properties:
@@ -2367,7 +2418,6 @@ components:
           type: object
       required:
         - data
-        - links
       type: object
     SceneViewRelationship:
       additionalProperties: false
@@ -2437,72 +2487,33 @@ components:
       required:
         - scene
       type: object
-    Scene_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/Scene_data_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        type:
-          example: scene
-          type: string
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    Scene_data_attributes:
-      properties:
-        camera:
-          $ref: '#/components/schemas/Camera'
-        state:
-          example: draft
-          type: string
-      required:
-        - state
-      type: object
     StreamKey:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/StreamKey_data'
+          $ref: '#/components/schemas/StreamKeyData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
-    StreamKeyList:
+    StreamKeyData:
       additionalProperties: false
       properties:
-        data:
-          items:
-            $ref: '#/components/schemas/StreamKey'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
-      type: object
-    StreamKey_data:
-      properties:
         attributes:
-          $ref: '#/components/schemas/StreamKey_data_attributes'
+          $ref: '#/components/schemas/StreamKeyData_attributes'
         id:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           format: uuid
           maxLength: 36
           type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
         relationships:
           $ref: '#/components/schemas/SceneView_data_relationships'
         type:
@@ -2514,7 +2525,7 @@ components:
         - relationships
         - type
       type: object
-    StreamKey_data_attributes:
+    StreamKeyData_attributes:
       properties:
         created:
           example: '2020-01-01T12:00:00Z'
@@ -2531,6 +2542,21 @@ components:
         - created
         - expiry
       type: object
+    StreamKeyList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/StreamKeyData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     TranslationInspectionJob:
       additionalProperties: false
       properties:
@@ -2542,7 +2568,6 @@ components:
           type: object
       required:
         - data
-        - links
       type: object
     TranslationInspectionJob_data:
       properties:
@@ -3509,7 +3534,7 @@ paths:
             returned if explictly requested.
           explode: true
           in: query
-          name: 'fields[part-revisions]'
+          name: 'fields[part-revision]'
           required: false
           schema:
             example: 'created,suppliedId'
@@ -3853,7 +3878,7 @@ paths:
           name: include
           required: false
           schema:
-            example: results.sceneItem.source
+            example: partRevisions
             maxLength: 32
             type: string
           style: form
@@ -5360,7 +5385,7 @@ paths:
             returned if explictly requested.
           explode: true
           in: query
-          name: 'fields[source]'
+          name: 'fields[part-revision]'
           required: false
           schema:
             example: 'created,suppliedId'
@@ -6393,7 +6418,7 @@ paths:
             returned if explictly requested.
           explode: true
           in: query
-          name: 'fields[source]'
+          name: 'fields[part-revision]'
           required: false
           schema:
             example: 'created,suppliedId'
