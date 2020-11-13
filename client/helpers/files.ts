@@ -1,7 +1,7 @@
 import {
   CreateFileRequest,
   encodeIfNotEncoded,
-  FileMetadata,
+  FileMetadataData,
   FileList,
   getBySuppliedId,
   VertexClient,
@@ -19,7 +19,7 @@ export async function uploadFileIfNotExists(
 ): Promise<string> {
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
-    ? await getBySuppliedId<FileMetadata, FileList>(
+    ? await getBySuppliedId<FileMetadataData, FileList>(
         () =>
           args.client.files.getFiles({
             pageSize: 1,
@@ -30,8 +30,8 @@ export async function uploadFileIfNotExists(
     : undefined;
 
   if (existingFile) {
-    const fileId = existingFile.data.id;
-    if (existingFile.data.attributes.status === 'complete') {
+    const fileId = existingFile.id;
+    if (existingFile.attributes.status === 'complete') {
       if (args.verbose) {
         console.log(
           `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
@@ -43,7 +43,7 @@ export async function uploadFileIfNotExists(
       // TODO: Temporary until we can resume file uploads
       if (args.verbose) {
         console.log(
-          `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.data.attributes.status}, ${fileId}`
+          `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.attributes.status}, ${fileId}`
         );
       }
 

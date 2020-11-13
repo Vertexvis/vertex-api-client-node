@@ -79,7 +79,7 @@ export function nowEpochMs(): number {
 }
 
 export async function getBySuppliedId<
-  T extends { data: { attributes: { suppliedId?: string } } },
+  T extends { attributes: { suppliedId?: string } },
   TRes extends { data: T[] }
 >(
   getter: () => Promise<AxiosResponse<TRes>>,
@@ -90,7 +90,7 @@ export async function getBySuppliedId<
   const res = await getter();
   if (res.data.data.length > 0) {
     const sceneItem = head(res.data.data);
-    if (sceneItem.data.attributes.suppliedId === suppliedId) return sceneItem;
+    if (sceneItem.attributes.suppliedId === suppliedId) return sceneItem;
   }
 
   return undefined;

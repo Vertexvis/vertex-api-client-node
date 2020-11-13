@@ -1043,10 +1043,10 @@ export interface Failure {
 export interface FileList {
   /**
    *
-   * @type {Array<FileMetadata>}
+   * @type {Array<FileMetadataData>}
    * @memberof FileList
    */
-  data: Array<FileMetadata>;
+  data: Array<FileMetadataData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -1071,7 +1071,7 @@ export interface FileMetadata {
    * @type {{ [key: string]: Link; }}
    * @memberof FileMetadata
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -1091,6 +1091,12 @@ export interface FileMetadataData {
    * @memberof FileMetadataData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof FileMetadataData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {string}
@@ -1199,7 +1205,7 @@ export interface GeometrySet {
    * @type {{ [key: string]: Link; }}
    * @memberof GeometrySet
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -1209,16 +1215,22 @@ export interface GeometrySet {
 export interface GeometrySetData {
   /**
    *
-   * @type {GeometrySetDataAttributes}
+   * @type {HitDataAttributes}
    * @memberof GeometrySetData
    */
-  attributes: GeometrySetDataAttributes;
+  attributes: HitDataAttributes;
   /**
    * ID of the resource.
    * @type {string}
    * @memberof GeometrySetData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof GeometrySetData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {string}
@@ -1229,28 +1241,15 @@ export interface GeometrySetData {
 /**
  *
  * @export
- * @interface GeometrySetDataAttributes
- */
-export interface GeometrySetDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof GeometrySetDataAttributes
-   */
-  created: string;
-}
-/**
- *
- * @export
  * @interface GeometrySetList
  */
 export interface GeometrySetList {
   /**
    *
-   * @type {Array<GeometrySet>}
+   * @type {Array<GeometrySetData>}
    * @memberof GeometrySetList
    */
-  data: Array<GeometrySet>;
+  data: Array<GeometrySetData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -1322,7 +1321,7 @@ export interface Hit {
    * @type {{ [key: string]: Link; }}
    * @memberof Hit
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -1332,10 +1331,10 @@ export interface Hit {
 export interface HitData {
   /**
    *
-   * @type {GeometrySetDataAttributes}
+   * @type {HitDataAttributes}
    * @memberof HitData
    */
-  attributes: GeometrySetDataAttributes;
+  attributes: HitDataAttributes;
   /**
    * ID of the resource.
    * @type {string}
@@ -1354,6 +1353,19 @@ export interface HitData {
    * @memberof HitData
    */
   type: string;
+}
+/**
+ *
+ * @export
+ * @interface HitDataAttributes
+ */
+export interface HitDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof HitDataAttributes
+   */
+  created: string;
 }
 /**
  *
@@ -1670,16 +1682,16 @@ export interface Part {
   data: PartData;
   /**
    *
-   * @type {Array<PartRevision>}
+   * @type {Array<PartRevisionData>}
    * @memberof Part
    */
-  included?: Array<PartRevision>;
+  included?: Array<PartRevisionData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
    * @memberof Part
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -1701,10 +1713,16 @@ export interface PartData {
   id: string;
   /**
    *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartData
+   */
+  links?: { [key: string]: Link };
+  /**
+   *
    * @type {PartDataRelationships}
    * @memberof PartData
    */
-  relationships: PartDataRelationships;
+  relationships?: PartDataRelationships;
   /**
    *
    * @type {string}
@@ -1748,7 +1766,7 @@ export interface PartDataRelationships {
    * @type {Array<PartDataRelationshipsPartRevisions>}
    * @memberof PartDataRelationships
    */
-  partRevisions?: Array<PartDataRelationshipsPartRevisions>;
+  partRevisions: Array<PartDataRelationshipsPartRevisions>;
 }
 /**
  *
@@ -1786,10 +1804,10 @@ export enum PartDataRelationshipsPartRevisionsTypeEnum {
 export interface PartList {
   /**
    *
-   * @type {Array<Part>}
+   * @type {Array<PartData>}
    * @memberof PartList
    */
-  data: Array<Part>;
+  data: Array<PartData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -1842,7 +1860,7 @@ export interface PartRevision {
    * @type {{ [key: string]: Link; }}
    * @memberof PartRevision
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -1933,10 +1951,10 @@ export interface PartRevisionDataRelationships {
 export interface PartRevisionList {
   /**
    *
-   * @type {Array<PartRevision>}
+   * @type {Array<PartRevisionData>}
    * @memberof PartRevisionList
    */
-  data: Array<PartRevision>;
+  data: Array<PartRevisionData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2189,7 +2207,7 @@ export interface QueuedJob {
    * @type {{ [key: string]: Link; }}
    * @memberof QueuedJob
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2316,7 +2334,7 @@ export interface Scene {
    * @type {{ [key: string]: Link; }}
    * @memberof Scene
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2335,7 +2353,7 @@ export interface SceneAlteration {
    * @type {{ [key: string]: Link; }}
    * @memberof SceneAlteration
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2345,16 +2363,22 @@ export interface SceneAlteration {
 export interface SceneAlterationData {
   /**
    *
-   * @type {GeometrySetDataAttributes}
+   * @type {HitDataAttributes}
    * @memberof SceneAlterationData
    */
-  attributes: GeometrySetDataAttributes;
+  attributes: HitDataAttributes;
   /**
    * ID of the resource.
    * @type {string}
    * @memberof SceneAlterationData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAlterationData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {SceneAlterationDataRelationships}
@@ -2389,10 +2413,10 @@ export interface SceneAlterationDataRelationships {
 export interface SceneAlterationList {
   /**
    *
-   * @type {Array<SceneAlteration>}
+   * @type {Array<SceneAlterationData>}
    * @memberof SceneAlterationList
    */
-  data: Array<SceneAlteration>;
+  data: Array<SceneAlterationData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2418,6 +2442,12 @@ export interface SceneData {
    * @memberof SceneData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {string}
@@ -2558,10 +2588,10 @@ export interface SceneItemDataRelationships {
 export interface SceneItemList {
   /**
    *
-   * @type {Array<SceneItem>}
+   * @type {Array<SceneItemData>}
    * @memberof SceneItemList
    */
-  data: Array<SceneItem>;
+  data: Array<SceneItemData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2586,7 +2616,7 @@ export interface SceneItemOverride {
    * @type {{ [key: string]: Link; }}
    * @memberof SceneItemOverride
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2606,6 +2636,12 @@ export interface SceneItemOverrideData {
    * @memberof SceneItemOverrideData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneItemOverrideData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {SceneItemOverrideDataRelationships}
@@ -2677,10 +2713,10 @@ export interface SceneItemOverrideDataRelationships {
 export interface SceneItemOverrideList {
   /**
    *
-   * @type {Array<SceneItemOverride>}
+   * @type {Array<SceneItemOverrideData>}
    * @memberof SceneItemOverrideList
    */
-  data: Array<SceneItemOverride>;
+  data: Array<SceneItemOverrideData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2737,10 +2773,10 @@ export enum SceneItemRelationshipDataTypeEnum {
 export interface SceneList {
   /**
    *
-   * @type {Array<Scene>}
+   * @type {Array<SceneData>}
    * @memberof SceneList
    */
-  data: Array<Scene>;
+  data: Array<SceneData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2831,7 +2867,7 @@ export interface SceneTemplate {
    * @type {{ [key: string]: Link; }}
    * @memberof SceneTemplate
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2851,6 +2887,12 @@ export interface SceneTemplateData {
    * @memberof SceneTemplateData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneTemplateData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {string}
@@ -2891,10 +2933,10 @@ export interface SceneTemplateDataAttributes {
 export interface SceneTemplateList {
   /**
    *
-   * @type {Array<SceneTemplate>}
+   * @type {Array<SceneTemplateData>}
    * @memberof SceneTemplateList
    */
-  data: Array<SceneTemplate>;
+  data: Array<SceneTemplateData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -2960,7 +3002,7 @@ export interface SceneView {
    * @type {{ [key: string]: Link; }}
    * @memberof SceneView
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -3083,7 +3125,7 @@ export interface StreamKey {
    * @type {{ [key: string]: Link; }}
    * @memberof StreamKey
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -3103,6 +3145,12 @@ export interface StreamKeyData {
    * @memberof StreamKeyData
    */
   id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof StreamKeyData
+   */
+  links?: { [key: string]: Link };
   /**
    *
    * @type {SceneViewDataRelationships}
@@ -3149,10 +3197,10 @@ export interface StreamKeyDataAttributes {
 export interface StreamKeyList {
   /**
    *
-   * @type {Array<StreamKey>}
+   * @type {Array<StreamKeyData>}
    * @memberof StreamKeyList
    */
-  data: Array<StreamKey>;
+  data: Array<StreamKeyData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -3177,7 +3225,7 @@ export interface TranslationInspectionJob {
    * @type {{ [key: string]: Link; }}
    * @memberof TranslationInspectionJob
    */
-  links: { [key: string]: Link };
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -4852,7 +4900,7 @@ export const HitsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4860,7 +4908,7 @@ export const HitsApiAxiosParamCreator = function (
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -4911,8 +4959,8 @@ export const HitsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
-      if (fieldsSource !== undefined) {
-        localVarQueryParameter['fields[source]'] = fieldsSource;
+      if (fieldsPartRevision !== undefined) {
+        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
@@ -4954,7 +5002,7 @@ export const HitsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -4962,7 +5010,7 @@ export const HitsApiAxiosParamCreator = function (
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -5013,8 +5061,8 @@ export const HitsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
-      if (fieldsSource !== undefined) {
-        localVarQueryParameter['fields[source]'] = fieldsSource;
+      if (fieldsPartRevision !== undefined) {
+        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
       }
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
@@ -5065,7 +5113,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5073,14 +5121,20 @@ export const HitsApiFp = function (configuration?: Configuration) {
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
       const localVarAxiosArgs = await HitsApiAxiosParamCreator(
         configuration
-      ).createSceneHit(id, createHitRequest, include, fieldsSource, options);
+      ).createSceneHit(
+        id,
+        createHitRequest,
+        include,
+        fieldsPartRevision,
+        options
+      );
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -5097,7 +5151,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5105,7 +5159,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
@@ -5116,7 +5170,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
         id,
         createHitRequest,
         include,
-        fieldsSource,
+        fieldsPartRevision,
         options
       );
       return (
@@ -5148,7 +5202,7 @@ export const HitsApiFactory = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5156,11 +5210,17 @@ export const HitsApiFactory = function (
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): AxiosPromise<Hit> {
       return HitsApiFp(configuration)
-        .createSceneHit(id, createHitRequest, include, fieldsSource, options)
+        .createSceneHit(
+          id,
+          createHitRequest,
+          include,
+          fieldsPartRevision,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -5168,7 +5228,7 @@ export const HitsApiFactory = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsSource] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5176,7 +5236,7 @@ export const HitsApiFactory = function (
       id: string,
       createHitRequest: CreateHitRequest,
       include?: string,
-      fieldsSource?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): AxiosPromise<Hit> {
       return HitsApiFp(configuration)
@@ -5184,7 +5244,7 @@ export const HitsApiFactory = function (
           id,
           createHitRequest,
           include,
-          fieldsSource,
+          fieldsPartRevision,
           options
         )
         .then((request) => request(axios, basePath));
@@ -5224,7 +5284,7 @@ export interface HitsApiCreateSceneHitRequest {
    * @type {string}
    * @memberof HitsApiCreateSceneHit
    */
-  readonly fieldsSource?: string;
+  readonly fieldsPartRevision?: string;
 }
 
 /**
@@ -5259,7 +5319,7 @@ export interface HitsApiCreateSceneViewHitRequest {
    * @type {string}
    * @memberof HitsApiCreateSceneViewHit
    */
-  readonly fieldsSource?: string;
+  readonly fieldsPartRevision?: string;
 }
 
 /**
@@ -5285,7 +5345,7 @@ export class HitsApi extends BaseAPI {
         requestParameters.id,
         requestParameters.createHitRequest,
         requestParameters.include,
-        requestParameters.fieldsSource,
+        requestParameters.fieldsPartRevision,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -5307,7 +5367,7 @@ export class HitsApi extends BaseAPI {
         requestParameters.id,
         requestParameters.createHitRequest,
         requestParameters.include,
-        requestParameters.fieldsSource,
+        requestParameters.fieldsPartRevision,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -5683,13 +5743,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevision: async (
       id: string,
-      fieldsPartRevisions?: string,
+      fieldsPartRevision?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -5729,8 +5789,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
           'Bearer ' + localVarAccessTokenValue;
       }
 
-      if (fieldsPartRevisions !== undefined) {
-        localVarQueryParameter['fields[part-revisions]'] = fieldsPartRevisions;
+      if (fieldsPartRevision !== undefined) {
+        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
       }
 
       const queryParameters = new URLSearchParams(localVarUrlObj.search);
@@ -5951,20 +6011,20 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getPartRevision(
       id: string,
-      fieldsPartRevisions?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
     > {
       const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
         configuration
-      ).getPartRevision(id, fieldsPartRevisions, options);
+      ).getPartRevision(id, fieldsPartRevision, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -6055,17 +6115,17 @@ export const PartRevisionsApiFactory = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevisions] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getPartRevision(
       id: string,
-      fieldsPartRevisions?: string,
+      fieldsPartRevision?: string,
       options?: any
     ): AxiosPromise<PartRevision> {
       return PartRevisionsApiFp(configuration)
-        .getPartRevision(id, fieldsPartRevisions, options)
+        .getPartRevision(id, fieldsPartRevision, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6125,7 +6185,7 @@ export interface PartRevisionsApiGetPartRevisionRequest {
    * @type {string}
    * @memberof PartRevisionsApiGetPartRevision
    */
-  readonly fieldsPartRevisions?: string;
+  readonly fieldsPartRevision?: string;
 }
 
 /**
@@ -6205,7 +6265,7 @@ export class PartRevisionsApi extends BaseAPI {
     return PartRevisionsApiFp(this.configuration)
       .getPartRevision(
         requestParameters.id,
-        requestParameters.fieldsPartRevisions,
+        requestParameters.fieldsPartRevision,
         options
       )
       .then((request) => request(this.axios, this.basePath));
