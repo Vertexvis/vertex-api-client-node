@@ -125,7 +125,7 @@ components:
       description: >-
         Comma-separated list of fields to return in response. An empty value
         returns no fields. Due to its potential size, metadata is only returned
-        if explictly requested.
+        if explicitly requested.
       explode: true
       in: query
       name: 'fields[part-revision]'
@@ -755,6 +755,15 @@ components:
       properties:
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
+        parent:
+          description: >-
+            ID provided for correlation. For example, an existing ID from a PLM
+            system.
+          example: PN12345
+          maxLength: 1024
+          type: string
+        source:
+          $ref: '#/components/schemas/PartRevisionSuppliedId'
         suppliedId:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -1702,27 +1711,9 @@ components:
       description: Relationship to a `part-revision`.
       properties:
         data:
-          $ref: '#/components/schemas/PartRevisionRelationship_data'
+          $ref: '#/components/schemas/PartData_relationships_partRevisions'
       required:
         - data
-      type: object
-    PartRevisionRelationship_data:
-      properties:
-        id:
-          anyOf:
-            - $ref: '#/components/schemas/Uuid'
-            - $ref: '#/components/schemas/PartRevisionSuppliedId'
-          description: ID of the resource.
-        type:
-          description: Resource object type.
-          enum:
-            - part-revision
-          example: part-revision
-          maxLength: 32
-          type: string
-      required:
-        - id
-        - type
       type: object
     PartRevisionSuppliedId:
       additionalProperties: false
@@ -2843,14 +2834,19 @@ info:
     name: Vertex API support
     url: 'https://developer.vertexvis.com/docs/support'
   description: >
-    The Vertex platform includes a set of APIs and SDKs, which together provide
-    a powerful toolset for building scalable applications based on 3D data.
-
+    The Vertex distributed cloud rendering platform includes a set of APIs and
+    SDKs, which together allow easily integrating 3D product data into your
+    business application.
 
 
     See our [Developer Portal
     Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get
     started.
+
+
+    Note that we use auto-generated UUIDs in example requests that may share the
+    same value. This is for ease of documentation only. In actual requests and
+    responses, they should uniquely identify their corresponding resource.
   termsOfService: 'https://vertexvis.com/terms-of-use'
   title: Vertex Platform API
   version: '1.0'
@@ -3531,7 +3527,7 @@ paths:
         - description: >-
             Comma-separated list of fields to return in response. An empty value
             returns no fields. Due to its potential size, metadata is only
-            returned if explictly requested.
+            returned if explicitly requested.
           explode: true
           in: query
           name: 'fields[part-revision]'
@@ -3592,7 +3588,8 @@ paths:
     patch:
       description: >+
 
-        Update a `part-revision`.
+        Update a `part-revision`. Note that metadata updates are eventually
+        consistent.
 
 
         ###### Body Params
@@ -5382,7 +5379,7 @@ paths:
         - description: >-
             Comma-separated list of fields to return in response. An empty value
             returns no fields. Due to its potential size, metadata is only
-            returned if explictly requested.
+            returned if explicitly requested.
           explode: true
           in: query
           name: 'fields[part-revision]'
@@ -6415,7 +6412,7 @@ paths:
         - description: >-
             Comma-separated list of fields to return in response. An empty value
             returns no fields. Due to its potential size, metadata is only
-            returned if explictly requested.
+            returned if explicitly requested.
           explode: true
           in: query
           name: 'fields[part-revision]'
@@ -6689,9 +6686,13 @@ paths:
     post:
       description: >+
 
-        Create a `scene-item` for a `scene`. This API is asynchronous, returning
-        the location of a `queued-scene-item`. Check the status via the
-        getQueuedSceneItem API. For details, see our [Rendering
+        Create a `scene-item` for a `scene`. Provide the source geometry either
+        via `part-revision` or `geometry-set` UUID using `relationship.source`
+        or by supplied IDs using `attributes.source`. Provide the hierarchical
+        parent either via `scene-item` UUID using `relationship.source` or by
+        supplied ID using `attributes.parent`. This API is asynchronous,
+        returning the location of a `queued-scene-item`. Check the status via
+        the getQueuedSceneItem API. For details, see our [Rendering
         scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
         guide.
 
@@ -6727,6 +6728,17 @@ paths:
         |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.|
 
         |▹▹▹ specular|Color3|true|RGB color.|
+
+        |▹▹ parent|string|false|ID provided for correlation. For example, an
+        existing ID from a PLM system.|
+
+        |▹▹ source|PartRevisionSuppliedId|false||
+
+        |▹▹▹ suppliedPartId|string|true|ID provided for correlation. For
+        example, an existing ID from a PLM system.|
+
+        |▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For
+        example, an existing ID from a PLM system.|
 
         |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
         existing ID from a PLM system.|
@@ -6779,19 +6791,9 @@ paths:
         |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a
         `part-revision`.|
 
-        |▹▹▹▹ data|PartRevisionRelationship_data|true||
+        |▹▹▹▹ data|PartData_relationships_partRevisions|true||
 
-        |▹▹▹▹▹ id|any|true|ID of the resource.|
-
-        |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.|
-
-        |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false||
-
-        |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For
-        example, an existing ID from a PLM system.|
-
-        |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For
-        example, an existing ID from a PLM system.|
+        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
 
         |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.|
 
