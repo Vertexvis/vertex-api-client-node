@@ -502,6 +502,12 @@ export interface CreatePartRequestData {
  */
 export interface CreatePartRequestDataAttributes {
   /**
+   * Optional boolean to set whether or not metadata will be indexed for the part.
+   * @type {boolean}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  indexMetadata?: boolean;
+  /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
@@ -6307,7 +6313,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6546,7 +6552,7 @@ export const PartsApiAxiosParamCreator = function (
 export const PartsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6643,7 +6649,7 @@ export const PartsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6760,7 +6766,7 @@ export interface PartsApiGetPartsRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}

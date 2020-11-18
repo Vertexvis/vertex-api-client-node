@@ -634,6 +634,12 @@ components:
       type: object
     CreatePartRequest_data_attributes:
       properties:
+        indexMetadata:
+          description: >-
+            Optional boolean to set whether or not metadata will be indexed for
+            the part.
+          example: true
+          type: boolean
         suppliedId:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -3785,6 +3791,9 @@ paths:
         |data|CreatePartRequest_data|true||
 
         |▹ attributes|CreatePartRequest_data_attributes|true||
+
+        |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not
+        metadata will be indexed for the part.|
 
         |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
         existing ID from a PLM system.|
