@@ -16,7 +16,7 @@ interface UploadFileArgs {
 
 export async function uploadFileIfNotExists(
   args: UploadFileArgs
-): Promise<string> {
+): Promise<FileMetadataData> {
   const suppliedId = args.createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
     ? await getBySuppliedId<FileMetadataData, FileList>(
@@ -38,7 +38,7 @@ export async function uploadFileIfNotExists(
         );
       }
 
-      return fileId;
+      return existingFile;
     } else {
       // TODO: Temporary until we can resume file uploads
       if (args.verbose) {
@@ -54,18 +54,21 @@ export async function uploadFileIfNotExists(
   return await uploadFile(args);
 }
 
-export async function uploadFile(args: UploadFileArgs): Promise<string> {
+export async function uploadFile(
+  args: UploadFileArgs
+): Promise<FileMetadataData> {
   const fileName = args.createFileReq.data.attributes.name;
   const createRes = await args.client.files.createFile({
     createFileRequest: args.createFileReq,
   });
 
-  const fileId = createRes.data.data.id;
+  const file = createRes.data.data;
+  const fileId = file.id;
   if (args.verbose) console.log(`Created file '${fileName}', ${fileId}`);
 
   await args.client.files.uploadFile({ id: fileId, body: args.fileData });
 
   if (args.verbose) console.log(`Uploaded file ${fileId}`);
 
-  return fileId;
+  return file;
 }

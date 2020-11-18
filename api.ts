@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex platform includes a set of APIs and SDKs, which together provide a powerful toolset for building scalable applications based on 3D data.   See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Note that we use auto-generated UUIDs in example requests that may share the same value. This is for ease of documentation only. In actual requests and responses, they should uniquely identify their corresponding resource.
  *
  * The version of the OpenAPI document: 1.0
  *
@@ -502,6 +502,12 @@ export interface CreatePartRequestData {
  */
 export interface CreatePartRequestDataAttributes {
   /**
+   * Optional boolean to set whether or not metadata will be indexed for the part.
+   * @type {boolean}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  indexMetadata?: boolean;
+  /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
@@ -685,6 +691,18 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   materialOverride?: ColorMaterial;
+  /**
+   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * @type {string}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  parent?: string;
+  /**
+   *
+   * @type {PartRevisionSuppliedId}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  source?: PartRevisionSuppliedId;
   /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
@@ -1970,39 +1988,11 @@ export interface PartRevisionList {
 export interface PartRevisionRelationship {
   /**
    *
-   * @type {PartRevisionRelationshipData}
+   * @type {PartDataRelationshipsPartRevisions}
    * @memberof PartRevisionRelationship
    */
-  data: PartRevisionRelationshipData;
+  data: PartDataRelationshipsPartRevisions;
 }
-/**
- *
- * @export
- * @interface PartRevisionRelationshipData
- */
-export interface PartRevisionRelationshipData {
-  /**
-   * ID of the resource.
-   * @type {string | PartRevisionSuppliedId}
-   * @memberof PartRevisionRelationshipData
-   */
-  id: string | PartRevisionSuppliedId;
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof PartRevisionRelationshipData
-   */
-  type: PartRevisionRelationshipDataTypeEnum;
-}
-
-/**
- * @export
- * @enum {string}
- */
-export enum PartRevisionRelationshipDataTypeEnum {
-  PartRevision = 'part-revision',
-}
-
 /**
  *
  * @export
@@ -4900,7 +4890,7 @@ export const HitsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5002,7 +4992,7 @@ export const HitsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5113,7 +5103,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5151,7 +5141,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5202,7 +5192,7 @@ export const HitsApiFactory = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5228,7 +5218,7 @@ export const HitsApiFactory = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {CreateHitRequest} createHitRequest
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5280,7 +5270,7 @@ export interface HitsApiCreateSceneHitRequest {
   readonly include?: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
    * @type {string}
    * @memberof HitsApiCreateSceneHit
    */
@@ -5315,7 +5305,7 @@ export interface HitsApiCreateSceneViewHitRequest {
   readonly include?: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
    * @type {string}
    * @memberof HitsApiCreateSceneViewHit
    */
@@ -5743,7 +5733,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5903,7 +5893,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -6011,7 +6001,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6072,7 +6062,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       };
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -6115,7 +6105,7 @@ export const PartRevisionsApiFactory = function (
     /**
      *  Get a `part-revision` by ID.
      * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6149,7 +6139,7 @@ export const PartRevisionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+     *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -6181,7 +6171,7 @@ export interface PartRevisionsApiGetPartRevisionRequest {
   readonly id: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explictly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
    * @type {string}
    * @memberof PartRevisionsApiGetPartRevision
    */
@@ -6294,7 +6284,7 @@ export class PartRevisionsApi extends BaseAPI {
   }
 
   /**
-   *  Update a `part-revision`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
+   *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
    * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -6323,7 +6313,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6562,7 +6552,7 @@ export const PartsApiAxiosParamCreator = function (
 export const PartsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6659,7 +6649,7 @@ export const PartsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6776,7 +6766,7 @@ export interface PartsApiGetPartsRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not metadata will be indexed for the part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8172,7 +8162,7 @@ export const SceneItemsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `scene-item` for a `scene`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartRevisionRelationship_data|true|| |▹▹▹▹▹ id|any|true|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false|| |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ parent|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ source|PartRevisionSuppliedId|false|| |▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartData_relationships_partRevisions|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -8671,7 +8661,7 @@ export const SceneItemsApiAxiosParamCreator = function (
 export const SceneItemsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `scene-item` for a `scene`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartRevisionRelationship_data|true|| |▹▹▹▹▹ id|any|true|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false|| |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ parent|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ source|PartRevisionSuppliedId|false|| |▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartData_relationships_partRevisions|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -8859,7 +8849,7 @@ export const SceneItemsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `scene-item` for a `scene`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartRevisionRelationship_data|true|| |▹▹▹▹▹ id|any|true|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false|| |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ parent|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ source|PartRevisionSuppliedId|false|| |▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartData_relationships_partRevisions|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -9089,7 +9079,7 @@ export interface SceneItemsApiUpdateSceneItemRequest {
  */
 export class SceneItemsApi extends BaseAPI {
   /**
-   *  Create a `scene-item` for a `scene`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartRevisionRelationship_data|true|| |▹▹▹▹▹ id|any|true|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|Uuid(uuid)|false|ID of the resource.| |▹▹▹▹▹▹ *anonymous*|PartRevisionSuppliedId|false|| |▹▹▹▹▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneItemRequest_data|true|| |▹ attributes|CreateSceneItemRequest_data_attributes|true|| |▹▹ materialOverride|ColorMaterial|false|Color properties describing how a material looks.| |▹▹▹ ambient|Color3|true|RGB color.| |▹▹▹▹ b|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ g|integer(int32)|true|Color value from 0 to 255.| |▹▹▹▹ r|integer(int32)|true|Color value from 0 to 255.| |▹▹▹ diffuse|Color3|true|RGB color.| |▹▹▹ emissive|Color3|true|RGB color.| |▹▹▹ glossiness|integer(int32)|true|Glossiness from 0 to 128.| |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.| |▹▹▹ specular|Color3|true|RGB color.| |▹▹ parent|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ source|PartRevisionSuppliedId|false|| |▹▹▹ suppliedPartId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see [Transformation Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices) for details.| |▹▹▹ r0|Vector4|true|4D vector.| |▹▹▹▹ w|number|true|w value.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ r1|Vector4|true|4D vector.| |▹▹▹ r2|Vector4|true|4D vector.| |▹▹▹ r3|Vector4|true|4D vector.| |▹▹ visible|boolean|false|Item visibility.| |▹ relationships|CreateSceneItemRequest_data_relationships|true|| |▹▹ parent|SceneItemRelationship|false|Relationship to a `scene-item`.| |▹▹▹ data|SceneItemRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-item)|true|Resource object type.| |▹▹ source|any|false|Relationship to a `geometry-set` or `part-revision`.| |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a `geometry-set`.| |▹▹▹▹ data|GeometrySetRelationshipData|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(geometry-set)|true|Resource object type.| |▹▹▹ *anonymous*|PartRevisionRelationship|false|Relationship to a `part-revision`.| |▹▹▹▹ data|PartData_relationships_partRevisions|true|| |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {SceneItemsApiCreateSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}

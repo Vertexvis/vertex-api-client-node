@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex platform includes a set of APIs and SDKs, which together provide a powerful toolset for building scalable applications based on 3D data.   See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Note that we use auto-generated UUIDs in example requests that may share the same value. This is for ease of documentation only. In actual requests and responses, they should uniquely identify their corresponding resource.
  *
  * The version of the OpenAPI document: 1.0
  *

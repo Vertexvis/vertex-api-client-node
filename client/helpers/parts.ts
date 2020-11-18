@@ -11,6 +11,7 @@ import {
   PartRevisionData,
   PartRevisionList,
   pollQueuedJob,
+  prettyJson,
   uploadFileIfNotExists,
   VertexClient,
 } from '../..';
@@ -31,8 +32,8 @@ interface GetPartRevisionBySuppliedIdArgs {
 
 export async function createPartFromFileIfNotExists(
   args: CreatePartFromFileArgs
-): Promise<string> {
-  const fileId = await uploadFileIfNotExists({
+): Promise<PartRevisionData> {
+  const file = await uploadFileIfNotExists({
     client: args.client,
     verbose: args.verbose,
     fileData: args.fileData,
@@ -42,7 +43,7 @@ export async function createPartFromFileIfNotExists(
   // TODO: Temporary until race condition fixed
   await delay(1000);
 
-  const createPartRequest = args.createPartReq(fileId);
+  const createPartRequest = args.createPartReq(file.id);
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
   const suppliedRevisionId =
     createPartRequest.data.attributes.suppliedRevisionId;
@@ -58,7 +59,7 @@ export async function createPartFromFileIfNotExists(
           `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
       );
     }
-    return existingPartRev.id;
+    return existingPartRev;
   }
 
   const createPartRes = await args.client.parts.createPart({
@@ -67,19 +68,25 @@ export async function createPartFromFileIfNotExists(
   const queuedId = createPartRes.data.data.id;
   if (args.verbose)
     console.log(
-      `Created part with queued-translation ${queuedId}, file ${fileId}`
+      `Created part with queued-translation ${queuedId}, file ${file.id}`
     );
 
   const part = await pollQueuedJob<Part>(queuedId, (id) =>
     args.client.translationInspections.getQueuedTranslation({ id })
   );
-  const partRevIds = part.included
-    ?.filter((pr) => pr.attributes.suppliedId === suppliedRevisionId)
-    .map((pr) => pr.id);
-  const partRevId = partRevIds ? head(partRevIds) : '';
+  const partRev = head(
+    part.included?.filter(
+      (pr) => pr.attributes.suppliedId === suppliedRevisionId
+    )
+  );
+  if (!partRev)
+    throw new Error(
+      `Error creating part revision.\nRes: ${prettyJson(part.data)}`
+    );
 
-  if (args.verbose) console.log(`Created part-revision ${partRevId}`);
-  return partRevId;
+  if (args.verbose) console.log(`Created part-revision ${partRev.id}`);
+
+  return partRev;
 }
 
 export async function getPartRevisionBySuppliedId(
