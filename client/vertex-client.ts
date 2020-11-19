@@ -76,12 +76,12 @@ export class VertexClient {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
-        if (error.isAxiosError) {
+        if (error.isAxiosError && error?.response?.config) {
           const r = error.response;
           const c = r.config;
-          error.vertexErrorMessage = `${c.method.toUpperCase()} '${
-            c.url
-          }' error.\nReq: ${c.data}\nRes: ${prettyJson(r.data)}`;
+          error.vertexErrorMessage = `${
+            c.method ? c.method.toUpperCase() : 'undefined'
+          } '${c.url}' error.\nReq: ${c.data}\nRes: ${prettyJson(r.data)}`;
         }
         return Promise.reject(error);
       }
