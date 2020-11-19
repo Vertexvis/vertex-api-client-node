@@ -99,33 +99,34 @@ export async function getBySuppliedId<
 export async function pollQueuedJob<T extends { data: { id: string } }>(
   id: string,
   getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>,
+  allow404: boolean = false,
   pollIntervalMs: number = PollIntervalMs
 ): Promise<T> {
   const poll = async (): Promise<AxiosResponse<QueuedJob | T>> => {
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
         const res = await getQueuedJob(id);
-        if (
+        if (allow404 && res.status === 404) resolve(res);
+        else if (
           !res.data.data ||
           !res.data.data.attributes ||
           res.data.data.attributes.status === 'error'
         ) {
-          return reject(
+          reject(
             new Error(
               `Error getting queued job ${id}.\n${prettyJson(res.data)}`
             )
           );
-        }
-
-        resolve(res);
+        } else resolve(res);
       }, pollIntervalMs);
     });
   };
 
-  let data: T | QueuedJob = { data: { id } } as T;
-  while (data.data.id === id) data = (await poll()).data;
+  let res: AxiosResponse<T | QueuedJob> = await poll();
+  while ((allow404 && res.status === 404) || res.data.data.id === id)
+    res = await poll();
 
-  return data as T;
+  return res.data as T;
 }
 
 export function prettyJson(obj: unknown): string {

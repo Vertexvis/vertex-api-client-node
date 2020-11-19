@@ -3,7 +3,6 @@ import {
   arrayChunked,
   CameraFitTypeEnum,
   CreateFileRequest,
-  createSceneItem,
   CreateSceneItemRequest,
   CreateSceneRequest,
   CreateSceneTemplateRequest,
@@ -12,6 +11,7 @@ import {
   RenderImageArgs,
   Scene,
   SceneData,
+  SceneItem,
   SceneRelationshipDataTypeEnum,
   UpdateSceneRequestDataAttributesStateEnum,
   uploadFile,
@@ -32,20 +32,7 @@ interface CreateSceneWithSceneItemsArgs {
   parallelism: number;
   verbose: boolean;
   createSceneReq: () => CreateSceneRequest;
-  /*
-  2D-array by depth. This allows awaiting creation of each depth in order to set
-  the parent relationship for children at lower depths. For example,
-    [
-      [...] // Items at depth 0 (root items)
-      [...] // Items at depth 1
-      ...
-    ]
-  If hierarchy isn't important, simply pass requests as,
-    [[() => ({ data: { ... } }), () => ({ data: { ... } })]]
-  */
-  createSceneItemReqFactoriesByDepth: ((
-    suppliedIdToSceneItemId: Map<string, string>
-  ) => CreateSceneItemRequest)[][];
+  createSceneItemReqsByDepth: CreateSceneItemRequest[][];
 }
 
 export const createSceneFromTemplateFile = async (
@@ -106,29 +93,48 @@ export async function createSceneWithSceneItems(
     },
   });
   const sceneId = createSceneRes.data.data.id;
-  const suppliedIdToSceneItemId = new Map<string, string>();
+  let queuedIds: string[] = [];
+  if (args.verbose) console.log(`Created scene ${sceneId}`);
 
   /* eslint-disable no-await-in-loop */
-  for (const reqFactoriesAtDepth of args.createSceneItemReqFactoriesByDepth) {
-    const chunks = arrayChunked(reqFactoriesAtDepth, args.parallelism);
+  for (const [
+    depth,
+    reqsAtDepth,
+  ] of args.createSceneItemReqsByDepth.entries()) {
+    if (args.verbose)
+      console.log(
+        `Creating ${reqsAtDepth.length} queued-scene-items at depth ${depth}...`
+      );
+    const chunks = arrayChunked(reqsAtDepth, args.parallelism);
     for (const chunk of chunks) {
-      (
+      queuedIds = queuedIds.concat(
         await Promise.all(
-          chunk.map((reqFactory) =>
-            createSceneItem({
-              client: args.client,
-              verbose: args.verbose,
-              sceneId,
-              createSceneItemReq: () => reqFactory(suppliedIdToSceneItemId),
-            })
+          chunk.map(
+            async (req) =>
+              (
+                await args.client.sceneItems.createSceneItem({
+                  id: sceneId,
+                  createSceneItemRequest: req,
+                })
+              ).data.data.id
           )
         )
-      ).forEach((si) =>
-        suppliedIdToSceneItemId.set(si.data.attributes.suppliedId, si.data.id)
       );
     }
   }
   /* eslint-enable no-await-in-loop */
+  if (args.verbose)
+    console.log(
+      `Created ${queuedIds.length} queued-scene-items. Polling for completion...`
+    );
+
+  await pollQueuedJob<SceneItem>(
+    queuedIds[queuedIds.length - 1],
+    (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
+    true
+  );
+
+  if (args.verbose) console.log(`Committing scene and polling until ready...`);
 
   await args.client.scenes.updateScene({
     id: sceneId,
@@ -141,8 +147,9 @@ export async function createSceneWithSceneItems(
       },
     },
   });
-
   await pollSceneReady({ client: args.client, id: sceneId });
+
+  if (args.verbose) console.log(`Fitting scene's camera to scene-items...`);
 
   const scene = await args.client.scenes.updateScene({
     id: sceneId,
