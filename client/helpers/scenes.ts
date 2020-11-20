@@ -166,11 +166,10 @@ export async function createSceneWithSceneItems(
   return scene.data.data;
 }
 
-// Returns Stream in Node, `(await renderScene(...)).data.pipe(createWriteStream('image.jpeg'))`
-export const renderScene = async (
+export async function renderScene<T>(
   args: RenderImageArgs
-): Promise<AxiosResponse<any>> =>
-  await args.client.scenes.renderScene(
+): Promise<AxiosResponse<T>> {
+  return await args.client.scenes.renderScene(
     {
       id: args.renderReq.id,
       height: args.renderReq.height,
@@ -178,6 +177,7 @@ export const renderScene = async (
     },
     { responseType: 'stream' }
   );
+}
 
 export async function pollSceneReady({
   client,
