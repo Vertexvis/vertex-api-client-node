@@ -18,7 +18,7 @@ export * from './scene-views';
     stream: NodeJS.ReadableStream,
     path: string
   ): Promise<void> {
-    return new Promise<void>((resolve) => {
+    return new Promise((resolve) => {
       const ws = createWriteStream(path);
       stream.pipe(ws);
       ws.on('finish', resolve);
