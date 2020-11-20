@@ -162,9 +162,10 @@ export class VertexClient {
     const nowMs = nowEpochMs();
     const expiresAtMs =
       this.tokenFetchedEpochMs + this.token.expires_in * SecToMs;
-    const tokenValid = expiresAtMs > nowMs - TenMinsInMs;
+    const tokenValid = nowMs + TenMinsInMs < expiresAtMs;
     if (tokenValid) return this.token.access_token;
 
+    console.log('Refreshing access token');
     this.token = await createToken(this.auth);
     this.tokenFetchedEpochMs = nowEpochMs();
     return this.token.access_token;
