@@ -96,24 +96,9 @@ export async function createSceneWithSceneItems(
   const sceneId = createSceneRes.data.data.id;
   if (args.verbose) {
     console.log(`Created scene ${sceneId}`);
-    // console.log(
-    //   `Creating ${args.createSceneItemReqs.length} queued-scene-items...`
-    // );
   }
 
   const limit = pLimit(args.parallelism);
-  // const responses = await Promise.all(
-  //   args.createSceneItemReqs.map((r) =>
-  //     limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
-  //       (r: CreateSceneItemRequest) =>
-  //         args.client.sceneItems.createSceneItem({
-  //           id: sceneId,
-  //           createSceneItemRequest: r,
-  //         }),
-  //       r
-  //     )
-  //   )
-  // );
   let responses: AxiosResponse<QueuedJob>[] = [];
   /* eslint-disable no-await-in-loop */
   for (const [
