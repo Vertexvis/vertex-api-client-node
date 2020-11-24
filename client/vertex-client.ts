@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
   BasePath,
   Configuration,
@@ -25,14 +25,16 @@ import {
 type BaseOptions = Record<string, unknown>;
 
 interface BuildArgs {
+  axiosOptions?: AxiosRequestConfig;
   baseOptions?: BaseOptions;
+  basePath?: BasePath;
   clientId?: string;
   clientSecret?: string;
-  basePath?: BasePath;
 }
 
 interface CtorArgs {
   auth: Oauth2Api;
+  axiosOptions?: AxiosRequestConfig;
   baseOptions?: BaseOptions;
   basePath: string;
   token: OAuth2Token;
@@ -63,7 +65,13 @@ export class VertexClient {
   private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
 
-  private constructor({ auth, baseOptions, basePath, token }: CtorArgs) {
+  private constructor({
+    auth,
+    axiosOptions,
+    baseOptions,
+    basePath,
+    token,
+  }: CtorArgs) {
     this.auth = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
@@ -72,7 +80,7 @@ export class VertexClient {
       baseOptions,
       basePath,
     });
-    this.axiosInstance = axios.create();
+    this.axiosInstance = axios.create(axiosOptions);
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
@@ -155,6 +163,7 @@ export class VertexClient {
       baseOptions: createBaseOptions(baseOptions),
       basePath,
       token,
+      axiosOptions: args?.axiosOptions,
     });
   };
 
