@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
+import pLimit from 'p-limit';
 import {
-  arrayChunked,
   CameraFitTypeEnum,
   CreateFileRequest,
   CreateSceneItemRequest,
@@ -8,6 +8,7 @@ import {
   CreateSceneTemplateRequest,
   PollIntervalMs,
   pollQueuedJob,
+  QueuedJob,
   RenderImageArgs,
   Scene,
   SceneData,
@@ -93,9 +94,27 @@ export async function createSceneWithSceneItems(
     },
   });
   const sceneId = createSceneRes.data.data.id;
-  let queuedIds: string[] = [];
-  if (args.verbose) console.log(`Created scene ${sceneId}`);
+  if (args.verbose) {
+    console.log(`Created scene ${sceneId}`);
+    // console.log(
+    //   `Creating ${args.createSceneItemReqs.length} queued-scene-items...`
+    // );
+  }
 
+  const limit = pLimit(args.parallelism);
+  // const responses = await Promise.all(
+  //   args.createSceneItemReqs.map((r) =>
+  //     limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
+  //       (r: CreateSceneItemRequest) =>
+  //         args.client.sceneItems.createSceneItem({
+  //           id: sceneId,
+  //           createSceneItemRequest: r,
+  //         }),
+  //       r
+  //     )
+  //   )
+  // );
+  let responses: AxiosResponse<QueuedJob>[] = [];
   /* eslint-disable no-await-in-loop */
   for (const [
     depth,
@@ -105,31 +124,29 @@ export async function createSceneWithSceneItems(
       console.log(
         `Creating ${reqsAtDepth.length} queued-scene-items at depth ${depth}...`
       );
-    const chunks = arrayChunked(reqsAtDepth, args.parallelism);
-    for (const chunk of chunks) {
-      queuedIds = queuedIds.concat(
-        await Promise.all(
-          chunk.map(
-            async (req) =>
-              (
-                await args.client.sceneItems.createSceneItem({
-                  id: sceneId,
-                  createSceneItemRequest: req,
-                })
-              ).data.data.id
+    responses = responses.concat(
+      await Promise.all(
+        reqsAtDepth.map((r) =>
+          limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
+            (r: CreateSceneItemRequest) =>
+              args.client.sceneItems.createSceneItem({
+                id: sceneId,
+                createSceneItemRequest: r,
+              }),
+            r
           )
         )
-      );
-    }
+      )
+    );
   }
   /* eslint-enable no-await-in-loop */
-  if (args.verbose)
-    console.log(
-      `Created ${queuedIds.length} queued-scene-items. Polling for completion...`
-    );
 
+  if (args.verbose)
+    console.log(`Created queued-scene-items. Polling for completion...`);
+
+  // TODO: Await last batch instead of last item
   await pollQueuedJob<SceneItem>(
-    queuedIds[queuedIds.length - 1],
+    responses[responses.length - 1].data.data.id,
     (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
     true
   );
