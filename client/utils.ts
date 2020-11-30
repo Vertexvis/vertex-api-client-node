@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { stringify } from 'flatted';
 import { Oauth2Api, OAuth2Token, QueuedJob } from '..';
 
 export const PollIntervalMs = 5000;
@@ -130,7 +131,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>(
 }
 
 export function prettyJson(obj: unknown): string {
-  return JSON.stringify(obj, null, 2);
+  return stringify(obj, null, 2);
 }
 
 export function toFloats(fallback: string, a?: string): number[] {
