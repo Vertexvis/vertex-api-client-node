@@ -635,10 +635,8 @@ components:
     CreatePartRequest_data_attributes:
       properties:
         indexMetadata:
-          description: >-
-            Optional boolean to set whether or not metadata will be indexed for
-            the part.
-          example: true
+          description: Whether or not to index metadata in the part file.
+          example: false
           type: boolean
         suppliedId:
           description: >-
@@ -3792,8 +3790,8 @@ paths:
 
         |▹ attributes|CreatePartRequest_data_attributes|true||
 
-        |▹▹ indexMetadata|boolean|false|Optional boolean to set whether or not
-        metadata will be indexed for the part.|
+        |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the
+        part file.|
 
         |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
         existing ID from a PLM system.|
@@ -4174,6 +4172,7 @@ paths:
         - scene-items
   '/queued-scene-templates/{id}':
     get:
+      deprecated: true
       description: |+
 
         Get a `queued-scene-template`.
@@ -4893,6 +4892,7 @@ paths:
         - scene-items
   /scene-templates:
     get:
+      deprecated: true
       description: |+
 
         Get `scene-templates`.
@@ -4957,6 +4957,7 @@ paths:
       tags:
         - scene-templates
     post:
+      deprecated: true
       description: >+
 
         Create a `scene-template`.
@@ -5049,6 +5050,7 @@ paths:
         - scene-templates
   '/scene-templates/{id}':
     get:
+      deprecated: true
       description: |+
 
         Get a `scene-template` by ID.
