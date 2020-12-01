@@ -4,6 +4,8 @@ import {
   CameraFitTypeEnum,
   CreateSceneItemRequest,
   CreateSceneRequest,
+  MaxAttempts,
+  Polling,
   PollIntervalMs,
   pollQueuedJob,
   QueuedJob,
@@ -22,6 +24,13 @@ interface CreateSceneWithSceneItemsArgs {
   verbose: boolean;
   createSceneReq: () => CreateSceneRequest;
   createSceneItemReqs: CreateSceneItemRequest[];
+  polling?: Polling;
+}
+
+interface PollSceneReadyArgs {
+  client: VertexClient;
+  id: string;
+  polling?: Polling;
 }
 
 export async function createSceneWithSceneItems(
@@ -60,11 +69,12 @@ export async function createSceneWithSceneItems(
   if (args.verbose)
     console.log(`Created queued-scene-items. Polling for completion...`);
 
-  await pollQueuedJob<SceneItem>(
-    responses[responses.length - 1].data.data.id,
-    (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
-    true
-  );
+  await pollQueuedJob<SceneItem>({
+    id: responses[responses.length - 1].data.data.id,
+    getQueuedJob: (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
+    allow404: true,
+    polling: args.polling,
+  });
 
   if (args.verbose) console.log(`Committing scene and polling until ready...`);
 
@@ -79,7 +89,11 @@ export async function createSceneWithSceneItems(
       },
     },
   });
-  await pollSceneReady({ client: args.client, id: sceneId });
+  await pollSceneReady({
+    client: args.client,
+    id: sceneId,
+    polling: args.polling,
+  });
 
   if (args.verbose) console.log(`Fitting scene's camera to scene-items...`);
 
@@ -114,22 +128,29 @@ export async function renderScene<T>(
 export async function pollSceneReady({
   client,
   id,
-  pollIntervalMs = PollIntervalMs,
-}: {
-  client: VertexClient;
-  id: string;
-  pollIntervalMs?: number;
-}): Promise<Scene> {
+  polling = {
+    intervalMs: PollIntervalMs,
+    maxAttempts: MaxAttempts,
+  },
+}: PollSceneReadyArgs): Promise<Scene> {
   const poll = async (): Promise<Scene> =>
     new Promise((resolve) => {
       setTimeout(
         async () => resolve((await client.scenes.getScene({ id })).data),
-        pollIntervalMs
+        polling.intervalMs
       );
     });
 
+  let attempts = 1;
   let scene = await poll();
-  while (scene.data.attributes.state !== 'ready') scene = await poll();
+  while (scene.data.attributes.state !== 'ready') {
+    attempts++;
+    if (attempts > polling.maxAttempts)
+      throw new Error(
+        `Polled scene ${id} ${polling.maxAttempts} times, giving up.`
+      );
+    scene = await poll();
+  }
 
   return scene;
 }

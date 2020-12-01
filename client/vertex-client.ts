@@ -21,6 +21,7 @@ import {
   SceneTemplatesApi,
   TranslationInspectionsApi,
 } from '..';
+import { name, version } from '../package.json';
 
 type BaseOptions = Record<string, unknown>;
 
@@ -80,7 +81,10 @@ export class VertexClient {
       baseOptions,
       basePath,
     });
-    this.axiosInstance = axios.create(axiosOptions);
+    this.axiosInstance = axios.create({
+      headers: { 'user-agent': `${name}/${version}` },
+      ...axiosOptions,
+    });
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error) => {
