@@ -12,7 +12,6 @@
     "rootDir": ".",
     "strict": true,
     "strictNullChecks": true,
-    "resolveJsonModule": true,
     "target": "es6",
     "typeRoots": ["node_modules/@types"]
   },
