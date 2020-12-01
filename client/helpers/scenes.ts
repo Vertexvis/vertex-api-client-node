@@ -141,8 +141,16 @@ export async function pollSceneReady({
       );
     });
 
+  let attempts = 1;
   let scene = await poll();
-  while (scene.data.attributes.state !== 'ready') scene = await poll();
+  while (scene.data.attributes.state !== 'ready') {
+    attempts++;
+    if (attempts > polling.maxAttempts)
+      throw new Error(
+        `Polled scene ${id} ${polling.maxAttempts} times, giving up.`
+      );
+    scene = await poll();
+  }
 
   return scene;
 }

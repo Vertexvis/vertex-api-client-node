@@ -138,9 +138,9 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   let res: AxiosResponse<T | QueuedJob> = await poll();
   while ((allow404 && res.status === 404) || res.data.data.id === id) {
     attempts++;
-    if (attempts === polling.maxAttempts)
+    if (attempts > polling.maxAttempts)
       throw new Error(
-        `Polled queued-id ${id} ${polling.maxAttempts} times, giving up.`
+        `Polled queued item ${id} ${polling.maxAttempts} times, giving up.`
       );
     res = await poll();
   }
