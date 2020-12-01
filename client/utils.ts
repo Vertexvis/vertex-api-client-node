@@ -1,9 +1,17 @@
 import { AxiosResponse } from 'axios';
-import { stringify } from 'flatted';
-import { Oauth2Api, OAuth2Token, QueuedJob } from '..';
+import { Oauth2Api, OAuth2Token, Polling, QueuedJob } from '..';
 
 export const PollIntervalMs = 5000;
+export const AttemptsPerMin = 60000 / PollIntervalMs;
+export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 export const Utf8 = 'utf8';
+
+interface PollQueuedJobArgs {
+  id: string;
+  getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
+  allow404?: boolean;
+  polling?: Polling;
+}
 
 export function arrayEq(a: number[], b: number[]): boolean {
   return arrayLenEq(a, b) && a.every((v, idx) => v === b[idx]);
@@ -97,12 +105,15 @@ export async function getBySuppliedId<
   return undefined;
 }
 
-export async function pollQueuedJob<T extends { data: { id: string } }>(
-  id: string,
-  getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>,
-  allow404: boolean = false,
-  pollIntervalMs: number = PollIntervalMs
-): Promise<T> {
+export async function pollQueuedJob<T extends { data: { id: string } }>({
+  id,
+  getQueuedJob,
+  allow404 = false,
+  polling = {
+    intervalMs: PollIntervalMs,
+    maxAttempts: MaxAttempts,
+  },
+}: PollQueuedJobArgs): Promise<T> {
   const poll = async (): Promise<AxiosResponse<QueuedJob | T>> => {
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
@@ -119,19 +130,30 @@ export async function pollQueuedJob<T extends { data: { id: string } }>(
             )
           );
         } else resolve(res);
-      }, pollIntervalMs);
+      }, polling.intervalMs);
     });
   };
 
+  let attempts = 1;
   let res: AxiosResponse<T | QueuedJob> = await poll();
-  while ((allow404 && res.status === 404) || res.data.data.id === id)
+  while ((allow404 && res.status === 404) || res.data.data.id === id) {
+    attempts++;
+    if (attempts === polling.maxAttempts)
+      throw new Error(
+        `Polled queued-id ${id} ${polling.maxAttempts} times, giving up.`
+      );
     res = await poll();
+  }
 
   return res.data as T;
 }
 
-export function prettyJson(obj: unknown): string {
-  return stringify(obj, null, 2);
+export function prettyJson(obj: any): string {
+  try {
+    return JSON.stringify(obj, null, 2);
+  } catch (error) {
+    return `Unable to parse ${obj} as JSON.`;
+  }
 }
 
 export function toFloats(fallback: string, a?: string): number[] {

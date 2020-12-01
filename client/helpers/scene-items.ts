@@ -1,11 +1,12 @@
 import { CreateSceneItemRequest, SceneItem } from '../..';
-import { pollQueuedJob, VertexClient } from '..';
+import { Polling, pollQueuedJob, VertexClient } from '..';
 
 interface CreateSceneItemArgs {
   client: VertexClient;
   verbose: boolean;
   sceneId: string;
   createSceneItemReq: () => CreateSceneItemRequest;
+  polling: Polling;
 }
 
 export async function createSceneItem(
@@ -19,9 +20,11 @@ export async function createSceneItem(
   if (args.verbose)
     console.log(`Created scene-item with queued-scene-item ${queuedId}`);
 
-  const sceneItem = await pollQueuedJob<SceneItem>(queuedId, (id) =>
-    args.client.sceneItems.getQueuedSceneItem({ id })
-  );
+  const sceneItem = await pollQueuedJob<SceneItem>({
+    id: queuedId,
+    getQueuedJob: (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
+    polling: args.polling,
+  });
   if (args.verbose) console.log(`Created scene-item ${sceneItem.data.id}`);
 
   return sceneItem;

@@ -10,6 +10,7 @@ import {
   PartList,
   PartRevisionData,
   PartRevisionList,
+  Polling,
   pollQueuedJob,
   prettyJson,
   uploadFileIfNotExists,
@@ -22,6 +23,7 @@ interface CreatePartFromFileArgs {
   fileData: unknown; // Use Buffer in Node
   createFileReq: CreateFileRequest;
   createPartReq: (fileId: string) => CreatePartRequest;
+  polling?: Polling;
 }
 
 interface GetPartRevisionBySuppliedIdArgs {
@@ -71,9 +73,12 @@ export async function createPartFromFileIfNotExists(
       `Created part with queued-translation ${queuedId}, file ${file.id}`
     );
 
-  const part = await pollQueuedJob<Part>(queuedId, (id) =>
-    args.client.translationInspections.getQueuedTranslation({ id })
-  );
+  const part = await pollQueuedJob<Part>({
+    id: queuedId,
+    getQueuedJob: (id) =>
+      args.client.translationInspections.getQueuedTranslation({ id }),
+    polling: args.polling,
+  });
   const partRev = head(
     part.included?.filter(
       (pr) => pr.attributes.suppliedId === suppliedRevisionId

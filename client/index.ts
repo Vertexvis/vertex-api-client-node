@@ -13,3 +13,8 @@ export interface RenderRequest {
   height?: number;
   width?: number;
 }
+
+export interface Polling {
+  intervalMs: number;
+  maxAttempts: number;
+}
