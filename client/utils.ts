@@ -152,7 +152,7 @@ export function prettyJson(obj: any): string {
   try {
     return JSON.stringify(obj, null, 2);
   } catch (error) {
-    return `Unable to parse ${obj} as JSON.`;
+    return `Unable to stringify ${obj} to JSON.`;
   }
 }
 
