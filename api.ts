@@ -2462,6 +2462,12 @@ export interface SceneDataAttributes {
    * @type {string}
    * @memberof SceneDataAttributes
    */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneDataAttributes
+   */
   state: string;
 }
 /**
@@ -2526,6 +2532,12 @@ export interface SceneItemData {
  * @interface SceneItemDataAttributes
  */
 export interface SceneItemDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneItemDataAttributes
+   */
+  created: string;
   /**
    *
    * @type {ColorMaterial}
@@ -5893,6 +5905,87 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
+     *  Get a rendered image of a `part-revision`.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {number} [height] The height of the image to render.
+     * @param {number} [width] The width of the image to render.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    renderPartRevision: async (
+      id: string,
+      height?: number,
+      width?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling renderPartRevision.'
+        );
+      }
+      const localVarPath = `/part-revisions/{id}/image`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      if (height !== undefined) {
+        localVarQueryParameter['height'] = height;
+      }
+
+      if (width !== undefined) {
+        localVarQueryParameter['width'] = width;
+      }
+
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        queryParameters.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        queryParameters.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
@@ -6062,6 +6155,36 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       };
     },
     /**
+     *  Get a rendered image of a `part-revision`.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {number} [height] The height of the image to render.
+     * @param {number} [width] The width of the image to render.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async renderPartRevision(
+      id: string,
+      height?: number,
+      width?: number,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
+    > {
+      const localVarAxiosArgs = await PartRevisionsApiAxiosParamCreator(
+        configuration
+      ).renderPartRevision(id, height, width, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
      *  Update a `part-revision`. Note that metadata updates are eventually consistent.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|UpdatePartRevisionRequest_data|true|| |▹ attributes|UpdatePartRevisionRequest_data_attributes|true|| |▹▹ metadata|object|false|Metadata about the `part` and/or `part-revision`.| |▹▹▹ **additionalProperties**|MetadataValue|false|| |▹▹▹▹ type|enum(string, long, float, date, null)|true|Type of metadata value.| |▹▹▹▹ value|string|false|Metadata value.| |▹ id|string(uuid)|true|ID of the resource.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
@@ -6136,6 +6259,24 @@ export const PartRevisionsApiFactory = function (
     ): AxiosPromise<PartRevisionList> {
       return PartRevisionsApiFp(configuration)
         .getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Get a rendered image of a `part-revision`.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {number} [height] The height of the image to render.
+     * @param {number} [width] The width of the image to render.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    renderPartRevision(
+      id: string,
+      height?: number,
+      width?: number,
+      options?: any
+    ): AxiosPromise<any> {
+      return PartRevisionsApiFp(configuration)
+        .renderPartRevision(id, height, width, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6214,6 +6355,34 @@ export interface PartRevisionsApiGetPartRevisionsRequest {
 }
 
 /**
+ * Request parameters for renderPartRevision operation in PartRevisionsApi.
+ * @export
+ * @interface PartRevisionsApiRenderPartRevisionRequest
+ */
+export interface PartRevisionsApiRenderPartRevisionRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly id: string;
+
+  /**
+   * The height of the image to render.
+   * @type {number}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly height?: number;
+
+  /**
+   * The width of the image to render.
+   * @type {number}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly width?: number;
+}
+
+/**
  * Request parameters for updatePartRevision operation in PartRevisionsApi.
  * @export
  * @interface PartRevisionsApiUpdatePartRevisionRequest
@@ -6278,6 +6447,27 @@ export class PartRevisionsApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.filterSuppliedId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Get a rendered image of a `part-revision`.
+   * @param {PartRevisionsApiRenderPartRevisionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRevisionsApi
+   */
+  public renderPartRevision(
+    requestParameters: PartRevisionsApiRenderPartRevisionRequest,
+    options?: any
+  ) {
+    return PartRevisionsApiFp(this.configuration)
+      .renderPartRevision(
+        requestParameters.id,
+        requestParameters.height,
+        requestParameters.width,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -10758,6 +10948,75 @@ export const ScenesApiAxiosParamCreator = function (
       };
     },
     /**
+     *  Delete a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteScene: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling deleteScene.'
+        );
+      }
+      const localVarPath = `/scenes/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        queryParameters.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        queryParameters.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      *  Get a `queued-scene`.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -11170,6 +11429,32 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       };
     },
     /**
+     *  Delete a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteScene(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await ScenesApiAxiosParamCreator(
+        configuration
+      ).deleteScene(id, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: basePath + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
      *  Get a `queued-scene`.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -11335,6 +11620,17 @@ export const ScenesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     *  Delete a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteScene(id: string, options?: any): AxiosPromise<void> {
+      return ScenesApiFp(configuration)
+        .deleteScene(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      *  Get a `queued-scene`.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -11421,6 +11717,20 @@ export interface ScenesApiCreateSceneRequest {
    * @memberof ScenesApiCreateScene
    */
   readonly createSceneRequest: CreateSceneRequest;
+}
+
+/**
+ * Request parameters for deleteScene operation in ScenesApi.
+ * @export
+ * @interface ScenesApiDeleteSceneRequest
+ */
+export interface ScenesApiDeleteSceneRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof ScenesApiDeleteScene
+   */
+  readonly id: string;
 }
 
 /**
@@ -11541,6 +11851,22 @@ export class ScenesApi extends BaseAPI {
   ) {
     return ScenesApiFp(this.configuration)
       .createScene(requestParameters.createSceneRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Delete a `scene`.
+   * @param {ScenesApiDeleteSceneRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ScenesApi
+   */
+  public deleteScene(
+    requestParameters: ScenesApiDeleteSceneRequest,
+    options?: any
+  ) {
+    return ScenesApiFp(this.configuration)
+      .deleteScene(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -11811,12 +12137,14 @@ export const StreamKeysApiAxiosParamCreator = function (
      *  Get `stream-key`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterKey] Stream key to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getStreamKeys: async (
       pageCursor?: string,
       pageSize?: number,
+      filterKey?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/stream-keys`;
@@ -11852,6 +12180,10 @@ export const StreamKeysApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterKey !== undefined) {
+        localVarQueryParameter['filter[key]'] = filterKey;
       }
 
       const queryParameters = new URLSearchParams(localVarUrlObj.search);
@@ -11943,19 +12275,21 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
      *  Get `stream-key`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterKey] Stream key to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getStreamKeys(
       pageCursor?: string,
       pageSize?: number,
+      filterKey?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKeyList>
     > {
       const localVarAxiosArgs = await StreamKeysApiAxiosParamCreator(
         configuration
-      ).getStreamKeys(pageCursor, pageSize, options);
+      ).getStreamKeys(pageCursor, pageSize, filterKey, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -12011,16 +12345,18 @@ export const StreamKeysApiFactory = function (
      *  Get `stream-key`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterKey] Stream key to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getStreamKeys(
       pageCursor?: string,
       pageSize?: number,
+      filterKey?: string,
       options?: any
     ): AxiosPromise<StreamKeyList> {
       return StreamKeysApiFp(configuration)
-        .getStreamKeys(pageCursor, pageSize, options)
+        .getStreamKeys(pageCursor, pageSize, filterKey, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -12080,6 +12416,13 @@ export interface StreamKeysApiGetStreamKeysRequest {
    * @memberof StreamKeysApiGetStreamKeys
    */
   readonly pageSize?: number;
+
+  /**
+   * Stream key to filter on.
+   * @type {string}
+   * @memberof StreamKeysApiGetStreamKeys
+   */
+  readonly filterKey?: string;
 }
 
 /**
@@ -12140,6 +12483,7 @@ export class StreamKeysApi extends BaseAPI {
       .getStreamKeys(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterKey,
         options
       )
       .then((request) => request(this.axios, this.basePath));
