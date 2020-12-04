@@ -180,6 +180,16 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    StreamKeyFilter:
+      description: Stream key to filter on.
+      explode: true
+      in: query
+      name: 'filter[key]'
+      required: false
+      schema:
+        example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
+        type: string
+      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -2041,10 +2051,15 @@ components:
       properties:
         camera:
           $ref: '#/components/schemas/Camera'
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         state:
           example: draft
           type: string
       required:
+        - created
         - state
       type: object
     SceneItem:
@@ -2087,6 +2102,10 @@ components:
       type: object
     SceneItemData_attributes:
       properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
         suppliedId:
@@ -2100,6 +2119,7 @@ components:
           example: true
           type: boolean
       required:
+        - created
         - suppliedId
         - transform
         - visible
@@ -3655,6 +3675,94 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-revisions
+  '/part-revisions/{id}/image':
+    get:
+      description: |+
+
+        Get a rendered image of a `part-revision`.
+
+      operationId: renderPartRevision
+      parameters:
+        - description: The `part-revision` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The height of the image to render.
+          explode: true
+          in: query
+          name: height
+          required: false
+          schema:
+            example: 1000
+            format: int32
+            maximum: 2160
+            minimum: 1
+            type: integer
+          style: form
+        - description: The width of the image to render.
+          explode: true
+          in: query
+          name: width
+          required: false
+          schema:
+            example: 1000
+            format: int32
+            maximum: 3840
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            image/jpeg:
+              schema:
+                format: binary
+                type: string
+          description: OK
         '401':
           content:
             application/vnd.api+json:
@@ -6198,6 +6306,64 @@ paths:
       tags:
         - scenes
   '/scenes/{id}':
+    delete:
+      description: |+
+
+        Delete a `scene`.
+
+      operationId: deleteScene
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scenes
     get:
       description: |+
 
@@ -7113,6 +7279,15 @@ paths:
             maximum: 200
             minimum: 1
             type: integer
+          style: form
+        - description: Stream key to filter on.
+          explode: true
+          in: query
+          name: 'filter[key]'
+          required: false
+          schema:
+            example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
+            type: string
           style: form
       responses:
         '200':
