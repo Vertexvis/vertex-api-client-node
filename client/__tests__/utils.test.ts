@@ -70,3 +70,51 @@ describe(utils.is4x4Identity, () => {
     ).toEqual(true);
   });
 });
+
+describe(utils.multiply, () => {
+  it('should return zeros', () => {
+    expect(utils.multiply([[0], [0]], [[0], [0]])).toEqual([[0], [0]]);
+  });
+
+  it('should return identity', () => {
+    expect(
+      utils.multiply(
+        [
+          [1, 2],
+          [0, 1],
+        ],
+        [
+          [3, 0],
+          [1, 1],
+        ]
+      )
+    ).toEqual([
+      [5, 2],
+      [1, 1],
+    ]);
+  });
+
+  it('should multiply', () => {
+    expect(
+      utils.multiply(
+        [
+          [2, 1, 0, 0],
+          [0, 3, 0, 0],
+          [0, 1, 1, 0],
+          [0, 0, 0, 1],
+        ],
+        [
+          [1, 0, 0, 0],
+          [0, 2, 0, 0],
+          [0, 7, 4, 0],
+          [0, 0, 0, 5],
+        ]
+      )
+    ).toEqual([
+      [2, 2, 0, 0],
+      [0, 6, 0, 0],
+      [0, 9, 4, 0],
+      [0, 0, 0, 5],
+    ]);
+  });
+});
