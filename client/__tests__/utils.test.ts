@@ -80,24 +80,6 @@ describe(utils.multiply, () => {
     expect(
       utils.multiply(
         [
-          [1, 0],
-          [0, 1],
-        ],
-        [
-          [1, 0],
-          [0, 1],
-        ]
-      )
-    ).toEqual([
-      [1, 0],
-      [0, 1],
-    ]);
-  });
-
-  it('should return identity', () => {
-    expect(
-      utils.multiply(
-        [
           [1, 2],
           [0, 1],
         ],
