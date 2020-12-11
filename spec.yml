@@ -800,7 +800,8 @@ components:
           anyOf:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
-          description: Relationship to a `geometry-set` or `part-revision`.
+            - $ref: '#/components/schemas/SceneRelationship'
+          description: 'Relationship to a `geometry-set`, `part-revision`, or `scene`.'
       type: object
     CreateSceneRequest:
       additionalProperties: false
@@ -813,7 +814,7 @@ components:
     CreateSceneRequest_data:
       properties:
         attributes:
-          $ref: '#/components/schemas/CreateSceneViewRequest_data_attributes'
+          $ref: '#/components/schemas/CreateSceneRequest_data_attributes'
         relationships:
           $ref: '#/components/schemas/CreateSceneRequest_data_relationships'
         type:
@@ -825,10 +826,29 @@ components:
         - attributes
         - type
       type: object
+    CreateSceneRequest_data_attributes:
+      properties:
+        camera:
+          $ref: '#/components/schemas/Camera'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          description: >-
+            ID provided for correlation. For example, an existing ID from a PLM
+            system.
+          example: PN12345
+          maxLength: 1024
+          type: string
+      type: object
     CreateSceneRequest_data_relationships:
       properties:
         source:
-          $ref: '#/components/schemas/SceneTemplateRelationship'
+          oneOf:
+            - $ref: '#/components/schemas/SceneTemplateRelationship'
+            - $ref: '#/components/schemas/SceneRelationship'
       required:
         - source
       type: object
@@ -2055,8 +2075,18 @@ components:
           example: '2020-01-01T12:00:00Z'
           format: date-time
           type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         state:
           example: draft
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
           type: string
       required:
         - created
@@ -2132,6 +2162,7 @@ components:
           anyOf:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
+            - $ref: '#/components/schemas/SceneRelationship'
       type: object
     SceneItemList:
       additionalProperties: false
@@ -2750,6 +2781,11 @@ components:
           anyOf:
             - $ref: '#/components/schemas/Camera'
             - $ref: '#/components/schemas/CameraFit'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         state:
           description: State of the scene.
           enum:
@@ -2757,6 +2793,13 @@ components:
             - commit
           example: commit
           maxLength: 32
+          type: string
+        suppliedId:
+          description: >-
+            ID provided for correlation. For example, an existing ID from a PLM
+            system.
+          example: PN12345
+          maxLength: 1024
           type: string
       type: object
     UpdateSceneViewRequest:
@@ -6219,7 +6262,7 @@ paths:
 
         |data|CreateSceneRequest_data|true||
 
-        |▹ attributes|CreateSceneViewRequest_data_attributes|true||
+        |▹ attributes|CreateSceneRequest_data_attributes|true||
 
         |▹▹ camera|Camera|false|Camera placement in 3D space.|
 
@@ -6235,16 +6278,31 @@ paths:
 
         |▹▹▹ up|Vector3|true|3D vector.|
 
+        |▹▹ name|string|false||
+
+        |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
+        existing ID from a PLM system.|
+
         |▹ relationships|CreateSceneRequest_data_relationships|false||
 
-        |▹▹ source|SceneTemplateRelationship|true|Relationship to a
+        |▹▹ source|any|true||
+
+        |▹▹▹ *anonymous*|SceneTemplateRelationship|false|Relationship to a
         `scene-template`.|
 
-        |▹▹▹ data|SceneTemplateRelationship_data|true||
+        |▹▹▹▹ data|SceneTemplateRelationship_data|true||
 
-        |▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
 
-        |▹▹▹▹ type|enum(scene-template)|true|Resource object type.|
+        |▹▹▹▹▹ type|enum(scene-template)|true|Resource object type.|
+
+        |▹▹▹ *anonymous*|SceneRelationship|false|Relationship to a `scene`.|
+
+        |▹▹▹▹ data|SceneRelationship_data|true||
+
+        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹▹▹▹▹ type|enum(scene)|true|Resource object type.|
 
         |▹ type|string|true|Resource object type.|
 
@@ -6468,7 +6526,12 @@ paths:
 
         |▹▹▹▹ type|enum(fit-visible-scene-items)|true|Resource object type.|
 
+        |▹▹ name|string|false||
+
         |▹▹ state|enum(draft, commit)|false|State of the scene.|
+
+        |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
+        existing ID from a PLM system.|
 
         |▹ type|string|true|Resource object type.|
 
@@ -6953,8 +7016,8 @@ paths:
 
         |▹▹▹▹ type|enum(scene-item)|true|Resource object type.|
 
-        |▹▹ source|any|false|Relationship to a `geometry-set` or
-        `part-revision`.|
+        |▹▹ source|any|false|Relationship to a `geometry-set`, `part-revision`,
+        or `scene`.|
 
         |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a
         `geometry-set`.|
@@ -6973,6 +7036,14 @@ paths:
         |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
 
         |▹▹▹▹▹ type|enum(part-revision)|true|Resource object type.|
+
+        |▹▹▹ *anonymous*|SceneRelationship|false|Relationship to a `scene`.|
+
+        |▹▹▹▹ data|SceneRelationship_data|true||
+
+        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹▹▹▹▹ type|enum(scene)|true|Resource object type.|
 
         |▹ type|string|true|Resource object type.|
 
