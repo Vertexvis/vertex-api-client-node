@@ -19,6 +19,25 @@ import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
+ * 3D bounding-box
+ * @export
+ * @interface BoundingBox
+ */
+export interface BoundingBox {
+  /**
+   *
+   * @type {Vector3}
+   * @memberof BoundingBox
+   */
+  max: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof BoundingBox
+   */
+  min: Vector3;
+}
+/**
  * Camera placement in 3D space.
  * @export
  * @interface Camera
@@ -507,6 +526,12 @@ export interface CreatePartRequestDataAttributes {
    * @memberof CreatePartRequestDataAttributes
    */
   indexMetadata?: boolean;
+  /**
+   * Name to be used for the root part.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  name?: string;
   /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
@@ -2574,10 +2599,16 @@ export interface SceneItemData {
 export interface SceneItemDataAttributes {
   /**
    *
+   * @type {BoundingBox}
+   * @memberof SceneItemDataAttributes
+   */
+  boundingBox?: BoundingBox;
+  /**
+   *
    * @type {string}
    * @memberof SceneItemDataAttributes
    */
-  created: string;
+  created?: string;
   /**
    *
    * @type {ColorMaterial}
@@ -2589,19 +2620,19 @@ export interface SceneItemDataAttributes {
    * @type {string}
    * @memberof SceneItemDataAttributes
    */
-  suppliedId: string;
+  suppliedId?: string;
   /**
    *
    * @type {Matrix4}
    * @memberof SceneItemDataAttributes
    */
-  transform: Matrix4;
+  transform?: Matrix4;
   /**
    *
    * @type {boolean}
    * @memberof SceneItemDataAttributes
    */
-  visible: boolean;
+  visible?: boolean;
 }
 /**
  *
@@ -4077,7 +4108,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4103,7 +4134,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4129,7 +4160,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4159,7 +4190,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4187,7 +4218,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4716,7 +4747,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4742,7 +4773,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -4773,7 +4804,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -5198,7 +5229,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -5236,7 +5267,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -5633,7 +5664,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -5659,7 +5690,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6169,7 +6200,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6204,7 +6235,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6234,7 +6265,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6262,7 +6293,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6558,7 +6589,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6797,7 +6828,7 @@ export const PartsApiAxiosParamCreator = function (
 export const PartsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6817,7 +6848,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6845,7 +6876,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6875,7 +6906,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -6894,7 +6925,7 @@ export const PartsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -7011,7 +7042,7 @@ export interface PartsApiGetPartsRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -7405,7 +7436,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -7431,7 +7462,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -7460,7 +7491,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -7489,7 +7520,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8084,7 +8115,7 @@ export const SceneItemOverridesApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8110,7 +8141,7 @@ export const SceneItemOverridesApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8139,7 +8170,7 @@ export const SceneItemOverridesApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8170,7 +8201,7 @@ export const SceneItemOverridesApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8642,11 +8673,13 @@ export const SceneItemsApiAxiosParamCreator = function (
     /**
      *  Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneItem: async (
       id: string,
+      fieldsSceneItem?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -8684,6 +8717,10 @@ export const SceneItemsApiAxiosParamCreator = function (
             : await configuration.accessToken;
         localVarHeaderParameter['Authorization'] =
           'Bearer ' + localVarAccessTokenValue;
+      }
+
+      if (fieldsSceneItem !== undefined) {
+        localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
       }
 
       const queryParameters = new URLSearchParams(localVarUrlObj.search);
@@ -8928,7 +8965,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8954,7 +8991,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8980,7 +9017,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -8988,25 +9025,27 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     /**
      *  Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getSceneItem(
       id: string,
+      fieldsSceneItem?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
     > {
       const localVarAxiosArgs = await SceneItemsApiAxiosParamCreator(
         configuration
-      ).getSceneItem(id, options);
+      ).getSceneItem(id, fieldsSceneItem, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9047,7 +9086,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9075,7 +9114,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9134,12 +9173,17 @@ export const SceneItemsApiFactory = function (
     /**
      *  Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getSceneItem(id: string, options?: any): AxiosPromise<SceneItem> {
+    getSceneItem(
+      id: string,
+      fieldsSceneItem?: string,
+      options?: any
+    ): AxiosPromise<SceneItem> {
       return SceneItemsApiFp(configuration)
-        .getSceneItem(id, options)
+        .getSceneItem(id, fieldsSceneItem, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -9251,6 +9295,13 @@ export interface SceneItemsApiGetSceneItemRequest {
    * @memberof SceneItemsApiGetSceneItem
    */
   readonly id: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItem
+   */
+  readonly fieldsSceneItem?: string;
 }
 
 /**
@@ -9387,7 +9438,11 @@ export class SceneItemsApi extends BaseAPI {
     options?: any
   ) {
     return SceneItemsApiFp(this.configuration)
-      .getSceneItem(requestParameters.id, options)
+      .getSceneItem(
+        requestParameters.id,
+        requestParameters.fieldsSceneItem,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -9765,7 +9820,7 @@ export const SceneTemplatesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9791,7 +9846,7 @@ export const SceneTemplatesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9817,7 +9872,7 @@ export const SceneTemplatesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -9848,7 +9903,7 @@ export const SceneTemplatesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10305,6 +10360,89 @@ export const SceneViewsApiAxiosParamCreator = function (
       };
     },
     /**
+     *  Get a `scene-item` within a view by ID.
+     * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} itemId The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getViewSceneItem: async (
+      id: string,
+      itemId: string,
+      fieldsSceneItem?: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      if (id === null || id === undefined) {
+        throw new RequiredError(
+          'id',
+          'Required parameter id was null or undefined when calling getViewSceneItem.'
+        );
+      }
+      // verify required parameter 'itemId' is not null or undefined
+      if (itemId === null || itemId === undefined) {
+        throw new RequiredError(
+          'itemId',
+          'Required parameter itemId was null or undefined when calling getViewSceneItem.'
+        );
+      }
+      const localVarPath = `/scene-views/{id}/scene-items/{itemId}`
+        .replace(`{${'id'}}`, encodeURIComponent(String(id)))
+        .replace(`{${'itemId'}}`, encodeURIComponent(String(itemId)));
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      if (configuration && configuration.accessToken) {
+        const localVarAccessTokenValue =
+          typeof configuration.accessToken === 'function'
+            ? await configuration.accessToken('OAuth2', [])
+            : await configuration.accessToken;
+        localVarHeaderParameter['Authorization'] =
+          'Bearer ' + localVarAccessTokenValue;
+      }
+
+      if (fieldsSceneItem !== undefined) {
+        localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
+      }
+
+      const queryParameters = new URLSearchParams(localVarUrlObj.search);
+      for (const key in localVarQueryParameter) {
+        queryParameters.set(key, localVarQueryParameter[key]);
+      }
+      for (const key in options.query) {
+        queryParameters.set(key, options.query[key]);
+      }
+      localVarUrlObj.search = new URLSearchParams(queryParameters).toString();
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url:
+          localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      *  Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {number} [height] The height of the image to render.
@@ -10512,7 +10650,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10538,7 +10676,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10564,7 +10702,37 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
+        };
+        return axios.request(axiosRequestArgs);
+      };
+    },
+    /**
+     *  Get a `scene-item` within a view by ID.
+     * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} itemId The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getViewSceneItem(
+      id: string,
+      itemId: string,
+      fieldsSceneItem?: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
+    > {
+      const localVarAxiosArgs = await SceneViewsApiAxiosParamCreator(
+        configuration
+      ).getViewSceneItem(id, itemId, fieldsSceneItem, options);
+      return (
+        axios: AxiosInstance = globalAxios,
+        basePath: string = BASE_PATH
+      ) => {
+        const axiosRequestArgs = {
+          ...localVarAxiosArgs.options,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10594,7 +10762,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10622,7 +10790,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -10676,6 +10844,24 @@ export const SceneViewsApiFactory = function (
     getSceneView(id: string, options?: any): AxiosPromise<SceneView> {
       return SceneViewsApiFp(configuration)
         .getSceneView(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Get a `scene-item` within a view by ID.
+     * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} itemId The &#x60;scene-item&#x60; ID.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getViewSceneItem(
+      id: string,
+      itemId: string,
+      fieldsSceneItem?: string,
+      options?: any
+    ): AxiosPromise<SceneItem> {
+      return SceneViewsApiFp(configuration)
+        .getViewSceneItem(id, itemId, fieldsSceneItem, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -10762,6 +10948,34 @@ export interface SceneViewsApiGetSceneViewRequest {
    * @memberof SceneViewsApiGetSceneView
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getViewSceneItem operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiGetViewSceneItemRequest
+ */
+export interface SceneViewsApiGetViewSceneItemRequest {
+  /**
+   * The &#x60;scene-view&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiGetViewSceneItem
+   */
+  readonly id: string;
+
+  /**
+   * The &#x60;scene-item&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiGetViewSceneItem
+   */
+  readonly itemId: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+   * @type {string}
+   * @memberof SceneViewsApiGetViewSceneItem
+   */
+  readonly fieldsSceneItem?: string;
 }
 
 /**
@@ -10869,6 +11083,27 @@ export class SceneViewsApi extends BaseAPI {
   ) {
     return SceneViewsApiFp(this.configuration)
       .getSceneView(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Get a `scene-item` within a view by ID.
+   * @param {SceneViewsApiGetViewSceneItemRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewsApi
+   */
+  public getViewSceneItem(
+    requestParameters: SceneViewsApiGetViewSceneItemRequest,
+    options?: any
+  ) {
+    return SceneViewsApiFp(this.configuration)
+      .getViewSceneItem(
+        requestParameters.id,
+        requestParameters.itemId,
+        requestParameters.fieldsSceneItem,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -11478,7 +11713,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11504,7 +11739,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11530,7 +11765,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11556,7 +11791,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11584,7 +11819,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11614,7 +11849,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -11642,7 +11877,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12295,7 +12530,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12321,7 +12556,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12351,7 +12586,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12814,7 +13049,7 @@ export const TranslationInspectionsApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12843,7 +13078,7 @@ export const TranslationInspectionsApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };
@@ -12869,7 +13104,7 @@ export const TranslationInspectionsApiFp = function (
       ) => {
         const axiosRequestArgs = {
           ...localVarAxiosArgs.options,
-          url: basePath + localVarAxiosArgs.url,
+          url: (configuration?.basePath || basePath) + localVarAxiosArgs.url,
         };
         return axios.request(axiosRequestArgs);
       };

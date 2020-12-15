@@ -153,6 +153,19 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    SceneItemFields:
+      description: >-
+        Comma-separated list of fields to return in response. An empty value
+        returns no fields. `boundingBox` is only returned if explicitly
+        requested.
+      explode: true
+      in: query
+      name: 'fields[scene-item]'
+      required: false
+      schema:
+        example: 'created,suppliedId,visible,transform,materialOverride'
+        type: string
+      style: form
     SceneItemId:
       description: The `scene-item` ID.
       explode: false
@@ -176,6 +189,15 @@ components:
       explode: false
       in: path
       name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    SceneViewItemId:
+      description: The `scene-item` ID.
+      explode: false
+      in: path
+      name: itemId
       required: true
       schema:
         $ref: '#/components/schemas/Uuid'
@@ -286,6 +308,27 @@ components:
             $ref: '#/components/schemas/Failure'
       description: Unsupported Media Type
   schemas:
+    BoundingBox:
+      additionalProperties: false
+      description: 3D bounding-box
+      example:
+        max:
+          x: 100
+          'y': 100
+          z: 100
+        min:
+          x: 0
+          'y': 0
+          z: 0
+      properties:
+        max:
+          $ref: '#/components/schemas/Vector3'
+        min:
+          $ref: '#/components/schemas/Vector3'
+      required:
+        - max
+        - min
+      type: object
     Camera:
       additionalProperties: false
       description: Camera placement in 3D space.
@@ -648,6 +691,11 @@ components:
           description: Whether or not to index metadata in the part file.
           example: false
           type: boolean
+        name:
+          description: Name to be used for the root part.
+          example: 1/2in. Flat Washer
+          maxLength: 255
+          type: string
         suppliedId:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -2132,6 +2180,8 @@ components:
       type: object
     SceneItemData_attributes:
       properties:
+        boundingBox:
+          $ref: '#/components/schemas/BoundingBox'
         created:
           example: '2020-01-01T12:00:00Z'
           format: date-time
@@ -2148,11 +2198,6 @@ components:
         visible:
           example: true
           type: boolean
-      required:
-        - created
-        - suppliedId
-        - transform
-        - visible
       type: object
     SceneItemData_relationships:
       properties:
@@ -3944,6 +3989,8 @@ paths:
         |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the
         part file.|
 
+        |▹▹ name|string|false|Name to be used for the root part.|
+
         |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
         existing ID from a PLM system.|
 
@@ -4855,6 +4902,18 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: >-
+            Comma-separated list of fields to return in response. An empty value
+            returns no fields. `boundingBox` is only returned if explicitly
+            requested.
+          explode: true
+          in: query
+          name: 'fields[scene-item]'
+          required: false
+          schema:
+            example: 'created,suppliedId,visible,transform,materialOverride'
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -6179,6 +6238,89 @@ paths:
         - OAuth2: []
       tags:
         - scene-item-overrides
+  '/scene-views/{id}/scene-items/{itemId}':
+    get:
+      description: |+
+
+        Get a `scene-item` within a view by ID.
+
+      operationId: getViewSceneItem
+      parameters:
+        - description: The `scene-view` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The `scene-item` ID.
+          explode: false
+          in: path
+          name: itemId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: >-
+            Comma-separated list of fields to return in response. An empty value
+            returns no fields. `boundingBox` is only returned if explicitly
+            requested.
+          explode: true
+          in: query
+          name: 'fields[scene-item]'
+          required: false
+          schema:
+            example: 'created,suppliedId,visible,transform,materialOverride'
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneItem'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-views
   /scenes:
     get:
       description: |+
