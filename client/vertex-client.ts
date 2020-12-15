@@ -18,7 +18,6 @@ import {
   OAuth2Token,
   PartsApi,
   ScenesApi,
-  SceneTemplatesApi,
   TranslationInspectionsApi,
 } from '..';
 
@@ -55,7 +54,6 @@ export class VertexClient {
   public scenes: ScenesApi;
   public sceneViews: SceneViewsApi;
   public streamKeys: StreamKeysApi;
-  public sceneTemplates: SceneTemplatesApi;
   public translationInspections: TranslationInspectionsApi;
 
   public axiosInstance: AxiosInstance;
@@ -132,11 +130,6 @@ export class VertexClient {
       this.axiosInstance
     );
     this.streamKeys = new StreamKeysApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.sceneTemplates = new SceneTemplatesApi(
       this.config,
       undefined,
       this.axiosInstance
