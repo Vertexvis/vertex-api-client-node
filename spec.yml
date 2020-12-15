@@ -153,6 +153,19 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    SceneItemFields:
+      description: >-
+        Comma-separated list of fields to return in response. An empty value
+        returns no fields. `boundingBox` is only returned if explicitly
+        requested.
+      explode: true
+      in: query
+      name: 'fields[scene-item]'
+      required: false
+      schema:
+        example: 'created,suppliedId,visible,transform,materialOverride'
+        type: string
+      style: form
     SceneItemId:
       description: The `scene-item` ID.
       explode: false
@@ -176,6 +189,15 @@ components:
       explode: false
       in: path
       name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    SceneViewItemId:
+      description: The `scene-item` ID.
+      explode: false
+      in: path
+      name: itemId
       required: true
       schema:
         $ref: '#/components/schemas/Uuid'
@@ -286,6 +308,27 @@ components:
             $ref: '#/components/schemas/Failure'
       description: Unsupported Media Type
   schemas:
+    BoundingBox:
+      additionalProperties: false
+      description: 3D bounding-box
+      example:
+        max:
+          x: 100
+          'y': 100
+          z: 100
+        min:
+          x: 0
+          'y': 0
+          z: 0
+      properties:
+        max:
+          $ref: '#/components/schemas/Vector3'
+        min:
+          $ref: '#/components/schemas/Vector3'
+      required:
+        - max
+        - min
+      type: object
     Camera:
       additionalProperties: false
       description: Camera placement in 3D space.
@@ -648,6 +691,11 @@ components:
           description: Whether or not to index metadata in the part file.
           example: false
           type: boolean
+        name:
+          description: Name to be used for the root part.
+          example: 1/2in. Flat Washer
+          maxLength: 255
+          type: string
         suppliedId:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -846,52 +894,9 @@ components:
     CreateSceneRequest_data_relationships:
       properties:
         source:
-          oneOf:
-            - $ref: '#/components/schemas/SceneTemplateRelationship'
-            - $ref: '#/components/schemas/SceneRelationship'
+          $ref: '#/components/schemas/SceneRelationship'
       required:
         - source
-      type: object
-    CreateSceneTemplateRequest:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateSceneTemplateRequest_data'
-      required:
-        - data
-      type: object
-    CreateSceneTemplateRequest_data:
-      properties:
-        attributes:
-          $ref: '#/components/schemas/CreateSceneTemplateRequest_data_attributes'
-        relationships:
-          $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
-        type:
-          description: Resource object type.
-          example: scene-template
-          maxLength: 32
-          type: string
-      required:
-        - attributes
-        - relationships
-        - type
-      type: object
-    CreateSceneTemplateRequest_data_attributes:
-      properties:
-        name:
-          description: Name of the scene template.
-          example: Config A
-          maxLength: 1024
-          type: string
-        suppliedId:
-          description: >-
-            ID provided for correlation. For example, an existing ID from a PLM
-            system.
-          example: ConfigA
-          maxLength: 1024
-          type: string
-      required:
-        - suppliedId
       type: object
     CreateSceneViewRequest:
       additionalProperties: false
@@ -2132,6 +2137,8 @@ components:
       type: object
     SceneItemData_attributes:
       properties:
+        boundingBox:
+          $ref: '#/components/schemas/BoundingBox'
         created:
           example: '2020-01-01T12:00:00Z'
           format: date-time
@@ -2148,11 +2155,6 @@ components:
         visible:
           example: true
           type: boolean
-      required:
-        - created
-        - suppliedId
-        - transform
-        - visible
       type: object
     SceneItemData_relationships:
       properties:
@@ -2349,104 +2351,6 @@ components:
           enum:
             - scene
           example: scene
-          maxLength: 32
-          type: string
-      required:
-        - id
-        - type
-      type: object
-    SceneTemplate:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/SceneTemplateData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-      type: object
-    SceneTemplateData:
-      additionalProperties: false
-      properties:
-        attributes:
-          $ref: '#/components/schemas/SceneTemplateData_attributes'
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-        type:
-          example: scene-template
-          type: string
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    SceneTemplateData_attributes:
-      properties:
-        created:
-          example: '2020-01-01T12:00:00Z'
-          format: date-time
-          type: string
-        name:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - created
-        - suppliedId
-      type: object
-    SceneTemplateList:
-      additionalProperties: false
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/SceneTemplateData'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
-      type: object
-    SceneTemplateRelationship:
-      additionalProperties: false
-      description: Relationship to a `scene-template`.
-      properties:
-        data:
-          $ref: '#/components/schemas/SceneTemplateRelationship_data'
-      required:
-        - data
-      type: object
-    SceneTemplateRelationship_data:
-      properties:
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        type:
-          description: Resource object type.
-          enum:
-            - scene-template
-          example: scene-template
           maxLength: 32
           type: string
       required:
@@ -3944,6 +3848,8 @@ paths:
         |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the
         part file.|
 
+        |▹▹ name|string|false|Name to be used for the root part.|
+
         |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
         existing ID from a PLM system.|
 
@@ -4321,70 +4227,6 @@ paths:
         - OAuth2: []
       tags:
         - scene-items
-  '/queued-scene-templates/{id}':
-    get:
-      deprecated: true
-      description: |+
-
-        Get a `queued-scene-template`.
-
-      operationId: getQueuedSceneTemplate
-      parameters:
-        - description: The `queued-scene-template` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/QueuedJob'
-          description: OK
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: Unauthorized
-                    status: '401'
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '404':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: NotFound
-                    status: '404'
-                    title: The requested resource was not found.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Not Found
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: UnsupportedMediaType
-                    status: '415'
-                    title: >-
-                      The provided media type is not supported. Update the
-                      Content-Type header to application/vnd.api+json and try
-                      again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - scene-templates
   '/queued-scenes/{id}':
     get:
       description: |+
@@ -4855,6 +4697,18 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: >-
+            Comma-separated list of fields to return in response. An empty value
+            returns no fields. `boundingBox` is only returned if explicitly
+            requested.
+          explode: true
+          in: query
+          name: 'fields[scene-item]'
+          required: false
+          schema:
+            example: 'created,suppliedId,visible,transform,materialOverride'
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -5041,228 +4895,6 @@ paths:
         - OAuth2: []
       tags:
         - scene-items
-  /scene-templates:
-    get:
-      deprecated: true
-      description: |+
-
-        Get `scene-templates`.
-
-      operationId: getSceneTemplates
-      parameters:
-        - description: The cursor for the next page of items.
-          explode: true
-          in: query
-          name: 'page[cursor]'
-          required: false
-          schema:
-            example: cHJkMDVFR2RLag==
-            type: string
-          style: form
-        - description: The number of items to return.
-          explode: true
-          in: query
-          name: 'page[size]'
-          required: false
-          schema:
-            example: 10
-            format: int32
-            maximum: 200
-            minimum: 1
-            type: integer
-          style: form
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/SceneTemplateList'
-          description: OK
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: Unauthorized
-                    status: '401'
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: UnsupportedMediaType
-                    status: '415'
-                    title: >-
-                      The provided media type is not supported. Update the
-                      Content-Type header to application/vnd.api+json and try
-                      again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - scene-templates
-    post:
-      deprecated: true
-      description: >+
-
-        Create a `scene-template`.
-
-
-        ###### Body Params
-
-
-        |Name|Type|Required|Description|
-
-        |---|---|---|---|
-
-        |data|CreateSceneTemplateRequest_data|true||
-
-        |▹ attributes|CreateSceneTemplateRequest_data_attributes|true||
-
-        |▹▹ name|string|false|Name of the scene template.|
-
-        |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
-        existing ID from a PLM system.|
-
-        |▹ relationships|CreateGeometrySetRequest_data_relationships|true||
-
-        |▹▹ source|FileRelationship|true|Relationship to a `file`.|
-
-        |▹▹▹ data|FileRelationship_data|true||
-
-        |▹▹▹▹ id|string(uuid)|true|ID of the resource.|
-
-        |▹▹▹▹ type|enum(file)|true|Resource object type.|
-
-        |▹ type|string|true|Resource object type.|
-
-      operationId: createSceneTemplate
-      requestBody:
-        content:
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/CreateSceneTemplateRequest'
-        required: true
-      responses:
-        '202':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/QueuedJob'
-          description: Accepted
-          headers:
-            content-location:
-              $ref: '#/components/headers/ContentLocation'
-        '400':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: BadRequest
-                    status: '400'
-                    title: 'Invalid, missing, or out-of-range request parameters.'
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Bad Request
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: Unauthorized
-                    status: '401'
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: UnsupportedMediaType
-                    status: '415'
-                    title: >-
-                      The provided media type is not supported. Update the
-                      Content-Type header to application/vnd.api+json and try
-                      again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - scene-templates
-  '/scene-templates/{id}':
-    get:
-      deprecated: true
-      description: |+
-
-        Get a `scene-template` by ID.
-
-      operationId: getSceneTemplate
-      parameters:
-        - description: The `scene-template` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/SceneTemplate'
-          description: OK
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: Unauthorized
-                    status: '401'
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '404':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: NotFound
-                    status: '404'
-                    title: The requested resource was not found.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Not Found
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - code: UnsupportedMediaType
-                    status: '415'
-                    title: >-
-                      The provided media type is not supported. Update the
-                      Content-Type header to application/vnd.api+json and try
-                      again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - scene-templates
   '/scene-views/{id}':
     delete:
       description: |+
@@ -6179,6 +5811,89 @@ paths:
         - OAuth2: []
       tags:
         - scene-item-overrides
+  '/scene-views/{id}/scene-items/{itemId}':
+    get:
+      description: |+
+
+        Get a `scene-item` within a view by ID.
+
+      operationId: getViewSceneItem
+      parameters:
+        - description: The `scene-view` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The `scene-item` ID.
+          explode: false
+          in: path
+          name: itemId
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: >-
+            Comma-separated list of fields to return in response. An empty value
+            returns no fields. `boundingBox` is only returned if explicitly
+            requested.
+          explode: true
+          in: query
+          name: 'fields[scene-item]'
+          required: false
+          schema:
+            example: 'created,suppliedId,visible,transform,materialOverride'
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneItem'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-views
   /scenes:
     get:
       description: |+
@@ -6285,24 +6000,13 @@ paths:
 
         |▹ relationships|CreateSceneRequest_data_relationships|false||
 
-        |▹▹ source|any|true||
+        |▹▹ source|SceneRelationship|true|Relationship to a `scene`.|
 
-        |▹▹▹ *anonymous*|SceneTemplateRelationship|false|Relationship to a
-        `scene-template`.|
+        |▹▹▹ data|SceneRelationship_data|true||
 
-        |▹▹▹▹ data|SceneTemplateRelationship_data|true||
+        |▹▹▹▹ id|string(uuid)|true|ID of the resource.|
 
-        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
-
-        |▹▹▹▹▹ type|enum(scene-template)|true|Resource object type.|
-
-        |▹▹▹ *anonymous*|SceneRelationship|false|Relationship to a `scene`.|
-
-        |▹▹▹▹ data|SceneRelationship_data|true||
-
-        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
-
-        |▹▹▹▹▹ type|enum(scene)|true|Resource object type.|
+        |▹▹▹▹ type|enum(scene)|true|Resource object type.|
 
         |▹ type|string|true|Resource object type.|
 
@@ -7626,8 +7330,6 @@ tags:
       Viewable objects in `scenes` referencing either `parts` or
       `geometry-sets`.
     name: scene-items
-  - description: Collections of `scene-items` to include in `scenes`.
-    name: scene-templates
   - description: Viewing sessions for an individual user inheriting `scene` contents.
     name: scene-views
   - description: Blueprints for what users see rendered.
