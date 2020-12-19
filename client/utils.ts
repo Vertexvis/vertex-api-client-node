@@ -1,10 +1,13 @@
 import { AxiosResponse } from 'axios';
+import { parse as urlParse } from 'url';
+import { parse, ParsedUrlQuery } from 'querystring';
 import { Oauth2Api, OAuth2Token, Polling, QueuedJob } from '..';
 
 export const PollIntervalMs = 5000;
 export const AttemptsPerMin = 60000 / PollIntervalMs;
 export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 export const Utf8 = 'utf8';
+const PageCursor = 'page[cursor]';
 
 interface PollQueuedJobArgs {
   id: string;
@@ -43,6 +46,38 @@ export async function delay(ms: number): Promise<unknown> {
 
 export function encodeIfNotEncoded(s: string) {
   return isEncoded(s) ? s : encodeURIComponent(s);
+}
+
+export async function getBySuppliedId<
+  T extends { attributes: { suppliedId?: string } },
+  TRes extends { data: T[] }
+>(
+  getter: () => Promise<AxiosResponse<TRes>>,
+  suppliedId?: string
+): Promise<T | undefined> {
+  if (!suppliedId) return undefined;
+
+  const res = await getter();
+  if (res.data.data.length > 0) {
+    const sceneItem = head(res.data.data);
+    if (sceneItem.attributes.suppliedId === suppliedId) return sceneItem;
+  }
+
+  return undefined;
+}
+
+export async function getPage<
+  T extends { data: unknown[]; links: { next?: { href: string } } }
+>(
+  getListing: () => Promise<AxiosResponse<T>>
+): Promise<{ page: T; cursor?: string }> {
+  const page = (await getListing()).data;
+  const next = parseUrl(page.links.next?.href);
+  const nextCursor = next ? next[PageCursor] : undefined;
+  return {
+    page,
+    cursor: Array.isArray(nextCursor) ? nextCursor[0] : nextCursor,
+  };
 }
 
 export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
@@ -87,22 +122,9 @@ export function nowEpochMs(): number {
   return new Date().getTime();
 }
 
-export async function getBySuppliedId<
-  T extends { attributes: { suppliedId?: string } },
-  TRes extends { data: T[] }
->(
-  getter: () => Promise<AxiosResponse<TRes>>,
-  suppliedId?: string
-): Promise<T | undefined> {
-  if (!suppliedId) return undefined;
-
-  const res = await getter();
-  if (res.data.data.length > 0) {
-    const sceneItem = head(res.data.data);
-    if (sceneItem.attributes.suppliedId === suppliedId) return sceneItem;
-  }
-
-  return undefined;
+export function parseUrl(url?: string): ParsedUrlQuery | undefined {
+  const query = url ? urlParse(url).query : null;
+  return query ? parse(query) : undefined;
 }
 
 export async function pollQueuedJob<T extends { data: { id: string } }>({

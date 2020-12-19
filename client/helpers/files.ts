@@ -4,6 +4,7 @@ import {
   FileMetadataData,
   FileList,
   getBySuppliedId,
+  getPage,
   VertexClient,
 } from '../..';
 
@@ -12,6 +13,30 @@ interface UploadFileArgs {
   verbose: boolean;
   fileData: unknown; // Buffer in Node
   createFileReq: CreateFileRequest;
+}
+
+interface DeleteArgs {
+  client: VertexClient;
+  pageSize?: number;
+  verbose?: boolean;
+}
+
+export async function deleteAllFiles({
+  client,
+  pageSize = 100,
+  verbose = false,
+}: DeleteArgs) {
+  let cursor: string | undefined;
+  do {
+    const res = await getPage(() =>
+      client.files.getFiles({ pageCursor: cursor, pageSize })
+    );
+    cursor = res.cursor;
+    await Promise.all(
+      res.page.data.map((p) => client.files.deleteFile({ id: p.id }))
+    );
+    if (verbose) console.log(`Deleted ${res.page.data.length} file(s)`);
+  } while (cursor);
 }
 
 export async function uploadFileIfNotExists(

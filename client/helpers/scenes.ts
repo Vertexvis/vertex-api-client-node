@@ -4,6 +4,7 @@ import {
   CameraFitTypeEnum,
   CreateSceneItemRequest,
   CreateSceneRequest,
+  getPage,
   MaxAttempts,
   Polling,
   PollIntervalMs,
@@ -31,6 +32,12 @@ interface PollSceneReadyArgs {
   client: VertexClient;
   id: string;
   polling?: Polling;
+}
+
+interface DeleteArgs {
+  client: VertexClient;
+  pageSize?: number;
+  verbose?: boolean;
 }
 
 export async function createSceneWithSceneItems(
@@ -110,6 +117,24 @@ export async function createSceneWithSceneItems(
   });
 
   return scene.data.data;
+}
+
+export async function deleteAllScenes({
+  client,
+  pageSize = 100,
+  verbose = false,
+}: DeleteArgs) {
+  let cursor: string | undefined;
+  do {
+    const res = await getPage(() =>
+      client.scenes.getScenes({ pageCursor: cursor, pageSize })
+    );
+    cursor = res.cursor;
+    await Promise.all(
+      res.page.data.map((p) => client.scenes.deleteScene({ id: p.id }))
+    );
+    if (verbose) console.log(`Deleted ${res.page.data.length} scene(s)`);
+  } while (cursor);
 }
 
 export async function renderScene<T>(

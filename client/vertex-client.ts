@@ -88,9 +88,12 @@ export class VertexClient {
         if (error.isAxiosError && error?.response?.config) {
           const r = error.response;
           const c = r.config;
-          error.vertexErrorMessage = `${
-            c.method ? c.method.toUpperCase() : 'undefined'
-          } '${c.url}' error.\nReq: ${c.data}\nRes: ${prettyJson(r.data)}`;
+          const m = c.method ? c.method.toUpperCase() : 'undefined';
+          const octetStream =
+            c.headers['Content-Type'] === 'application/octet-stream';
+          error.vertexErrorMessage = `${m} '${c.url}' error.\n${
+            c.data && !octetStream ? `Req: ${c.data}\n` : ''
+          }Res: ${prettyJson(r.data)}`;
         }
         return Promise.reject(error);
       }
