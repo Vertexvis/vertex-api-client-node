@@ -1,12 +1,16 @@
 # @vertexvis/vertex-api-client
 
-The Vertex platform API client for TypeScript and JavaScript. The generated module can be used in Node.js, Webpack, and Browserify environments. To use with ES5, you must have a Promises/A+ library installed. It supports CommonJS and ES6 module systems.
+If you're ready to integrate Vertex into your application, this is the place! If you're looking for more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/docs/guides/getting-started).
 
-It can be used in both TypeScript and JavaScript. In TypeScript, type definitions are automatically resolved.
+The Vertex platform API client for TypeScript and JavaScript is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator) so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
+
+This client can be used in Node.js, Webpack, and Browserify environments. To use with ES5, you must have a Promises/A+ library installed. It supports CommonJS and ES6 module systems.
 
 ### Usage
 
-Install the client and export your credentials,
+If you're not an existing Vertex customer, [contact us](https://developer.vertexvis.com/docs/support) for a free account.
+
+Install the client and export your credentials.
 
 ```bash
 # Install client
@@ -17,7 +21,7 @@ export VERTEX_CLIENT_ID={CLIENT_ID}
 export VERTEX_CLIENT_SECRET={CLIENT_SECRET}
 ```
 
-Then, create a client and start using the Vertex API,
+Then, create a client and start using the Vertex API.
 
 ```ts
 import { prettyJson, VertexClient } from '@vertexvis/vertex-api-client';
@@ -55,6 +59,7 @@ yarn build
 # Format code
 yarn format
 
-# Version in preparation for publish
-yarn version --patch
+# Generate latest client, version, and open GitHub PR
+# ARG=minor|major  [default: patch]
+yarn push:version [ARG]
 ```

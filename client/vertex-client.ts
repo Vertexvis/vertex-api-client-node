@@ -79,7 +79,7 @@ export class VertexClient {
       basePath,
     });
     this.axiosInstance = axios.create({
-      headers: { 'user-agent': `vertex-api-client-ts/0.5.3` },
+      headers: { 'user-agent': `vertex-api-client-ts/0.6.1` },
       ...axiosOptions,
     });
     this.axiosInstance.interceptors.response.use(
