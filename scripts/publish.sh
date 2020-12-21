@@ -1,10 +1,7 @@
 #!/bin/bash
-
-# Internal script to publish packages to NPM.
-
-set -e
-
+# shellcheck source=./utils.sh
 . "$(pwd)"/scripts/utils.sh
+set -o errexit
 
 version="v$(get_version)"
 sha="$(git rev-parse HEAD)"

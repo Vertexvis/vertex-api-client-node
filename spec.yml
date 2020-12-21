@@ -775,6 +775,8 @@ components:
       properties:
         material:
           $ref: '#/components/schemas/ColorMaterial'
+        selected:
+          $ref: '#/components/schemas/ColorMaterial'
         transform:
           $ref: '#/components/schemas/Matrix4'
         visible:
@@ -817,6 +819,11 @@ components:
       properties:
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         parent:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -993,6 +1000,19 @@ components:
       example: '2020-01-01T12:00:00Z'
       format: date-time
       type: string
+    DeselectOperation:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - deselect
+          example: deselect
+          maxLength: 32
+          type: string
+      required:
+        - type
+      type: object
     Dimensions:
       additionalProperties: false
       description: An item's height and width.
@@ -2145,6 +2165,11 @@ components:
           type: string
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         suppliedId:
           example: some-string
           maxLength: 1024
@@ -2226,6 +2251,8 @@ components:
           format: date-time
           type: string
         material:
+          $ref: '#/components/schemas/ColorMaterial'
+        selected:
           $ref: '#/components/schemas/ColorMaterial'
         transform:
           $ref: '#/components/schemas/Matrix4'
@@ -2315,6 +2342,8 @@ components:
               - $ref: '#/components/schemas/ClearMaterialOperation'
               - $ref: '#/components/schemas/ChangeTransformOperation'
               - $ref: '#/components/schemas/ClearTransformOperation'
+              - $ref: '#/components/schemas/SelectOperation'
+              - $ref: '#/components/schemas/DeselectOperation'
           maxItems: 1024
           type: array
         query:
@@ -2436,6 +2465,22 @@ components:
           $ref: '#/components/schemas/SceneRelationship'
       required:
         - scene
+      type: object
+    SelectOperation:
+      additionalProperties: false
+      properties:
+        material:
+          $ref: '#/components/schemas/ColorMaterial'
+        type:
+          description: Resource object type.
+          enum:
+            - select
+          example: select
+          maxLength: 32
+          type: string
+      required:
+        - material
+        - type
       type: object
     StreamKey:
       additionalProperties: false
@@ -2618,6 +2663,8 @@ components:
       properties:
         material:
           $ref: '#/components/schemas/ColorMaterialNullable'
+        selected:
+          $ref: '#/components/schemas/ColorMaterialNullable'
         transform:
           $ref: '#/components/schemas/Matrix4Nullable'
         visible:
@@ -2651,6 +2698,11 @@ components:
       properties:
         materialOverride:
           $ref: '#/components/schemas/MaterialOverride'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         transform:
           $ref: '#/components/schemas/Matrix4'
         visible:
@@ -4522,6 +4574,9 @@ paths:
 
         |▹▹▹ specular|Color3|true|RGB color.|
 
+        |▹▹ selected|ColorMaterialNullable¦null|false|Color properties
+        describing how a material looks.|
+
         |▹▹ transform|Matrix4Nullable¦null|false|4x4 affine transformation
         matrix, see [Transformation
         Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
@@ -4795,6 +4850,8 @@ paths:
         |▹▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.|
 
         |▹▹▹▹ specular|Color3|true|RGB color.|
+
+        |▹▹ name|string|false||
 
         |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see
         [Transformation
@@ -5488,6 +5545,17 @@ paths:
 
         |▹▹▹▹▹ type|enum(clear-transform)|true|Resource object type.|
 
+        |▹▹▹▹ *anonymous*|SelectOperation|false||
+
+        |▹▹▹▹▹ material|ColorMaterial|true|Color properties describing how a
+        material looks.|
+
+        |▹▹▹▹▹ type|enum(select)|true|Resource object type.|
+
+        |▹▹▹▹ *anonymous*|DeselectOperation|false||
+
+        |▹▹▹▹▹ type|enum(deselect)|true|Resource object type.|
+
         |▹▹▹ query|any|true|Query `scene-items`. Use `query-by-collection` to
         combine multiple queries.|
 
@@ -5696,6 +5764,9 @@ paths:
         |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.|
 
         |▹▹▹ specular|Color3|true|RGB color.|
+
+        |▹▹ selected|ColorMaterial|false|Color properties describing how a
+        material looks.|
 
         |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see
         [Transformation
@@ -6672,6 +6743,8 @@ paths:
         |▹▹▹ opacity|integer(int32)|true|Opacity from 0 to 100.|
 
         |▹▹▹ specular|Color3|true|RGB color.|
+
+        |▹▹ name|string|false||
 
         |▹▹ parent|string|false|ID provided for correlation. For example, an
         existing ID from a PLM system.|
