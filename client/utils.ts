@@ -8,6 +8,7 @@ export const AttemptsPerMin = 60000 / PollIntervalMs;
 export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 export const Utf8 = 'utf8';
 const PageCursor = 'page[cursor]';
+const UnableToStringify = 'Unable to stringify';
 
 interface PollQueuedJobArgs {
   id: string;
@@ -105,6 +106,18 @@ export function isEncoded(s: string) {
   return s !== decodeURIComponent(s);
 }
 
+export function logError(
+  error: Error & { vertexErrorMessage?: string },
+  logger: (input: Error | string) => void = console.error
+): void {
+  if (
+    error.vertexErrorMessage &&
+    !error.vertexErrorMessage.startsWith(UnableToStringify)
+  )
+    logger(error.vertexErrorMessage);
+  else logger(error);
+}
+
 export function multiply(a: number[][], b: number[][]): number[][] {
   const m = new Array(a.length).fill(0);
   for (let r = 0; r < a.length; ++r) {
@@ -174,7 +187,7 @@ export function prettyJson(obj: any): string {
   try {
     return JSON.stringify(obj, null, 2);
   } catch (error) {
-    return `Unable to stringify ${obj} to JSON.`;
+    return `${UnableToStringify} ${obj} to JSON.`;
   }
 }
 
