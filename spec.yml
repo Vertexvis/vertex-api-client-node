@@ -676,7 +676,10 @@ components:
         relationships:
           $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
         type:
-          description: Resource object type.
+          description: >-
+            Resource object type. Specify one and only one of suppliedId or
+            suppliedIdKey and one and only one of suppliedRevisionId or
+            suppliedRevisionIdKey.
           example: part
           maxLength: 32
           type: string
@@ -703,6 +706,11 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
+        suppliedIdKey:
+          description: Metadata key used to extract an ID used for correlation.
+          example: ProductNumber
+          maxLength: 255
+          type: string
         suppliedRevisionId:
           description: >-
             ID provided for correlation. For example, an existing ID from a PLM
@@ -710,9 +718,11 @@ components:
           example: RevA
           maxLength: 1024
           type: string
-      required:
-        - suppliedId
-        - suppliedRevisionId
+        suppliedRevisionIdKey:
+          description: Metadata key used to extract an ID used for correlation.
+          example: RevisionId
+          maxLength: 255
+          type: string
       type: object
     CreateSceneAlterationRequest:
       additionalProperties: false
@@ -897,6 +907,9 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
+        treeEnabled:
+          example: false
+          type: boolean
       type: object
     CreateSceneRequest_data_relationships:
       properties:
@@ -2113,6 +2126,8 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
+        treeEnabled:
+          type: boolean
       required:
         - created
         - state
@@ -2867,9 +2882,9 @@ info:
     started.
 
 
-    Note that we use auto-generated UUIDs in example requests that may share the
-    same value. This is for ease of documentation only. In actual requests and
-    responses, they should uniquely identify their corresponding resource.
+    Notes about the Postman collection and API Reference code samples,
+      - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.
+      - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
   termsOfService: 'https://vertexvis.com/terms-of-use'
   title: Vertex Platform API
   version: '1.0'
@@ -3902,11 +3917,17 @@ paths:
 
         |▹▹ name|string|false|Name to be used for the root part.|
 
-        |▹▹ suppliedId|string|true|ID provided for correlation. For example, an
+        |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
         existing ID from a PLM system.|
 
-        |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For
+        |▹▹ suppliedIdKey|string|false|Metadata key used to extract an ID used
+        for correlation.|
+
+        |▹▹ suppliedRevisionId|string|false|ID provided for correlation. For
         example, an existing ID from a PLM system.|
+
+        |▹▹ suppliedRevisionIdKey|string|false|Metadata key used to extract an
+        ID used for correlation.|
 
         |▹ relationships|CreateGeometrySetRequest_data_relationships|true||
 
@@ -3918,7 +3939,9 @@ paths:
 
         |▹▹▹▹ type|enum(file)|true|Resource object type.|
 
-        |▹ type|string|true|Resource object type.|
+        |▹ type|string|true|Resource object type. Specify one and only one of
+        suppliedId or suppliedIdKey and one and only one of suppliedRevisionId
+        or suppliedRevisionIdKey.|
 
       operationId: createPart
       requestBody:
@@ -4895,12 +4918,15 @@ paths:
               $ref: '#/components/schemas/UpdateSceneItemRequest'
         required: true
       responses:
-        '200':
+        '202':
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/SceneItem'
-          description: OK
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
         '400':
           content:
             application/vnd.api+json:
@@ -6068,6 +6094,8 @@ paths:
 
         |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
         existing ID from a PLM system.|
+
+        |▹▹ treeEnabled|boolean|false||
 
         |▹ relationships|CreateSceneRequest_data_relationships|false||
 

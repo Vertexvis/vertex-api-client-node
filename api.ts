@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Note that we use auto-generated UUIDs in example requests that may share the same value. This is for ease of documentation only. In actual requests and responses, they should uniquely identify their corresponding resource.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Notes about the Postman collection and API Reference code samples,   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
  *
  * The version of the OpenAPI document: 1.0
  *
@@ -508,7 +508,7 @@ export interface CreatePartRequestData {
    */
   relationships: CreateGeometrySetRequestDataRelationships;
   /**
-   * Resource object type.
+   * Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.
    * @type {string}
    * @memberof CreatePartRequestData
    */
@@ -537,13 +537,25 @@ export interface CreatePartRequestDataAttributes {
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
    */
-  suppliedId: string;
+  suppliedId?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  suppliedIdKey?: string;
   /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
    */
-  suppliedRevisionId: string;
+  suppliedRevisionId?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  suppliedRevisionIdKey?: string;
 }
 /**
  *
@@ -843,6 +855,12 @@ export interface CreateSceneRequestDataAttributes {
    * @memberof CreateSceneRequestDataAttributes
    */
   suppliedId?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof CreateSceneRequestDataAttributes
+   */
+  treeEnabled?: boolean;
 }
 /**
  *
@@ -946,25 +964,6 @@ export interface CreateStreamKeyRequestDataAttributes {
    * @memberof CreateStreamKeyRequestDataAttributes
    */
   expiry?: number;
-}
-/**
- *
- * @export
- * @interface CreateTokenRequest
- */
-export interface CreateTokenRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof CreateTokenRequest
-   */
-  grant_type: string;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateTokenRequest
-   */
-  scope?: string;
 }
 /**
  *
@@ -2511,6 +2510,12 @@ export interface SceneDataAttributes {
    * @memberof SceneDataAttributes
    */
   suppliedId?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SceneDataAttributes
+   */
+  treeEnabled?: boolean;
 }
 /**
  *
@@ -6485,7 +6490,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹▹ suppliedRevisionId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6724,7 +6729,7 @@ export const PartsApiAxiosParamCreator = function (
 export const PartsApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹▹ suppliedRevisionId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6821,7 +6826,7 @@ export const PartsApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹▹ suppliedRevisionId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.|
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -6938,7 +6943,7 @@ export interface PartsApiGetPartsRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionId|string|true|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Importing data](https://developer.vertexvis.com/docs/guides/importing-data) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreatePartRequest_data|true|| |▹ attributes|CreatePartRequest_data_attributes|true|| |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the part file.| |▹▹ name|string|false|Name to be used for the root part.| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹▹ suppliedRevisionId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ suppliedRevisionIdKey|string|false|Metadata key used to extract an ID used for correlation.| |▹ relationships|CreateGeometrySetRequest_data_relationships|true|| |▹▹ source|FileRelationship|true|Relationship to a `file`.| |▹▹▹ data|FileRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(file)|true|Resource object type.| |▹ type|string|true|Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.|
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -8999,7 +9004,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       updateSceneItemRequest: UpdateSceneItemRequest,
       options?: any
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
       const localVarAxiosArgs = await SceneItemsApiAxiosParamCreator(
         configuration
@@ -9122,7 +9127,7 @@ export const SceneItemsApiFactory = function (
       id: string,
       updateSceneItemRequest: UpdateSceneItemRequest,
       options?: any
-    ): AxiosPromise<SceneItem> {
+    ): AxiosPromise<QueuedJob> {
       return SceneItemsApiFp(configuration)
         .updateSceneItem(id, updateSceneItemRequest, options)
         .then((request) => request(axios, basePath));
@@ -10426,7 +10431,7 @@ export const ScenesApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ treeEnabled|boolean|false|| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreateSceneRequest} createSceneRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -10961,7 +10966,7 @@ export const ScenesApiAxiosParamCreator = function (
 export const ScenesApiFp = function (configuration?: Configuration) {
   return {
     /**
-     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ treeEnabled|boolean|false|| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreateSceneRequest} createSceneRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11164,7 +11169,7 @@ export const ScenesApiFactory = function (
 ) {
   return {
     /**
-     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ treeEnabled|boolean|false|| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {CreateSceneRequest} createSceneRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11397,7 +11402,7 @@ export interface ScenesApiUpdateSceneRequest {
  */
 export class ScenesApi extends BaseAPI {
   /**
-   *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   *  Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Rendering scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes) guide.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneRequest_data|true|| |▹ attributes|CreateSceneRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹▹ name|string|false|| |▹▹ suppliedId|string|false|ID provided for correlation. For example, an existing ID from a PLM system.| |▹▹ treeEnabled|boolean|false|| |▹ relationships|CreateSceneRequest_data_relationships|false|| |▹▹ source|SceneRelationship|true|Relationship to a `scene`.| |▹▹▹ data|SceneRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {ScenesApiCreateSceneRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
