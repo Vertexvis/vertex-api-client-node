@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Note that we use auto-generated UUIDs in example requests that may share the same value. This is for ease of documentation only. In actual requests and responses, they should uniquely identify their corresponding resource.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Portal Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get started.  Notes about the Postman collection and API Reference code samples,   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
  *
  * The version of the OpenAPI document: 1.0
  *
