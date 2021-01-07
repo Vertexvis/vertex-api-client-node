@@ -17,6 +17,7 @@ function git_current_branch() {
 
 function generate_client() {
   yarn generate
+  yarn verify
 }
 
 function version_package() {

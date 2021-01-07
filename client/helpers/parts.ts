@@ -49,19 +49,22 @@ export async function createPartFromFileIfNotExists(
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
   const suppliedRevisionId =
     createPartRequest.data.attributes.suppliedRevisionId;
-  const existingPartRev = await getPartRevisionBySuppliedId({
-    client: args.client,
-    suppliedPartId,
-    suppliedRevisionId,
-  });
-  if (existingPartRev) {
-    if (args.verbose) {
-      console.log(
-        `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
-          `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
-      );
+
+  if (suppliedPartId && suppliedRevisionId) {
+    const existingPartRev = await getPartRevisionBySuppliedId({
+      client: args.client,
+      suppliedPartId,
+      suppliedRevisionId,
+    });
+    if (existingPartRev) {
+      if (args.verbose) {
+        console.log(
+          `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
+            `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
+        );
+      }
+      return existingPartRev;
     }
-    return existingPartRev;
   }
 
   const createPartRes = await args.client.parts.createPart({
