@@ -133,7 +133,6 @@ export async function deleteAllScenes({
     cursor = res.cursor;
     await Promise.all(sceneIds.map((id) => client.scenes.deleteScene({ id })));
     if (verbose) console.log(`Deleting scene(s) ${sceneIds.join(', ')}`);
-    process.exit(0);
   } while (cursor);
 }
 
