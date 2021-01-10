@@ -129,11 +129,11 @@ export async function deleteAllScenes({
     const res = await getPage(() =>
       client.scenes.getScenes({ pageCursor: cursor, pageSize })
     );
+    const sceneIds = res.page.data.map((d) => d.id);
     cursor = res.cursor;
-    await Promise.all(
-      res.page.data.map((p) => client.scenes.deleteScene({ id: p.id }))
-    );
-    if (verbose) console.log(`Deleted scene(s) ${res.page.data.join(', ')}`);
+    await Promise.all(sceneIds.map((id) => client.scenes.deleteScene({ id })));
+    if (verbose) console.log(`Deleting scene(s) ${sceneIds.join(', ')}`);
+    process.exit(0);
   } while (cursor);
 }
 
