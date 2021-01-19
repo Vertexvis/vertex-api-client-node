@@ -66,6 +66,17 @@ components:
         maxLength: 32
         type: string
       style: form
+    IncludeSceneItemOverride:
+      description: Comma-separated list of relationships to include in response.
+      explode: true
+      in: query
+      name: include
+      required: false
+      schema:
+        example: sceneItemOverride
+        maxLength: 32
+        type: string
+      style: form
     IncludeSource:
       description: Comma-separated list of relationships to include in response.
       explode: true
@@ -2406,6 +2417,23 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/SceneView_data'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    SceneViewItem:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneItemData'
+        included:
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/SceneItemOverrideData'
+          type: array
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -5944,12 +5972,22 @@ paths:
             example: 'created,suppliedId,visible,transform,materialOverride'
             type: string
           style: form
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: sceneItemOverride
+            maxLength: 32
+            type: string
+          style: form
       responses:
         '200':
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/SceneItem'
+                $ref: '#/components/schemas/SceneViewItem'
           description: OK
         '401':
           content:

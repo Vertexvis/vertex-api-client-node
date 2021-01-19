@@ -3005,6 +3005,31 @@ export interface SceneViewDataRelationships {
   scene: SceneRelationship;
 }
 /**
+ *
+ * @export
+ * @interface SceneViewItem
+ */
+export interface SceneViewItem {
+  /**
+   *
+   * @type {SceneItemData}
+   * @memberof SceneViewItem
+   */
+  data: SceneItemData;
+  /**
+   *
+   * @type {Array<SceneItemOverrideData>}
+   * @memberof SceneViewItem
+   */
+  included?: Array<SceneItemOverrideData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneViewItem
+   */
+  links?: { [key: string]: Link };
+}
+/**
  * Relationship to a `scene-view`.
  * @export
  * @interface SceneViewRelationship
@@ -9637,6 +9662,7 @@ export const SceneViewsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9644,6 +9670,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       id: string,
       itemId: string,
       fieldsSceneItem?: string,
+      include?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -9691,6 +9718,10 @@ export const SceneViewsApiAxiosParamCreator = function (
 
       if (fieldsSceneItem !== undefined) {
         localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
+      }
+
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
       }
 
       const queryParameters = new URLSearchParams(localVarUrlObj.search);
@@ -9985,6 +10016,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9992,13 +10024,14 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       id: string,
       itemId: string,
       fieldsSceneItem?: string,
+      include?: string,
       options?: any
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewItem>
     > {
       const localVarAxiosArgs = await SceneViewsApiAxiosParamCreator(
         configuration
-      ).getViewSceneItem(id, itemId, fieldsSceneItem, options);
+      ).getViewSceneItem(id, itemId, fieldsSceneItem, include, options);
       return (
         axios: AxiosInstance = globalAxios,
         basePath: string = BASE_PATH
@@ -10124,6 +10157,7 @@ export const SceneViewsApiFactory = function (
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10131,10 +10165,11 @@ export const SceneViewsApiFactory = function (
       id: string,
       itemId: string,
       fieldsSceneItem?: string,
+      include?: string,
       options?: any
-    ): AxiosPromise<SceneItem> {
+    ): AxiosPromise<SceneViewItem> {
       return SceneViewsApiFp(configuration)
-        .getViewSceneItem(id, itemId, fieldsSceneItem, options)
+        .getViewSceneItem(id, itemId, fieldsSceneItem, include, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -10249,6 +10284,13 @@ export interface SceneViewsApiGetViewSceneItemRequest {
    * @memberof SceneViewsApiGetViewSceneItem
    */
   readonly fieldsSceneItem?: string;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof SceneViewsApiGetViewSceneItem
+   */
+  readonly include?: string;
 }
 
 /**
@@ -10375,6 +10417,7 @@ export class SceneViewsApi extends BaseAPI {
         requestParameters.id,
         requestParameters.itemId,
         requestParameters.fieldsSceneItem,
+        requestParameters.include,
         options
       )
       .then((request) => request(this.axios, this.basePath));
