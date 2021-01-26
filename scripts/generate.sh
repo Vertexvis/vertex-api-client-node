@@ -13,5 +13,7 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest gen
     --output /local
 
 sed -i "" "s/, COLLECTION_FORMATS, /, /" api.ts
+sed -i "" "s/, setApiKeyToObject, /, /" api.ts
+sed -i "" "s/, setBearerAuthToObject, /, /" api.ts
 
 yarn format

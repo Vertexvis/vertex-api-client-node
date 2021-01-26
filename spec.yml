@@ -213,6 +213,15 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    SnapshotId:
+      description: The `snapshot` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     StreamKeyFilter:
       description: Stream key to filter on.
       explode: true
@@ -954,6 +963,45 @@ components:
       properties:
         camera:
           $ref: '#/components/schemas/Camera'
+      type: object
+    CreateSnapshotRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateSnapshotRequest_data'
+      required:
+        - data
+      type: object
+    CreateSnapshotRequest_data:
+      properties:
+        attributes:
+          $ref: '#/components/schemas/CreateSnapshotRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateSnapshotRequest_data_relationships'
+        type:
+          description: Resource object type.
+          example: snapshot
+          maxLength: 32
+          type: string
+      required:
+        - attributes
+        - relationships
+        - type
+      type: object
+    CreateSnapshotRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      type: object
+    CreateSnapshotRequest_data_relationships:
+      properties:
+        sceneView:
+          $ref: '#/components/schemas/SceneViewRelationship'
+      required:
+        - sceneView
       type: object
     CreateStreamKeyRequest:
       additionalProperties: false
@@ -2061,7 +2109,7 @@ components:
             $ref: '#/components/schemas/Link'
           type: object
         relationships:
-          $ref: '#/components/schemas/SceneAlterationData_relationships'
+          $ref: '#/components/schemas/CreateSnapshotRequest_data_relationships'
         type:
           example: scene-alteration
           type: string
@@ -2070,13 +2118,6 @@ components:
         - id
         - relationships
         - type
-      type: object
-    SceneAlterationData_relationships:
-      properties:
-        sceneView:
-          $ref: '#/components/schemas/SceneViewRelationship'
-      required:
-        - sceneView
       type: object
     SceneAlterationList:
       additionalProperties: false
@@ -2525,6 +2566,70 @@ components:
         - material
         - type
       type: object
+    Snapshot:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SnapshotData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    SnapshotData:
+      additionalProperties: false
+      properties:
+        attributes:
+          $ref: '#/components/schemas/SnapshotData_attributes'
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        type:
+          example: snapshot
+          type: string
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SnapshotData_attributes:
+      properties:
+        created:
+          example: '2020-01-01T12:00:00Z'
+          format: date-time
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - created
+      type: object
+    SnapshotList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SnapshotData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     StreamKey:
       additionalProperties: false
       properties:
@@ -2800,6 +2905,9 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
+        treeEnabled:
+          description: Whether or not scene trees can be viewed for this scene.
+          type: boolean
       type: object
     UpdateSceneViewRequest:
       additionalProperties: false
@@ -4105,7 +4213,7 @@ paths:
     get:
       description: |+
 
-        Get `part-revisions`.
+        Get `part-revisions` for a `part`.
 
       operationId: getPartRevisions
       parameters:
@@ -5454,7 +5562,7 @@ paths:
     get:
       description: |+
 
-        Get `scene-alterations`.
+        Get `scene-alterations` for a `scene-view`.
 
       operationId: getSceneAlterations
       parameters:
@@ -6374,6 +6482,9 @@ paths:
         |▹▹ suppliedId|string|false|ID provided for correlation. For example, an
         existing ID from a PLM system.|
 
+        |▹▹ treeEnabled|boolean|false|Whether or not scene trees can be viewed
+        for this scene.|
+
         |▹ type|string|true|Resource object type.|
 
       operationId: updateScene
@@ -6663,7 +6774,7 @@ paths:
     get:
       description: |+
 
-        Get `scenes-items` for a `scene`.
+        Get `scene-items` for a `scene`.
 
       operationId: getSceneItems
       parameters:
@@ -7076,6 +7187,188 @@ paths:
         - OAuth2: []
       tags:
         - scene-views
+  '/scenes/{id}/snapshots':
+    get:
+      description: |+
+
+        Get `snapshots` for a `scene`.
+
+      operationId: getSceneSnapshots
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: 'page[cursor]'
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: 'page[size]'
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SnapshotList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - snapshots
+    post:
+      description: >+
+
+        Create a `snapshot` for a `scene`.
+
+
+        ###### Body Params
+
+
+        |Name|Type|Required|Description|
+
+        |---|---|---|---|
+
+        |data|CreateSnapshotRequest_data|true||
+
+        |▹ attributes|CreateSnapshotRequest_data_attributes|true||
+
+        |▹▹ name|string|false||
+
+        |▹ relationships|CreateSnapshotRequest_data_relationships|true||
+
+        |▹▹ sceneView|SceneViewRelationship|true|Relationship to a
+        `scene-view`.|
+
+        |▹▹▹ data|SceneViewRelationship_data|true||
+
+        |▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹▹▹▹ type|enum(scene-view)|true|Resource object type.|
+
+        |▹ type|string|true|Resource object type.|
+
+      operationId: createSceneSnapshot
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateSnapshotRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Snapshot'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: BadRequest
+                    status: '400'
+                    title: 'Invalid, missing, or out-of-range request parameters.'
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - snapshots
   '/scenes/{id}/stream-keys':
     post:
       description: >+
@@ -7165,6 +7458,127 @@ paths:
         - OAuth2: []
       tags:
         - stream-keys
+  '/snapshots/{id}':
+    delete:
+      description: |+
+
+        Delete a `snapshot`.
+
+      operationId: deleteSnapshot
+      parameters:
+        - description: The `snapshot` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - snapshots
+    get:
+      description: |+
+
+        Get a `snapshot` by ID.
+
+      operationId: getSnapshot
+      parameters:
+        - description: The `snapshot` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Snapshot'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - snapshots
   /stream-keys:
     get:
       description: |+
@@ -7473,6 +7887,8 @@ tags:
     name: scene-views
   - description: Blueprints for what users see rendered.
     name: scenes
+  - description: 'Saved camera, override, and selection state for scenes.'
+    name: snapshots
   - description: Grant the Vertex SDK expirable access to specific scenes.
     name: stream-keys
   - description: Inspect `files` after upload.
