@@ -3,7 +3,7 @@ set -o errexit -o nounset
 
 yarn clean
 
-curl -s https://platform.platdev.vertexvis.io/spec > ./spec.yml
+curl -s https://platform.vertexvis.com/spec > ./spec.yml
 # cp ../vertex-api/src/universal/api-resolved-public.yml ./spec.yml
 
 docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest generate \
@@ -13,5 +13,7 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest gen
     --output /local
 
 sed -i "" "s/, COLLECTION_FORMATS, /, /" api.ts
+sed -i "" "s/, setApiKeyToObject, /, /" api.ts
+sed -i "" "s/, setBearerAuthToObject, /, /" api.ts
 
 yarn format
