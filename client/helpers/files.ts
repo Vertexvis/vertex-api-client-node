@@ -1,5 +1,6 @@
 import {
   CreateFileRequest,
+  delay,
   encodeIfNotEncoded,
   FileMetadataData,
   FileList,
@@ -39,14 +40,17 @@ export async function deleteAllFiles({
   } while (cursor);
 }
 
-export async function uploadFileIfNotExists(
-  args: UploadFileArgs
-): Promise<FileMetadataData> {
-  const suppliedId = args.createFileReq.data.attributes.suppliedId;
+export async function uploadFileIfNotExists({
+  client,
+  createFileReq,
+  fileData,
+  verbose,
+}: UploadFileArgs): Promise<FileMetadataData> {
+  const suppliedId = createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
     ? await getBySuppliedId<FileMetadataData, FileList>(
         () =>
-          args.client.files.getFiles({
+          client.files.getFiles({
             pageSize: 1,
             filterSuppliedId: encodeIfNotEncoded(suppliedId),
           }),
@@ -57,7 +61,7 @@ export async function uploadFileIfNotExists(
   if (existingFile) {
     const fileId = existingFile.id;
     if (existingFile.attributes.status === 'complete') {
-      if (args.verbose) {
+      if (verbose) {
         console.log(
           `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
         );
@@ -66,34 +70,45 @@ export async function uploadFileIfNotExists(
       return existingFile;
     } else {
       // TODO: Temporary until we can resume file uploads
-      if (args.verbose) {
+      if (verbose) {
         console.log(
           `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.attributes.status}, ${fileId}`
         );
       }
 
-      await args.client.files.deleteFile({ id: fileId });
+      await client.files.deleteFile({ id: fileId });
     }
   }
 
-  return await uploadFile(args);
+  return await uploadFile({ client, createFileReq, fileData, verbose });
 }
 
-export async function uploadFile(
-  args: UploadFileArgs
-): Promise<FileMetadataData> {
-  const fileName = args.createFileReq.data.attributes.name;
-  const createRes = await args.client.files.createFile({
-    createFileRequest: args.createFileReq,
+export async function uploadFile({
+  client,
+  createFileReq,
+  fileData,
+  verbose,
+}: UploadFileArgs): Promise<FileMetadataData> {
+  const fileName = createFileReq.data.attributes.name;
+  const createRes = await client.files.createFile({
+    createFileRequest: createFileReq,
   });
+  const fileId = createRes.data.data.id;
+  if (verbose) console.log(`Created file '${fileName}', ${fileId}`);
 
-  const file = createRes.data.data;
-  const fileId = file.id;
-  if (args.verbose) console.log(`Created file '${fileName}', ${fileId}`);
+  await client.files.uploadFile({ id: fileId, body: fileData });
+  if (verbose) console.log(`Uploaded file ${fileId}`);
 
-  await args.client.files.uploadFile({ id: fileId, body: args.fileData });
+  const updated = (await client.files.getFile({ id: fileId })).data.data;
+  const status = updated.attributes.status;
+  if (status === 'error')
+    throw new Error(`Uploading file ${fileId} failed with status ${status}`);
 
-  if (args.verbose) console.log(`Uploaded file ${fileId}`);
+  // TODO: Temporary, remove if we don't see this logged
+  if (status !== 'complete') {
+    console.log(`File ${fileId} in status ${status}, waiting...`);
+    await delay(1000);
+  }
 
-  return file;
+  return updated;
 }
