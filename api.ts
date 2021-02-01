@@ -912,6 +912,12 @@ export interface CreateSceneViewRequestData {
    */
   attributes: CreateSceneViewRequestDataAttributes;
   /**
+   *
+   * @type {CreateSceneViewRequestDataRelationships}
+   * @memberof CreateSceneViewRequestData
+   */
+  relationships?: CreateSceneViewRequestDataRelationships;
+  /**
    * Resource object type.
    * @type {string}
    * @memberof CreateSceneViewRequestData
@@ -934,64 +940,77 @@ export interface CreateSceneViewRequestDataAttributes {
 /**
  *
  * @export
- * @interface CreateSnapshotRequest
+ * @interface CreateSceneViewRequestDataRelationships
  */
-export interface CreateSnapshotRequest {
+export interface CreateSceneViewRequestDataRelationships {
   /**
    *
-   * @type {CreateSnapshotRequestData}
-   * @memberof CreateSnapshotRequest
+   * @type {SceneViewStateRelationship}
+   * @memberof CreateSceneViewRequestDataRelationships
    */
-  data: CreateSnapshotRequestData;
+  sceneViewState?: SceneViewStateRelationship;
 }
 /**
  *
  * @export
- * @interface CreateSnapshotRequestData
+ * @interface CreateSceneViewStateRequest
  */
-export interface CreateSnapshotRequestData {
+export interface CreateSceneViewStateRequest {
   /**
    *
-   * @type {CreateSnapshotRequestDataAttributes}
-   * @memberof CreateSnapshotRequestData
+   * @type {CreateSceneViewStateRequestData}
+   * @memberof CreateSceneViewStateRequest
    */
-  attributes: CreateSnapshotRequestDataAttributes;
+  data: CreateSceneViewStateRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneViewStateRequestData
+ */
+export interface CreateSceneViewStateRequestData {
   /**
    *
-   * @type {CreateSnapshotRequestDataRelationships}
-   * @memberof CreateSnapshotRequestData
+   * @type {CreateSceneViewStateRequestDataAttributes}
+   * @memberof CreateSceneViewStateRequestData
    */
-  relationships: CreateSnapshotRequestDataRelationships;
+  attributes: CreateSceneViewStateRequestDataAttributes;
+  /**
+   *
+   * @type {CreateSceneViewStateRequestDataRelationships}
+   * @memberof CreateSceneViewStateRequestData
+   */
+  relationships: CreateSceneViewStateRequestDataRelationships;
   /**
    * Resource object type.
    * @type {string}
-   * @memberof CreateSnapshotRequestData
+   * @memberof CreateSceneViewStateRequestData
    */
   type: string;
 }
 /**
  *
  * @export
- * @interface CreateSnapshotRequestDataAttributes
+ * @interface CreateSceneViewStateRequestDataAttributes
  */
-export interface CreateSnapshotRequestDataAttributes {
+export interface CreateSceneViewStateRequestDataAttributes {
   /**
    *
    * @type {string}
-   * @memberof CreateSnapshotRequestDataAttributes
+   * @memberof CreateSceneViewStateRequestDataAttributes
    */
   name?: string;
 }
 /**
  *
  * @export
- * @interface CreateSnapshotRequestDataRelationships
+ * @interface CreateSceneViewStateRequestDataRelationships
  */
-export interface CreateSnapshotRequestDataRelationships {
+export interface CreateSceneViewStateRequestDataRelationships {
   /**
    *
    * @type {SceneViewRelationship}
-   * @memberof CreateSnapshotRequestDataRelationships
+   * @memberof CreateSceneViewStateRequestDataRelationships
    */
   sceneView: SceneViewRelationship;
 }
@@ -2475,10 +2494,10 @@ export interface SceneAlterationData {
   links?: { [key: string]: Link };
   /**
    *
-   * @type {CreateSnapshotRequestDataRelationships}
+   * @type {CreateSceneViewStateRequestDataRelationships}
    * @memberof SceneAlterationData
    */
-  relationships: CreateSnapshotRequestDataRelationships;
+  relationships: CreateSceneViewStateRequestDataRelationships;
   /**
    *
    * @type {string}
@@ -3135,6 +3154,135 @@ export enum SceneViewRelationshipDataTypeEnum {
 /**
  *
  * @export
+ * @interface SceneViewState
+ */
+export interface SceneViewState {
+  /**
+   *
+   * @type {SceneViewStateData}
+   * @memberof SceneViewState
+   */
+  data: SceneViewStateData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneViewState
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneViewStateData
+ */
+export interface SceneViewStateData {
+  /**
+   *
+   * @type {SceneViewStateDataAttributes}
+   * @memberof SceneViewStateData
+   */
+  attributes: SceneViewStateDataAttributes;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneViewStateData
+   */
+  id: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneViewStateData
+   */
+  links?: { [key: string]: Link };
+  /**
+   *
+   * @type {string}
+   * @memberof SceneViewStateData
+   */
+  type: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneViewStateDataAttributes
+ */
+export interface SceneViewStateDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneViewStateDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneViewStateDataAttributes
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneViewStateList
+ */
+export interface SceneViewStateList {
+  /**
+   *
+   * @type {Array<SceneViewStateData>}
+   * @memberof SceneViewStateList
+   */
+  data: Array<SceneViewStateData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneViewStateList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ * Relationship to a `scene-view-state`.
+ * @export
+ * @interface SceneViewStateRelationship
+ */
+export interface SceneViewStateRelationship {
+  /**
+   *
+   * @type {SceneViewStateRelationshipData}
+   * @memberof SceneViewStateRelationship
+   */
+  data: SceneViewStateRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface SceneViewStateRelationshipData
+ */
+export interface SceneViewStateRelationshipData {
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneViewStateRelationshipData
+   */
+  id: string;
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof SceneViewStateRelationshipData
+   */
+  type: SceneViewStateRelationshipDataTypeEnum;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum SceneViewStateRelationshipDataTypeEnum {
+  SceneViewState = 'scene-view-state',
+}
+
+/**
+ *
+ * @export
  * @interface SelectOperation
  */
 export interface SelectOperation {
@@ -3160,94 +3308,6 @@ export enum SelectOperationTypeEnum {
   Select = 'select',
 }
 
-/**
- *
- * @export
- * @interface Snapshot
- */
-export interface Snapshot {
-  /**
-   *
-   * @type {SnapshotData}
-   * @memberof Snapshot
-   */
-  data: SnapshotData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Snapshot
-   */
-  links?: { [key: string]: Link };
-}
-/**
- *
- * @export
- * @interface SnapshotData
- */
-export interface SnapshotData {
-  /**
-   *
-   * @type {SnapshotDataAttributes}
-   * @memberof SnapshotData
-   */
-  attributes: SnapshotDataAttributes;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SnapshotData
-   */
-  id: string;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SnapshotData
-   */
-  links?: { [key: string]: Link };
-  /**
-   *
-   * @type {string}
-   * @memberof SnapshotData
-   */
-  type: string;
-}
-/**
- *
- * @export
- * @interface SnapshotDataAttributes
- */
-export interface SnapshotDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof SnapshotDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SnapshotDataAttributes
-   */
-  name?: string;
-}
-/**
- *
- * @export
- * @interface SnapshotList
- */
-export interface SnapshotList {
-  /**
-   *
-   * @type {Array<SnapshotData>}
-   * @memberof SnapshotList
-   */
-  data: Array<SnapshotData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SnapshotList
-   */
-  links: { [key: string]: Link };
-}
 /**
  *
  * @export
@@ -8898,6 +8958,604 @@ export class SceneItemsApi extends BaseAPI {
 }
 
 /**
+ * SceneViewStatesApi - axios parameter creator
+ * @export
+ */
+export const SceneViewStatesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     *  Create a `scene-view-state` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewStateRequest_data|true|| |▹ attributes|CreateSceneViewStateRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSceneViewStateRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneViewState: async (
+      id: string,
+      createSceneViewStateRequest: CreateSceneViewStateRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createSceneViewState', 'id', id);
+      // verify required parameter 'createSceneViewStateRequest' is not null or undefined
+      assertParamExists(
+        'createSceneViewState',
+        'createSceneViewStateRequest',
+        createSceneViewStateRequest
+      );
+      const localVarPath = `/scenes/{id}/scene-view-states`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createSceneViewStateRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *  Delete a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneViewState: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteSceneViewState', 'id', id);
+      const localVarPath = `/scene-view-states/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *  Get a `scene-view-state` by ID.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViewState: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneViewState', 'id', id);
+      const localVarPath = `/scene-view-states/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *  Get `scene-view-states` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViewStates: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneViewStates', 'id', id);
+      const localVarPath = `/scenes/{id}/scene-view-states`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * SceneViewStatesApi - functional programming interface
+ * @export
+ */
+export const SceneViewStatesApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = SceneViewStatesApiAxiosParamCreator(
+    configuration
+  );
+  return {
+    /**
+     *  Create a `scene-view-state` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewStateRequest_data|true|| |▹ attributes|CreateSceneViewStateRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSceneViewStateRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createSceneViewState(
+      id: string,
+      createSceneViewStateRequest: CreateSceneViewStateRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneViewState(
+        id,
+        createSceneViewStateRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *  Delete a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteSceneViewState(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneViewState(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *  Get a `scene-view-state` by ID.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneViewState(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewState(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *  Get `scene-view-states` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneViewStates(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneViewStateList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewStates(
+        id,
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * SceneViewStatesApi - factory interface
+ * @export
+ */
+export const SceneViewStatesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = SceneViewStatesApiFp(configuration);
+  return {
+    /**
+     *  Create a `scene-view-state` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewStateRequest_data|true|| |▹ attributes|CreateSceneViewStateRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSceneViewStateRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneViewState(
+      id: string,
+      createSceneViewStateRequest: CreateSceneViewStateRequest,
+      options?: any
+    ): AxiosPromise<SceneViewState> {
+      return localVarFp
+        .createSceneViewState(id, createSceneViewStateRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Delete a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneViewState(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteSceneViewState(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Get a `scene-view-state` by ID.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViewState(id: string, options?: any): AxiosPromise<SceneViewState> {
+      return localVarFp
+        .getSceneViewState(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *  Get `scene-view-states` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViewStates(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<SceneViewStateList> {
+      return localVarFp
+        .getSceneViewStates(id, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createSceneViewState operation in SceneViewStatesApi.
+ * @export
+ * @interface SceneViewStatesApiCreateSceneViewStateRequest
+ */
+export interface SceneViewStatesApiCreateSceneViewStateRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewStatesApiCreateSceneViewState
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneViewStateRequest}
+   * @memberof SceneViewStatesApiCreateSceneViewState
+   */
+  readonly createSceneViewStateRequest: CreateSceneViewStateRequest;
+}
+
+/**
+ * Request parameters for deleteSceneViewState operation in SceneViewStatesApi.
+ * @export
+ * @interface SceneViewStatesApiDeleteSceneViewStateRequest
+ */
+export interface SceneViewStatesApiDeleteSceneViewStateRequest {
+  /**
+   * The &#x60;scene-view-state&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewStatesApiDeleteSceneViewState
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneViewState operation in SceneViewStatesApi.
+ * @export
+ * @interface SceneViewStatesApiGetSceneViewStateRequest
+ */
+export interface SceneViewStatesApiGetSceneViewStateRequest {
+  /**
+   * The &#x60;scene-view-state&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewState
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneViewStates operation in SceneViewStatesApi.
+ * @export
+ * @interface SceneViewStatesApiGetSceneViewStatesRequest
+ */
+export interface SceneViewStatesApiGetSceneViewStatesRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * SceneViewStatesApi - object-oriented interface
+ * @export
+ * @class SceneViewStatesApi
+ * @extends {BaseAPI}
+ */
+export class SceneViewStatesApi extends BaseAPI {
+  /**
+   *  Create a `scene-view-state` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewStateRequest_data|true|| |▹ attributes|CreateSceneViewStateRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSceneViewStateRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
+   * @param {SceneViewStatesApiCreateSceneViewStateRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewStatesApi
+   */
+  public createSceneViewState(
+    requestParameters: SceneViewStatesApiCreateSceneViewStateRequest,
+    options?: any
+  ) {
+    return SceneViewStatesApiFp(this.configuration)
+      .createSceneViewState(
+        requestParameters.id,
+        requestParameters.createSceneViewStateRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Delete a `scene-view-state`.
+   * @param {SceneViewStatesApiDeleteSceneViewStateRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewStatesApi
+   */
+  public deleteSceneViewState(
+    requestParameters: SceneViewStatesApiDeleteSceneViewStateRequest,
+    options?: any
+  ) {
+    return SceneViewStatesApiFp(this.configuration)
+      .deleteSceneViewState(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Get a `scene-view-state` by ID.
+   * @param {SceneViewStatesApiGetSceneViewStateRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewStatesApi
+   */
+  public getSceneViewState(
+    requestParameters: SceneViewStatesApiGetSceneViewStateRequest,
+    options?: any
+  ) {
+    return SceneViewStatesApiFp(this.configuration)
+      .getSceneViewState(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Get `scene-view-states` for a `scene`.
+   * @param {SceneViewStatesApiGetSceneViewStatesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewStatesApi
+   */
+  public getSceneViewStates(
+    requestParameters: SceneViewStatesApiGetSceneViewStatesRequest,
+    options?: any
+  ) {
+    return SceneViewStatesApiFp(this.configuration)
+      .getSceneViewStates(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * SceneViewsApi - axios parameter creator
  * @export
  */
@@ -8906,7 +9564,7 @@ export const SceneViewsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ relationships|CreateSceneViewRequest_data_relationships|false|| |▹▹ sceneViewState|SceneViewStateRelationship|false|Relationship to a `scene-view-state`.| |▹▹▹ data|SceneViewStateRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view-state)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneViewRequest} createSceneViewRequest
      * @param {*} [options] Override http request option.
@@ -9299,7 +9957,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
   );
   return {
     /**
-     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ relationships|CreateSceneViewRequest_data_relationships|false|| |▹▹ sceneViewState|SceneViewStateRelationship|false|Relationship to a `scene-view-state`.| |▹▹▹ data|SceneViewStateRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view-state)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneViewRequest} createSceneViewRequest
      * @param {*} [options] Override http request option.
@@ -9472,7 +10130,7 @@ export const SceneViewsApiFactory = function (
   const localVarFp = SceneViewsApiFp(configuration);
   return {
     /**
-     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ type|string|true|Resource object type.|
+     *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ relationships|CreateSceneViewRequest_data_relationships|false|| |▹▹ sceneViewState|SceneViewStateRelationship|false|Relationship to a `scene-view-state`.| |▹▹▹ data|SceneViewStateRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view-state)|true|Resource object type.| |▹ type|string|true|Resource object type.|
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneViewRequest} createSceneViewRequest
      * @param {*} [options] Override http request option.
@@ -9707,7 +10365,7 @@ export interface SceneViewsApiUpdateSceneViewRequest {
  */
 export class SceneViewsApi extends BaseAPI {
   /**
-   *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ type|string|true|Resource object type.|
+   *  Create a `scene-view` of a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSceneViewRequest_data|true|| |▹ attributes|CreateSceneViewRequest_data_attributes|true|| |▹▹ camera|Camera|false|Camera placement in 3D space.| |▹▹▹ lookAt|Vector3|true|3D vector.| |▹▹▹▹ x|number|true|x-axis coordinate.| |▹▹▹▹ y|number|true|y-axis coordinate.| |▹▹▹▹ z|number|true|z-axis coordinate.| |▹▹▹ position|Vector3|true|3D vector.| |▹▹▹ up|Vector3|true|3D vector.| |▹ relationships|CreateSceneViewRequest_data_relationships|false|| |▹▹ sceneViewState|SceneViewStateRelationship|false|Relationship to a `scene-view-state`.| |▹▹▹ data|SceneViewStateRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view-state)|true|Resource object type.| |▹ type|string|true|Resource object type.|
    * @param {SceneViewsApiCreateSceneViewRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -10794,601 +11452,6 @@ export class ScenesApi extends BaseAPI {
         requestParameters.updateSceneRequest,
         options
       )
-      .then((request) => request(this.axios, this.basePath));
-  }
-}
-
-/**
- * SnapshotsApi - axios parameter creator
- * @export
- */
-export const SnapshotsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     *  Create a `snapshot` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSnapshotRequest_data|true|| |▹ attributes|CreateSnapshotRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSnapshotRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSnapshotRequest} createSnapshotRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneSnapshot: async (
-      id: string,
-      createSnapshotRequest: CreateSnapshotRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneSnapshot', 'id', id);
-      // verify required parameter 'createSnapshotRequest' is not null or undefined
-      assertParamExists(
-        'createSceneSnapshot',
-        'createSnapshotRequest',
-        createSnapshotRequest
-      );
-      const localVarPath = `/scenes/{id}/snapshots`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSnapshotRequest,
-        localVarRequestOptions,
-        configuration
-      );
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *  Delete a `snapshot`.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSnapshot: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteSnapshot', 'id', id);
-      const localVarPath = `/snapshots/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *  Get `snapshots` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneSnapshots: async (
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneSnapshots', 'id', id);
-      const localVarPath = `/scenes/{id}/snapshots`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
-
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     *  Get a `snapshot` by ID.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSnapshot: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSnapshot', 'id', id);
-      const localVarPath = `/snapshots/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
-};
-
-/**
- * SnapshotsApi - functional programming interface
- * @export
- */
-export const SnapshotsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = SnapshotsApiAxiosParamCreator(
-    configuration
-  );
-  return {
-    /**
-     *  Create a `snapshot` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSnapshotRequest_data|true|| |▹ attributes|CreateSnapshotRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSnapshotRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSnapshotRequest} createSnapshotRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneSnapshot(
-      id: string,
-      createSnapshotRequest: CreateSnapshotRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Snapshot>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneSnapshot(
-        id,
-        createSnapshotRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     *  Delete a `snapshot`.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteSnapshot(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSnapshot(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     *  Get `snapshots` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneSnapshots(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SnapshotList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneSnapshots(
-        id,
-        pageCursor,
-        pageSize,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     *  Get a `snapshot` by ID.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSnapshot(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Snapshot>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSnapshot(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
-};
-
-/**
- * SnapshotsApi - factory interface
- * @export
- */
-export const SnapshotsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SnapshotsApiFp(configuration);
-  return {
-    /**
-     *  Create a `snapshot` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSnapshotRequest_data|true|| |▹ attributes|CreateSnapshotRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSnapshotRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSnapshotRequest} createSnapshotRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneSnapshot(
-      id: string,
-      createSnapshotRequest: CreateSnapshotRequest,
-      options?: any
-    ): AxiosPromise<Snapshot> {
-      return localVarFp
-        .createSceneSnapshot(id, createSnapshotRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     *  Delete a `snapshot`.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSnapshot(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteSnapshot(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     *  Get `snapshots` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneSnapshots(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): AxiosPromise<SnapshotList> {
-      return localVarFp
-        .getSceneSnapshots(id, pageCursor, pageSize, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     *  Get a `snapshot` by ID.
-     * @param {string} id The &#x60;snapshot&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSnapshot(id: string, options?: any): AxiosPromise<Snapshot> {
-      return localVarFp
-        .getSnapshot(id, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
-};
-
-/**
- * Request parameters for createSceneSnapshot operation in SnapshotsApi.
- * @export
- * @interface SnapshotsApiCreateSceneSnapshotRequest
- */
-export interface SnapshotsApiCreateSceneSnapshotRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SnapshotsApiCreateSceneSnapshot
-   */
-  readonly id: string;
-
-  /**
-   *
-   * @type {CreateSnapshotRequest}
-   * @memberof SnapshotsApiCreateSceneSnapshot
-   */
-  readonly createSnapshotRequest: CreateSnapshotRequest;
-}
-
-/**
- * Request parameters for deleteSnapshot operation in SnapshotsApi.
- * @export
- * @interface SnapshotsApiDeleteSnapshotRequest
- */
-export interface SnapshotsApiDeleteSnapshotRequest {
-  /**
-   * The &#x60;snapshot&#x60; ID.
-   * @type {string}
-   * @memberof SnapshotsApiDeleteSnapshot
-   */
-  readonly id: string;
-}
-
-/**
- * Request parameters for getSceneSnapshots operation in SnapshotsApi.
- * @export
- * @interface SnapshotsApiGetSceneSnapshotsRequest
- */
-export interface SnapshotsApiGetSceneSnapshotsRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SnapshotsApiGetSceneSnapshots
-   */
-  readonly id: string;
-
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof SnapshotsApiGetSceneSnapshots
-   */
-  readonly pageCursor?: string;
-
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof SnapshotsApiGetSceneSnapshots
-   */
-  readonly pageSize?: number;
-}
-
-/**
- * Request parameters for getSnapshot operation in SnapshotsApi.
- * @export
- * @interface SnapshotsApiGetSnapshotRequest
- */
-export interface SnapshotsApiGetSnapshotRequest {
-  /**
-   * The &#x60;snapshot&#x60; ID.
-   * @type {string}
-   * @memberof SnapshotsApiGetSnapshot
-   */
-  readonly id: string;
-}
-
-/**
- * SnapshotsApi - object-oriented interface
- * @export
- * @class SnapshotsApi
- * @extends {BaseAPI}
- */
-export class SnapshotsApi extends BaseAPI {
-  /**
-   *  Create a `snapshot` for a `scene`.  ###### Body Params  |Name|Type|Required|Description| |---|---|---|---| |data|CreateSnapshotRequest_data|true|| |▹ attributes|CreateSnapshotRequest_data_attributes|true|| |▹▹ name|string|false|| |▹ relationships|CreateSnapshotRequest_data_relationships|true|| |▹▹ sceneView|SceneViewRelationship|true|Relationship to a `scene-view`.| |▹▹▹ data|SceneViewRelationship_data|true|| |▹▹▹▹ id|string(uuid)|true|ID of the resource.| |▹▹▹▹ type|enum(scene-view)|true|Resource object type.| |▹ type|string|true|Resource object type.|
-   * @param {SnapshotsApiCreateSceneSnapshotRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SnapshotsApi
-   */
-  public createSceneSnapshot(
-    requestParameters: SnapshotsApiCreateSceneSnapshotRequest,
-    options?: any
-  ) {
-    return SnapshotsApiFp(this.configuration)
-      .createSceneSnapshot(
-        requestParameters.id,
-        requestParameters.createSnapshotRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *  Delete a `snapshot`.
-   * @param {SnapshotsApiDeleteSnapshotRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SnapshotsApi
-   */
-  public deleteSnapshot(
-    requestParameters: SnapshotsApiDeleteSnapshotRequest,
-    options?: any
-  ) {
-    return SnapshotsApiFp(this.configuration)
-      .deleteSnapshot(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *  Get `snapshots` for a `scene`.
-   * @param {SnapshotsApiGetSceneSnapshotsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SnapshotsApi
-   */
-  public getSceneSnapshots(
-    requestParameters: SnapshotsApiGetSceneSnapshotsRequest,
-    options?: any
-  ) {
-    return SnapshotsApiFp(this.configuration)
-      .getSceneSnapshots(
-        requestParameters.id,
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
-
-  /**
-   *  Get a `snapshot` by ID.
-   * @param {SnapshotsApiGetSnapshotRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SnapshotsApi
-   */
-  public getSnapshot(
-    requestParameters: SnapshotsApiGetSnapshotRequest,
-    options?: any
-  ) {
-    return SnapshotsApiFp(this.configuration)
-      .getSnapshot(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

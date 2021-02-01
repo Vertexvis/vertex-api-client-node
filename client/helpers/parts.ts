@@ -1,7 +1,6 @@
 import {
   CreateFileRequest,
   CreatePartRequest,
-  delay,
   encodeIfNotEncoded,
   getBySuppliedId,
   head,
@@ -19,11 +18,11 @@ import {
 
 interface CreatePartFromFileArgs {
   client: VertexClient;
-  verbose: boolean;
-  fileData: unknown; // Use Buffer in Node
   createFileReq: CreateFileRequest;
   createPartReq: (fileId: string) => CreatePartRequest;
+  fileData: unknown; // Use Buffer in Node
   polling?: Polling;
+  verbose: boolean;
 }
 
 interface GetPartRevisionBySuppliedIdArgs {
@@ -32,32 +31,33 @@ interface GetPartRevisionBySuppliedIdArgs {
   suppliedRevisionId: string;
 }
 
-export async function createPartFromFileIfNotExists(
-  args: CreatePartFromFileArgs
-): Promise<PartRevisionData> {
+export async function createPartFromFileIfNotExists({
+  client,
+  createFileReq,
+  createPartReq,
+  fileData,
+  polling,
+  verbose,
+}: CreatePartFromFileArgs): Promise<PartRevisionData> {
   const file = await uploadFileIfNotExists({
-    client: args.client,
-    verbose: args.verbose,
-    fileData: args.fileData,
-    createFileReq: args.createFileReq,
+    client,
+    verbose,
+    fileData,
+    createFileReq,
   });
-
-  // TODO: Temporary until race condition fixed
-  await delay(1000);
-
-  const createPartRequest = args.createPartReq(file.id);
+  const createPartRequest = createPartReq(file.id);
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
   const suppliedRevisionId =
     createPartRequest.data.attributes.suppliedRevisionId;
 
   if (suppliedPartId && suppliedRevisionId) {
     const existingPartRev = await getPartRevisionBySuppliedId({
-      client: args.client,
+      client,
       suppliedPartId,
       suppliedRevisionId,
     });
     if (existingPartRev) {
-      if (args.verbose) {
+      if (verbose) {
         console.log(
           `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
             `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
@@ -67,11 +67,9 @@ export async function createPartFromFileIfNotExists(
     }
   }
 
-  const createPartRes = await args.client.parts.createPart({
-    createPartRequest,
-  });
+  const createPartRes = await client.parts.createPart({ createPartRequest });
   const queuedId = createPartRes.data.data.id;
-  if (args.verbose)
+  if (verbose)
     console.log(
       `Created part with queued-translation ${queuedId}, file ${file.id}`
     );
@@ -79,8 +77,8 @@ export async function createPartFromFileIfNotExists(
   const part = await pollQueuedJob<Part>({
     id: queuedId,
     getQueuedJob: (id) =>
-      args.client.translationInspections.getQueuedTranslation({ id }),
-    polling: args.polling,
+      client.translationInspections.getQueuedTranslation({ id }),
+    polling,
   });
   const partRev = head(
     part.included?.filter(
@@ -92,22 +90,24 @@ export async function createPartFromFileIfNotExists(
       `Error creating part revision.\nRes: ${prettyJson(part.data)}`
     );
 
-  if (args.verbose) console.log(`Created part-revision ${partRev.id}`);
+  if (verbose) console.log(`Created part-revision ${partRev.id}`);
 
   return partRev;
 }
 
-export async function getPartRevisionBySuppliedId(
-  args: GetPartRevisionBySuppliedIdArgs
-): Promise<PartRevisionData | undefined> {
-  // TODO: Update once we can filter by both part and part-revision suppliedIds with one API call
+export async function getPartRevisionBySuppliedId({
+  client,
+  suppliedPartId,
+  suppliedRevisionId,
+}: GetPartRevisionBySuppliedIdArgs): Promise<PartRevisionData | undefined> {
+  // TODO: Update once filtering by part and part-revision suppliedIds supported
   const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
-      args.client.parts.getParts({
+      client.parts.getParts({
         pageSize: 1,
-        filterSuppliedId: encodeIfNotEncoded(args.suppliedPartId),
+        filterSuppliedId: encodeIfNotEncoded(suppliedPartId),
       }),
-    args.suppliedPartId
+    suppliedPartId
   );
   if (existingPart) {
     const existingPartRev = await getBySuppliedId<
@@ -115,12 +115,12 @@ export async function getPartRevisionBySuppliedId(
       PartRevisionList
     >(
       () =>
-        args.client.partRevisions.getPartRevisions({
+        client.partRevisions.getPartRevisions({
           id: existingPart.id,
           pageSize: 1,
-          filterSuppliedId: encodeIfNotEncoded(args.suppliedRevisionId),
+          filterSuppliedId: encodeIfNotEncoded(suppliedRevisionId),
         }),
-      args.suppliedRevisionId
+      suppliedRevisionId
     );
     if (existingPartRev) return existingPartRev;
   }
