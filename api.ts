@@ -6463,6 +6463,57 @@ export const PartsApiAxiosParamCreator = function (
       };
     },
     /**
+     *  Delete a `part`.
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePart: async (id: string, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deletePart', 'id', id);
+      const localVarPath = `/parts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
      * @param {string} [include] Comma-separated list of relationships to include in response.
@@ -6621,6 +6672,29 @@ export const PartsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     *  Delete a `part`.
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deletePart(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deletePart(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
      * @param {string} [include] Comma-separated list of relationships to include in response.
@@ -6704,6 +6778,17 @@ export const PartsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     *  Delete a `part`.
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePart(id: string, options?: any): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .deletePart(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      *  Get a `part` by ID.
      * @param {string} id The &#x60;part&#x60; ID.
      * @param {string} [include] Comma-separated list of relationships to include in response.
@@ -6748,6 +6833,20 @@ export interface PartsApiCreatePartRequest {
    * @memberof PartsApiCreatePart
    */
   readonly createPartRequest: CreatePartRequest;
+}
+
+/**
+ * Request parameters for deletePart operation in PartsApi.
+ * @export
+ * @interface PartsApiDeletePartRequest
+ */
+export interface PartsApiDeletePartRequest {
+  /**
+   * The &#x60;part&#x60; ID.
+   * @type {string}
+   * @memberof PartsApiDeletePart
+   */
+  readonly id: string;
 }
 
 /**
@@ -6819,6 +6918,22 @@ export class PartsApi extends BaseAPI {
   ) {
     return PartsApiFp(this.configuration)
       .createPart(requestParameters.createPartRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *  Delete a `part`.
+   * @param {PartsApiDeletePartRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartsApi
+   */
+  public deletePart(
+    requestParameters: PartsApiDeletePartRequest,
+    options?: any
+  ) {
+    return PartsApiFp(this.configuration)
+      .deletePart(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

@@ -288,6 +288,17 @@ components:
           schema:
             $ref: '#/components/schemas/Failure'
       description: Conflict
+    GatewayTimeout:
+      content:
+        application/vnd.api+json:
+          example:
+            errors:
+              - code: GatewayTimeout
+                status: '504'
+                title: Request timed out.
+          schema:
+            $ref: '#/components/schemas/Failure'
+      description: GatewayTimeout
     MovedPermanently:
       description: Moved Permanently
     NoContent:
@@ -3984,6 +3995,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+        '504':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: GatewayTimeout
+                    status: '504'
+                    title: Request timed out.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: GatewayTimeout
       security:
         - OAuth2: []
       tags:
@@ -4172,6 +4194,71 @@ paths:
       tags:
         - parts
   '/parts/{id}':
+    delete:
+      description: |+
+
+        Delete a `part`.
+
+      operationId: deletePart
+      parameters:
+        - description: The `part` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - parts
     get:
       description: |+
 
@@ -5710,6 +5797,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+        '504':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: GatewayTimeout
+                    status: '504'
+                    title: Request timed out.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: GatewayTimeout
       security:
         - OAuth2: []
       tags:
@@ -6922,6 +7020,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+        '504':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: GatewayTimeout
+                    status: '504'
+                    title: Request timed out.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: GatewayTimeout
       security:
         - OAuth2: []
       tags:
