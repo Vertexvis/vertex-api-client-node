@@ -6,27 +6,36 @@ import {
   FileList,
   getBySuppliedId,
   getPage,
-  VertexClient,
 } from '../..';
+import { BaseArgs } from '..';
 
-interface UploadFileArgs {
-  client: VertexClient;
-  verbose: boolean;
-  fileData: unknown; // Buffer in Node
-  createFileReq: CreateFileRequest;
+/**
+ * Upload file arguments.
+ */
+interface UploadFileArgs extends BaseArgs {
+  readonly createFileReq: CreateFileRequest;
+  readonly fileData: unknown; // Buffer in Node
 }
 
-interface DeleteArgs {
-  client: VertexClient;
-  pageSize?: number;
-  verbose?: boolean;
+/**
+ * Delete arguments.
+ */
+interface DeleteArgs extends BaseArgs {
+  readonly pageSize?: number;
 }
 
+/**
+ * Delete all files.
+ *
+ * @param client - The {@link VertexClient}.
+ * @param pageSize - The page size used while fetching files.
+ * @param verbose - Whether to print verbose log messages.
+ */
 export async function deleteAllFiles({
   client,
   pageSize = 100,
   verbose = false,
-}: DeleteArgs) {
+}: DeleteArgs): Promise<void> {
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -40,6 +49,15 @@ export async function deleteAllFiles({
   } while (cursor);
 }
 
+/**
+ * Create a file resource and upload a file if it doesn't already exist.
+ *
+ * @param client - The {@link VertexClient}.
+ * @param createFileReq - The {@link CreateFileRequest}.
+ * @param fileData - The file data, a `Buffer` in Node.
+ * @param verbose - Whether to print verbose log messages.
+ * @returns The {@link FileMetadataData}.
+ */
 export async function uploadFileIfNotExists({
   client,
   createFileReq,
@@ -83,6 +101,15 @@ export async function uploadFileIfNotExists({
   return await uploadFile({ client, createFileReq, fileData, verbose });
 }
 
+/**
+ * Create a file resource and upload a file.
+ *
+ * @param client - The {@link VertexClient}.
+ * @param createFileReq - The {@link CreateFileRequest}.
+ * @param fileData - The file data, a `Buffer` in Node.
+ * @param verbose - Whether to print verbose log messages.
+ * @returns The {@link FileMetadataData}.
+ */
 export async function uploadFile({
   client,
   createFileReq,

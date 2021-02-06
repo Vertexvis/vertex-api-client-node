@@ -5,7 +5,7 @@ import { FilesApiAxiosParamCreator } from './api';
 
 verify();
 
-async function verify() {
+async function verify(): Promise<void> {
   const config = new Configuration();
   const fileAsBuffer = readFileSync('package.json');
   const uploadFileParams = await FilesApiAxiosParamCreator(config).uploadFile(

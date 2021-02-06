@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios';
 import {
   CreateFileRequest,
   CreatePartRequest,
@@ -12,25 +13,43 @@ import {
   Polling,
   pollQueuedJob,
   prettyJson,
+  RenderImageArgs,
   uploadFileIfNotExists,
   VertexClient,
 } from '../..';
 
+/**
+ * Create parts from file arguments.
+ */
 interface CreatePartFromFileArgs {
-  client: VertexClient;
-  createFileReq: CreateFileRequest;
-  createPartReq: (fileId: string) => CreatePartRequest;
-  fileData: unknown; // Use Buffer in Node
-  polling?: Polling;
-  verbose: boolean;
+  readonly client: VertexClient;
+  readonly createFileReq: CreateFileRequest;
+  readonly createPartReq: (fileId: string) => CreatePartRequest;
+  readonly fileData: unknown; // Use Buffer in Node
+  readonly polling?: Polling;
+  readonly verbose: boolean;
 }
 
+/**
+ * Get part revision by supplied ID arguments.
+ */
 interface GetPartRevisionBySuppliedIdArgs {
-  client: VertexClient;
-  suppliedPartId: string;
-  suppliedRevisionId: string;
+  readonly client: VertexClient;
+  readonly suppliedPartId: string;
+  readonly suppliedRevisionId: string;
 }
 
+/**
+ * Create part and file resources if they don't already exist.
+ *
+ * @param client - The {@link VertexClient}.
+ * @param createFileReq - The {@link CreateFileRequest}.
+ * @param createPartReq - A function returning a {@link CreatePartRequest}.
+ * @param fileData - The file data, a `Buffer` in Node.
+ * @param polling - The {@link Polling} configuration.
+ * @param verbose - Whether to print verbose log messages.
+ * @returns The {@link PartRevisionData}.
+ */
 export async function createPartFromFileIfNotExists({
   client,
   createFileReq,
@@ -95,6 +114,14 @@ export async function createPartFromFileIfNotExists({
   return partRev;
 }
 
+/**
+ * Get a part revision by supplied ID.
+ *
+ * @param client - The {@link VertexClient}.
+ * @param suppliedPartId - The supplied part ID.
+ * @param suppliedRevisionId - A supplied revision ID.
+ * @returns The {@link PartRevisionData}.
+ */
 export async function getPartRevisionBySuppliedId({
   client,
   suppliedPartId,
@@ -126,4 +153,22 @@ export async function getPartRevisionBySuppliedId({
   }
 
   return undefined;
+}
+
+/**
+ * Render a part revision.
+ *
+ * @param args - The {@link RenderImageArgs}.
+ */
+export async function renderPartRevision<T>(
+  args: RenderImageArgs
+): Promise<AxiosResponse<T>> {
+  return await args.client.partRevisions.renderPartRevision(
+    {
+      id: args.renderReq.id,
+      height: args.renderReq.height,
+      width: args.renderReq.width,
+    },
+    { responseType: 'stream' }
+  );
 }

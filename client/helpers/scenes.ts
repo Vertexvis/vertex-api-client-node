@@ -19,27 +19,42 @@ import {
   VertexClient,
 } from '../..';
 
+/**
+ * Create scene with scene items arguments.
+ */
 interface CreateSceneWithSceneItemsArgs {
-  client: VertexClient;
-  parallelism: number;
-  verbose: boolean;
-  createSceneReq: () => CreateSceneRequest;
-  createSceneItemReqs: CreateSceneItemRequest[];
-  polling?: Polling;
+  readonly client: VertexClient;
+  readonly parallelism: number;
+  readonly verbose: boolean;
+  readonly createSceneReq: () => CreateSceneRequest;
+  readonly createSceneItemReqs: CreateSceneItemRequest[];
+  readonly polling?: Polling;
 }
 
+/**
+ * Poll scene ready arguments.
+ */
 interface PollSceneReadyArgs {
-  client: VertexClient;
-  id: string;
-  polling?: Polling;
+  readonly client: VertexClient;
+  readonly id: string;
+  readonly polling?: Polling;
 }
 
+/**
+ * Delete arguments.
+ */
 interface DeleteArgs {
-  client: VertexClient;
-  pageSize?: number;
-  verbose?: boolean;
+  readonly client: VertexClient;
+  readonly pageSize?: number;
+  readonly verbose?: boolean;
 }
 
+/**
+ * Create a scene with scene items.
+ *
+ * @param args - The {@link CreateSceneWithSceneItemsArgs}.
+ * @returns The {@link SceneData}
+ */
 export async function createSceneWithSceneItems(
   args: CreateSceneWithSceneItemsArgs
 ): Promise<SceneData> {
@@ -61,14 +76,14 @@ export async function createSceneWithSceneItems(
 
   const limit = pLimit(args.parallelism);
   const responses = await Promise.all(
-    args.createSceneItemReqs.map((r) =>
+    args.createSceneItemReqs.map((req) =>
       limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
         (r: CreateSceneItemRequest) =>
           args.client.sceneItems.createSceneItem({
             id: sceneId,
             createSceneItemRequest: r,
           }),
-        r
+        req
       )
     )
   );
@@ -119,11 +134,16 @@ export async function createSceneWithSceneItems(
   return scene.data.data;
 }
 
+/**
+ * Delete all scenes.
+ *
+ * @param args - The {@link DeleteArgs}.
+ */
 export async function deleteAllScenes({
   client,
   pageSize = 100,
   verbose = false,
-}: DeleteArgs) {
+}: DeleteArgs): Promise<void> {
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -136,19 +156,12 @@ export async function deleteAllScenes({
   } while (cursor);
 }
 
-export async function renderScene<T>(
-  args: RenderImageArgs
-): Promise<AxiosResponse<T>> {
-  return await args.client.scenes.renderScene(
-    {
-      id: args.renderReq.id,
-      height: args.renderReq.height,
-      width: args.renderReq.width,
-    },
-    { responseType: 'stream' }
-  );
-}
-
+/**
+ * Poll a scene until it reaches the ready state.
+ *
+ * @param args - The {@link PollSceneReadyArgs}.
+ * @returns The {@link Scene}
+ */
 export async function pollSceneReady({
   client,
   id,
@@ -177,4 +190,22 @@ export async function pollSceneReady({
   }
 
   return scene;
+}
+
+/**
+ * Render a scene.
+ *
+ * @param args - The {@link RenderImageArgs}.
+ */
+export async function renderScene<T>(
+  args: RenderImageArgs
+): Promise<AxiosResponse<T>> {
+  return await args.client.scenes.renderScene(
+    {
+      id: args.renderReq.id,
+      height: args.renderReq.height,
+      width: args.renderReq.width,
+    },
+    { responseType: 'stream' }
+  );
 }

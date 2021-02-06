@@ -1,26 +1,47 @@
 import { AxiosResponse } from 'axios';
-import { parse as urlParse } from 'url';
 import { parse, ParsedUrlQuery } from 'querystring';
-import { Oauth2Api, OAuth2Token, Polling, QueuedJob } from '..';
+import { Matrix4, Oauth2Api, OAuth2Token, Polling, QueuedJob } from '..';
+import { DUMMY_BASE_URL } from '../common';
 
 export const PollIntervalMs = 5000;
+
 export const AttemptsPerMin = 60000 / PollIntervalMs;
+
 export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
+
 export const Utf8 = 'utf8';
+
 const PageCursor = 'page[cursor]';
 const UnableToStringify = 'Unable to stringify';
 
+/**
+ * Polling async queued job request arguments.
+ */
 interface PollQueuedJobArgs {
-  id: string;
-  getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
-  allow404?: boolean;
-  polling?: Polling;
+  readonly id: string;
+  readonly getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
+  readonly allow404?: boolean;
+  readonly polling?: Polling;
 }
 
+/**
+ * Check for array equality.
+ *
+ * @param a - A number array.
+ * @param b - A number array.
+ * @returns `true` if `a` and `b` are equal.
+ */
 export function arrayEq(a: number[], b: number[]): boolean {
   return arrayLenEq(a, b) && a.every((v, idx) => v === b[idx]);
 }
 
+/**
+ * Check for 2D array equality.
+ *
+ * @param a - A 2D number array.
+ * @param b - A 2D number array.
+ * @returns `true` if `a` and `b` are equal.
+ */
 export function arrayEq2d(a: number[][], b: number[][]): boolean {
   if (!arrayLenEq(a, b)) return false;
 
@@ -29,6 +50,13 @@ export function arrayEq2d(a: number[][], b: number[][]): boolean {
   return true;
 }
 
+/**
+ * Split an array into a 2D array of `chunkSize` chunks.
+ *
+ * @param a - An array.
+ * @param chunkSize - The number of chunks to split `a` into.
+ * @returns A 2D number array.
+ */
 export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   return a.reduce((all: T[][], one: T, idx: number) => {
     const chunk = Math.floor(idx / chunkSize);
@@ -37,18 +65,42 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   }, [] as T[][]);
 }
 
+/**
+ * Create an OAuth2 token.
+ *
+ * @param auth - `Oauth2Api`.
+ * @returns `OAuth2Token` response body.
+ */
 export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
   return (await auth.createToken({ grantType: 'client_credentials' })).data;
 }
 
-export async function delay(ms: number): Promise<unknown> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+/**
+ * Delay execution by the given milliseconds.
+ *
+ * @param ms - Amount of milliseconds to delay.
+ */
+export async function delay(ms: number): Promise<void> {
+  new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export function encodeIfNotEncoded(s: string) {
+/**
+ * URI encode given value if it isn't already.
+ *
+ * @param s - value to encode.
+ * @returns Encoded value.
+ */
+export function encodeIfNotEncoded(s: string): string {
   return isEncoded(s) ? s : encodeURIComponent(s);
 }
 
+/**
+ * Call `getter` and return item if `suppliedId` matches.
+ *
+ * @param getter - Function called to get item.
+ * @param suppliedId - ID to match.
+ * @returns Item if and only if it matches ID.
+ */
 export async function getBySuppliedId<
   T extends { attributes: { suppliedId?: string } },
   TRes extends { data: T[] }
@@ -60,13 +112,19 @@ export async function getBySuppliedId<
 
   const res = await getter();
   if (res.data.data.length > 0) {
-    const sceneItem = head(res.data.data);
-    if (sceneItem.attributes.suppliedId === suppliedId) return sceneItem;
+    const item = head(res.data.data);
+    if (item.attributes.suppliedId === suppliedId) return item;
   }
 
   return undefined;
 }
 
+/**
+ * Get a page of results from a listing.
+ *
+ * @param getListing - Function called to get list of items.
+ * @returns Page of results and optional cursor to get next page.
+ */
 export async function getPage<
   T extends { data: unknown[]; links: { next?: { href: string } } }
 >(
@@ -81,6 +139,13 @@ export async function getPage<
   };
 }
 
+/**
+ * Group an array by the result of `getKey`.
+ *
+ * @param items - An array.
+ * @param getKey - Function returning key to group by.
+ * @returns A 2D array.
+ */
 export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
   items.reduce((acc, cur) => {
     const group = getKey(cur);
@@ -89,10 +154,22 @@ export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
     return acc;
   }, [] as T[][]);
 
-export function head<T>(item: T | T[]): T {
-  return Array.isArray(item) ? item[0] : item;
+/**
+ * Return the first item in an array.
+ *
+ * @param items - An array.
+ * @returns The first item.
+ */
+export function head<T>(items: T | T[]): T {
+  return Array.isArray(items) ? items[0] : items;
 }
 
+/**
+ * Check if array is the 4x4 identity matrix.
+ *
+ * @param transform: A 2D number array.
+ * @returns `true` if 4x4 identity matrix.
+ */
 export function is4x4Identity(transform: number[][]): boolean {
   return arrayEq2d(transform, [
     [1, 0, 0, 0],
@@ -102,10 +179,23 @@ export function is4x4Identity(transform: number[][]): boolean {
   ]);
 }
 
-export function isEncoded(s: string) {
+/**
+ * Check if a value is URI encoded.
+ *
+ * @param s: value to check.
+ * @returns `true` if URI encoded.
+ */
+export function isEncoded(s: string): boolean {
   return s !== decodeURIComponent(s);
 }
 
+/**
+ * Log an Error produced by `vertex-api-client`.
+ *
+ * @param error: The error to log.
+ * @param logger: The logger to use.
+ * @returns `true` if URI encoded.
+ */
 export function logError(
   error: Error & { vertexErrorMessage?: string },
   logger: (input: Error | string) => void = console.error
@@ -118,6 +208,13 @@ export function logError(
   else logger(error);
 }
 
+/**
+ * Matrix multiply two 2D arrays.
+ *
+ * @param a - A 2D number array.
+ * @param b - A 2D number array.
+ * @returns The 2D multiplied array.
+ */
 export function multiply(a: number[][], b: number[][]): number[][] {
   const m = new Array(a.length).fill(0);
   for (let r = 0; r < a.length; ++r) {
@@ -131,15 +228,43 @@ export function multiply(a: number[][], b: number[][]): number[][] {
   return m;
 }
 
+/**
+ * Get the current epoch.
+ *
+ * @returns The current epoch.
+ */
 export function nowEpochMs(): number {
   return new Date().getTime();
 }
 
+/**
+ * Parse the query parameters from a URL.
+ *
+ * @param url - A URL to parse.
+ * @returns `ParsedUrlQuery` of query parameters.
+ */
 export function parseUrl(url?: string): ParsedUrlQuery | undefined {
-  const query = url ? urlParse(url).query : null;
-  return query ? parse(query) : undefined;
+  if (url === undefined) return undefined;
+
+  const absoluteUrl = url.startsWith('http')
+    ? url
+    : url.startsWith('/')
+    ? `${DUMMY_BASE_URL}${url}`
+    : `${DUMMY_BASE_URL}/${url}`;
+  return parse(new URL(absoluteUrl).search);
 }
 
+/**
+ * Poll `getQueuedJob` until we're redirected to the resulting resource or
+ * reach `polling.maxAttempts`.
+ *
+ * @param id - Queued job ID.
+ * @param getQueuedJob - Function called to get queued job.
+ * @param allow404 - If `true`, doesn't fail if API returns 404 status code.
+ * @param polling.intervalMs - How often to poll API in milliseconds.
+ * @param polling.maxAttempts - Maximum number of polling attempts.
+ * @returns The resulting resource.
+ */
 export async function pollQueuedJob<T extends { data: { id: string } }>({
   id,
   getQueuedJob,
@@ -152,19 +277,19 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   const poll = async (): Promise<AxiosResponse<QueuedJob | T>> => {
     return new Promise((resolve, reject) => {
       setTimeout(async () => {
-        const res = await getQueuedJob(id);
-        if (allow404 && res.status === 404) resolve(res);
+        const jobRes = await getQueuedJob(id);
+        if (allow404 && jobRes.status === 404) resolve(jobRes);
         else if (
-          !res.data.data ||
-          !res.data.data.attributes ||
-          res.data.data.attributes.status === 'error'
+          !jobRes.data.data ||
+          !jobRes.data.data.attributes ||
+          jobRes.data.data.attributes.status === 'error'
         ) {
           reject(
             new Error(
-              `Error getting queued job ${id}.\n${prettyJson(res.data)}`
+              `Error getting queued job ${id}.\n${prettyJson(jobRes.data)}`
             )
           );
-        } else resolve(res);
+        } else resolve(jobRes);
       }, polling.intervalMs);
     });
   };
@@ -183,7 +308,13 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   return res.data as T;
 }
 
-export function prettyJson(obj: any): string {
+/**
+ * Convert JavaScript object to a pretty JSON string.
+ *
+ * @param obj - A JavaScript object.
+ * @returns The pretty JSON format.
+ */
+export function prettyJson(obj: unknown): string {
   try {
     return JSON.stringify(obj, null, 2);
   } catch (error) {
@@ -191,14 +322,29 @@ export function prettyJson(obj: any): string {
   }
 }
 
+/**
+ * Convert a comma-separated string to a float array.
+ *
+ * @param fallback - A default to use if `a` is undefined.
+ * @param a - The value to convert.
+ * @returns A float array.
+ */
 export function toFloats(fallback: string, a?: string): number[] {
   return (a ?? fallback).split(',').map(parseFloat);
 }
 
+/**
+ * Convert an `orientation`, `translation`, and `scale` to a 4x4 transform.
+ *
+ * @param orientation - The transform's orientation as a nine-element array.
+ * @param translation - The transform's translation as a three-element array.
+ * @param scale - The transform's scale.
+ * @returns A 4x4 transform.
+ */
 export function to4x4Transform(
   orientation: number[],
   translation: number[],
-  scale: number = 1
+  scale = 1
 ): number[][] {
   return [
     [orientation[0], orientation[3], orientation[6], translation[0] * scale],
@@ -208,7 +354,13 @@ export function to4x4Transform(
   ];
 }
 
-export function toTransform(t: number[][]) {
+/**
+ * Convert a 2D array to a `Matrix4`.
+ *
+ * @param t - A 2D number array.
+ * @returns A `Matrix4`.
+ */
+export function toTransform(t: number[][]): Matrix4 {
   return {
     r0: { x: t[0][0], y: t[0][1], z: t[0][2], w: t[0][3] },
     r1: { x: t[1][0], y: t[1][1], z: t[1][2], w: t[1][3] },
@@ -217,6 +369,16 @@ export function toTransform(t: number[][]) {
   };
 }
 
-function arrayLenEq(a: number[] | number[][], b: number[] | number[][]) {
+/**
+ * Check if arrays are equal length.
+ *
+ * @param a - A number array.
+ * @param b - A number array.
+ * @returns `true` if arrays are equal length.
+ */
+function arrayLenEq(
+  a: number[] | number[][],
+  b: number[] | number[][]
+): boolean {
   return Array.isArray(a) && Array.isArray(b) && a.length === b.length;
 }
