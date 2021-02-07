@@ -23,25 +23,64 @@ import {
 
 type BaseOptions = Record<string, unknown>;
 
+/**
+ * Static `build` function arguments.
+ */
 interface BuildArgs {
-  axiosOptions?: AxiosRequestConfig;
-  baseOptions?: BaseOptions;
-  basePath?: BasePath;
-  clientId?: string;
-  clientSecret?: string;
+  readonly axiosOptions?: AxiosRequestConfig;
+  readonly baseOptions?: BaseOptions;
+  readonly basePath?: BasePath;
+  readonly clientId?: string;
+  readonly clientSecret?: string;
 }
 
+/**
+ * `VertexClient` constructor arguments.
+ */
 interface CtorArgs {
-  auth: Oauth2Api;
-  axiosOptions?: AxiosRequestConfig;
-  baseOptions?: BaseOptions;
-  basePath: string;
-  token: OAuth2Token;
+  readonly auth: Oauth2Api;
+  readonly axiosOptions?: AxiosRequestConfig;
+  readonly baseOptions?: BaseOptions;
+  readonly basePath: string;
+  readonly token: OAuth2Token;
 }
 
 const TenMinsInMs = 600_000;
 const SecToMs = 1000;
 
+/**
+ * The official API client for Vertex's API.
+ *
+ * @example
+ * ```
+ * import {
+ *   logError,
+ *   prettyJson,
+ *   VertexClient,
+ * } from '@vertexvis/vertex-api-client';
+ *
+ * const main = async () => {
+ *   try {
+ *     // Shown with default values
+ *     const client = await VertexClient.build({
+ *       clientId: process.env.VERTEX_CLIENT_ID,
+ *       clientSecret: process.env.VERTEX_CLIENT_SECRET,
+ *       basePath: 'https://platform.vertexvis.com',
+ *     });
+ *
+ *     const getFilesRes = await client.files.getFiles({ pageSize: 1 });
+ *
+ *     console.log(prettyJson(getFilesRes.data));
+ *   } catch (error) {
+ *     logError(error, console.error);
+ *   }
+ * };
+ *
+ * main();
+ * ```
+ *
+ * @see {@link https://developer.vertexvis.com/guides|Developer Guides} to get started.
+ */
 export class VertexClient {
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
@@ -144,6 +183,12 @@ export class VertexClient {
     );
   }
 
+  /**
+   * Build a VertexClient.
+   *
+   * @param args - {@link BuildArgs}.
+   * @returns A {@link VertexClient}.
+   */
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
     const basePath = args?.basePath ?? `https://platform.vertexvis.com`;
     const baseOptions = args?.baseOptions ?? {};
@@ -180,12 +225,18 @@ export class VertexClient {
   };
 }
 
-// See https://github.com/axios/axios#request-config
-function createBaseOptions(baseOptions: BaseOptions) {
+/**
+ * Create base options to pass to `Configuration`.
+ *
+ * @see {@link https://github.com/axios/axios#request-config|Axios request config} for details.
+ * @param args - {@link BaseOptions}.
+ * @returns {@link BaseOptions} with defaults.
+ */
+function createBaseOptions(args: BaseOptions): BaseOptions {
   return {
     validateStatus: (status: number) => status < 400,
     maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
     maxBodyLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead
-    ...(baseOptions ?? {}),
+    ...(args ?? {}),
   };
 }

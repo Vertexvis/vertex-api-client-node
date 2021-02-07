@@ -1,14 +1,22 @@
 import { CreateSceneItemRequest, SceneItem } from '../..';
 import { Polling, pollQueuedJob, VertexClient } from '..';
 
+/**
+ * Create scene item arguments.
+ */
 interface CreateSceneItemArgs {
-  client: VertexClient;
-  verbose: boolean;
-  sceneId: string;
-  createSceneItemReq: () => CreateSceneItemRequest;
-  polling: Polling;
+  readonly client: VertexClient;
+  readonly verbose: boolean;
+  readonly sceneId: string;
+  readonly createSceneItemReq: () => CreateSceneItemRequest;
+  readonly polling: Polling;
 }
 
+/**
+ * Create a scene item.
+ *
+ * @param args - The {@link CreateSceneItemArgs}.
+ */
 export async function createSceneItem(
   args: CreateSceneItemArgs
 ): Promise<SceneItem> {

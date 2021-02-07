@@ -1,12 +1,15 @@
-# @vertexvis/vertex-api-client
+# Vertex API Client
 
-If you're ready to integrate Vertex into your application, this is the place! If you're looking for more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/docs/guides/getting-started).
+[![Version](https://img.shields.io/npm/v/@vertexvis/vertex-api-client.svg)](https://www.npmjs.com/package/@vertexvis/vertex-api-client)
+[![License](https://img.shields.io/npm/l/@vertexvis/vertex-api-client.svg)](https://github.com/Vertexvis/vertex-api-client/blob/master/LICENSE)
 
-The Vertex platform API client for TypeScript and JavaScript is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator) so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
+If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/guides).
+
+The Vertex platform API client for TypeScript and JavaScript is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
 
 This client can be used in Node.js, Webpack, and Browserify environments. To use with ES5, you must have a Promises/A+ library installed. It supports CommonJS and ES6 module systems.
 
-### Usage
+## Usage
 
 If you're not an existing Vertex customer, [contact us](https://developer.vertexvis.com/docs/support) for a free account.
 
@@ -50,7 +53,7 @@ const main = async () => {
 main();
 ```
 
-### Local Development
+## Local Development
 
 ```bash
 # Install dependencies

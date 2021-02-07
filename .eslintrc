@@ -1,0 +1,4 @@
+{
+  "extends": ["@vertexvis/vertexvis-typescript"],
+  "plugins": ["eslint-plugin-tsdoc"]
+}
