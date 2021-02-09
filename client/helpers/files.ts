@@ -1,5 +1,7 @@
 import {
+  BaseArgs,
   CreateFileRequest,
+  DeleteArgs,
   delay,
   encodeIfNotEncoded,
   FileMetadataData,
@@ -7,29 +9,20 @@ import {
   getBySuppliedId,
   getPage,
 } from '../..';
-import { BaseArgs } from '..';
 
-/**
- * Upload file arguments.
- */
+/** Upload file arguments. */
 interface UploadFileArgs extends BaseArgs {
+  /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
-  readonly fileData: unknown; // Buffer in Node
-}
 
-/**
- * Delete arguments.
- */
-interface DeleteArgs extends BaseArgs {
-  readonly pageSize?: number;
+  /** File data, use {@link Buffer} in Node. */
+  readonly fileData: unknown;
 }
 
 /**
  * Delete all files.
  *
- * @param client - The {@link VertexClient}.
- * @param pageSize - The page size used while fetching files.
- * @param verbose - Whether to print verbose log messages.
+ * @param args - The {@link DeleteArgs}.
  */
 export async function deleteAllFiles({
   client,
@@ -41,21 +34,17 @@ export async function deleteAllFiles({
     const res = await getPage(() =>
       client.files.getFiles({ pageCursor: cursor, pageSize })
     );
+    const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
-    await Promise.all(
-      res.page.data.map((p) => client.files.deleteFile({ id: p.id }))
-    );
-    if (verbose) console.log(`Deleted ${res.page.data.length} file(s)`);
+    await Promise.all(ids.map((id) => client.files.deleteFile({ id })));
+    if (verbose) console.log(`Deleted file(s) ${ids.join(', ')}`);
   } while (cursor);
 }
 
 /**
  * Create a file resource and upload a file if it doesn't already exist.
  *
- * @param client - The {@link VertexClient}.
- * @param createFileReq - The {@link CreateFileRequest}.
- * @param fileData - The file data, a `Buffer` in Node.
- * @param verbose - Whether to print verbose log messages.
+ * @param args - The {@link UploadFileArgs}.
  * @returns The {@link FileMetadataData}.
  */
 export async function uploadFileIfNotExists({
@@ -104,10 +93,7 @@ export async function uploadFileIfNotExists({
 /**
  * Create a file resource and upload a file.
  *
- * @param client - The {@link VertexClient}.
- * @param createFileReq - The {@link CreateFileRequest}.
- * @param fileData - The file data, a `Buffer` in Node.
- * @param verbose - Whether to print verbose log messages.
+ * @param args - The {@link UploadFileArgs}.
  * @returns The {@link FileMetadataData}.
  */
 export async function uploadFile({

@@ -1,14 +1,17 @@
 import { CreateSceneItemRequest, SceneItem } from '../..';
-import { Polling, pollQueuedJob, VertexClient } from '..';
+import { BaseArgs, Polling, pollQueuedJob } from '..';
 
 /**
  * Create scene item arguments.
  */
-interface CreateSceneItemArgs {
-  readonly client: VertexClient;
-  readonly verbose: boolean;
-  readonly sceneId: string;
+interface CreateSceneItemArgs extends BaseArgs {
+  /** Function returning a {@link CreateSceneItemRequest}. */
   readonly createSceneItemReq: () => CreateSceneItemRequest;
+
+  /** ID of scene to add scene items to. */
+  readonly sceneId: string;
+
+  /** {@link Polling} */
   readonly polling: Polling;
 }
 
@@ -17,23 +20,27 @@ interface CreateSceneItemArgs {
  *
  * @param args - The {@link CreateSceneItemArgs}.
  */
-export async function createSceneItem(
-  args: CreateSceneItemArgs
-): Promise<SceneItem> {
-  const res = await args.client.sceneItems.createSceneItem({
-    id: args.sceneId,
-    createSceneItemRequest: args.createSceneItemReq(),
+export async function createSceneItem({
+  client,
+  createSceneItemReq,
+  polling,
+  sceneId,
+  verbose,
+}: CreateSceneItemArgs): Promise<SceneItem> {
+  const res = await client.sceneItems.createSceneItem({
+    id: sceneId,
+    createSceneItemRequest: createSceneItemReq(),
   });
   const queuedId = res.data.data.id;
-  if (args.verbose)
+  if (verbose)
     console.log(`Created scene-item with queued-scene-item ${queuedId}`);
 
   const sceneItem = await pollQueuedJob<SceneItem>({
     id: queuedId,
-    getQueuedJob: (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
-    polling: args.polling,
+    getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
+    polling,
   });
-  if (args.verbose) console.log(`Created scene-item ${sceneItem.data.id}`);
+  if (verbose) console.log(`Created scene-item ${sceneItem.data.id}`);
 
   return sceneItem;
 }

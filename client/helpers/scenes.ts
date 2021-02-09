@@ -1,9 +1,11 @@
 import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
 import {
+  BaseArgs,
   CameraFitTypeEnum,
   CreateSceneItemRequest,
   CreateSceneRequest,
+  DeleteArgs,
   getPage,
   MaxAttempts,
   Polling,
@@ -16,37 +18,34 @@ import {
   SceneItem,
   SceneRelationshipDataTypeEnum,
   UpdateSceneRequestDataAttributesStateEnum,
-  VertexClient,
 } from '../..';
 
 /**
  * Create scene with scene items arguments.
  */
-interface CreateSceneWithSceneItemsArgs {
-  readonly client: VertexClient;
-  readonly parallelism: number;
-  readonly verbose: boolean;
-  readonly createSceneReq: () => CreateSceneRequest;
+interface CreateSceneWithSceneItemsArgs extends BaseArgs {
+  /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
+
+  /** Function returning a {@link CreateSceneRequest}. */
+  readonly createSceneReq: () => CreateSceneRequest;
+
+  /** How many requests to run in parallel. */
+  readonly parallelism: number;
+
+  /** {@link Polling} */
   readonly polling?: Polling;
 }
 
 /**
  * Poll scene ready arguments.
  */
-interface PollSceneReadyArgs {
-  readonly client: VertexClient;
+interface PollSceneReadyArgs extends BaseArgs {
+  /** ID of scene. */
   readonly id: string;
-  readonly polling?: Polling;
-}
 
-/**
- * Delete arguments.
- */
-interface DeleteArgs {
-  readonly client: VertexClient;
-  readonly pageSize?: number;
-  readonly verbose?: boolean;
+  /** {@link Polling} */
+  readonly polling?: Polling;
 }
 
 /**
@@ -55,31 +54,29 @@ interface DeleteArgs {
  * @param args - The {@link CreateSceneWithSceneItemsArgs}.
  * @returns The {@link SceneData}
  */
-export async function createSceneWithSceneItems(
-  args: CreateSceneWithSceneItemsArgs
-): Promise<SceneData> {
-  const createSceneRes = await args.client.scenes.createScene({
-    createSceneRequest: {
-      data: {
-        attributes: {},
-        type: SceneRelationshipDataTypeEnum.Scene,
-      },
-    },
+export async function createSceneWithSceneItems({
+  client,
+  createSceneItemReqs,
+  createSceneReq,
+  parallelism,
+  polling,
+  verbose,
+}: CreateSceneWithSceneItemsArgs): Promise<SceneData> {
+  const createSceneRes = await client.scenes.createScene({
+    createSceneRequest: createSceneReq(),
   });
   const sceneId = createSceneRes.data.data.id;
-  if (args.verbose) {
+  if (verbose) {
     console.log(`Created scene ${sceneId}`);
-    console.log(
-      `Creating ${args.createSceneItemReqs.length} queued-scene-items...`
-    );
+    console.log(`Creating ${createSceneItemReqs.length} queued-scene-items...`);
   }
 
-  const limit = pLimit(args.parallelism);
+  const limit = pLimit(parallelism);
   const responses = await Promise.all(
-    args.createSceneItemReqs.map((req) =>
+    createSceneItemReqs.map((req) =>
       limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
         (r: CreateSceneItemRequest) =>
-          args.client.sceneItems.createSceneItem({
+          client.sceneItems.createSceneItem({
             id: sceneId,
             createSceneItemRequest: r,
           }),
@@ -88,19 +85,19 @@ export async function createSceneWithSceneItems(
     )
   );
 
-  if (args.verbose)
+  if (verbose)
     console.log(`Created queued-scene-items. Polling for completion...`);
 
   await pollQueuedJob<SceneItem>({
     id: responses[responses.length - 1].data.data.id,
-    getQueuedJob: (id) => args.client.sceneItems.getQueuedSceneItem({ id }),
+    getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
     allow404: true,
-    polling: args.polling,
+    polling,
   });
 
-  if (args.verbose) console.log(`Committing scene and polling until ready...`);
+  if (verbose) console.log(`Committing scene and polling until ready...`);
 
-  await args.client.scenes.updateScene({
+  await client.scenes.updateScene({
     id: sceneId,
     updateSceneRequest: {
       data: {
@@ -111,15 +108,11 @@ export async function createSceneWithSceneItems(
       },
     },
   });
-  await pollSceneReady({
-    client: args.client,
-    id: sceneId,
-    polling: args.polling,
-  });
+  await pollSceneReady({ client, id: sceneId, polling, verbose });
 
-  if (args.verbose) console.log(`Fitting scene's camera to scene-items...`);
+  if (verbose) console.log(`Fitting scene's camera to scene-items...`);
 
-  const scene = await args.client.scenes.updateScene({
+  const scene = await client.scenes.updateScene({
     id: sceneId,
     updateSceneRequest: {
       data: {
@@ -149,10 +142,10 @@ export async function deleteAllScenes({
     const res = await getPage(() =>
       client.scenes.getScenes({ pageCursor: cursor, pageSize })
     );
-    const sceneIds = res.page.data.map((d) => d.id);
+    const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
-    await Promise.all(sceneIds.map((id) => client.scenes.deleteScene({ id })));
-    if (verbose) console.log(`Deleting scene(s) ${sceneIds.join(', ')}`);
+    await Promise.all(ids.map((id) => client.scenes.deleteScene({ id })));
+    if (verbose) console.log(`Deleting scene(s) ${ids.join(', ')}`);
   } while (cursor);
 }
 
@@ -197,15 +190,12 @@ export async function pollSceneReady({
  *
  * @param args - The {@link RenderImageArgs}.
  */
-export async function renderScene<T>(
-  args: RenderImageArgs
-): Promise<AxiosResponse<T>> {
-  return await args.client.scenes.renderScene(
-    {
-      id: args.renderReq.id,
-      height: args.renderReq.height,
-      width: args.renderReq.width,
-    },
+export async function renderScene<T>({
+  client,
+  renderReq: { id, height, width },
+}: RenderImageArgs): Promise<AxiosResponse<T>> {
+  return await client.scenes.renderScene(
+    { id, height, width },
     { responseType: 'stream' }
   );
 }

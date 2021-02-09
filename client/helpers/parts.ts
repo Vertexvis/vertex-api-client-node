@@ -1,9 +1,12 @@
 import { AxiosResponse } from 'axios';
 import {
+  BaseArgs,
   CreateFileRequest,
   CreatePartRequest,
+  DeleteArgs,
   encodeIfNotEncoded,
   getBySuppliedId,
+  getPage,
   head,
   Part,
   PartData,
@@ -15,39 +18,36 @@ import {
   prettyJson,
   RenderImageArgs,
   uploadFileIfNotExists,
-  VertexClient,
 } from '../..';
 
-/**
- * Create parts from file arguments.
- */
-interface CreatePartFromFileArgs {
-  readonly client: VertexClient;
+/** Create parts from file arguments. */
+interface CreatePartFromFileArgs extends BaseArgs {
+  /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
+
+  /** Function returning a {@link CreatePartRequest}. */
   readonly createPartReq: (fileId: string) => CreatePartRequest;
-  readonly fileData: unknown; // Use Buffer in Node
+
+  /** File data, use {@link Buffer} in Node. */
+  readonly fileData: unknown;
+
+  /** {@link Polling} */
   readonly polling?: Polling;
-  readonly verbose: boolean;
 }
 
-/**
- * Get part revision by supplied ID arguments.
- */
-interface GetPartRevisionBySuppliedIdArgs {
-  readonly client: VertexClient;
+/** Get part revision by supplied ID arguments. */
+interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
+  /** A supplied part ID. */
   readonly suppliedPartId: string;
+
+  /** A supplied part revision ID. */
   readonly suppliedRevisionId: string;
 }
 
 /**
  * Create part and file resources if they don't already exist.
  *
- * @param client - The {@link VertexClient}.
- * @param createFileReq - The {@link CreateFileRequest}.
- * @param createPartReq - A function returning a {@link CreatePartRequest}.
- * @param fileData - The file data, a `Buffer` in Node.
- * @param polling - The {@link Polling} configuration.
- * @param verbose - Whether to print verbose log messages.
+ * @param args - The {@link CreatePartFromFileArgs}.
  * @returns The {@link PartRevisionData}.
  */
 export async function createPartFromFileIfNotExists({
@@ -74,6 +74,7 @@ export async function createPartFromFileIfNotExists({
       client,
       suppliedPartId,
       suppliedRevisionId,
+      verbose,
     });
     if (existingPartRev) {
       if (verbose) {
@@ -115,11 +116,31 @@ export async function createPartFromFileIfNotExists({
 }
 
 /**
+ * Delete all parts.
+ *
+ * @param args - The {@link DeleteArgs}.
+ */
+export async function deleteAllParts({
+  client,
+  pageSize = 100,
+  verbose = false,
+}: DeleteArgs): Promise<void> {
+  let cursor: string | undefined;
+  do {
+    const res = await getPage(() =>
+      client.parts.getParts({ pageCursor: cursor, pageSize })
+    );
+    const ids = res.page.data.map((d) => d.id);
+    cursor = res.cursor;
+    await Promise.all(ids.map((id) => client.parts.deletePart({ id })));
+    if (verbose) console.log(`Deleting part(s) ${ids.join(', ')}`);
+  } while (cursor);
+}
+
+/**
  * Get a part revision by supplied ID.
  *
- * @param client - The {@link VertexClient}.
- * @param suppliedPartId - The supplied part ID.
- * @param suppliedRevisionId - A supplied revision ID.
+ * @param args - The {@link GetPartRevisionBySuppliedIdArgs}.
  * @returns The {@link PartRevisionData}.
  */
 export async function getPartRevisionBySuppliedId({
@@ -160,15 +181,12 @@ export async function getPartRevisionBySuppliedId({
  *
  * @param args - The {@link RenderImageArgs}.
  */
-export async function renderPartRevision<T>(
-  args: RenderImageArgs
-): Promise<AxiosResponse<T>> {
-  return await args.client.partRevisions.renderPartRevision(
-    {
-      id: args.renderReq.id,
-      height: args.renderReq.height,
-      width: args.renderReq.width,
-    },
+export async function renderPartRevision<T>({
+  client,
+  renderReq: { id, height, width },
+}: RenderImageArgs): Promise<AxiosResponse<T>> {
+  return await client.partRevisions.renderPartRevision(
+    { id, height, width },
     { responseType: 'stream' }
   );
 }
