@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.6.11",
+  "version": "0.7.0",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -51,7 +51,7 @@
     "@vertexvis/eslint-config-vertexvis-typescript": "^0.4",
     "eslint": "^7.19",
     "eslint-plugin-tsdoc": "^0.2",
-    "husky": "^4.3",
+    "husky": "^5.0",
     "jest": "^26.6",
     "lint-staged": "^10.5",
     "prettier": "^2.2",

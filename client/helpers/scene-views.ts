@@ -6,15 +6,12 @@ import { RenderImageArgs } from '../..';
  *
  * @param args - The {@link RenderImageArgs}.
  */
-export async function renderSceneView<T>(
-  args: RenderImageArgs
-): Promise<AxiosResponse<T>> {
-  return await args.client.sceneViews.renderSceneView(
-    {
-      id: args.renderReq.id,
-      height: args.renderReq.height,
-      width: args.renderReq.width,
-    },
+export async function renderSceneView<T>({
+  client,
+  renderReq: { id, height, width },
+}: RenderImageArgs): Promise<AxiosResponse<T>> {
+  return await client.sceneViews.renderSceneView(
+    { id, height, width },
     { responseType: 'stream' }
   );
 }

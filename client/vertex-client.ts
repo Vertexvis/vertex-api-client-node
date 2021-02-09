@@ -21,26 +21,46 @@ import {
   TranslationInspectionsApi,
 } from '..';
 
-type BaseOptions = Record<string, unknown>;
-
 /**
  * Static `build` function arguments.
  */
 interface BuildArgs {
+  /**
+   * A {@link AxiosRequestConfig}. For example, to use HTTP keep-alive in Node,
+   *
+   *  * @example
+   * ```typescript
+   * import { Agent } from 'https';from '@vertexvis/vertex-api-client';
+   *
+   * const main = async () => {
+   *   const client = await VertexClient.build({
+   *     axiosOptions: { httpsAgent: new Agent({ keepAlive: true }) }
+   *   });
+   * };
+   *
+   * main();
+   * ```
+   *
+   * @see {@link https://github.com/axios/axios#request-config|Axios request config} for details.
+   */
   readonly axiosOptions?: AxiosRequestConfig;
-  readonly baseOptions?: BaseOptions;
+
+  /** Base path to use, @see {@link BasePath}. */
   readonly basePath?: BasePath;
+
+  /** Your Vertex API client ID. */
   readonly clientId?: string;
+
+  /** Your Vertex API client secret. */
   readonly clientSecret?: string;
 }
 
 /**
- * `VertexClient` constructor arguments.
+ * {@link VertexClient} constructor arguments.
  */
 interface CtorArgs {
   readonly auth: Oauth2Api;
   readonly axiosOptions?: AxiosRequestConfig;
-  readonly baseOptions?: BaseOptions;
   readonly basePath: string;
   readonly token: OAuth2Token;
 }
@@ -52,7 +72,7 @@ const SecToMs = 1000;
  * The official API client for Vertex's API.
  *
  * @example
- * ```
+ * ```typescript
  * import {
  *   logError,
  *   prettyJson,
@@ -102,23 +122,16 @@ export class VertexClient {
   private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
 
-  private constructor({
-    auth,
-    axiosOptions,
-    baseOptions,
-    basePath,
-    token,
-  }: CtorArgs) {
+  private constructor({ auth, axiosOptions, basePath, token }: CtorArgs) {
     this.auth = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
     this.config = new Configuration({
       accessToken: this.accessTokenRefresher,
-      baseOptions,
       basePath,
     });
     this.axiosInstance = axios.create({
-      headers: { 'user-agent': `vertex-api-client-ts/0.6.9` },
+      headers: { 'user-agent': `vertex-api-client-ts/0.6.10` },
       ...axiosOptions,
     });
     this.axiosInstance.interceptors.response.use(
@@ -191,10 +204,8 @@ export class VertexClient {
    */
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
     const basePath = args?.basePath ?? `https://platform.vertexvis.com`;
-    const baseOptions = args?.baseOptions ?? {};
     const auth = new Oauth2Api(
       new Configuration({
-        baseOptions: createBaseOptions(baseOptions),
         basePath,
         username: args?.clientId ?? process?.env?.VERTEX_CLIENT_ID,
         password: args?.clientSecret ?? process?.env?.VERTEX_CLIENT_SECRET,
@@ -204,10 +215,9 @@ export class VertexClient {
     const token = await createToken(auth);
     return new VertexClient({
       auth,
-      baseOptions: createBaseOptions(baseOptions),
+      axiosOptions: createAxiosOptions(args?.axiosOptions),
       basePath,
       token,
-      axiosOptions: args?.axiosOptions,
     });
   };
 
@@ -226,13 +236,12 @@ export class VertexClient {
 }
 
 /**
- * Create base options to pass to `Configuration`.
+ * Create Axios client options.
  *
- * @see {@link https://github.com/axios/axios#request-config|Axios request config} for details.
- * @param args - {@link BaseOptions}.
- * @returns {@link BaseOptions} with defaults.
+ * @param args - {@link AxiosRequestConfig}.
+ * @returns {@link AxiosRequestConfig} with defaults.
  */
-function createBaseOptions(args: BaseOptions): BaseOptions {
+function createAxiosOptions(args?: AxiosRequestConfig): AxiosRequestConfig {
   return {
     validateStatus: (status: number) => status < 400,
     maxContentLength: Number.POSITIVE_INFINITY, // Rely on API's limit instead

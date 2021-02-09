@@ -14,13 +14,18 @@ export const Utf8 = 'utf8';
 const PageCursor = 'page[cursor]';
 const UnableToStringify = 'Unable to stringify';
 
-/**
- * Polling async queued job request arguments.
- */
+/** Polling async queued job request arguments. */
 interface PollQueuedJobArgs {
+  /** Queued job ID. */
   readonly id: string;
+
+  /** Function called to get queued job. */
   readonly getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
+
+  /** If `true`, doesn't fail if API returns 404 status code. */
   readonly allow404?: boolean;
+
+  /** {@link Polling} */
   readonly polling?: Polling;
 }
 
@@ -68,8 +73,8 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
 /**
  * Create an OAuth2 token.
  *
- * @param auth - `Oauth2Api`.
- * @returns `OAuth2Token` response body.
+ * @param auth - A {@link Oauth2Api}.
+ * @returns A {@link OAuth2Token} response body.
  */
 export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
   return (await auth.createToken({ grantType: 'client_credentials' })).data;
@@ -143,7 +148,7 @@ export async function getPage<
  * Group an array by the result of `getKey`.
  *
  * @param items - An array.
- * @param getKey - Function returning key to group by.
+ * @param getKey - Function returning key to group the array by.
  * @returns A 2D array.
  */
 export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
@@ -190,7 +195,7 @@ export function isEncoded(s: string): boolean {
 }
 
 /**
- * Log an Error produced by `vertex-api-client`.
+ * Log an Error produced by {@link VertexClient}.
  *
  * @param error: The error to log.
  * @param logger: The logger to use.
@@ -241,7 +246,7 @@ export function nowEpochMs(): number {
  * Parse the query parameters from a URL.
  *
  * @param url - A URL to parse.
- * @returns `ParsedUrlQuery` of query parameters.
+ * @returns A {@link ParsedUrlQuery} of query parameters.
  */
 export function parseUrl(url?: string): ParsedUrlQuery | undefined {
   if (url === undefined) return undefined;
@@ -255,14 +260,10 @@ export function parseUrl(url?: string): ParsedUrlQuery | undefined {
 }
 
 /**
- * Poll `getQueuedJob` until we're redirected to the resulting resource or
- * reach `polling.maxAttempts`.
+ * Poll `getQueuedJob` until redirected to resulting resource or reach
+ * `polling.maxAttempts`.
  *
- * @param id - Queued job ID.
- * @param getQueuedJob - Function called to get queued job.
- * @param allow404 - If `true`, doesn't fail if API returns 404 status code.
- * @param polling.intervalMs - How often to poll API in milliseconds.
- * @param polling.maxAttempts - Maximum number of polling attempts.
+ * @param args - {@link PollQueuedJobArgs}.
  * @returns The resulting resource.
  */
 export async function pollQueuedJob<T extends { data: { id: string } }>({
@@ -355,10 +356,10 @@ export function to4x4Transform(
 }
 
 /**
- * Convert a 2D array to a `Matrix4`.
+ * Convert a 2D array to a {@link Matrix4}.
  *
  * @param t - A 2D number array.
- * @returns A `Matrix4`.
+ * @returns A {@link Matrix4}.
  */
 export function toTransform(t: number[][]): Matrix4 {
   return {
