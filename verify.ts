@@ -1,6 +1,6 @@
 import { strictEqual } from 'assert';
 import { readFileSync } from 'fs';
-import { Configuration } from '.';
+import { Configuration } from './configuration';
 import { FilesApiAxiosParamCreator } from './api';
 
 verify();

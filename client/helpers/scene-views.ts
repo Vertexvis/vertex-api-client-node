@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { RenderImageArgs } from '../..';
+import { RenderImageArgs } from '../index';
 
 /**
  * Render a scene view.

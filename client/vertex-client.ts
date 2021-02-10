@@ -1,14 +1,10 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import {
-  BasePath,
   Configuration,
-  createToken,
   FilesApi,
   GeometrySetsApi,
   HitsApi,
-  nowEpochMs,
   PartRevisionsApi,
-  prettyJson,
   SceneAlterationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
@@ -20,7 +16,8 @@ import {
   PartsApi,
   ScenesApi,
   TranslationInspectionsApi,
-} from '..';
+} from '../index';
+import { BasePath, createToken, nowEpochMs, prettyJson } from './index';
 import { version } from './version';
 
 /**

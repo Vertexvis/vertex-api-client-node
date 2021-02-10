@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.7.3",
+  "version": "0.8.0",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -12,8 +12,9 @@
   "bugs": {
     "url": "https://github.com/Vertexvis/vertex-api-client-ts/issues"
   },
-  "main": "./dist/index.js",
-  "typings": "./dist/index.d.ts",
+  "main": "./dist/cjs/index.js",
+  "module": "./dist/esm/index.js",
+  "types": "./dist/esm/index.d.ts",
   "publishConfig": {
     "registry": "https://registry.npmjs.org",
     "access": "public"
@@ -29,7 +30,7 @@
     "typescript"
   ],
   "scripts": {
-    "build": "tsc --outDir dist/",
+    "build": "tsc --project tsconfig.json && tsc --project tsconfig-esm.json",
     "clean": "rm -rf dist/",
     "clean-build": "yarn clean && yarn build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
@@ -42,7 +43,7 @@
     "push:version": "./scripts/push_version.sh",
     "test": "jest",
     "test:func": "yarn clean-build && node dist/functional-test.js",
-    "verify": "yarn clean-build && yarn test && node dist/verify.js",
+    "verify": "yarn clean-build && yarn test && node dist/cjs/verify.js",
     "watch": "jest --watch"
   },
   "dependencies": {
