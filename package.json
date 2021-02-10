@@ -43,7 +43,7 @@
     "push:version": "./scripts/push_version.sh",
     "test": "jest",
     "test:func": "yarn clean-build && node dist/functional-test.js",
-    "verify": "yarn clean-build && yarn test && node dist/verify.js",
+    "verify": "yarn clean-build && yarn test && node dist/cjs/verify.js",
     "watch": "jest --watch"
   },
   "dependencies": {
