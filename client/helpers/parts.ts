@@ -1,24 +1,26 @@
 import { AxiosResponse } from 'axios';
 import {
-  BaseArgs,
   CreateFileRequest,
   CreatePartRequest,
-  DeleteArgs,
-  encodeIfNotEncoded,
-  getBySuppliedId,
-  getPage,
-  head,
   Part,
   PartData,
   PartList,
   PartRevisionData,
   PartRevisionList,
+} from '../../index';
+import {
+  BaseArgs,
+  DeleteArgs,
+  encodeIfNotEncoded,
+  getBySuppliedId,
+  getPage,
+  head,
   Polling,
   pollQueuedJob,
   prettyJson,
   RenderImageArgs,
   uploadFileIfNotExists,
-} from '../..';
+} from '../index';
 
 /** Create parts from file arguments. */
 interface CreatePartFromFileArgs extends BaseArgs {

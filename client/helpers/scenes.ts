@@ -1,24 +1,26 @@
 import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
 import {
-  BaseArgs,
   CameraFitTypeEnum,
   CreateSceneItemRequest,
   CreateSceneRequest,
+  QueuedJob,
+  Scene,
+  SceneData,
+  SceneItem,
+  SceneRelationshipDataTypeEnum,
+  UpdateSceneRequestDataAttributesStateEnum,
+} from '../../index';
+import {
+  BaseArgs,
   DeleteArgs,
   getPage,
   MaxAttempts,
   Polling,
   PollIntervalMs,
   pollQueuedJob,
-  QueuedJob,
   RenderImageArgs,
-  Scene,
-  SceneData,
-  SceneItem,
-  SceneRelationshipDataTypeEnum,
-  UpdateSceneRequestDataAttributesStateEnum,
-} from '../..';
+} from '../index';
 
 /**
  * Create scene with scene items arguments.

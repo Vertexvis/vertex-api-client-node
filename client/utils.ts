@@ -1,7 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { parse, ParsedUrlQuery } from 'querystring';
-import { Matrix4, Oauth2Api, OAuth2Token, Polling, QueuedJob } from '..';
+import { Matrix4, Oauth2Api, OAuth2Token, QueuedJob } from '../index';
 import { DUMMY_BASE_URL } from '../common';
+import { Polling } from './index';
 
 export const PollIntervalMs = 5000;
 

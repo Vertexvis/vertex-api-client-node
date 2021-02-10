@@ -1,5 +1,5 @@
-import { CreateSceneItemRequest, SceneItem } from '../..';
-import { BaseArgs, Polling, pollQueuedJob } from '..';
+import { CreateSceneItemRequest, SceneItem } from '../../index';
+import { BaseArgs, Polling, pollQueuedJob } from '../index';
 
 /**
  * Create scene item arguments.

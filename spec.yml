@@ -2490,8 +2490,7 @@ components:
           $ref: '#/components/schemas/SceneItemData'
         included:
           items:
-            oneOf:
-              - $ref: '#/components/schemas/SceneItemOverrideData'
+            $ref: '#/components/schemas/SceneItemOverrideData'
           type: array
         links:
           additionalProperties:
@@ -3048,9 +3047,10 @@ components:
       type: http
 externalDocs:
   description: Getting started guides
-  url: 'https://developer.vertexvis.com/docs/guides/getting-started'
+  url: 'https://developer.vertexvis.com/guides'
 info:
   contact:
+    email: support@vertexvis.com
     name: Vertex API support
     url: 'https://developer.vertexvis.com/docs/support'
   description: >
@@ -3059,8 +3059,7 @@ info:
     business application.
 
 
-    See our [Developer Portal
-    Guides](https://developer.vertexvis.com/docs/guides/getting-started/) to get
+    See our [Developer Guides](https://developer.vertexvis.com/guides) to get
     started.
 
 

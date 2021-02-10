@@ -1,10 +1,10 @@
-import { VertexClient } from '..';
+import { VertexClient } from './index';
 
 export * from './utils';
 
 export * from './vertex-client';
 
-export * from './helpers';
+export * from './helpers/index';
 
 /** Common helper arguments. */
 export interface BaseArgs {

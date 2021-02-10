@@ -1,14 +1,12 @@
+import { CreateFileRequest, FileMetadataData, FileList } from '../../index';
 import {
   BaseArgs,
-  CreateFileRequest,
   DeleteArgs,
   delay,
   encodeIfNotEncoded,
-  FileMetadataData,
-  FileList,
   getBySuppliedId,
   getPage,
-} from '../..';
+} from '../../client/index';
 
 /** Upload file arguments. */
 interface UploadFileArgs extends BaseArgs {
