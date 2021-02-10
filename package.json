@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/vertex-api-client",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "The Vertex platform API client for TypeScript and JavaScript.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -35,6 +35,7 @@
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
     "generate": "./scripts/generate.sh",
     "lint": "eslint . --ext .ts --config .eslintrc",
+    "postinstall": "husky install",
     "push:version": "./scripts/push_version.sh",
     "test": "jest",
     "test:func": "yarn clean-build && node dist/functional-test.js",
