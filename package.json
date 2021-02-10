@@ -36,6 +36,7 @@
     "generate": "./scripts/generate.sh",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postinstall": "husky install",
+    "version": "./scripts/version.sh",
     "push:version": "./scripts/push_version.sh",
     "test": "jest",
     "test:func": "yarn clean-build && node dist/functional-test.js",
