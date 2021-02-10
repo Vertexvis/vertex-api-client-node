@@ -21,6 +21,7 @@ import {
   ScenesApi,
   TranslationInspectionsApi,
 } from '..';
+import { version } from './version';
 
 /**
  * Static `build` function arguments.
@@ -133,7 +134,7 @@ export class VertexClient {
       basePath,
     });
     this.axiosInstance = axios.create({
-      headers: { 'user-agent': `vertex-api-client-ts/0.7.2` },
+      headers: { 'user-agent': `vertex-api-client-ts/${version}` },
       ...axiosOptions,
     });
     this.axiosInstance.interceptors.response.use(
