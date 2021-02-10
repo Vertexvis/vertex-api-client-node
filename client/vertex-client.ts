@@ -13,6 +13,7 @@ import {
   SceneItemOverridesApi,
   SceneItemsApi,
   SceneViewsApi,
+  SceneViewStatesApi,
   StreamKeysApi,
   Oauth2Api,
   OAuth2Token,
@@ -112,6 +113,7 @@ export class VertexClient {
   public sceneItems: SceneItemsApi;
   public scenes: ScenesApi;
   public sceneViews: SceneViewsApi;
+  public sceneViewStates: SceneViewStatesApi;
   public streamKeys: StreamKeysApi;
   public translationInspections: TranslationInspectionsApi;
 
@@ -131,7 +133,7 @@ export class VertexClient {
       basePath,
     });
     this.axiosInstance = axios.create({
-      headers: { 'user-agent': `vertex-api-client-ts/0.7.0` },
+      headers: { 'user-agent': `vertex-api-client-ts/0.7.2` },
       ...axiosOptions,
     });
     this.axiosInstance.interceptors.response.use(
@@ -180,6 +182,11 @@ export class VertexClient {
     );
     this.scenes = new ScenesApi(this.config, undefined, this.axiosInstance);
     this.sceneViews = new SceneViewsApi(
+      this.config,
+      undefined,
+      this.axiosInstance
+    );
+    this.sceneViewStates = new SceneViewStatesApi(
       this.config,
       undefined,
       this.axiosInstance
