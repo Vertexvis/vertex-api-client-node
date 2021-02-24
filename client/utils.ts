@@ -261,7 +261,7 @@ export function parseUrl(url?: string): ParsedUrlQuery | undefined {
 }
 
 /**
- * Poll `getQueuedJob` until redirected to resulting resource or reach
+ * Poll `getQueuedJob` until redirected to resulting resource, `error`, or reach
  * `polling.maxAttempts`.
  *
  * @param args - {@link PollQueuedJobArgs}.
@@ -271,7 +271,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   id,
   getQueuedJob,
   allow404 = false,
-  polling = {
+  polling: { intervalMs, maxAttempts } = {
     intervalMs: PollIntervalMs,
     maxAttempts: MaxAttempts,
   },
@@ -292,7 +292,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
             )
           );
         } else resolve(jobRes);
-      }, polling.intervalMs);
+      }, intervalMs);
     });
   };
 
@@ -300,9 +300,9 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   let res: AxiosResponse<T | QueuedJob> = await poll();
   while ((allow404 && res.status === 404) || res.data.data.id === id) {
     attempts++;
-    if (attempts > polling.maxAttempts)
+    if (attempts > maxAttempts)
       throw new Error(
-        `Polled queued item ${id} ${polling.maxAttempts} times, giving up.`
+        `Polled queued item ${id} ${maxAttempts} times, giving up.`
       );
     res = await poll();
   }
