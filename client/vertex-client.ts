@@ -47,10 +47,22 @@ interface BuildArgs {
   /** Base path to use, @see {@link BasePath}. */
   readonly basePath?: BasePath;
 
-  /** Your Vertex API client ID. */
+  /** Your Vertex API client ID and secret. */
+  readonly client?: {
+    readonly id?: string;
+    readonly secret?: string;
+  };
+
+  /**
+   * Your Vertex API client ID.
+   * @deprecated Use {@link client.id} instead.
+   */
   readonly clientId?: string;
 
-  /** Your Vertex API client secret. */
+  /**
+   * Your Vertex API client secret.
+   * @deprecated Use {@link client.secret} instead.
+   */
   readonly clientSecret?: string;
 }
 
@@ -216,8 +228,12 @@ export class VertexClient {
     const auth = new Oauth2Api(
       new Configuration({
         basePath,
-        username: args?.clientId ?? process?.env?.VERTEX_CLIENT_ID,
-        password: args?.clientSecret ?? process?.env?.VERTEX_CLIENT_SECRET,
+        username:
+          args?.client?.id ?? args?.clientId ?? process?.env?.VERTEX_CLIENT_ID,
+        password:
+          args?.client?.secret ??
+          args?.clientSecret ??
+          process?.env?.VERTEX_CLIENT_SECRET,
       })
     );
 
