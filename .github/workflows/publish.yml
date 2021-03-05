@@ -21,21 +21,11 @@ jobs:
     if: needs.detect-publish.outputs.publish == 1
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifact
-          path: dist
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
           registry-url: https://registry.npmjs.org
           scope: '@vertexvis'
-      - uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPMJS_ACCESS_TOKEN }}
@@ -43,6 +33,7 @@ jobs:
           REPOSITORY: ${{ github.repository }}
         run: |
           yarn install --frozen-lockfile
+          yarn verify
           ./scripts/publish.sh
 
   docs:
@@ -50,26 +41,17 @@ jobs:
     needs: [publish]
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/download-artifact@v2
-        with:
-          name: build-artifact
-          path: dist
       - uses: actions/setup-node@v1
         with:
           node-version: 14.x
           registry-url: https://registry.npmjs.org
           scope: '@vertexvis'
-      - uses: actions/cache@v2
-        with:
-          path: |
-            node_modules
-            */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/yarn.lock') }}
       - name: Publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           yarn install --frozen-lockfile
+          yarn verify
           yarn generate:docs
           git config user.name github-actions
           git config user.email github-actions@github.com
