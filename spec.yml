@@ -736,6 +736,12 @@ components:
           description: Whether or not to index metadata in the part file.
           example: false
           type: boolean
+        latestRevision:
+          description: >-
+            Whether or not to mark the revisions generated from uploading this
+            part as the latest revisions.
+          example: false
+          type: boolean
         name:
           description: Name to be used for the root part.
           example: 1/2in. Flat Washer
@@ -908,7 +914,10 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
-          description: 'Relationship to a `geometry-set`, `part-revision`, or `scene`.'
+            - $ref: '#/components/schemas/PartRelationship'
+          description: >-
+            Relationship to a `geometry-set`, `part-revision`, `part`, or
+            `scene`.
       type: object
     CreateSceneRequest:
       additionalProperties: false
@@ -1508,8 +1517,8 @@ components:
     Matrix4:
       additionalProperties: false
       description: >-
-        4x4 affine transformation matrix, see [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        4x4 affine transformation matrix, see [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.
       example:
         r0:
@@ -1550,8 +1559,8 @@ components:
     Matrix4Nullable:
       additionalProperties: false
       description: >-
-        4x4 affine transformation matrix, see [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        4x4 affine transformation matrix, see [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.
       example:
         r0:
@@ -1712,6 +1721,12 @@ components:
           example: '2020-01-01T12:00:00Z'
           format: date-time
           type: string
+        latestRevisionId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -1769,6 +1784,15 @@ components:
       required:
         - data
         - links
+      type: object
+    PartRelationship:
+      additionalProperties: false
+      description: Relationship to a `part`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartRelationshipData'
+      required:
+        - data
       type: object
     PartRelationshipData:
       additionalProperties: false
@@ -2286,6 +2310,7 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
+            - $ref: '#/components/schemas/PartRelationship'
       type: object
     SceneItemList:
       additionalProperties: false
@@ -3058,7 +3083,7 @@ components:
       type: http
 externalDocs:
   description: Getting started guides
-  url: 'https://developer.vertexvis.com/guides'
+  url: 'https://developer.vertexvis.com/docs/guides/render-your-first-scene'
 info:
   contact:
     email: support@vertexvis.com
@@ -3070,8 +3095,9 @@ info:
     business application.
 
 
-    See our [Developer Guides](https://developer.vertexvis.com/guides) to get
-    started.
+    See our [Developer
+    Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene)
+    to get started.
 
 
     Notes about the Postman collection and API Reference code samples,
@@ -3165,8 +3191,9 @@ paths:
       description: >+
 
         Create a `file`. Once created, upload file content via the uploadFile
-        API. For details including supported file formats, see our [Importing
-        data](https://developer.vertexvis.com/docs/guides/importing-data) guide.
+        API. For details including supported file formats, see our [Import
+        data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
+        guide.
 
 
         ###### Body Params
@@ -3520,8 +3547,9 @@ paths:
       description: >+
 
         Create a `geometry-set`. Once created, create scenes via the createScene
-        API. For details, see our [Importing
-        data](https://developer.vertexvis.com/docs/guides/importing-data) guide.
+        API. For details, see our [Import
+        data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
+        guide.
 
 
         ###### Body Params
@@ -3739,6 +3767,71 @@ paths:
       tags:
         - oauth2
   '/part-revisions/{id}':
+    delete:
+      description: |+
+
+        Delete a `part-revision`.
+
+      operationId: deletePartRevision
+      parameters:
+        - description: The `part-revision` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-revisions
     get:
       description: |+
 
@@ -4100,8 +4193,9 @@ paths:
 
         Create a `part`. This API is asynchronous, returning the location of a
         `queued-translation`. Check the status via the getQueuedTranslation API.
-        For details, see our [Importing
-        data](https://developer.vertexvis.com/docs/guides/importing-data) guide.
+        For details, see our [Import
+        data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
+        guide.
 
 
         ###### Body Params
@@ -4117,6 +4211,9 @@ paths:
 
         |▹▹ indexMetadata|boolean|false|Whether or not to index metadata in the
         part file.|
+
+        |▹▹ latestRevision|boolean|false|Whether or not to mark the revisions
+        generated from uploading this part as the latest revisions.|
 
         |▹▹ name|string|false|Name to be used for the root part.|
 
@@ -4500,6 +4597,71 @@ paths:
         - OAuth2: []
       tags:
         - parts
+  '/queued-part-revision-deletions/{id}':
+    get:
+      description: |+
+
+        Get a `queued-part-revision-deletion` by ID.
+
+      operationId: getQueuedPartRevisionDeletion
+      parameters:
+        - description: The `queued-part-revision-deletion` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '301':
+          description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: Unauthorized
+                    status: '401'
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: NotFound
+                    status: '404'
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - code: UnsupportedMediaType
+                    status: '415'
+                    title: >-
+                      The provided media type is not supported. Update the
+                      Content-Type header to application/vnd.api+json and try
+                      again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-revisions
   '/queued-scene-alterations/{id}':
     get:
       description: |+
@@ -4572,8 +4734,8 @@ paths:
         Get a `queued-scene-item`. The response is either the status if
         `running` or `error` or, upon completion, redirects to the created
         `scene-item`. Once created, commit the scene via the updateScene API.
-        For details, see our [Rendering
-        scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
+        For details, see our [Render static
+        scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
 
       operationId: getQueuedSceneItem
@@ -4707,8 +4869,8 @@ paths:
         Get a `queued-translation`. The response is either the status if
         `running` or `error` or, upon completion, redirects to the created
         `part-revision`. Once created, create scenes via the createScene API.
-        For details, see our [Rendering
-        scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
+        For details, see our [Render static
+        scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
 
       operationId: getQueuedTranslation
@@ -4934,8 +5096,8 @@ paths:
         describing how a material looks.|
 
         |▹▹ transform|Matrix4Nullable¦null|false|4x4 affine transformation
-        matrix, see [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        matrix, see [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.|
 
         |▹▹▹ r0|Vector4|true|4D vector.|
@@ -5210,8 +5372,8 @@ paths:
         |▹▹ name|string|false||
 
         |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see
-        [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.|
 
         |▹▹▹ r0|Vector4|true|4D vector.|
@@ -6010,8 +6172,8 @@ paths:
         |▹▹▹▹ *anonymous*|ChangeTransformOperation|false||
 
         |▹▹▹▹▹ transform|Matrix4|true|4x4 affine transformation matrix, see
-        [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.|
 
         |▹▹▹▹▹▹ r0|Vector4|true|4D vector.|
@@ -6260,8 +6422,8 @@ paths:
         material looks.|
 
         |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see
-        [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.|
 
         |▹▹▹ r0|Vector4|true|4D vector.|
@@ -6535,8 +6697,8 @@ paths:
       description: >+
 
         Create a `scene`. Once created, add scene items via the createSceneItem
-        API. For details, see our [Rendering
-        scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
+        API. For details, see our [Render static
+        scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
 
 
@@ -6766,9 +6928,9 @@ paths:
       description: >+
 
         Update a `scene` camera and/or state. Once updated, view the scene via
-        the renderScene API or with the Viewer SDK. For details, see our
-        [Rendering
-        scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
+        the renderScene API or with the Viewer SDK. For details, see our [Render
+        static
+        scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
 
 
@@ -7242,8 +7404,8 @@ paths:
 
         This API is asynchronous, returning the location of a
         `queued-scene-item`. Check the status via the getQueuedSceneItem API.
-        For details, see our [Rendering
-        scenes](https://developer.vertexvis.com/docs/guides/rendering-scenes)
+        For details, see our [Render static
+        scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
 
 
@@ -7296,8 +7458,8 @@ paths:
         existing ID from a PLM system.|
 
         |▹▹ transform|Matrix4|false|4x4 affine transformation matrix, see
-        [Transformation
-        Matrices](https://developer.vertexvis.com/docs/guides/rendering-scenes#transformation-matrices)
+        [Matrix
+        transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
         for details.|
 
         |▹▹▹ r0|Vector4|true|4D vector.|
@@ -7329,7 +7491,7 @@ paths:
         |▹▹▹▹ type|enum(scene-item)|true|Resource object type.|
 
         |▹▹ source|any|false|Relationship to a `geometry-set`, `part-revision`,
-        or `scene`.|
+        `part`, or `scene`.|
 
         |▹▹▹ *anonymous*|GeometrySetRelationship|false|Relationship to a
         `geometry-set`.|
@@ -7356,6 +7518,14 @@ paths:
         |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
 
         |▹▹▹▹▹ type|enum(scene)|true|Resource object type.|
+
+        |▹▹▹ *anonymous*|PartRelationship|false|Relationship to a `part`.|
+
+        |▹▹▹▹ data|PartRelationshipData|true||
+
+        |▹▹▹▹▹ id|string(uuid)|true|ID of the resource.|
+
+        |▹▹▹▹▹ type|enum(part)|true|Resource object type.|
 
         |▹ type|string|true|Resource object type.|
 

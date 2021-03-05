@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck source=./utils.sh
 . "$(pwd)"/scripts/utils.sh
 
@@ -10,8 +10,4 @@ version=v$(get_version)
 
 git fetch --tags
 
-if test -z "$(git tag --list "$version")"; then
-  echo 1
-else
-  echo 0
-fi
+if test -z "$(git tag --list "$version")"; then echo 1; else echo 0; fi

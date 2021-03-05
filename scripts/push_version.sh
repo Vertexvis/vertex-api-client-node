@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # shellcheck source=./utils.sh
 . "$(pwd)"/scripts/utils.sh
 set -o errexit -o noclobber -o nounset
