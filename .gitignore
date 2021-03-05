@@ -1,7 +1,6 @@
 .husky/
 .lib/
 dist/
-docs/
 functional-test.ts
 node_modules/
 wwwroot/*.js
