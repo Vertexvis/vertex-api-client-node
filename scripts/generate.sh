@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 set -o errexit -o nounset
 
 yarn clean
@@ -15,5 +15,7 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest gen
 sed -i "" "s/, COLLECTION_FORMATS, /, /" api.ts
 sed -i "" "s/, setApiKeyToObject, /, /" api.ts
 sed -i "" "s/, setBearerAuthToObject, /, /" api.ts
+
+yarn generate:docs
 
 yarn format

@@ -1,0 +1,13 @@
+{
+  "name": "Vertex API Client",
+  "entryPoints": ["./index.ts"],
+  "theme": "minimal",
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "includeVersion": false,
+  "gitRevision": "master",
+  "hideGenerator": true,
+  "readme": "none",
+  "out": "docs"
+}
