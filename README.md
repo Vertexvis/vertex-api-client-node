@@ -1,6 +1,3 @@
-<!-- DO NOT EDIT THE README.md DIRECTLY. THIS FILE IS AUTO-GENERATED. -->
-<!-- INSTEAD EDIT README.template.md -->
-
 # Vertex API Client
 
 [![Version](https://img.shields.io/npm/v/@vertexvis/vertex-api-client.svg)](https://www.npmjs.com/package/@vertexvis/vertex-api-client)

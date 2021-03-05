@@ -35,7 +35,7 @@
     "clean-build": "yarn clean && yarn build",
     "format": "prettier --write './**/*.+(js|jsx|ts|tsx|json|yml|yaml|md|mdx|html|css)'",
     "generate": "./scripts/generate.sh",
-    "generate:docs": "./scripts/generate_docs.sh && typedoc --tsconfig tsconfig.json",
+    "generate:docs": "typedoc --tsconfig tsconfig.json",
     "lint": "eslint . --ext .ts --config .eslintrc",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
