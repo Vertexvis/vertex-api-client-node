@@ -11,6 +11,9 @@ export interface BaseArgs {
   /** An instance of {@link VertexClient}. */
   readonly client: VertexClient;
 
+  /** Callback to log progress. */
+  readonly onMsg?: (msg: string) => void;
+
   /** Whether or not to include verbose log messages. */
   readonly verbose: boolean;
 }

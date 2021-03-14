@@ -62,23 +62,19 @@ export async function createSceneWithSceneItems({
   client,
   createSceneItemReqs,
   createSceneReq,
+  onMsg = console.log,
+  onProgress,
   parallelism,
   polling,
   verbose,
-  onProgress,
 }: CreateSceneWithSceneItemsArgs): Promise<SceneData> {
-  const createSceneRes = await client.scenes.createScene({
-    createSceneRequest: createSceneReq(),
-  });
-  const sceneId = createSceneRes.data.data.id;
-  const total = createSceneItemReqs.length;
-  if (verbose) {
-    console.log(`Created scene ${sceneId}`);
-    console.log(`Creating ${total} queued-scene-items...`);
-  }
-
-  let complete = 0;
+  const sceneId = (
+    await client.scenes.createScene({
+      createSceneRequest: createSceneReq(),
+    })
+  ).data.data.id;
   const limit = pLimit(parallelism);
+  let complete = 0;
   const responses = await Promise.all(
     createSceneItemReqs.map((req) =>
       limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
@@ -87,16 +83,14 @@ export async function createSceneWithSceneItems({
             id: sceneId,
             createSceneItemRequest: r,
           });
-          if (onProgress) onProgress((complete += 1), total);
+          if (onProgress)
+            onProgress((complete += 1), createSceneItemReqs.length);
           return res;
         },
         req
       )
     )
   );
-
-  if (verbose)
-    console.log(`Created queued-scene-items. Polling for completion...`);
 
   await pollQueuedJob<SceneItem>({
     id: responses[responses.length - 1].data.data.id,
@@ -105,7 +99,7 @@ export async function createSceneWithSceneItems({
     polling,
   });
 
-  if (verbose) console.log(`Committing scene and polling until ready...`);
+  if (verbose) onMsg(`Committing scene and polling until ready...`);
 
   await client.scenes.updateScene({
     id: sceneId,
@@ -118,9 +112,9 @@ export async function createSceneWithSceneItems({
       },
     },
   });
-  await pollSceneReady({ client, id: sceneId, polling, verbose });
+  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
 
-  if (verbose) console.log(`Fitting scene's camera to scene-items...`);
+  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
 
   const scene = await client.scenes.updateScene({
     id: sceneId,
@@ -145,8 +139,8 @@ export async function createSceneWithSceneItems({
 export async function deleteAllScenes({
   client,
   pageSize = 100,
-  verbose = false,
-}: DeleteArgs): Promise<void> {
+}: DeleteArgs): Promise<SceneData[]> {
+  let scenes: SceneData[] = [];
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -155,8 +149,10 @@ export async function deleteAllScenes({
     const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.scenes.deleteScene({ id })));
-    if (verbose) console.log(`Deleting scene(s) ${ids.join(', ')}`);
+    scenes = scenes.concat(res.page.data);
   } while (cursor);
+
+  return scenes;
 }
 
 /**
