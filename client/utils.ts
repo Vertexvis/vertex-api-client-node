@@ -139,7 +139,9 @@ export async function getPage<
 ): Promise<{ page: T; cursor?: string }> {
   const page = (await getListing()).data;
   const next = parseUrl(page.links.next?.href);
-  const nextCursor = next ? next[PageCursor] : undefined;
+  const nextCursor = next
+    ? next[PageCursor] ?? next[`?${PageCursor}`]
+    : undefined;
   return {
     page,
     cursor: Array.isArray(nextCursor) ? nextCursor[0] : nextCursor,
