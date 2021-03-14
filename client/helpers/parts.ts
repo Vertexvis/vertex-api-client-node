@@ -37,21 +37,6 @@ export interface CreatePartFromFileArgs extends BaseArgs {
   readonly polling?: Polling;
 }
 
-/** Create parts from files arguments. */
-export interface CreatePartsFromFilesArgs extends BaseArgs {
-  /** A {@link CreateFileRequest}. */
-  readonly createFileReq: CreateFileRequest;
-
-  /** Function returning a {@link CreatePartRequest}. */
-  readonly createPartReq: (fileId: string) => CreatePartRequest;
-
-  /** File data, use {@link Buffer} in Node. */
-  readonly fileData: unknown;
-
-  /** {@link Polling} */
-  readonly polling?: Polling;
-}
-
 /** Get part revision by supplied ID arguments. */
 export interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
   /** A supplied part ID. */
