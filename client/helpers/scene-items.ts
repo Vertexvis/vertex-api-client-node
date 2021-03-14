@@ -4,7 +4,7 @@ import { BaseArgs, Polling, pollQueuedJob } from '../index';
 /**
  * Create scene item arguments.
  */
-interface CreateSceneItemArgs extends BaseArgs {
+export interface CreateSceneItemArgs extends BaseArgs {
   /** Function returning a {@link CreateSceneItemRequest}. */
   readonly createSceneItemReq: () => CreateSceneItemRequest;
 

@@ -1474,8 +1474,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/QueuedJob'
           description: OK
-        '301':
-          description: Moved Permanently
         '401':
           content:
             application/vnd.api+json:
@@ -1535,8 +1533,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/QueuedJob'
           description: OK
-        '301':
-          description: Moved Permanently
         '401':
           content:
             application/vnd.api+json:
@@ -2533,6 +2529,65 @@ paths:
           description: OK
         '301':
           description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-items
+  /queued-scene-item-deletions/{id}:
+    get:
+      description: Get a `queued-scene-item-deletion` by ID.
+      operationId: getQueuedSceneItemDeletion
+      parameters:
+        - description: The `queued-scene-item-deletion` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
         '401':
           content:
             application/vnd.api+json:
@@ -5622,15 +5677,6 @@ components:
       required:
         - data
       type: object
-    PartRelationship:
-      additionalProperties: false
-      description: Relationship to a `part`.
-      properties:
-        data:
-          $ref: '#/components/schemas/PartRelationshipData'
-      required:
-        - data
-      type: object
     Camera:
       additionalProperties: false
       description: Camera placement in 3D space.
@@ -6301,12 +6347,6 @@ components:
           example: RevisionId
           maxLength: 255
           type: string
-        latestRevision:
-          description:
-            Whether or not to mark the revisions generated from uploading
-            this part as the latest revisions.
-          example: false
-          type: boolean
       type: object
     CreatePartRequest_data:
       properties:
@@ -6490,10 +6530,7 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
-            - $ref: '#/components/schemas/PartRelationship'
-          description:
-            Relationship to a `geometry-set`, `part-revision`, `part`,
-            or `scene`.
+          description: Relationship to a `geometry-set`, `part-revision`, or `scene`.
       type: object
     CreateSceneItemRequest_data:
       properties:
@@ -6890,7 +6927,6 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
-            - $ref: '#/components/schemas/PartRelationship'
         parent:
           $ref: '#/components/schemas/SceneItemRelationship'
       type: object
@@ -6932,12 +6968,6 @@ components:
         created:
           example: 2020-01-01T12:00:00Z
           format: date-time
-          type: string
-        latestRevisionId:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
           type: string
       required:
         - created

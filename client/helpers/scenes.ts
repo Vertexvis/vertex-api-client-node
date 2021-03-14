@@ -25,7 +25,7 @@ import {
 /**
  * Create scene with scene items arguments.
  */
-interface CreateSceneWithSceneItemsArgs extends BaseArgs {
+export interface CreateSceneWithSceneItemsArgs extends BaseArgs {
   /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
 
@@ -37,12 +37,15 @@ interface CreateSceneWithSceneItemsArgs extends BaseArgs {
 
   /** {@link Polling} */
   readonly polling?: Polling;
+
+  /** Callback with total number of requests and number complete. */
+  onProgress?: (complete: number, total: number) => void;
 }
 
 /**
  * Poll scene ready arguments.
  */
-interface PollSceneReadyArgs extends BaseArgs {
+export interface PollSceneReadyArgs extends BaseArgs {
   /** ID of scene. */
   readonly id: string;
 
@@ -54,7 +57,6 @@ interface PollSceneReadyArgs extends BaseArgs {
  * Create a scene with scene items.
  *
  * @param args - The {@link CreateSceneWithSceneItemsArgs}.
- * @returns The {@link SceneData}
  */
 export async function createSceneWithSceneItems({
   client,
@@ -63,25 +65,31 @@ export async function createSceneWithSceneItems({
   parallelism,
   polling,
   verbose,
+  onProgress,
 }: CreateSceneWithSceneItemsArgs): Promise<SceneData> {
   const createSceneRes = await client.scenes.createScene({
     createSceneRequest: createSceneReq(),
   });
   const sceneId = createSceneRes.data.data.id;
+  const total = createSceneItemReqs.length;
   if (verbose) {
     console.log(`Created scene ${sceneId}`);
-    console.log(`Creating ${createSceneItemReqs.length} queued-scene-items...`);
+    console.log(`Creating ${total} queued-scene-items...`);
   }
 
+  let complete = 0;
   const limit = pLimit(parallelism);
   const responses = await Promise.all(
     createSceneItemReqs.map((req) =>
       limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
-        (r: CreateSceneItemRequest) =>
-          client.sceneItems.createSceneItem({
+        async (r: CreateSceneItemRequest) => {
+          const res = await client.sceneItems.createSceneItem({
             id: sceneId,
             createSceneItemRequest: r,
-          }),
+          });
+          if (onProgress) onProgress((complete += 1), total);
+          return res;
+        },
         req
       )
     )
@@ -155,7 +163,6 @@ export async function deleteAllScenes({
  * Poll a scene until it reaches the ready state.
  *
  * @param args - The {@link PollSceneReadyArgs}.
- * @returns The {@link Scene}
  */
 export async function pollSceneReady({
   client,
@@ -176,7 +183,7 @@ export async function pollSceneReady({
   let attempts = 1;
   let scene = await poll();
   while (scene.data.attributes.state !== 'ready') {
-    attempts++;
+    attempts += 1;
     if (attempts > polling.maxAttempts)
       throw new Error(
         `Polled scene ${id} ${polling.maxAttempts} times, giving up.`

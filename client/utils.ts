@@ -1,4 +1,4 @@
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import { parse, ParsedUrlQuery } from 'querystring';
 import { Matrix4, Oauth2Api, OAuth2Token, QueuedJob } from '../index';
 import { DUMMY_BASE_URL } from '../common';
@@ -12,11 +12,13 @@ export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 
 export const Utf8 = 'utf8';
 
+type VertexError = Error & { vertexErrorMessage?: string };
+
 const PageCursor = 'page[cursor]';
 const UnableToStringify = 'Unable to stringify';
 
 /** Polling async queued job request arguments. */
-interface PollQueuedJobArgs {
+export interface PollQueuedJobArgs {
   /** Queued job ID. */
   readonly id: string;
 
@@ -51,7 +53,7 @@ export function arrayEq(a: number[], b: number[]): boolean {
 export function arrayEq2d(a: number[][], b: number[][]): boolean {
   if (!arrayLenEq(a, b)) return false;
 
-  for (let i = 0; i < a.length; i++) if (!arrayEq(a[i], b[i])) return false;
+  for (let i = 0; i < a.length; i += 1) if (!arrayEq(a[i], b[i])) return false;
 
   return true;
 }
@@ -75,7 +77,6 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
  * Create an OAuth2 token.
  *
  * @param auth - A {@link Oauth2Api}.
- * @returns A {@link OAuth2Token} response body.
  */
 export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
   return (await auth.createToken({ grantType: 'client_credentials' })).data;
@@ -203,15 +204,19 @@ export function isEncoded(s: string): boolean {
  * @returns `true` if URI encoded.
  */
 export function logError(
-  error: Error & { vertexErrorMessage?: string },
+  error: VertexError | AxiosError,
   logger: (input: Error | string) => void = console.error
 ): void {
-  if (
-    error.vertexErrorMessage &&
-    !error.vertexErrorMessage.startsWith(UnableToStringify)
-  )
-    logger(error.vertexErrorMessage);
-  else logger(error);
+  if (isVertexError(error)) {
+    if (
+      error.vertexErrorMessage &&
+      !error.vertexErrorMessage.startsWith(UnableToStringify)
+    ) {
+      logger(error.vertexErrorMessage);
+    } else logger(error);
+  } else if (error.response?.data) {
+    logger(prettyJson(error.response?.data));
+  } else logger(error);
 }
 
 /**
@@ -247,7 +252,6 @@ export function nowEpochMs(): number {
  * Parse the query parameters from a URL.
  *
  * @param url - A URL to parse.
- * @returns A {@link ParsedUrlQuery} of query parameters.
  */
 export function parseUrl(url?: string): ParsedUrlQuery | undefined {
   if (url === undefined) return undefined;
@@ -299,7 +303,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   let attempts = 1;
   let res: AxiosResponse<T | QueuedJob> = await poll();
   while ((allow404 && res.status === 404) || res.data.data.id === id) {
-    attempts++;
+    attempts += 1;
     if (attempts > maxAttempts)
       throw new Error(
         `Polled queued item ${id} ${maxAttempts} times, giving up.`
@@ -360,7 +364,6 @@ export function to4x4Transform(
  * Convert a 2D array to a {@link Matrix4}.
  *
  * @param t - A 2D number array.
- * @returns A {@link Matrix4}.
  */
 export function toTransform(t: number[][]): Matrix4 {
   return {
@@ -383,4 +386,10 @@ function arrayLenEq(
   b: number[] | number[][]
 ): boolean {
   return Array.isArray(a) && Array.isArray(b) && a.length === b.length;
+}
+
+function isVertexError(
+  error: VertexError | AxiosResponse
+): error is VertexError {
+  return (error as VertexError).vertexErrorMessage !== undefined;
 }

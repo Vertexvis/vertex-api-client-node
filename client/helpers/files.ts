@@ -9,11 +9,11 @@ import {
 } from '../../client/index';
 
 /** Upload file arguments. */
-interface UploadFileArgs extends BaseArgs {
+export interface UploadFileArgs extends BaseArgs {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  /** File data, use {@link Buffer} in Node. */
+  /** File data, use {@link Buffer} or {@link ReadStream} in Node. */
   readonly fileData: unknown;
 }
 
@@ -43,7 +43,6 @@ export async function deleteAllFiles({
  * Create a file resource and upload a file if it doesn't already exist.
  *
  * @param args - The {@link UploadFileArgs}.
- * @returns The {@link FileMetadataData}.
  */
 export async function uploadFileIfNotExists({
   client,
@@ -74,7 +73,6 @@ export async function uploadFileIfNotExists({
 
       return existingFile;
     } else {
-      // TODO: Temporary until we can resume file uploads
       if (verbose) {
         console.log(
           `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.attributes.status}, ${fileId}`
@@ -92,7 +90,6 @@ export async function uploadFileIfNotExists({
  * Create a file resource and upload a file.
  *
  * @param args - The {@link UploadFileArgs}.
- * @returns The {@link FileMetadataData}.
  */
 export async function uploadFile({
   client,

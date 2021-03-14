@@ -23,7 +23,22 @@ import {
 } from '../index';
 
 /** Create parts from file arguments. */
-interface CreatePartFromFileArgs extends BaseArgs {
+export interface CreatePartFromFileArgs extends BaseArgs {
+  /** A {@link CreateFileRequest}. */
+  readonly createFileReq: CreateFileRequest;
+
+  /** Function returning a {@link CreatePartRequest}. */
+  readonly createPartReq: (fileId: string) => CreatePartRequest;
+
+  /** File data, use {@link Buffer} in Node. */
+  readonly fileData: unknown;
+
+  /** {@link Polling} */
+  readonly polling?: Polling;
+}
+
+/** Create parts from files arguments. */
+export interface CreatePartsFromFilesArgs extends BaseArgs {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
@@ -38,7 +53,7 @@ interface CreatePartFromFileArgs extends BaseArgs {
 }
 
 /** Get part revision by supplied ID arguments. */
-interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
+export interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
   /** A supplied part ID. */
   readonly suppliedPartId: string;
 
@@ -50,7 +65,6 @@ interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
  * Create part and file resources if they don't already exist.
  *
  * @param args - The {@link CreatePartFromFileArgs}.
- * @returns The {@link PartRevisionData}.
  */
 export async function createPartFromFileIfNotExists({
   client,
@@ -143,14 +157,12 @@ export async function deleteAllParts({
  * Get a part revision by supplied ID.
  *
  * @param args - The {@link GetPartRevisionBySuppliedIdArgs}.
- * @returns The {@link PartRevisionData}.
  */
 export async function getPartRevisionBySuppliedId({
   client,
   suppliedPartId,
   suppliedRevisionId,
 }: GetPartRevisionBySuppliedIdArgs): Promise<PartRevisionData | undefined> {
-  // TODO: Update once filtering by part and part-revision suppliedIds supported
   const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
       client.parts.getParts({
