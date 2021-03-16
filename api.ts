@@ -567,12 +567,6 @@ export interface CreatePartRequestDataAttributes {
    * @memberof CreatePartRequestDataAttributes
    */
   suppliedRevisionIdKey?: string;
-  /**
-   * Whether or not to mark the revisions generated from uploading this part as the latest revisions.
-   * @type {boolean}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  latestRevision?: boolean;
 }
 /**
  *
@@ -801,15 +795,14 @@ export interface CreateSceneItemRequestDataRelationships {
    */
   parent?: SceneItemRelationship;
   /**
-   * Relationship to a `geometry-set`, `part-revision`, `part`, or `scene`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRelationship}
+   * Relationship to a `geometry-set`, `part-revision`, or `scene`.
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
    * @memberof CreateSceneItemRequestDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
-    | SceneRelationship
-    | PartRelationship;
+    | SceneRelationship;
 }
 /**
  *
@@ -1902,12 +1895,6 @@ export interface PartDataAttributes {
    * @memberof PartDataAttributes
    */
   created: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PartDataAttributes
-   */
-  latestRevisionId?: string;
 }
 /**
  *
@@ -1968,19 +1955,6 @@ export interface PartList {
    * @memberof PartList
    */
   links: { [key: string]: Link };
-}
-/**
- * Relationship to a `part`.
- * @export
- * @interface PartRelationship
- */
-export interface PartRelationship {
-  /**
-   *
-   * @type {PartRelationshipData}
-   * @memberof PartRelationship
-   */
-  data: PartRelationshipData;
 }
 /**
  *
@@ -2737,14 +2711,13 @@ export interface SceneItemDataAttributes {
 export interface SceneItemDataRelationships {
   /**
    *
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRelationship}
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
    * @memberof SceneItemDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
-    | SceneRelationship
-    | PartRelationship;
+    | SceneRelationship;
   /**
    *
    * @type {SceneItemRelationship}
@@ -8707,6 +8680,60 @@ export const SceneItemsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Get a `queued-scene-item-deletion` by ID.
+     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedSceneItemDeletion: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getQueuedSceneItemDeletion', 'id', id);
+      const localVarPath = `/queued-scene-item-deletions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
@@ -9004,6 +9031,29 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Get a `queued-scene-item-deletion` by ID.
+     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedSceneItemDeletion(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneItemDeletion(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
@@ -9146,6 +9196,20 @@ export const SceneItemsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Get a `queued-scene-item-deletion` by ID.
+     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedSceneItemDeletion(
+      id: string,
+      options?: any
+    ): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .getQueuedSceneItemDeletion(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
      * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
@@ -9257,6 +9321,20 @@ export interface SceneItemsApiGetQueuedSceneItemRequest {
    * The &#x60;queued-scene-item&#x60; ID.
    * @type {string}
    * @memberof SceneItemsApiGetQueuedSceneItem
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedSceneItemDeletion operation in SceneItemsApi.
+ * @export
+ * @interface SceneItemsApiGetQueuedSceneItemDeletionRequest
+ */
+export interface SceneItemsApiGetQueuedSceneItemDeletionRequest {
+  /**
+   * The &#x60;queued-scene-item-deletion&#x60; ID.
+   * @type {string}
+   * @memberof SceneItemsApiGetQueuedSceneItemDeletion
    */
   readonly id: string;
 }
@@ -9408,6 +9486,22 @@ export class SceneItemsApi extends BaseAPI {
   ) {
     return SceneItemsApiFp(this.configuration)
       .getQueuedSceneItem(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `queued-scene-item-deletion` by ID.
+   * @param {SceneItemsApiGetQueuedSceneItemDeletionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneItemsApi
+   */
+  public getQueuedSceneItemDeletion(
+    requestParameters: SceneItemsApiGetQueuedSceneItemDeletionRequest,
+    options?: any
+  ) {
+    return SceneItemsApiFp(this.configuration)
+      .getQueuedSceneItemDeletion(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

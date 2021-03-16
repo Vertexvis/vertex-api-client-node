@@ -1,9 +1,9 @@
 # Vertex API Client
 
 [![Version](https://img.shields.io/npm/v/@vertexvis/vertex-api-client.svg)](https://www.npmjs.com/package/@vertexvis/vertex-api-client)
-[![License](https://img.shields.io/npm/l/@vertexvis/vertex-api-client.svg)](https://github.com/Vertexvis/vertex-api-client/blob/master/LICENSE)
+[![License](https://img.shields.io/npm/l/@vertexvis/vertex-api-client.svg)](https://github.com/Vertexvis/vertex-api-client/blob/master/LICENSE) [TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-ts/)
 
-If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/guides).
+If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/docs/guides).
 
 The Vertex platform API client for TypeScript and JavaScript is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
 
@@ -11,7 +11,7 @@ This client can be used in Node.js, Webpack, and Browserify environments. To use
 
 ## Usage
 
-If you're not an existing Vertex customer, [contact us](https://developer.vertexvis.com/docs/support) for a free account.
+If you're not an existing Vertex customer, [sign up for a free account](https://aws.amazon.com/marketplace/pp/B08PP264Z1?stl=true).
 
 Install the client and export your credentials.
 
@@ -37,9 +37,11 @@ const main = async () => {
   try {
     // Shown with default values
     const client = await VertexClient.build({
-      clientId: process.env.VERTEX_CLIENT_ID,
-      clientSecret: process.env.VERTEX_CLIENT_SECRET,
       basePath: 'https://platform.vertexvis.com',
+      client: {
+        id: process.env.VERTEX_CLIENT_ID,
+        secret: process.env.VERTEX_CLIENT_SECRET,
+      },
     });
 
     const getFilesRes = await client.files.getFiles({ pageSize: 1 });

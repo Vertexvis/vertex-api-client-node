@@ -9,11 +9,11 @@ import {
 } from '../../client/index';
 
 /** Upload file arguments. */
-interface UploadFileArgs extends BaseArgs {
+export interface UploadFileArgs extends BaseArgs {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  /** File data, use {@link Buffer} in Node. */
+  /** File data, use {@link Buffer} or {@link ReadStream} in Node. */
   readonly fileData: unknown;
 }
 
@@ -25,8 +25,8 @@ interface UploadFileArgs extends BaseArgs {
 export async function deleteAllFiles({
   client,
   pageSize = 100,
-  verbose = false,
-}: DeleteArgs): Promise<void> {
+}: DeleteArgs): Promise<FileMetadataData[]> {
+  let files: FileMetadataData[] = [];
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -35,20 +35,22 @@ export async function deleteAllFiles({
     const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.files.deleteFile({ id })));
-    if (verbose) console.log(`Deleted file(s) ${ids.join(', ')}`);
+    files = files.concat(res.page.data);
   } while (cursor);
+
+  return files;
 }
 
 /**
  * Create a file resource and upload a file if it doesn't already exist.
  *
  * @param args - The {@link UploadFileArgs}.
- * @returns The {@link FileMetadataData}.
  */
 export async function uploadFileIfNotExists({
   client,
   createFileReq,
   fileData,
+  onMsg = console.log,
   verbose,
 }: UploadFileArgs): Promise<FileMetadataData> {
   const suppliedId = createFileReq.data.attributes.suppliedId;
@@ -67,16 +69,15 @@ export async function uploadFileIfNotExists({
     const fileId = existingFile.id;
     if (existingFile.attributes.status === 'complete') {
       if (verbose) {
-        console.log(
+        onMsg(
           `File with suppliedId '${suppliedId}' already exists, using it, ${fileId}`
         );
       }
 
       return existingFile;
     } else {
-      // TODO: Temporary until we can resume file uploads
       if (verbose) {
-        console.log(
+        onMsg(
           `Deleting file with suppliedId '${suppliedId}' in status ${existingFile.attributes.status}, ${fileId}`
         );
       }
@@ -85,19 +86,19 @@ export async function uploadFileIfNotExists({
     }
   }
 
-  return await uploadFile({ client, createFileReq, fileData, verbose });
+  return await uploadFile({ client, createFileReq, fileData, onMsg, verbose });
 }
 
 /**
  * Create a file resource and upload a file.
  *
  * @param args - The {@link UploadFileArgs}.
- * @returns The {@link FileMetadataData}.
  */
 export async function uploadFile({
   client,
   createFileReq,
   fileData,
+  onMsg = console.log,
   verbose,
 }: UploadFileArgs): Promise<FileMetadataData> {
   const fileName = createFileReq.data.attributes.name;
@@ -105,10 +106,10 @@ export async function uploadFile({
     createFileRequest: createFileReq,
   });
   const fileId = createRes.data.data.id;
-  if (verbose) console.log(`Created file '${fileName}', ${fileId}`);
+  if (verbose) onMsg(`Created file '${fileName}', ${fileId}`);
 
   await client.files.uploadFile({ id: fileId, body: fileData });
-  if (verbose) console.log(`Uploaded file ${fileId}`);
+  if (verbose) onMsg(`Uploaded file ${fileId}`);
 
   const updated = (await client.files.getFile({ id: fileId })).data.data;
   const status = updated.attributes.status;
@@ -117,7 +118,7 @@ export async function uploadFile({
 
   // TODO: Temporary, remove if we don't see this logged
   if (status !== 'complete') {
-    console.log(`File ${fileId} in status ${status}, waiting...`);
+    if (verbose) onMsg(`File ${fileId} in status ${status}, waiting...`);
     await delay(1000);
   }
 

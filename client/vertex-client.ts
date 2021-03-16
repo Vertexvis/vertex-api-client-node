@@ -23,7 +23,7 @@ import { version } from './version';
 /**
  * Static `build` function arguments.
  */
-interface BuildArgs {
+export interface BuildArgs {
   /**
    * A {@link AxiosRequestConfig}. For example, to use HTTP keep-alive in Node,
    *
@@ -94,9 +94,11 @@ const SecToMs = 1000;
  *   try {
  *     // Shown with default values
  *     const client = await VertexClient.build({
- *       clientId: process.env.VERTEX_CLIENT_ID,
- *       clientSecret: process.env.VERTEX_CLIENT_SECRET,
  *       basePath: 'https://platform.vertexvis.com',
+ *       client: {
+ *         id: process.env.VERTEX_CLIENT_ID,
+ *         secret: process.env.VERTEX_CLIENT_SECRET,
+ *       },
  *     });
  *
  *     const getFilesRes = await client.files.getFiles({ pageSize: 1 });
@@ -110,7 +112,7 @@ const SecToMs = 1000;
  * main();
  * ```
  *
- * @see {@link https://developer.vertexvis.com/guides|Developer Guides} to get started.
+ * @see {@link https://developer.vertexvis.com/docs/guides|Developer Guides} to get started.
  */
 export class VertexClient {
   public files: FilesApi;
@@ -217,7 +219,6 @@ export class VertexClient {
    * Build a VertexClient.
    *
    * @param args - {@link BuildArgs}.
-   * @returns A {@link VertexClient}.
    */
   public static build = async (args?: BuildArgs): Promise<VertexClient> => {
     const basePath = args?.basePath

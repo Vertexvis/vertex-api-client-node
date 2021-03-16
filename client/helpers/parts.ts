@@ -23,7 +23,7 @@ import {
 } from '../index';
 
 /** Create parts from file arguments. */
-interface CreatePartFromFileArgs extends BaseArgs {
+export interface CreatePartFromFileArgs extends BaseArgs {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
@@ -38,7 +38,7 @@ interface CreatePartFromFileArgs extends BaseArgs {
 }
 
 /** Get part revision by supplied ID arguments. */
-interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
+export interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
   /** A supplied part ID. */
   readonly suppliedPartId: string;
 
@@ -50,13 +50,13 @@ interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
  * Create part and file resources if they don't already exist.
  *
  * @param args - The {@link CreatePartFromFileArgs}.
- * @returns The {@link PartRevisionData}.
  */
 export async function createPartFromFileIfNotExists({
   client,
   createFileReq,
   createPartReq,
   fileData,
+  onMsg = console.log,
   polling,
   verbose,
 }: CreatePartFromFileArgs): Promise<PartRevisionData> {
@@ -65,6 +65,7 @@ export async function createPartFromFileIfNotExists({
     verbose,
     fileData,
     createFileReq,
+    onMsg,
   });
   const createPartRequest = createPartReq(file.id);
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
@@ -77,10 +78,11 @@ export async function createPartFromFileIfNotExists({
       suppliedPartId,
       suppliedRevisionId,
       verbose,
+      onMsg,
     });
     if (existingPartRev) {
       if (verbose) {
-        console.log(
+        onMsg(
           `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
             `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
         );
@@ -92,9 +94,7 @@ export async function createPartFromFileIfNotExists({
   const createPartRes = await client.parts.createPart({ createPartRequest });
   const queuedId = createPartRes.data.data.id;
   if (verbose)
-    console.log(
-      `Created part with queued-translation ${queuedId}, file ${file.id}`
-    );
+    onMsg(`Created part with queued-translation ${queuedId}, file ${file.id}`);
 
   const part = await pollQueuedJob<Part>({
     id: queuedId,
@@ -112,7 +112,7 @@ export async function createPartFromFileIfNotExists({
       `Error creating part revision.\nRes: ${prettyJson(part.data)}`
     );
 
-  if (verbose) console.log(`Created part-revision ${partRev.id}`);
+  if (verbose) onMsg(`Created part-revision ${partRev.id}`);
 
   return partRev;
 }
@@ -125,8 +125,8 @@ export async function createPartFromFileIfNotExists({
 export async function deleteAllParts({
   client,
   pageSize = 100,
-  verbose = false,
-}: DeleteArgs): Promise<void> {
+}: DeleteArgs): Promise<PartData[]> {
+  let parts: PartData[] = [];
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -135,22 +135,22 @@ export async function deleteAllParts({
     const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.parts.deletePart({ id })));
-    if (verbose) console.log(`Deleting part(s) ${ids.join(', ')}`);
+    parts = parts.concat(res.page.data);
   } while (cursor);
+
+  return parts;
 }
 
 /**
  * Get a part revision by supplied ID.
  *
  * @param args - The {@link GetPartRevisionBySuppliedIdArgs}.
- * @returns The {@link PartRevisionData}.
  */
 export async function getPartRevisionBySuppliedId({
   client,
   suppliedPartId,
   suppliedRevisionId,
 }: GetPartRevisionBySuppliedIdArgs): Promise<PartRevisionData | undefined> {
-  // TODO: Update once filtering by part and part-revision suppliedIds supported
   const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
       client.parts.getParts({

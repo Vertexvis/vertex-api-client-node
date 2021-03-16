@@ -4,7 +4,7 @@ import { BaseArgs, Polling, pollQueuedJob } from '../index';
 /**
  * Create scene item arguments.
  */
-interface CreateSceneItemArgs extends BaseArgs {
+export interface CreateSceneItemArgs extends BaseArgs {
   /** Function returning a {@link CreateSceneItemRequest}. */
   readonly createSceneItemReq: () => CreateSceneItemRequest;
 
@@ -23,6 +23,7 @@ interface CreateSceneItemArgs extends BaseArgs {
 export async function createSceneItem({
   client,
   createSceneItemReq,
+  onMsg = console.log,
   polling,
   sceneId,
   verbose,
@@ -32,15 +33,14 @@ export async function createSceneItem({
     createSceneItemRequest: createSceneItemReq(),
   });
   const queuedId = res.data.data.id;
-  if (verbose)
-    console.log(`Created scene-item with queued-scene-item ${queuedId}`);
+  if (verbose) onMsg(`Created scene-item with queued-scene-item ${queuedId}`);
 
   const sceneItem = await pollQueuedJob<SceneItem>({
     id: queuedId,
     getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
     polling,
   });
-  if (verbose) console.log(`Created scene-item ${sceneItem.data.id}`);
+  if (verbose) onMsg(`Created scene-item ${sceneItem.data.id}`);
 
   return sceneItem;
 }

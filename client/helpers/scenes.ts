@@ -25,7 +25,7 @@ import {
 /**
  * Create scene with scene items arguments.
  */
-interface CreateSceneWithSceneItemsArgs extends BaseArgs {
+export interface CreateSceneWithSceneItemsArgs extends BaseArgs {
   /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
 
@@ -37,12 +37,15 @@ interface CreateSceneWithSceneItemsArgs extends BaseArgs {
 
   /** {@link Polling} */
   readonly polling?: Polling;
+
+  /** Callback with total number of requests and number complete. */
+  onProgress?: (complete: number, total: number) => void;
 }
 
 /**
  * Poll scene ready arguments.
  */
-interface PollSceneReadyArgs extends BaseArgs {
+export interface PollSceneReadyArgs extends BaseArgs {
   /** ID of scene. */
   readonly id: string;
 
@@ -54,41 +57,40 @@ interface PollSceneReadyArgs extends BaseArgs {
  * Create a scene with scene items.
  *
  * @param args - The {@link CreateSceneWithSceneItemsArgs}.
- * @returns The {@link SceneData}
  */
 export async function createSceneWithSceneItems({
   client,
   createSceneItemReqs,
   createSceneReq,
+  onMsg = console.log,
+  onProgress,
   parallelism,
   polling,
   verbose,
 }: CreateSceneWithSceneItemsArgs): Promise<SceneData> {
-  const createSceneRes = await client.scenes.createScene({
-    createSceneRequest: createSceneReq(),
-  });
-  const sceneId = createSceneRes.data.data.id;
-  if (verbose) {
-    console.log(`Created scene ${sceneId}`);
-    console.log(`Creating ${createSceneItemReqs.length} queued-scene-items...`);
-  }
-
+  const sceneId = (
+    await client.scenes.createScene({
+      createSceneRequest: createSceneReq(),
+    })
+  ).data.data.id;
   const limit = pLimit(parallelism);
+  let complete = 0;
   const responses = await Promise.all(
     createSceneItemReqs.map((req) =>
       limit<CreateSceneItemRequest[], AxiosResponse<QueuedJob>>(
-        (r: CreateSceneItemRequest) =>
-          client.sceneItems.createSceneItem({
+        async (r: CreateSceneItemRequest) => {
+          const res = await client.sceneItems.createSceneItem({
             id: sceneId,
             createSceneItemRequest: r,
-          }),
+          });
+          if (onProgress)
+            onProgress((complete += 1), createSceneItemReqs.length);
+          return res;
+        },
         req
       )
     )
   );
-
-  if (verbose)
-    console.log(`Created queued-scene-items. Polling for completion...`);
 
   await pollQueuedJob<SceneItem>({
     id: responses[responses.length - 1].data.data.id,
@@ -97,7 +99,7 @@ export async function createSceneWithSceneItems({
     polling,
   });
 
-  if (verbose) console.log(`Committing scene and polling until ready...`);
+  if (verbose) onMsg(`Committing scene and polling until ready...`);
 
   await client.scenes.updateScene({
     id: sceneId,
@@ -110,9 +112,9 @@ export async function createSceneWithSceneItems({
       },
     },
   });
-  await pollSceneReady({ client, id: sceneId, polling, verbose });
+  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
 
-  if (verbose) console.log(`Fitting scene's camera to scene-items...`);
+  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
 
   const scene = await client.scenes.updateScene({
     id: sceneId,
@@ -137,8 +139,8 @@ export async function createSceneWithSceneItems({
 export async function deleteAllScenes({
   client,
   pageSize = 100,
-  verbose = false,
-}: DeleteArgs): Promise<void> {
+}: DeleteArgs): Promise<SceneData[]> {
+  let scenes: SceneData[] = [];
   let cursor: string | undefined;
   do {
     const res = await getPage(() =>
@@ -147,15 +149,16 @@ export async function deleteAllScenes({
     const ids = res.page.data.map((d) => d.id);
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.scenes.deleteScene({ id })));
-    if (verbose) console.log(`Deleting scene(s) ${ids.join(', ')}`);
+    scenes = scenes.concat(res.page.data);
   } while (cursor);
+
+  return scenes;
 }
 
 /**
  * Poll a scene until it reaches the ready state.
  *
  * @param args - The {@link PollSceneReadyArgs}.
- * @returns The {@link Scene}
  */
 export async function pollSceneReady({
   client,
@@ -176,7 +179,7 @@ export async function pollSceneReady({
   let attempts = 1;
   let scene = await poll();
   while (scene.data.attributes.state !== 'ready') {
-    attempts++;
+    attempts += 1;
     if (attempts > polling.maxAttempts)
       throw new Error(
         `Polled scene ${id} ${polling.maxAttempts} times, giving up.`
