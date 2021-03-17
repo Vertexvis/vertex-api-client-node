@@ -6475,6 +6475,13 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
+        suppliedId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 1024
+          type: string
       type: object
     UpdateSceneItemRequest_data:
       properties:
