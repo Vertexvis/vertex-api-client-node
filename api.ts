@@ -3653,6 +3653,12 @@ export interface UpdateSceneItemRequestDataAttributes {
    * @memberof UpdateSceneItemRequestDataAttributes
    */
   name?: string;
+  /**
+   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * @type {string}
+   * @memberof UpdateSceneItemRequestDataAttributes
+   */
+  suppliedId?: string;
 }
 /**
  *
