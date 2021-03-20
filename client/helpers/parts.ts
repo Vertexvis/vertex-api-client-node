@@ -19,6 +19,7 @@ import {
   pollQueuedJob,
   prettyJson,
   RenderImageArgs,
+  tryStream,
   uploadFileIfNotExists,
 } from '../index';
 
@@ -187,8 +188,10 @@ export async function renderPartRevision<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageArgs): Promise<AxiosResponse<T>> {
-  return await client.partRevisions.renderPartRevision(
-    { id, height, width },
-    { responseType: 'stream' }
+  return tryStream(async () =>
+    client.partRevisions.renderPartRevision(
+      { id, height, width },
+      { responseType: 'stream' }
+    )
   );
 }

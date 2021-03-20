@@ -20,6 +20,7 @@ import {
   PollIntervalMs,
   pollQueuedJob,
   RenderImageArgs,
+  tryStream,
 } from '../index';
 
 /**
@@ -199,8 +200,7 @@ export async function renderScene<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageArgs): Promise<AxiosResponse<T>> {
-  return await client.scenes.renderScene(
-    { id, height, width },
-    { responseType: 'stream' }
+  return tryStream(async () =>
+    client.scenes.renderScene({ id, height, width }, { responseType: 'stream' })
   );
 }
