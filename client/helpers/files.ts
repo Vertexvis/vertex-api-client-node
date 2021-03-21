@@ -25,6 +25,7 @@ export interface UploadFileArgs extends BaseArgs {
 export async function deleteAllFiles({
   client,
   pageSize = 100,
+  exceptions = new Set(),
 }: DeleteArgs): Promise<FileMetadataData[]> {
   let files: FileMetadataData[] = [];
   let cursor: string | undefined;
@@ -32,7 +33,9 @@ export async function deleteAllFiles({
     const res = await getPage(() =>
       client.files.getFiles({ pageCursor: cursor, pageSize })
     );
-    const ids = res.page.data.map((d) => d.id);
+    const ids = res.page.data
+      .map((d) => d.id)
+      .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.files.deleteFile({ id })));
     files = files.concat(res.page.data);

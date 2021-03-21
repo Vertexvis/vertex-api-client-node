@@ -29,6 +29,9 @@ export type BasePath =
 export interface DeleteArgs extends BaseArgs {
   /** The page size used while fetching listing. */
   readonly pageSize?: number;
+
+  /** Set of IDs to *not* delete. */
+  readonly exceptions?: Set<string>;
 }
 
 /** Polling configuration for async APIs. */

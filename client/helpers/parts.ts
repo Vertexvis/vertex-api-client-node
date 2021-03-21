@@ -126,6 +126,7 @@ export async function createPartFromFileIfNotExists({
 export async function deleteAllParts({
   client,
   pageSize = 100,
+  exceptions = new Set(),
 }: DeleteArgs): Promise<PartData[]> {
   let parts: PartData[] = [];
   let cursor: string | undefined;
@@ -133,7 +134,9 @@ export async function deleteAllParts({
     const res = await getPage(() =>
       client.parts.getParts({ pageCursor: cursor, pageSize })
     );
-    const ids = res.page.data.map((d) => d.id);
+    const ids = res.page.data
+      .map((d) => d.id)
+      .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.parts.deletePart({ id })));
     parts = parts.concat(res.page.data);

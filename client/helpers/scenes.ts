@@ -140,6 +140,7 @@ export async function createSceneWithSceneItems({
 export async function deleteAllScenes({
   client,
   pageSize = 100,
+  exceptions = new Set(),
 }: DeleteArgs): Promise<SceneData[]> {
   let scenes: SceneData[] = [];
   let cursor: string | undefined;
@@ -147,7 +148,9 @@ export async function deleteAllScenes({
     const res = await getPage(() =>
       client.scenes.getScenes({ pageCursor: cursor, pageSize })
     );
-    const ids = res.page.data.map((d) => d.id);
+    const ids = res.page.data
+      .map((d) => d.id)
+      .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.scenes.deleteScene({ id })));
     scenes = scenes.concat(res.page.data);
