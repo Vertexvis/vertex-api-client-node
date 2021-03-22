@@ -377,6 +377,25 @@ export function toTransform(t: number[][]): Matrix4 {
 }
 
 /**
+ * Try a request with a streaming response and handle errors.
+ *
+ * @param fn - Function with streaming response type.
+ */
+export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
+  try {
+    return await fn();
+  } catch (error) {
+    return new Promise((_resolve, reject) => {
+      let res = '';
+      error.response.data.setEncoding('utf8');
+      error.response.data
+        .on('data', (data: string) => (res += data))
+        .on('end', () => reject(res));
+    });
+  }
+}
+
+/**
  * Check if arrays are equal length.
  *
  * @param a - A number array.

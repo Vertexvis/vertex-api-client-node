@@ -19,6 +19,7 @@ import {
   pollQueuedJob,
   prettyJson,
   RenderImageArgs,
+  tryStream,
   uploadFileIfNotExists,
 } from '../index';
 
@@ -125,6 +126,7 @@ export async function createPartFromFileIfNotExists({
 export async function deleteAllParts({
   client,
   pageSize = 100,
+  exceptions = new Set(),
 }: DeleteArgs): Promise<PartData[]> {
   let parts: PartData[] = [];
   let cursor: string | undefined;
@@ -132,7 +134,9 @@ export async function deleteAllParts({
     const res = await getPage(() =>
       client.parts.getParts({ pageCursor: cursor, pageSize })
     );
-    const ids = res.page.data.map((d) => d.id);
+    const ids = res.page.data
+      .map((d) => d.id)
+      .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
     await Promise.all(ids.map((id) => client.parts.deletePart({ id })));
     parts = parts.concat(res.page.data);
@@ -187,8 +191,10 @@ export async function renderPartRevision<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageArgs): Promise<AxiosResponse<T>> {
-  return await client.partRevisions.renderPartRevision(
-    { id, height, width },
-    { responseType: 'stream' }
+  return tryStream(async () =>
+    client.partRevisions.renderPartRevision(
+      { id, height, width },
+      { responseType: 'stream' }
+    )
   );
 }
