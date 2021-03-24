@@ -752,23 +752,11 @@ export interface CreateSceneItemRequestDataAttributes {
    */
   materialOverride?: ColorMaterial;
   /**
-   *
-   * @type {string}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  name?: string;
-  /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
    * @memberof CreateSceneItemRequestDataAttributes
    */
   parent?: string;
-  /**
-   * Whether or not to use part instance supplied IDs as scene item supplied IDs.
-   * @type {boolean}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  partInstanceSuppliedIdsAsSuppliedIds?: boolean;
   /**
    *
    * @type {PartRevisionSuppliedId}
@@ -793,6 +781,12 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   visible?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  name?: string;
 }
 /**
  *

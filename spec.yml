@@ -6529,11 +6529,6 @@ components:
       properties:
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
-        name:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
         parent:
           description:
             ID provided for correlation. For example, an existing ID from
@@ -6541,12 +6536,6 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
-        partInstanceSuppliedIdsAsSuppliedIds:
-          description:
-            Whether or not to use part instance supplied IDs as scene item
-            supplied IDs.
-          example: false
-          type: boolean
         source:
           $ref: '#/components/schemas/PartRevisionSuppliedId'
         suppliedId:
@@ -6562,6 +6551,11 @@ components:
           description: Item visibility.
           example: true
           type: boolean
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
       type: object
     CreateSceneItemRequest_data_relationships:
       properties:
