@@ -567,6 +567,12 @@ export interface CreatePartRequestDataAttributes {
    * @memberof CreatePartRequestDataAttributes
    */
   suppliedRevisionIdKey?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  suppliedInstanceIdKey?: string;
 }
 /**
  *
@@ -936,6 +942,12 @@ export interface CreateSceneViewRequestDataAttributes {
    * @memberof CreateSceneViewRequestDataAttributes
    */
   camera?: Camera;
+  /**
+   *
+   * @type {CrossSectioning}
+   * @memberof CreateSceneViewRequestDataAttributes
+   */
+  crossSectioning?: CrossSectioning | null;
 }
 /**
  *
@@ -1090,6 +1102,19 @@ export interface CreateTranslationInspectionRequestData {
    * @memberof CreateTranslationInspectionRequestData
    */
   relationships: CreateGeometrySetRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface CrossSectioning
+ */
+export interface CrossSectioning {
+  /**
+   *
+   * @type {Array<SectionPlane>}
+   * @memberof CrossSectioning
+   */
+  planes: Array<SectionPlane>;
 }
 /**
  *
@@ -3071,6 +3096,12 @@ export interface SceneViewDataAttributes {
    * @memberof SceneViewDataAttributes
    */
   created: string;
+  /**
+   *
+   * @type {CrossSectioning}
+   * @memberof SceneViewDataAttributes
+   */
+  crossSectioning?: CrossSectioning | null;
 }
 /**
  *
@@ -3280,6 +3311,25 @@ export enum SceneViewStateRelationshipDataTypeEnum {
   SceneViewState = 'scene-view-state',
 }
 
+/**
+ *
+ * @export
+ * @interface SectionPlane
+ */
+export interface SectionPlane {
+  /**
+   *
+   * @type {Vector3}
+   * @memberof SectionPlane
+   */
+  normal: Vector3;
+  /**
+   * Distance from the center point to move the plane.
+   * @type {number}
+   * @memberof SectionPlane
+   */
+  offset: number;
+}
 /**
  *
  * @export
@@ -3783,6 +3833,12 @@ export interface UpdateSceneViewRequestDataAttributes {
    * @memberof UpdateSceneViewRequestDataAttributes
    */
   camera?: Camera | CameraFit;
+  /**
+   *
+   * @type {CrossSectioning}
+   * @memberof UpdateSceneViewRequestDataAttributes
+   */
+  crossSectioning?: CrossSectioning | null;
 }
 /**
  * 3D vector.

@@ -113,7 +113,8 @@ export async function createPartFromFileIfNotExists({
       `Error creating part revision.\nRes: ${prettyJson(part.data)}`
     );
 
-  if (verbose) onMsg(`Created part-revision ${partRev.id}`);
+  if (verbose)
+    onMsg(`Created part ${part.data.id}, part-revision ${partRev.id}`);
 
   return partRev;
 }

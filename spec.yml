@@ -5705,6 +5705,17 @@ components:
         - position
         - up
       type: object
+    CrossSectioning:
+      additionalProperties: false
+      nullable: true
+      properties:
+        planes:
+          items:
+            $ref: '#/components/schemas/SectionPlane'
+          type: array
+      required:
+        - planes
+      type: object
     CameraFit:
       additionalProperties: false
       description: Fit camera in 3D space based on items in scene.
@@ -6098,6 +6109,19 @@ components:
         - g
         - r
       type: object
+    SectionPlane:
+      additionalProperties: false
+      properties:
+        normal:
+          $ref: '#/components/schemas/Vector3'
+        offset:
+          description: Distance from the center point to move the plane.
+          example: 0.0
+          type: number
+      required:
+        - normal
+        - offset
+      type: object
     Color:
       description: Color value from 0 to 255.
       example: 255
@@ -6347,6 +6371,11 @@ components:
           example: RevisionId
           maxLength: 255
           type: string
+        suppliedInstanceIdKey:
+          description: Metadata key used to extract an ID used for correlation.
+          example: InstanceId
+          maxLength: 255
+          type: string
       type: object
     CreatePartRequest_data:
       properties:
@@ -6563,6 +6592,8 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        crossSectioning:
+          $ref: '#/components/schemas/CrossSectioning'
       required:
         - camera
         - created
@@ -6601,6 +6632,8 @@ components:
           anyOf:
             - $ref: '#/components/schemas/Camera'
             - $ref: '#/components/schemas/CameraFit'
+        crossSectioning:
+          $ref: '#/components/schemas/CrossSectioning'
       type: object
     UpdateSceneViewRequest_data:
       properties:
@@ -6619,6 +6652,8 @@ components:
       properties:
         camera:
           $ref: '#/components/schemas/Camera'
+        crossSectioning:
+          $ref: '#/components/schemas/CrossSectioning'
       type: object
     CreateSceneViewRequest_data_relationships:
       properties:
