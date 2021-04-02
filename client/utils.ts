@@ -1,8 +1,13 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse, Method } from 'axios';
 import { parse, ParsedUrlQuery } from 'querystring';
-import { Matrix4, Oauth2Api, OAuth2Token, QueuedJob } from '../index';
+import { Failure, Matrix4, Oauth2Api, OAuth2Token, QueuedJob } from '../index';
 import { DUMMY_BASE_URL } from '../common';
 import { Polling } from './index';
+
+export interface Partitions<T> {
+  a: T[];
+  b: T[];
+}
 
 export const PollIntervalMs = 5000;
 
@@ -12,7 +17,10 @@ export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 
 export const Utf8 = 'utf8';
 
-type VertexError = Error & { vertexErrorMessage?: string };
+type VertexError = Error & {
+  vertexError?: { method: Method; url: string; req: unknown; res: Failure };
+  vertexErrorMessage?: string;
+};
 
 const PageCursor = 'page[cursor]';
 const UnableToStringify = 'Unable to stringify';
@@ -127,6 +135,22 @@ export async function getBySuppliedId<
 }
 
 /**
+ * Get an Error message produced by {@link VertexClient}.
+ *
+ * @param error: The error.
+ */
+export function getErrorMessage(error: VertexError | AxiosError): string {
+  if (hasVertexErrorMessage(error)) {
+    const ve = error.vertexErrorMessage;
+    return ve && !ve.startsWith(UnableToStringify) ? ve : error.message;
+  }
+
+  return error.isAxiosError && error.response?.data
+    ? prettyJson(error.response?.data)
+    : error.message;
+}
+
+/**
  * Get a page of results from a listing.
  *
  * @param getListing - Function called to get list of items.
@@ -198,27 +222,36 @@ export function isEncoded(s: string): boolean {
   return s !== decodeURIComponent(s);
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function isFailure(data: any): data is Failure {
+  if (data.errors == null || data.errors.length === 0) return false;
+  const first = head(data.errors);
+  return first.id != null && first.status != null && first.code != null;
+}
+
+export function hasVertexError(
+  error: VertexError | AxiosResponse
+): error is VertexError {
+  return (error as VertexError).vertexError != null;
+}
+
+export function hasVertexErrorMessage(
+  error: VertexError | AxiosResponse
+): error is VertexError {
+  return (error as VertexError).vertexErrorMessage != null;
+}
+
 /**
  * Log an Error produced by {@link VertexClient}.
  *
  * @param error: The error to log.
  * @param logger: The logger to use.
- * @returns `true` if URI encoded.
  */
 export function logError(
   error: VertexError | AxiosError,
   logger: (input: Error | string) => void = console.error
 ): void {
-  if (isVertexError(error)) {
-    if (
-      error.vertexErrorMessage &&
-      !error.vertexErrorMessage.startsWith(UnableToStringify)
-    ) {
-      logger(error.vertexErrorMessage);
-    } else logger(error);
-  } else if (error.response?.data) {
-    logger(prettyJson(error.response?.data));
-  } else logger(error);
+  logger(getErrorMessage(error));
 }
 
 /**
@@ -251,6 +284,13 @@ export function nowEpochMs(): number {
 }
 
 /**
+ * Whether or not a value is null or undefined.
+ */
+export function nullOrUndefined<T>(obj?: T): obj is T {
+  return obj == null;
+}
+
+/**
  * Parse the query parameters from a URL.
  *
  * @param url - A URL to parse.
@@ -264,6 +304,18 @@ export function parseUrl(url?: string): ParsedUrlQuery | undefined {
     ? `${DUMMY_BASE_URL}${url}`
     : `${DUMMY_BASE_URL}/${url}`;
   return parse(new URL(absoluteUrl).search);
+}
+
+/**
+ * Partition an array into two arrays, a and b, based on `isA` predicate.
+ *
+ * @param url - Two arrays.
+ */
+export function partition<T>(is: T[], isA: (i: T) => boolean): Partitions<T> {
+  return is.reduce(
+    ({ a, b }, i) => (isA(i) ? { a: [...a, i], b } : { a, b: [...b, i] }),
+    { a: [], b: [] } as Partitions<T>
+  );
 }
 
 /**
@@ -407,10 +459,4 @@ function arrayLenEq(
   b: number[] | number[][]
 ): boolean {
   return Array.isArray(a) && Array.isArray(b) && a.length === b.length;
-}
-
-function isVertexError(
-  error: VertexError | AxiosResponse
-): error is VertexError {
-  return (error as VertexError).vertexErrorMessage !== undefined;
 }

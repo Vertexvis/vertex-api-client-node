@@ -17,7 +17,13 @@ import {
   ScenesApi,
   TranslationInspectionsApi,
 } from '../index';
-import { BasePath, createToken, nowEpochMs, prettyJson } from './index';
+import {
+  BasePath,
+  createToken,
+  isFailure,
+  nowEpochMs,
+  prettyJson,
+} from './index';
 import { version } from './version';
 
 /**
@@ -157,6 +163,14 @@ export class VertexClient {
           const m = c.method ? c.method.toUpperCase() : 'undefined';
           const octetStream =
             c.headers['Content-Type'] === 'application/octet-stream';
+          if (isFailure(r.data)) {
+            error.vertexError = {
+              method: m,
+              url: c.url,
+              req: octetStream ? undefined : c.data,
+              res: r.data,
+            };
+          }
           error.vertexErrorMessage = `${m} '${c.url}' error.\n${
             c.data && !octetStream ? `Req: ${c.data}\n` : ''
           }Res: ${prettyJson(r.data)}`;
