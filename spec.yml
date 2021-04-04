@@ -4559,7 +4559,7 @@ components:
       properties:
         errors:
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
           maxItems: 20
           type: array
           uniqueItems: true
@@ -5133,7 +5133,7 @@ components:
       additionalProperties:
         $ref: '#/components/schemas/Link'
       type: object
-    Error:
+    ApiError:
       additionalProperties: false
       properties:
         id:
@@ -5156,7 +5156,7 @@ components:
           example: '$.data.attributes.suppliedId: is missing but it is required'
           type: string
         source:
-          $ref: '#/components/schemas/Error_source'
+          $ref: '#/components/schemas/ApiError_source'
         meta:
           additionalProperties:
             type: string
@@ -6196,7 +6196,7 @@ components:
           type: string
         errors:
           items:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/ApiError'
           maxItems: 20
           type: array
           uniqueItems: true
@@ -6897,7 +6897,7 @@ components:
         - name
         - status
       type: object
-    Error_source:
+    ApiError_source:
       properties:
         pointer:
           example: /body/data/attributes
