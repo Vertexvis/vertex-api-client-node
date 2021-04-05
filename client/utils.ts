@@ -1,6 +1,13 @@
 import { AxiosError, AxiosResponse, Method } from 'axios';
 import { parse, ParsedUrlQuery } from 'querystring';
-import { Failure, Matrix4, Oauth2Api, OAuth2Token, QueuedJob } from '../index';
+import {
+  ApiError,
+  Failure,
+  Matrix4,
+  Oauth2Api,
+  OAuth2Token,
+  QueuedJob,
+} from '../index';
 import { DUMMY_BASE_URL } from '../common';
 import { Polling } from './index';
 
@@ -223,10 +230,15 @@ export function isEncoded(s: string): boolean {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function isApiError(error: any): error is ApiError {
+  return error.id != null && error.status != null && error.code != null;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isFailure(data: any): data is Failure {
-  if (data.errors == null || data.errors.length === 0) return false;
-  const first = head(data.errors);
-  return first.id != null && first.status != null && first.code != null;
+  return data.errors == null || data.errors.length === 0
+    ? false
+    : isApiError(head(data.errors));
 }
 
 export function hasVertexError(

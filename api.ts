@@ -30,6 +30,80 @@ import {
 import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
+ *
+ * @export
+ * @interface ApiError
+ */
+export interface ApiError {
+  /**
+   *
+   * @type {string}
+   * @memberof ApiError
+   */
+  id?: string;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ApiError
+   */
+  links?: { [key: string]: Link };
+  /**
+   *
+   * @type {string}
+   * @memberof ApiError
+   */
+  status?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApiError
+   */
+  code?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApiError
+   */
+  title?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApiError
+   */
+  detail?: string;
+  /**
+   *
+   * @type {ApiErrorSource}
+   * @memberof ApiError
+   */
+  source?: ApiErrorSource;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof ApiError
+   */
+  meta?: { [key: string]: string };
+}
+/**
+ *
+ * @export
+ * @interface ApiErrorSource
+ */
+export interface ApiErrorSource {
+  /**
+   *
+   * @type {string}
+   * @memberof ApiErrorSource
+   */
+  pointer?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApiErrorSource
+   */
+  parameter?: string;
+}
+/**
  * 3D bounding-box
  * @export
  * @interface BoundingBox
@@ -1166,34 +1240,15 @@ export interface Dimensions {
 /**
  *
  * @export
- * @interface ErrorSource
- */
-export interface ErrorSource {
-  /**
-   *
-   * @type {string}
-   * @memberof ErrorSource
-   */
-  pointer?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ErrorSource
-   */
-  parameter?: string;
-}
-/**
- *
- * @export
  * @interface Failure
  */
 export interface Failure {
   /**
    *
-   * @type {Set<Error>}
+   * @type {Set<ApiError>}
    * @memberof Failure
    */
-  errors: Set<Error>;
+  errors: Set<ApiError>;
   /**
    *
    * @type {{ [key: string]: string; }}
@@ -1735,61 +1790,6 @@ export enum MetadataValueTypeEnum {
   Null = 'null',
 }
 
-/**
- *
- * @export
- * @interface ModelError
- */
-export interface ModelError {
-  /**
-   *
-   * @type {string}
-   * @memberof ModelError
-   */
-  id?: string;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof ModelError
-   */
-  links?: { [key: string]: Link };
-  /**
-   *
-   * @type {string}
-   * @memberof ModelError
-   */
-  status?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ModelError
-   */
-  code?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ModelError
-   */
-  title?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ModelError
-   */
-  detail?: string;
-  /**
-   *
-   * @type {ErrorSource}
-   * @memberof ModelError
-   */
-  source?: ErrorSource;
-  /**
-   *
-   * @type {{ [key: string]: string; }}
-   * @memberof ModelError
-   */
-  meta?: { [key: string]: string };
-}
 /**
  *
  * @export
@@ -2392,10 +2392,10 @@ export interface QueuedJobDataAttributes {
   status: string;
   /**
    *
-   * @type {Set<Error>}
+   * @type {Set<ApiError>}
    * @memberof QueuedJobDataAttributes
    */
-  errors?: Set<Error>;
+  errors?: Set<ApiError>;
 }
 /**
  *
