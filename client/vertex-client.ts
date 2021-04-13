@@ -77,7 +77,7 @@ export interface BuildArgs {
  */
 interface CtorArgs {
   readonly auth: Oauth2Api;
-  readonly axiosOptions?: AxiosRequestConfig;
+  readonly axiosInst: AxiosInstance;
   readonly basePath: string;
   readonly token: OAuth2Token;
 }
@@ -142,7 +142,7 @@ export class VertexClient {
   private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
 
-  private constructor({ auth, axiosOptions, basePath, token }: CtorArgs) {
+  private constructor({ auth, axiosInst, basePath, token }: CtorArgs) {
     this.auth = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
@@ -150,11 +150,59 @@ export class VertexClient {
       accessToken: this.accessTokenRefresher,
       basePath,
     });
-    this.axiosInstance = axios.create({
+    this.axiosInstance = axiosInst;
+    this.files = new FilesApi(this.config, undefined, axiosInst);
+    this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
+    this.hits = new HitsApi(this.config, undefined, axiosInst);
+    this.partRevisions = new PartRevisionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.parts = new PartsApi(this.config, undefined, axiosInst);
+    this.sceneAlterations = new SceneAlterationsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.sceneItemOverrides = new SceneItemOverridesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.sceneItems = new SceneItemsApi(this.config, undefined, axiosInst);
+    this.scenes = new ScenesApi(this.config, undefined, axiosInst);
+    this.sceneViews = new SceneViewsApi(this.config, undefined, axiosInst);
+    this.sceneViewStates = new SceneViewStatesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.streamKeys = new StreamKeysApi(this.config, undefined, axiosInst);
+    this.translationInspections = new TranslationInspectionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+  }
+
+  /**
+   * Build a VertexClient.
+   *
+   * @param args - {@link BuildArgs}.
+   */
+  public static build = async (args?: BuildArgs): Promise<VertexClient> => {
+    const basePath = args?.basePath
+      ? args?.basePath.endsWith('/')
+        ? args?.basePath.slice(0, -1)
+        : args?.basePath
+      : `https://platform.vertexvis.com`;
+    const axiosInst = axios.create({
       headers: { 'user-agent': `vertex-api-client-ts/${version}` },
-      ...axiosOptions,
+      ...createAxiosOptions(args?.axiosOptions),
     });
-    this.axiosInstance.interceptors.response.use(
+
+    axiosInst.interceptors.response.use(
       (response) => response,
       (error) => {
         if (error.isAxiosError && error?.response?.config) {
@@ -178,68 +226,7 @@ export class VertexClient {
         return Promise.reject(error);
       }
     );
-    this.files = new FilesApi(this.config, undefined, this.axiosInstance);
-    this.geometrySets = new GeometrySetsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.hits = new HitsApi(this.config, undefined, this.axiosInstance);
-    this.partRevisions = new PartRevisionsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.parts = new PartsApi(this.config, undefined, this.axiosInstance);
-    this.sceneAlterations = new SceneAlterationsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.sceneItemOverrides = new SceneItemOverridesApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.sceneItems = new SceneItemsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.scenes = new ScenesApi(this.config, undefined, this.axiosInstance);
-    this.sceneViews = new SceneViewsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.sceneViewStates = new SceneViewStatesApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.streamKeys = new StreamKeysApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-    this.translationInspections = new TranslationInspectionsApi(
-      this.config,
-      undefined,
-      this.axiosInstance
-    );
-  }
 
-  /**
-   * Build a VertexClient.
-   *
-   * @param args - {@link BuildArgs}.
-   */
-  public static build = async (args?: BuildArgs): Promise<VertexClient> => {
-    const basePath = args?.basePath
-      ? args?.basePath.endsWith('/')
-        ? args?.basePath.slice(0, -1)
-        : args?.basePath
-      : `https://platform.vertexvis.com`;
     const auth = new Oauth2Api(
       new Configuration({
         basePath,
@@ -249,16 +236,13 @@ export class VertexClient {
           args?.client?.secret ??
           args?.clientSecret ??
           process?.env?.VERTEX_CLIENT_SECRET,
-      })
-    );
-
-    const token = await createToken(auth);
-    return new VertexClient({
-      auth,
-      axiosOptions: createAxiosOptions(args?.axiosOptions),
+      }),
       basePath,
-      token,
-    });
+      axiosInst
+    );
+    const token = await createToken(auth);
+
+    return new VertexClient({ auth, axiosInst, basePath, token });
   };
 
   private accessTokenRefresher = async (): Promise<string> => {
