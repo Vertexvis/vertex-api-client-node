@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios';
 import { Failure, Polling, QueuedJob } from '../../index';
-import { isFailure, isQueuedJob, isQueuedJobError, prettyJson } from '../utils';
+import { isFailure, isQueuedJob, prettyJson } from '../utils';
 
 export const PollIntervalMs = 5000;
 
@@ -51,44 +51,51 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   async function poll(): Promise<PollJobRes<T>> {
     return new Promise((resolve) => {
       setTimeout(async () => {
-        const jobRes: AxiosResponse<PollRes<T>> = await getQueuedJob(id);
+        const jobRes = await getQueuedJob(id);
         resolve({ status: jobRes.status, res: jobRes.data });
       }, intervalMs);
     });
   }
 
+  const allowed404 = (status: number): boolean => allow404 && status === 404;
+  const validJob = <T>(r: PollRes<T>): boolean => isQueuedJob(r) && !isError(r);
+
   let attempts = 1;
-  let res = await poll();
+  let pr = await poll();
   while (
-    (allow404 && res.status === 404) ||
-    (isQueuedJob(res.res) &&
-      (attempts > maxAttempts || isQueuedJobError(res.res)))
+    (allowed404(pr.status) || validJob(pr.res)) &&
+    attempts <= maxAttempts
   ) {
     attempts += 1;
-    res = await poll();
+    pr = await poll();
   }
 
   // At this point, `res` is one of the following,
-  //   - An item of type `T` after being redirected to it
-  //   - A QueuedJob (after either exceeding `maxAttempts` or with `error` status)
-  //   - A Failure
-  return { ...res, attempts, id };
+  //  - An item of type `T` after being redirected to it
+  //  - A QueuedJob (after either exceeding `maxAttempts` or with `error` status)
+  //  - A Failure
+  return { ...pr, attempts, id };
 }
 
 export function isPollError<T>(r: PollRes<T>): r is QueuedJob | Failure {
-  return isQueuedJob(r) || isFailure(r);
+  return isQueuedJobError(r) || isFailure(r);
 }
 
-export function throwOnError<T>({
-  maxAttempts,
-  pollRes,
-}: {
-  maxAttempts: number;
-  pollRes: PollQueuedJobRes<T>;
-}): never {
+export function throwOnError<T>(r: PollQueuedJobRes<T>): never {
   throw new Error(
-    isQueuedJobError(pollRes.res) || isFailure(pollRes.res)
-      ? `Error getting queued job ${pollRes.id}.\n${prettyJson(pollRes.res)}`
-      : `Polled queued item ${pollRes.id} ${maxAttempts} times, giving up.`
+    isQueuedJobError(r.res) || isFailure(r.res)
+      ? `Error getting queued job ${r.id}.\n${prettyJson(r.res)}`
+      : `Polled queued item ${r.id} ${
+          r.attempts
+        } times, giving up.\n${prettyJson(r.res)}`
   );
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+function isQueuedJobError(obj: any): obj is QueuedJob {
+  return isQueuedJob(obj) && isError(obj);
+}
+
+function isError(job: QueuedJob): boolean {
+  return job.data.attributes.status === 'error';
 }

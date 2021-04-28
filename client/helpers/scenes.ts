@@ -15,6 +15,7 @@ import {
 } from '../../index';
 import {
   BaseReq,
+  defined,
   DeleteReq,
   getPage,
   hasVertexError,
@@ -69,6 +70,7 @@ export interface CreateSceneItemsReq extends Base {
 }
 
 export interface CreateSceneItemsRes {
+  leaves: number;
   queuedSceneItems: QueuedSceneItem[];
 }
 
@@ -122,21 +124,21 @@ export async function createSceneAndSceneItems({
     await client.scenes.createScene({ createSceneRequest: createSceneReq() })
   ).data;
   const sceneId = scene.data.id;
+  const res = await createSceneItems({
+    client,
+    createSceneItemReqs,
+    failFast: failFast ?? false,
+    onProgress,
+    parallelism,
+    sceneId,
+  });
   const { a: queuedItems, b: errors } = partition(
-    (
-      await createSceneItems({
-        client,
-        createSceneItemReqs,
-        failFast: failFast ?? false,
-        onProgress,
-        parallelism,
-        sceneId,
-      })
-    ).queuedSceneItems,
+    res.queuedSceneItems,
     (i: QueuedSceneItem) => isQueuedJob(i.res)
   );
 
-  if (queuedItems.length === 0) return { errors, scene };
+  if (queuedItems.length === 0 || errors.length === res.leaves)
+    return { errors, scene };
 
   const limit = pLimit(parallelism);
   await Promise.all(
@@ -150,7 +152,7 @@ export async function createSceneAndSceneItems({
         });
         if (isPollError(r.res)) {
           failFast
-            ? throwOnError({ maxAttempts: polling.maxAttempts, pollRes: r })
+            ? throwOnError(r)
             : errors.push({ req: req.req, res: r.res });
         }
       }, is)
@@ -191,36 +193,43 @@ export async function createSceneItems({
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
   const limit = pLimit(parallelism);
   let complete = 0;
-  return {
-    queuedSceneItems: await Promise.all(
-      createSceneItemReqs.map((r) =>
-        limit<CreateSceneItemRequest[], QueuedSceneItem>(
-          async (req: CreateSceneItemRequest) => {
-            let res: Failure | QueuedJob | undefined;
-            try {
-              res = (
-                await client.sceneItems.createSceneItem({
-                  id: sceneId,
-                  createSceneItemRequest: req,
-                })
-              ).data;
-            } catch (error) {
-              if (!failFast && hasVertexError(error)) {
-                res = error.vertexError?.res;
-              } else throw error;
+  let leaves = 0;
+  const queuedSceneItems = await Promise.all(
+    createSceneItemReqs.map((r) =>
+      limit<CreateSceneItemRequest[], QueuedSceneItem>(
+        async (req: CreateSceneItemRequest) => {
+          let res: Failure | QueuedJob | undefined;
+          try {
+            if (
+              defined(req.data.attributes.source) ||
+              defined(req.data.relationships.source)
+            ) {
+              leaves++;
             }
+            res = (
+              await client.sceneItems.createSceneItem({
+                id: sceneId,
+                createSceneItemRequest: req,
+              })
+            ).data;
+          } catch (error) {
+            if (!failFast && hasVertexError(error)) {
+              res = error.vertexError?.res;
+            } else throw error;
+          }
 
-            if (onProgress != null) {
-              onProgress((complete += 1), createSceneItemReqs.length);
-            }
+          if (onProgress != null) {
+            onProgress((complete += 1), createSceneItemReqs.length);
+          }
 
-            return { req, res };
-          },
-          r
-        )
+          return { req, res };
+        },
+        r
       )
-    ),
-  };
+    )
+  );
+
+  return { leaves, queuedSceneItems };
 }
 
 /**

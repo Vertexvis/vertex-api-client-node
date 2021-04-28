@@ -48,10 +48,7 @@ export async function createSceneItem({
     getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
     polling,
   });
-  if (isPollError(pollRes.res)) {
-    throwOnError({ maxAttempts: polling.maxAttempts, pollRes });
-  }
-
+  if (isPollError(pollRes.res)) throwOnError(pollRes);
   if (verbose) onMsg(`Created scene-item ${pollRes.res.data.id}`);
 
   return pollRes.res;

@@ -105,9 +105,7 @@ export async function createPartFromFileIfNotExists({
       client.translationInspections.getQueuedTranslation({ id }),
     polling,
   });
-  if (isPollError(pollRes.res)) {
-    throwOnError({ maxAttempts: polling.maxAttempts, pollRes });
-  }
+  if (isPollError(pollRes.res)) throwOnError(pollRes);
 
   const partRev = head(
     pollRes.res.included?.filter(
@@ -116,7 +114,7 @@ export async function createPartFromFileIfNotExists({
   );
   if (!partRev)
     throw new Error(
-      `Error creating part revision.\nRes: ${prettyJson(pollRes.res?.data)}`
+      `Error creating part revision.\nRes: ${prettyJson(pollRes)}`
     );
 
   if (verbose)

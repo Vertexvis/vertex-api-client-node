@@ -209,16 +209,12 @@ export function isEncoded(s: string): boolean {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isApiError(error: any): error is ApiError {
-  return (
-    !nullOrUndefined(error.id) &&
-    !nullOrUndefined(error.status) &&
-    !nullOrUndefined(error.code)
-  );
+  return defined(error.id) && defined(error.status) && defined(error.code);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isFailure(obj: any): obj is Failure {
-  return nullOrUndefined(obj.errors) || obj.errors.length === 0
+  return !defined(obj.errors) || obj.errors.length === 0
     ? false
     : isApiError(head(obj.errors));
 }
@@ -226,27 +222,21 @@ export function isFailure(obj: any): obj is Failure {
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isQueuedJob(obj: any): obj is QueuedJob {
   return (
-    !nullOrUndefined(obj?.data?.type) &&
-    !nullOrUndefined(obj?.data?.attributes) &&
-    obj?.data.type.startsWith('queued-')
+    defined(obj.data) &&
+    defined(obj.data?.attributes) &&
+    defined(obj.data?.type) &&
+    obj.data.type.startsWith('queued-')
   );
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function isQueuedJobError(obj: any): obj is QueuedJob {
-  return isQueuedJob(obj) && obj.data.attributes.status === 'error';
+export function hasVertexError(error: any): error is VertexError {
+  return defined(error.vertexError);
 }
 
-export function hasVertexError(
-  error: VertexError | AxiosResponse
-): error is VertexError {
-  return !nullOrUndefined((error as VertexError).vertexError);
-}
-
-export function hasVertexErrorMessage(
-  error: VertexError | AxiosResponse
-): error is VertexError {
-  return !nullOrUndefined((error as VertexError).vertexErrorMessage);
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function hasVertexErrorMessage(error: any): error is VertexError {
+  return defined(error.vertexErrorMessage);
 }
 
 /**
@@ -294,8 +284,8 @@ export function nowEpochMs(): number {
 /**
  * Whether or not a value is null or undefined.
  */
-export function nullOrUndefined<T>(obj?: T): obj is T {
-  return obj == null;
+export function defined<T>(obj?: T): obj is T {
+  return obj != null;
 }
 
 /**
