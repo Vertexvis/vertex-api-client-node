@@ -7,7 +7,7 @@ export * from './vertex-client';
 export * from './helpers/index';
 
 /** Common helper arguments. */
-export interface BaseArgs {
+export interface BaseReq {
   /** An instance of {@link VertexClient}. */
   readonly client: VertexClient;
 
@@ -26,7 +26,7 @@ export type BasePath =
   | string;
 
 /** Delete arguments. */
-export interface DeleteArgs extends BaseArgs {
+export interface DeleteReq extends BaseReq {
   /** The page size used while fetching listing. */
   readonly pageSize?: number;
 
@@ -67,13 +67,13 @@ export interface Polling {
  * ```
  *
  */
-export interface RenderImageArgs extends BaseArgs {
+export interface RenderImageReq extends BaseReq {
   /** A {@link RenderRequest}. */
-  readonly renderReq: RenderRequest;
+  readonly renderReq: RenderReq;
 }
 
 /** Image rendering request arguments. */
-export interface RenderRequest {
+export interface RenderReq {
   /** ID of resource. */
   readonly id: string;
 

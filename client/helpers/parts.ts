@@ -9,22 +9,24 @@ import {
   PartRevisionList,
 } from '../../index';
 import {
-  BaseArgs,
-  DeleteArgs,
+  BaseReq,
+  DeleteReq,
   encodeIfNotEncoded,
   getBySuppliedId,
   getPage,
   head,
+  MaxAttempts,
   Polling,
-  pollQueuedJob,
+  PollIntervalMs,
   prettyJson,
-  RenderImageArgs,
+  RenderImageReq,
   tryStream,
   uploadFileIfNotExists,
 } from '../index';
+import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
 
 /** Create parts from file arguments. */
-export interface CreatePartFromFileArgs extends BaseArgs {
+export interface CreatePartFromFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
@@ -39,7 +41,7 @@ export interface CreatePartFromFileArgs extends BaseArgs {
 }
 
 /** Get part revision by supplied ID arguments. */
-export interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
+export interface GetPartRevisionBySuppliedIdReq extends BaseReq {
   /** A supplied part ID. */
   readonly suppliedPartId: string;
 
@@ -50,7 +52,7 @@ export interface GetPartRevisionBySuppliedIdArgs extends BaseArgs {
 /**
  * Create part and file resources if they don't already exist.
  *
- * @param args - The {@link CreatePartFromFileArgs}.
+ * @param args - The {@link CreatePartFromFileReq}.
  */
 export async function createPartFromFileIfNotExists({
   client,
@@ -58,9 +60,9 @@ export async function createPartFromFileIfNotExists({
   createPartReq,
   fileData,
   onMsg = console.log,
-  polling,
+  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   verbose,
-}: CreatePartFromFileArgs): Promise<PartRevisionData> {
+}: CreatePartFromFileReq): Promise<PartRevisionData> {
   const file = await uploadFileIfNotExists({
     client,
     verbose,
@@ -97,24 +99,28 @@ export async function createPartFromFileIfNotExists({
   if (verbose)
     onMsg(`Created part with queued-translation ${queuedId}, file ${file.id}`);
 
-  const part = await pollQueuedJob<Part>({
+  const pollRes = await pollQueuedJob<Part>({
     id: queuedId,
     getQueuedJob: (id) =>
       client.translationInspections.getQueuedTranslation({ id }),
     polling,
   });
+  if (isPollError(pollRes.res)) {
+    throwOnError({ maxAttempts: polling.maxAttempts, pollRes });
+  }
+
   const partRev = head(
-    part.included?.filter(
+    pollRes.res.included?.filter(
       (pr) => pr.attributes.suppliedId === suppliedRevisionId
     )
   );
   if (!partRev)
     throw new Error(
-      `Error creating part revision.\nRes: ${prettyJson(part.data)}`
+      `Error creating part revision.\nRes: ${prettyJson(pollRes.res?.data)}`
     );
 
   if (verbose)
-    onMsg(`Created part ${part.data.id}, part-revision ${partRev.id}`);
+    onMsg(`Created part ${pollRes.res?.data.id}, part-revision ${partRev.id}`);
 
   return partRev;
 }
@@ -122,13 +128,13 @@ export async function createPartFromFileIfNotExists({
 /**
  * Delete all parts.
  *
- * @param args - The {@link DeleteArgs}.
+ * @param args - The {@link DeleteReq}.
  */
 export async function deleteAllParts({
   client,
   pageSize = 100,
   exceptions = new Set(),
-}: DeleteArgs): Promise<PartData[]> {
+}: DeleteReq): Promise<PartData[]> {
   let parts: PartData[] = [];
   let cursor: string | undefined;
   do {
@@ -149,13 +155,13 @@ export async function deleteAllParts({
 /**
  * Get a part revision by supplied ID.
  *
- * @param args - The {@link GetPartRevisionBySuppliedIdArgs}.
+ * @param args - The {@link GetPartRevisionBySuppliedIdReq}.
  */
 export async function getPartRevisionBySuppliedId({
   client,
   suppliedPartId,
   suppliedRevisionId,
-}: GetPartRevisionBySuppliedIdArgs): Promise<PartRevisionData | undefined> {
+}: GetPartRevisionBySuppliedIdReq): Promise<PartRevisionData | undefined> {
   const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
       client.parts.getParts({
@@ -186,12 +192,12 @@ export async function getPartRevisionBySuppliedId({
 /**
  * Render a part revision.
  *
- * @param args - The {@link RenderImageArgs}.
+ * @param args - The {@link RenderImageReq}.
  */
 export async function renderPartRevision<T>({
   client,
   renderReq: { id, height, width },
-}: RenderImageArgs): Promise<AxiosResponse<T>> {
+}: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(async () =>
     client.partRevisions.renderPartRevision(
       { id, height, width },

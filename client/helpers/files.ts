@@ -1,7 +1,7 @@
 import { CreateFileRequest, FileMetadataData, FileList } from '../../index';
 import {
-  BaseArgs,
-  DeleteArgs,
+  BaseReq,
+  DeleteReq,
   delay,
   encodeIfNotEncoded,
   getBySuppliedId,
@@ -9,7 +9,7 @@ import {
 } from '../../client/index';
 
 /** Upload file arguments. */
-export interface UploadFileArgs extends BaseArgs {
+export interface UploadFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
@@ -20,13 +20,13 @@ export interface UploadFileArgs extends BaseArgs {
 /**
  * Delete all files.
  *
- * @param args - The {@link DeleteArgs}.
+ * @param args - The {@link DeleteReq}.
  */
 export async function deleteAllFiles({
   client,
   pageSize = 100,
   exceptions = new Set(),
-}: DeleteArgs): Promise<FileMetadataData[]> {
+}: DeleteReq): Promise<FileMetadataData[]> {
   let files: FileMetadataData[] = [];
   let cursor: string | undefined;
   do {
@@ -47,7 +47,7 @@ export async function deleteAllFiles({
 /**
  * Create a file resource and upload a file if it doesn't already exist.
  *
- * @param args - The {@link UploadFileArgs}.
+ * @param args - The {@link UploadFileReq}.
  */
 export async function uploadFileIfNotExists({
   client,
@@ -55,7 +55,7 @@ export async function uploadFileIfNotExists({
   fileData,
   onMsg = console.log,
   verbose,
-}: UploadFileArgs): Promise<FileMetadataData> {
+}: UploadFileReq): Promise<FileMetadataData> {
   const suppliedId = createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
     ? await getBySuppliedId<FileMetadataData, FileList>(
@@ -95,7 +95,7 @@ export async function uploadFileIfNotExists({
 /**
  * Create a file resource and upload a file.
  *
- * @param args - The {@link UploadFileArgs}.
+ * @param args - The {@link UploadFileReq}.
  */
 export async function uploadFile({
   client,
@@ -103,7 +103,7 @@ export async function uploadFile({
   fileData,
   onMsg = console.log,
   verbose,
-}: UploadFileArgs): Promise<FileMetadataData> {
+}: UploadFileReq): Promise<FileMetadataData> {
   const fileName = createFileReq.data.attributes.name;
   const createRes = await client.files.createFile({
     createFileRequest: createFileReq,
