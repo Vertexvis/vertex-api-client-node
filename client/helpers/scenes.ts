@@ -14,22 +14,23 @@ import {
   UpdateSceneRequestDataAttributesStateEnum,
 } from '../../index';
 import {
-  BaseArgs,
-  DeleteArgs,
+  BaseReq,
+  defined,
+  DeleteReq,
   getPage,
   hasVertexError,
+  isQueuedJob,
   MaxAttempts,
-  nullOrUndefined,
   partition,
   Polling,
   PollIntervalMs,
-  pollQueuedJob,
-  RenderImageArgs,
+  RenderImageReq,
   tryStream,
   VertexClient,
 } from '../index';
+import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
 
-export interface CreateSceneAndSceneItemsReq extends BaseArgs {
+export interface CreateSceneAndSceneItemsReq extends BaseReq {
   /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
 
@@ -62,40 +63,21 @@ export interface CreateSceneItemsReq extends Base {
   readonly failFast: boolean;
 
   /** Callback with total number of requests and number complete. */
-  readonly onProgress: ((complete: number, total: number) => void) | undefined;
+  readonly onProgress?: (complete: number, total: number) => void;
 
   /** How many requests to run in parallel. */
   readonly parallelism: number;
 }
 
 export interface CreateSceneItemsRes {
+  leaves: number;
   queuedSceneItems: QueuedSceneItem[];
-}
-
-/**
- * Create scene with scene items arguments.
- */
-export interface CreateSceneWithSceneItemsArgs extends BaseArgs {
-  /** A list of {@link CreateSceneItemRequest}. */
-  readonly createSceneItemReqs: CreateSceneItemRequest[];
-
-  /** Function returning a {@link CreateSceneRequest}. */
-  readonly createSceneReq: () => CreateSceneRequest;
-
-  /** How many requests to run in parallel. */
-  readonly parallelism: number;
-
-  /** {@link Polling} */
-  readonly polling?: Polling;
-
-  /** Callback with total number of requests and number complete. */
-  onProgress?: (complete: number, total: number) => void;
 }
 
 /**
  * Poll scene ready arguments.
  */
-export interface PollSceneReadyArgs extends BaseArgs {
+export interface PollSceneReadyReq extends BaseReq {
   /** ID of scene. */
   readonly id: string;
 
@@ -120,9 +102,8 @@ interface Base {
 }
 
 interface QueuedSceneItem {
-  failure?: Failure;
-  job?: QueuedJob;
   req: CreateSceneItemRequest;
+  res?: Failure | QueuedJob;
 }
 
 /**
@@ -136,35 +117,47 @@ export async function createSceneAndSceneItems({
   onMsg = console.log,
   onProgress,
   parallelism,
-  polling,
+  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   verbose,
 }: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsRes> {
   const scene = (
     await client.scenes.createScene({ createSceneRequest: createSceneReq() })
   ).data;
   const sceneId = scene.data.id;
+  const res = await createSceneItems({
+    client,
+    createSceneItemReqs,
+    failFast: failFast ?? false,
+    onProgress,
+    parallelism,
+    sceneId,
+  });
   const { a: queuedItems, b: errors } = partition(
-    (
-      await createSceneItems({
-        client,
-        createSceneItemReqs,
-        failFast: failFast ?? false,
-        onProgress,
-        parallelism,
-        sceneId,
-      })
-    ).queuedSceneItems,
-    (i: QueuedSceneItem) => !nullOrUndefined(i.job)
+    res.queuedSceneItems,
+    (i: QueuedSceneItem) => isQueuedJob(i.res)
   );
 
-  if (queuedItems.length === 0) return { errors, scene };
+  if (queuedItems.length === 0 || errors.length === res.leaves)
+    return { errors, scene };
 
-  await pollQueuedJob<SceneItem>({
-    id: (queuedItems[queuedItems.length - 1].job as QueuedJob).data.id,
-    getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
-    allow404: true,
-    polling,
-  });
+  const limit = pLimit(parallelism);
+  await Promise.all(
+    queuedItems.map((is) =>
+      limit<QueuedSceneItem[], void>(async (req: QueuedSceneItem) => {
+        const r = await pollQueuedJob<SceneItem>({
+          id: (req.res as QueuedJob).data.id,
+          getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
+          allow404: true,
+          polling,
+        });
+        if (isPollError(r.res)) {
+          failFast
+            ? throwOnError(r)
+            : errors.push({ req: req.req, res: r.res });
+        }
+      }, is)
+    )
+  );
 
   if (verbose) onMsg(`Committing scene and polling until ready...`);
 
@@ -200,103 +193,55 @@ export async function createSceneItems({
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
   const limit = pLimit(parallelism);
   let complete = 0;
+  let leaves = 0;
   const queuedSceneItems = await Promise.all(
-    createSceneItemReqs.map((req) =>
+    createSceneItemReqs.map((r) =>
       limit<CreateSceneItemRequest[], QueuedSceneItem>(
-        async (r: CreateSceneItemRequest) => {
-          let job: QueuedJob | undefined;
-          let failure: Failure | undefined;
+        async (req: CreateSceneItemRequest) => {
+          let res: Failure | QueuedJob | undefined;
           try {
-            job = (
+            if (
+              defined(req.data.attributes.source) ||
+              defined(req.data.relationships.source)
+            ) {
+              leaves++;
+            }
+            res = (
               await client.sceneItems.createSceneItem({
                 id: sceneId,
-                createSceneItemRequest: r,
+                createSceneItemRequest: req,
               })
             ).data;
           } catch (error) {
-            if (failFast) throw error;
-            if (hasVertexError(error)) failure = error.vertexError?.res;
+            if (!failFast && hasVertexError(error)) {
+              res = error.vertexError?.res;
+            } else throw error;
           }
-          if (onProgress)
+
+          if (onProgress != null) {
             onProgress((complete += 1), createSceneItemReqs.length);
-          return { failure, job, req: r };
+          }
+
+          return { req, res };
         },
-        req
+        r
       )
     )
   );
-  return { queuedSceneItems };
-}
 
-/**
- * Create a scene with scene items.
- *
- * @deprecated Use {@link createSceneAndSceneItems} instead.
- * @param args - The {@link CreateSceneWithSceneItemsArgs}.
- */
-export async function createSceneWithSceneItems({
-  client,
-  createSceneItemReqs,
-  createSceneReq,
-  onMsg = console.log,
-  onProgress,
-  parallelism,
-  polling,
-  verbose,
-}: CreateSceneWithSceneItemsArgs): Promise<SceneData> {
-  const sceneId = (
-    await client.scenes.createScene({ createSceneRequest: createSceneReq() })
-  ).data.data.id;
-  const responses = (
-    await createSceneItems({
-      client,
-      createSceneItemReqs,
-      failFast: true,
-      onProgress,
-      parallelism,
-      sceneId,
-    })
-  ).queuedSceneItems
-    .filter((i) => !nullOrUndefined(i.job))
-    .map((i) => i.job as QueuedJob);
-
-  await pollQueuedJob<SceneItem>({
-    id: responses[responses.length - 1].data.id,
-    getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
-    allow404: true,
-    polling,
-  });
-
-  if (verbose) onMsg(`Committing scene and polling until ready...`);
-
-  await updateScene({
-    attributes: { state: UpdateSceneRequestDataAttributesStateEnum.Commit },
-    client,
-    sceneId,
-  });
-  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
-
-  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
-
-  return (
-    await updateScene({
-      attributes: { camera: { type: CameraFitTypeEnum.FitVisibleSceneItems } },
-      client,
-      sceneId,
-    })
-  ).scene.data;
+  return { leaves, queuedSceneItems };
 }
 
 /**
  * Delete all scenes.
  *
- * @param args - The {@link DeleteArgs}.
+ * @param args - The {@link DeleteReq}.
  */
 export async function deleteAllScenes({
   client,
   pageSize = 100,
   exceptions = new Set(),
-}: DeleteArgs): Promise<SceneData[]> {
+}: DeleteReq): Promise<SceneData[]> {
   let scenes: SceneData[] = [];
   let cursor: string | undefined;
   do {
@@ -317,7 +262,7 @@ export async function deleteAllScenes({
 /**
  * Poll a scene until it reaches the ready state.
  *
- * @param args - The {@link PollSceneReadyArgs}.
+ * @param args - The {@link PollSceneReadyReq}.
  */
 export async function pollSceneReady({
   client,
@@ -326,7 +271,7 @@ export async function pollSceneReady({
     intervalMs: PollIntervalMs,
     maxAttempts: MaxAttempts,
   },
-}: PollSceneReadyArgs): Promise<Scene> {
+}: PollSceneReadyReq): Promise<Scene> {
   const poll = async (): Promise<Scene> =>
     new Promise((resolve) => {
       setTimeout(
@@ -352,12 +297,12 @@ export async function pollSceneReady({
 /**
  * Render a scene.
  *
- * @param args - The {@link RenderImageArgs}.
+ * @param args - The {@link RenderImageReq}.
  */
 export async function renderScene<T>({
   client,
   renderReq: { id, height, width },
-}: RenderImageArgs): Promise<AxiosResponse<T>> {
+}: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(async () =>
     client.scenes.renderScene({ id, height, width }, { responseType: 'stream' })
   );

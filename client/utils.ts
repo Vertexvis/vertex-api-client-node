@@ -9,18 +9,11 @@ import {
   QueuedJob,
 } from '../index';
 import { DUMMY_BASE_URL } from '../common';
-import { Polling } from './index';
 
-export interface Partitions<T> {
+interface Partitions<T> {
   a: T[];
   b: T[];
 }
-
-export const PollIntervalMs = 5000;
-
-export const AttemptsPerMin = 60000 / PollIntervalMs;
-
-export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 
 export const Utf8 = 'utf8';
 
@@ -31,21 +24,6 @@ type VertexError = Error & {
 
 const PageCursor = 'page[cursor]';
 const UnableToStringify = 'Unable to stringify';
-
-/** Polling async queued job request arguments. */
-export interface PollQueuedJobArgs {
-  /** Queued job ID. */
-  readonly id: string;
-
-  /** Function called to get queued job. */
-  readonly getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
-
-  /** If `true`, doesn't fail if API returns 404 status code. */
-  readonly allow404?: boolean;
-
-  /** {@link Polling} */
-  readonly polling?: Polling;
-}
 
 /**
  * Check for array equality.
@@ -231,26 +209,34 @@ export function isEncoded(s: string): boolean {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isApiError(error: any): error is ApiError {
-  return error.id != null && error.status != null && error.code != null;
+  return defined(error.id) && defined(error.status) && defined(error.code);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function isFailure(data: any): data is Failure {
-  return data.errors == null || data.errors.length === 0
+export function isFailure(obj: any): obj is Failure {
+  return !defined(obj.errors) || obj.errors.length === 0
     ? false
-    : isApiError(head(data.errors));
+    : isApiError(head(obj.errors));
 }
 
-export function hasVertexError(
-  error: VertexError | AxiosResponse
-): error is VertexError {
-  return (error as VertexError).vertexError != null;
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function isQueuedJob(obj: any): obj is QueuedJob {
+  return (
+    defined(obj.data) &&
+    defined(obj.data?.attributes) &&
+    defined(obj.data?.type) &&
+    obj.data.type.startsWith('queued-')
+  );
 }
 
-export function hasVertexErrorMessage(
-  error: VertexError | AxiosResponse
-): error is VertexError {
-  return (error as VertexError).vertexErrorMessage != null;
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function hasVertexError(error: any): error is VertexError {
+  return defined(error.vertexError);
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+export function hasVertexErrorMessage(error: any): error is VertexError {
+  return defined(error.vertexErrorMessage);
 }
 
 /**
@@ -298,8 +284,8 @@ export function nowEpochMs(): number {
 /**
  * Whether or not a value is null or undefined.
  */
-export function nullOrUndefined<T>(obj?: T): obj is T {
-  return obj == null;
+export function defined<T>(obj?: T): obj is T {
+  return obj != null;
 }
 
 /**
@@ -328,56 +314,6 @@ export function partition<T>(is: T[], isA: (i: T) => boolean): Partitions<T> {
     ({ a, b }, i) => (isA(i) ? { a: [...a, i], b } : { a, b: [...b, i] }),
     { a: [], b: [] } as Partitions<T>
   );
-}
-
-/**
- * Poll `getQueuedJob` until redirected to resulting resource, `error`, or reach
- * `polling.maxAttempts`.
- *
- * @param args - {@link PollQueuedJobArgs}.
- * @returns The resulting resource.
- */
-export async function pollQueuedJob<T extends { data: { id: string } }>({
-  id,
-  getQueuedJob,
-  allow404 = false,
-  polling: { intervalMs, maxAttempts } = {
-    intervalMs: PollIntervalMs,
-    maxAttempts: MaxAttempts,
-  },
-}: PollQueuedJobArgs): Promise<T> {
-  const poll = async (): Promise<AxiosResponse<QueuedJob | T>> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(async () => {
-        const jobRes = await getQueuedJob(id);
-        if (allow404 && jobRes.status === 404) resolve(jobRes);
-        else if (
-          !jobRes.data.data ||
-          !jobRes.data.data.attributes ||
-          jobRes.data.data.attributes.status === 'error'
-        ) {
-          reject(
-            new Error(
-              `Error getting queued job ${id}.\n${prettyJson(jobRes.data)}`
-            )
-          );
-        } else resolve(jobRes);
-      }, intervalMs);
-    });
-  };
-
-  let attempts = 1;
-  let res: AxiosResponse<T | QueuedJob> = await poll();
-  while ((allow404 && res.status === 404) || res.data.data.id === id) {
-    attempts += 1;
-    if (attempts > maxAttempts)
-      throw new Error(
-        `Polled queued item ${id} ${maxAttempts} times, giving up.`
-      );
-    res = await poll();
-  }
-
-  return res.data as T;
 }
 
 /**
@@ -451,7 +387,7 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
   } catch (error) {
     return new Promise((_resolve, reject) => {
       let res = '';
-      error.response.data.setEncoding('utf8');
+      error.response.data.setEncoding(Utf8);
       error.response.data
         .on('data', (data: string) => (res += data))
         .on('end', () => reject(res));

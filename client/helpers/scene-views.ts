@@ -1,15 +1,15 @@
 import { AxiosResponse } from 'axios';
-import { RenderImageArgs, tryStream } from '../index';
+import { RenderImageReq, tryStream } from '../index';
 
 /**
  * Render a scene view.
  *
- * @param args - The {@link RenderImageArgs}.
+ * @param args - The {@link RenderImageReq}.
  */
 export async function renderSceneView<T>({
   client,
   renderReq: { id, height, width },
-}: RenderImageArgs): Promise<AxiosResponse<T>> {
+}: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(async () =>
     client.sceneViews.renderSceneView(
       { id, height, width },

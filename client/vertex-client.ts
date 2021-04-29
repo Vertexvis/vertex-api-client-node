@@ -29,7 +29,7 @@ import { version } from './version';
 /**
  * Static `build` function arguments.
  */
-export interface BuildArgs {
+export interface BuildReq {
   /**
    * A {@link AxiosRequestConfig}. For example, to use HTTP keep-alive in Node,
    *
@@ -58,24 +58,12 @@ export interface BuildArgs {
     readonly id?: string;
     readonly secret?: string;
   };
-
-  /**
-   * Your Vertex API client ID.
-   * @deprecated Use {@link client.id} instead.
-   */
-  readonly clientId?: string;
-
-  /**
-   * Your Vertex API client secret.
-   * @deprecated Use {@link client.secret} instead.
-   */
-  readonly clientSecret?: string;
 }
 
 /**
  * {@link VertexClient} constructor arguments.
  */
-interface CtorArgs {
+interface CtorReq {
   readonly auth: Oauth2Api;
   readonly axiosInst: AxiosInstance;
   readonly basePath: string;
@@ -142,7 +130,7 @@ export class VertexClient {
   private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
 
-  private constructor({ auth, axiosInst, basePath, token }: CtorArgs) {
+  private constructor({ auth, axiosInst, basePath, token }: CtorReq) {
     this.auth = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
@@ -189,9 +177,9 @@ export class VertexClient {
   /**
    * Build a VertexClient.
    *
-   * @param args - {@link BuildArgs}.
+   * @param args - {@link BuildReq}.
    */
-  public static build = async (args?: BuildArgs): Promise<VertexClient> => {
+  public static build = async (args?: BuildReq): Promise<VertexClient> => {
     const basePath = args?.basePath
       ? args?.basePath.endsWith('/')
         ? args?.basePath.slice(0, -1)
@@ -230,12 +218,8 @@ export class VertexClient {
     const auth = new Oauth2Api(
       new Configuration({
         basePath,
-        username:
-          args?.client?.id ?? args?.clientId ?? process?.env?.VERTEX_CLIENT_ID,
-        password:
-          args?.client?.secret ??
-          args?.clientSecret ??
-          process?.env?.VERTEX_CLIENT_SECRET,
+        username: args?.client?.id ?? process?.env?.VERTEX_CLIENT_ID,
+        password: args?.client?.secret ?? process?.env?.VERTEX_CLIENT_SECRET,
       }),
       basePath,
       axiosInst
