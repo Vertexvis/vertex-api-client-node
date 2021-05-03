@@ -48,12 +48,12 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   allow404 = false,
   polling: { intervalMs, maxAttempts },
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
-  async function poll(): Promise<PollJobRes<T>> {
+  async function poll(ms: number): Promise<PollJobRes<T>> {
     return new Promise((resolve) => {
       setTimeout(async () => {
         const jobRes = await getQueuedJob(id);
         resolve({ status: jobRes.status, res: jobRes.data });
-      }, intervalMs);
+      }, ms);
     });
   }
 
@@ -61,13 +61,13 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   const validJob = <T>(r: PollRes<T>): boolean => isQueuedJob(r) && !isError(r);
 
   let attempts = 1;
-  let pr = await poll();
+  let pr = await poll(0);
   while (
     (allowed404(pr.status) || validJob(pr.res)) &&
     attempts <= maxAttempts
   ) {
     attempts += 1;
-    pr = await poll();
+    pr = await poll(intervalMs);
   }
 
   // At this point, `res` is one of the following,
