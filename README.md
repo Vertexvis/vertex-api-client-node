@@ -1,13 +1,12 @@
-# Vertex API Client
+# Vertex API Client for Node.js
 
 [![Version](https://img.shields.io/npm/v/@vertexvis/vertex-api-client.svg)](https://www.npmjs.com/package/@vertexvis/vertex-api-client)
-[![License](https://img.shields.io/npm/l/@vertexvis/vertex-api-client.svg)](https://github.com/Vertexvis/vertex-api-client/blob/master/LICENSE) [TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-ts/)
+[![MIT License](https://img.shields.io/github/license/vertexvis/vertex-api-client-ts)](https://github.com/Vertexvis/vertex-api-client-ts/blob/main/LICENSE)
+[TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-ts/)
 
-If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [our guides](https://developer.vertexvis.com/docs/guides).
+If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [Developer Portal](https://developer.vertexvis.com/).
 
-The Vertex platform API client for TypeScript and JavaScript is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
-
-This client can be used in Node.js, Webpack, and Browserify environments. To use with ES5, you must have a Promises/A+ library installed. It supports CommonJS and ES6 module systems.
+The Vertex REST API client for Node.js is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
 
 ## Usage
 
@@ -19,9 +18,9 @@ Install the client and export your credentials.
 # Install client
 npm install --save @vertexvis/vertex-api-client
 
-# Export your Vertex Platform API client ID and secret
-export VERTEX_CLIENT_ID={CLIENT_ID}
-export VERTEX_CLIENT_SECRET={CLIENT_SECRET}
+# Export your Vertex REST API client ID and secret
+export VERTEX_CLIENT_ID=[YOUR_CLIENT_ID]
+export VERTEX_CLIENT_SECRET=[YOUR_CLIENT_SECRET]
 ```
 
 Then, create a client and start using the Vertex API.
@@ -67,7 +66,6 @@ yarn build
 # Format code
 yarn format
 
-# Generate latest client, version, and open GitHub PR
-# ARG=minor|major  [default: patch]
-yarn push:version [ARG]
+# Generate using latest OpenAPI spec, version, and open GitHub PR
+yarn push:version [patch|minor|major (default: patch)]
 ```
