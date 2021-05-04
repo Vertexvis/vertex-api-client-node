@@ -2,6 +2,7 @@
 
 [![Version](https://img.shields.io/npm/v/@vertexvis/api-client-node.svg)](https://www.npmjs.com/package/@vertexvis/api-client-node)
 [![MIT License](https://img.shields.io/github/license/vertexvis/vertex-api-client-node)](https://github.com/Vertexvis/vertex-api-client-node/blob/main/LICENSE)
+
 [TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-node/)
 
 If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with our [Developer Portal](https://developer.vertexvis.com/).
