@@ -20,3 +20,5 @@ curl -s -X POST "https://api.github.com/repos/$REPOSITORY/releases" \
   "prelease": false
 }
 EOF
+
+npm deprecate @vertexvis/vertex-api-client "Package is deprecated. Use @vertexvis/api-client-node instead."

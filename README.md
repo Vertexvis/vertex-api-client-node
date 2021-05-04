@@ -4,6 +4,10 @@
 [![MIT License](https://img.shields.io/github/license/vertexvis/vertex-api-client-ts)](https://github.com/Vertexvis/vertex-api-client-ts/blob/main/LICENSE)
 [TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-ts/)
 
+# Deprecation Warning
+
+`@vertexvis/vertex-api-client` is deprecated. Use [`@vertexvis/api-client-node`](https://www.npmjs.com/package/@vertexvis/api-client-node) instead.
+
 If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [Developer Portal](https://developer.vertexvis.com/).
 
 The Vertex REST API client for Node.js is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
