@@ -180,6 +180,14 @@ export class VertexClient {
    * @param args - {@link BuildReq}.
    */
   public static build = async (args?: BuildReq): Promise<VertexClient> => {
+    if (window != null) {
+      throw new Error(
+        '@vertexvis/api-client-node is not supported in browser environments. ' +
+          'For details on how your application should communicate with the ' +
+          'Vertex platform, visit https://developer.vertexvis.com/docs/guides/platform-architecture.'
+      );
+    }
+
     const basePath = args?.basePath
       ? args?.basePath.endsWith('/')
         ? args?.basePath.slice(0, -1)
