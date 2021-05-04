@@ -1,4 +1,4 @@
-npmName: '@vertexvis/vertex-api-client'
+npmName: '@vertexvis/api-client-node'
 npmVersion: '0.0.1'
 snapshot: false
 supportsES6: true

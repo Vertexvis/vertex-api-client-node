@@ -1,14 +1,10 @@
 # Vertex API Client for Node.js
 
-[![Version](https://img.shields.io/npm/v/@vertexvis/vertex-api-client.svg)](https://www.npmjs.com/package/@vertexvis/vertex-api-client)
-[![MIT License](https://img.shields.io/github/license/vertexvis/vertex-api-client-ts)](https://github.com/Vertexvis/vertex-api-client-ts/blob/main/LICENSE)
-[TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-ts/)
+[![Version](https://img.shields.io/npm/v/@vertexvis/api-client-node.svg)](https://www.npmjs.com/package/@vertexvis/api-client-node)
+[![MIT License](https://img.shields.io/github/license/vertexvis/vertex-api-client-node)](https://github.com/Vertexvis/vertex-api-client-node/blob/main/LICENSE)
+[TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-node/)
 
-# Deprecation Warning
-
-`@vertexvis/vertex-api-client` is deprecated. Use [`@vertexvis/api-client-node`](https://www.npmjs.com/package/@vertexvis/api-client-node) instead.
-
-If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with [Developer Portal](https://developer.vertexvis.com/).
+If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with our [Developer Portal](https://developer.vertexvis.com/).
 
 The Vertex REST API client for Node.js is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
 
@@ -20,7 +16,7 @@ Install the client and export your credentials.
 
 ```bash
 # Install client
-npm install --save @vertexvis/vertex-api-client
+npm install --save @vertexvis/api-client-node
 
 # Export your Vertex REST API client ID and secret
 export VERTEX_CLIENT_ID=[YOUR_CLIENT_ID]
@@ -30,11 +26,7 @@ export VERTEX_CLIENT_SECRET=[YOUR_CLIENT_SECRET]
 Then, create a client and start using the Vertex API.
 
 ```ts
-import {
-  logError,
-  prettyJson,
-  VertexClient,
-} from '@vertexvis/vertex-api-client';
+import { logError, prettyJson, VertexClient } from '@vertexvis/api-client-node';
 
 const main = async () => {
   try {
