@@ -35,7 +35,7 @@ export interface BuildReq {
    *
    *  * @example
    * ```typescript
-   * import { Agent } from 'https';from '@vertexvis/vertex-api-client';
+   * import { Agent } from 'https';from '@vertexvis/api-client-node';
    *
    * const main = async () => {
    *   const client = await VertexClient.build({
@@ -82,7 +82,7 @@ const SecToMs = 1000;
  *   logError,
  *   prettyJson,
  *   VertexClient,
- * } from '@vertexvis/vertex-api-client';
+ * } from '@vertexvis/api-client-node';
  *
  * const main = async () => {
  *   try {
@@ -186,7 +186,7 @@ export class VertexClient {
         : args?.basePath
       : `https://platform.vertexvis.com`;
     const axiosInst = axios.create({
-      headers: { 'user-agent': `vertex-api-client-ts/${version}` },
+      headers: { 'user-agent': `vertex-api-client-node/${version}` },
       ...createAxiosOptions(args?.axiosOptions),
     });
 

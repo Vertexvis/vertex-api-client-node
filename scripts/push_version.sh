@@ -28,7 +28,7 @@ function version_package() {
   new_ver=$(get_version)
 
   # Update version in `user-agent` header
-  sed -i "" "s|vertex-api-client-ts/${old_ver}|vertex-api-client-ts/${new_ver}|" client/vertex-client.ts
+  sed -i "" "s|vertex-api-client-node/${old_ver}|vertex-api-client-node/${new_ver}|" client/vertex-client.ts
 }
 
 function create_pull_request() {
