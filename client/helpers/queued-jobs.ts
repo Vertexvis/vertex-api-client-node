@@ -50,10 +50,15 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
   async function poll(ms: number): Promise<PollJobRes<T>> {
     return new Promise((resolve) => {
-      setTimeout(async () => {
-        const jobRes = await getQueuedJob(id);
-        resolve({ status: jobRes.status, res: jobRes.data });
-      }, ms);
+      setTimeout(
+        () =>
+          getQueuedJob(id)
+            .then((r) => resolve({ status: r.status, res: r.data }))
+            .catch((error) =>
+              console.log(`pollQueuedJob error, continuing. '${error.message}'`)
+            ),
+        ms
+      );
     });
   }
 

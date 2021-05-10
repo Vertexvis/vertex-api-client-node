@@ -7158,8 +7158,13 @@ components:
           type: string
         treeEnabled:
           type: boolean
+        modified:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
       required:
         - created
+        - modified
         - state
       type: object
     SceneViewStateData_attributes:

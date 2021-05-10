@@ -2628,6 +2628,12 @@ export interface SceneDataAttributes {
    * @memberof SceneDataAttributes
    */
   treeEnabled?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneDataAttributes
+   */
+  modified: string;
 }
 /**
  *
@@ -4790,9 +4796,8 @@ export const GeometrySetsApiAxiosParamCreator = function (
  * @export
  */
 export const GeometrySetsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = GeometrySetsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    GeometrySetsApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
@@ -4806,10 +4811,11 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createGeometrySet(
-        createGeometrySetRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createGeometrySet(
+          createGeometrySetRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -5262,13 +5268,14 @@ export const HitsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneViewHit(
-        id,
-        createHitRequest,
-        include,
-        fieldsPartRevision,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneViewHit(
+          id,
+          createHitRequest,
+          include,
+          fieldsPartRevision,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -6169,9 +6176,8 @@ export const PartRevisionsApiAxiosParamCreator = function (
  * @export
  */
 export const PartRevisionsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = PartRevisionsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    PartRevisionsApiAxiosParamCreator(configuration);
   return {
     /**
      * Delete a `part-revision`.
@@ -6185,10 +6191,8 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deletePartRevision(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deletePartRevision(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -6243,13 +6247,14 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<PartRevisionList>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getPartRevisions(
-        id,
-        pageCursor,
-        pageSize,
-        filterSuppliedId,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPartRevisions(
+          id,
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -6269,10 +6274,11 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedPartRevisionDeletion(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedPartRevisionDeletion(
+          id,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -6296,12 +6302,13 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.renderPartRevision(
-        id,
-        height,
-        width,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.renderPartRevision(
+          id,
+          height,
+          width,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -6323,11 +6330,12 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updatePartRevision(
-        id,
-        updatePartRevisionRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updatePartRevision(
+          id,
+          updatePartRevisionRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -7122,10 +7130,8 @@ export const PartsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedPartDeletion(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedPartDeletion(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -7644,9 +7650,8 @@ export const SceneAlterationsApiAxiosParamCreator = function (
  * @export
  */
 export const SceneAlterationsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = SceneAlterationsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    SceneAlterationsApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `scene-alteration` for a `scene-view`.
@@ -7662,11 +7667,12 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneAlteration(
-        id,
-        createSceneAlterationRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneAlteration(
+          id,
+          createSceneAlterationRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -7686,10 +7692,8 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneAlteration(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedSceneAlteration(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -7712,10 +7716,8 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<SceneAlteration>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneAlteration(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneAlteration(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -7738,10 +7740,8 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<SceneAlterationList>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneAlterations(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneAlterations(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -8227,9 +8227,8 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
 export const SceneItemOverridesApiFp = function (
   configuration?: Configuration
 ) {
-  const localVarAxiosParamCreator = SceneItemOverridesApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    SceneItemOverridesApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `scene-item-override` for a `scene-view`.
@@ -8248,11 +8247,12 @@ export const SceneItemOverridesApiFp = function (
         basePath?: string
       ) => AxiosPromise<SceneItemOverride>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneItemOverride(
-        id,
-        createSceneItemOverrideRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneItemOverride(
+          id,
+          createSceneItemOverrideRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -8272,10 +8272,8 @@ export const SceneItemOverridesApiFp = function (
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneItemOverride(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteSceneItemOverride(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -8298,10 +8296,8 @@ export const SceneItemOverridesApiFp = function (
         basePath?: string
       ) => AxiosPromise<SceneItemOverrideList>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItemOverrides(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneItemOverrides(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -8326,11 +8322,12 @@ export const SceneItemOverridesApiFp = function (
         basePath?: string
       ) => AxiosPromise<SceneItemOverride>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneItemOverride(
-        id,
-        updateSceneItemOverrideRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateSceneItemOverride(
+          id,
+          updateSceneItemOverrideRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9022,9 +9019,8 @@ export const SceneItemsApiAxiosParamCreator = function (
  * @export
  */
 export const SceneItemsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = SceneItemsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    SceneItemsApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
@@ -9087,10 +9083,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneItem(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedSceneItem(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9110,10 +9104,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneItemDeletion(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedSceneItemDeletion(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9897,9 +9889,8 @@ export const SceneViewStatesApiAxiosParamCreator = function (
  * @export
  */
 export const SceneViewStatesApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = SceneViewStatesApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    SceneViewStatesApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `scene-view-state` for a `scene`.
@@ -9915,11 +9906,12 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneViewState(
-        id,
-        createSceneViewStateRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneViewState(
+          id,
+          createSceneViewStateRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9939,10 +9931,8 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneViewState(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteSceneViewState(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9962,10 +9952,8 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewState(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneViewState(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -9992,12 +9980,13 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<SceneViewStateList>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewStates(
-        id,
-        pageCursor,
-        pageSize,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneViewStates(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -10633,9 +10622,8 @@ export const SceneViewsApiAxiosParamCreator = function (
  * @export
  */
 export const SceneViewsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = SceneViewsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    SceneViewsApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `scene-view` of a `scene`.
@@ -10727,13 +10715,14 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewItem>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getViewSceneItem(
-        id,
-        itemId,
-        fieldsSceneItem,
-        include,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getViewSceneItem(
+          id,
+          itemId,
+          fieldsSceneItem,
+          include,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -12341,9 +12330,8 @@ export const StreamKeysApiAxiosParamCreator = function (
  * @export
  */
 export const StreamKeysApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = StreamKeysApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    StreamKeysApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `stream-key` for a `scene`.
@@ -12359,11 +12347,12 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKey>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneStreamKey(
-        id,
-        createStreamKeyRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneStreamKey(
+          id,
+          createStreamKeyRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -12801,9 +12790,8 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
 export const TranslationInspectionsApiFp = function (
   configuration?: Configuration
 ) {
-  const localVarAxiosParamCreator = TranslationInspectionsApiAxiosParamCreator(
-    configuration
-  );
+  const localVarAxiosParamCreator =
+    TranslationInspectionsApiAxiosParamCreator(configuration);
   return {
     /**
      * Create a `translation-inspection`.
@@ -12820,10 +12808,11 @@ export const TranslationInspectionsApiFp = function (
         basePath?: string
       ) => AxiosPromise<TranslationInspectionJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createTranslationInspection(
-        createTranslationInspectionRequest,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createTranslationInspection(
+          createTranslationInspectionRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -12846,10 +12835,8 @@ export const TranslationInspectionsApiFp = function (
         basePath?: string
       ) => AxiosPromise<TranslationInspectionJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getInspectionJob(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getInspectionJob(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -12869,10 +12856,8 @@ export const TranslationInspectionsApiFp = function (
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedTranslation(
-        id,
-        options
-      );
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedTranslation(id, options);
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
