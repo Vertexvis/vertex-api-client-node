@@ -11,7 +11,7 @@ describe(utils.arrayEq, () => {
 
   it('should return false if not array', () => {
     expect(
-      utils.arrayEq((1 as unknown) as number[], (1 as unknown) as number[])
+      utils.arrayEq(1 as unknown as number[], 1 as unknown as number[])
     ).toEqual(false);
   });
 });
