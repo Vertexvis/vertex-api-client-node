@@ -81,7 +81,7 @@ export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
  * @param ms - Amount of milliseconds to delay.
  */
 export async function delay(ms: number): Promise<void> {
-  new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 /**
@@ -92,6 +92,10 @@ export async function delay(ms: number): Promise<void> {
  */
 export function encodeIfNotEncoded(s: string): string {
   return isEncoded(s) ? s : encodeURIComponent(s);
+}
+
+export function envVar(key: string): string {
+  return required(key, process.env[key]);
 }
 
 /**
@@ -328,6 +332,15 @@ export function prettyJson(obj: unknown): string {
   } catch (error) {
     return `${UnableToStringify} ${obj} to JSON.`;
   }
+}
+
+export function required<T>(name: string, value?: T): T {
+  return value ?? thrw(`${name} required`);
+}
+
+export function thrw(error: string | Error): never {
+  if (error instanceof Error) throw error;
+  throw new Error(error);
 }
 
 /**

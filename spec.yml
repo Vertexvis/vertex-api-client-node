@@ -5631,6 +5631,24 @@ components:
         value:
           $ref: '#/components/schemas/ColorMaterial'
       type: object
+    GeometrySetRelationship:
+      additionalProperties: false
+      description: Relationship to a `geometry-set`.
+      properties:
+        data:
+          $ref: '#/components/schemas/GeometrySetRelationshipData'
+      required:
+        - data
+      type: object
+    PartRevisionRelationship:
+      additionalProperties: false
+      description: Relationship to a `part-revision`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartData_relationships_partRevisions'
+      required:
+        - data
+      type: object
     PartRevisionSuppliedId:
       additionalProperties: false
       properties:
@@ -5649,24 +5667,6 @@ components:
       required:
         - suppliedPartId
         - suppliedRevisionId
-      type: object
-    GeometrySetRelationship:
-      additionalProperties: false
-      description: Relationship to a `geometry-set`.
-      properties:
-        data:
-          $ref: '#/components/schemas/GeometrySetRelationshipData'
-      required:
-        - data
-      type: object
-    PartRevisionRelationship:
-      additionalProperties: false
-      description: Relationship to a `part-revision`.
-      properties:
-        data:
-          $ref: '#/components/schemas/PartData_relationships_partRevisions'
-      required:
-        - data
       type: object
     SceneRelationship:
       additionalProperties: false
@@ -6512,6 +6512,14 @@ components:
           maxLength: 1024
           type: string
       type: object
+    UpdateSceneItemRequest_data_relationships:
+      properties:
+        source:
+          anyOf:
+            - $ref: '#/components/schemas/GeometrySetRelationship'
+            - $ref: '#/components/schemas/PartRevisionRelationship'
+          description: Relationship to a `geometry-set` or `part-revision`.
+      type: object
     UpdateSceneItemRequest_data:
       properties:
         type:
@@ -6521,6 +6529,8 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateSceneItemRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/UpdateSceneItemRequest_data_relationships'
       required:
         - attributes
         - type

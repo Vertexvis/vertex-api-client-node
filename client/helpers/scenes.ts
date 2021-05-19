@@ -219,7 +219,8 @@ export async function createSceneItems({
           }
 
           if (onProgress != null) {
-            onProgress((complete += 1), createSceneItemReqs.length);
+            complete += 1;
+            onProgress(complete, createSceneItemReqs.length);
           }
 
           return { req, res };

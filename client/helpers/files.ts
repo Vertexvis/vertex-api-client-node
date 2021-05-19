@@ -89,7 +89,7 @@ export async function uploadFileIfNotExists({
     }
   }
 
-  return await uploadFile({ client, createFileReq, fileData, onMsg, verbose });
+  return uploadFile({ client, createFileReq, fileData, onMsg, verbose });
 }
 
 /**
@@ -119,7 +119,7 @@ export async function uploadFile({
   if (status === 'error')
     throw new Error(`Uploading file ${fileId} failed with status ${status}`);
 
-  // TODO: Temporary, remove if we don't see this logged
+  // Sanity check
   if (status !== 'complete') {
     if (verbose) onMsg(`File ${fileId} in status ${status}, waiting...`);
     await delay(1000);
