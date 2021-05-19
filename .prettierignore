@@ -11,6 +11,7 @@ yarn.lock
 
 .openapi-generator/
 dist/
+coverage/
 docs/
 node_modules/
 scripts/

@@ -3684,6 +3684,12 @@ export interface UpdateSceneItemRequestData {
    * @memberof UpdateSceneItemRequestData
    */
   attributes: UpdateSceneItemRequestDataAttributes;
+  /**
+   *
+   * @type {UpdateSceneItemRequestDataRelationships}
+   * @memberof UpdateSceneItemRequestData
+   */
+  relationships?: UpdateSceneItemRequestDataRelationships;
 }
 /**
  *
@@ -3721,6 +3727,19 @@ export interface UpdateSceneItemRequestDataAttributes {
    * @memberof UpdateSceneItemRequestDataAttributes
    */
   suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneItemRequestDataRelationships
+ */
+export interface UpdateSceneItemRequestDataRelationships {
+  /**
+   * Relationship to a `geometry-set` or `part-revision`.
+   * @type {GeometrySetRelationship | PartRevisionRelationship}
+   * @memberof UpdateSceneItemRequestDataRelationships
+   */
+  source?: GeometrySetRelationship | PartRevisionRelationship;
 }
 /**
  *

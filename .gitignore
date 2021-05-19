@@ -1,5 +1,6 @@
 .husky/
 .lib/
+coverage/
 dist/
 functional-test.ts
 node_modules/
