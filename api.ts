@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.  Notes about the Postman collection and API Reference code samples,   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.  Notes about the Postman collection and API Reference code samples,   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource. 
  *
  * The version of the OpenAPI document: 1.0
  * Contact: support@vertexvis.com
@@ -12,96 +12,88 @@
  * Do not edit the class manually.
  */
 
+
 import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
-import {
-  DUMMY_BASE_URL,
-  assertParamExists,
-  setBasicAuthToObject,
-  setOAuthToObject,
-  setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
-  createRequestFunction,
-} from './common';
+import { DUMMY_BASE_URL, assertParamExists, setBasicAuthToObject, setOAuthToObject, setSearchParams, serializeDataIfNeeded, toPathString, createRequestFunction } from './common';
 // @ts-ignore
 import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
- *
+ * 
  * @export
  * @interface ApiError
  */
 export interface ApiError {
-  /**
-   *
-   * @type {string}
-   * @memberof ApiError
-   */
-  id?: string;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof ApiError
-   */
-  links?: { [key: string]: Link };
-  /**
-   *
-   * @type {string}
-   * @memberof ApiError
-   */
-  status?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiError
-   */
-  code?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiError
-   */
-  title?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiError
-   */
-  detail?: string;
-  /**
-   *
-   * @type {ApiErrorSource}
-   * @memberof ApiError
-   */
-  source?: ApiErrorSource;
-  /**
-   *
-   * @type {{ [key: string]: string; }}
-   * @memberof ApiError
-   */
-  meta?: { [key: string]: string };
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiError
+     */
+    id?: string;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof ApiError
+     */
+    links?: { [key: string]: Link; };
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiError
+     */
+    status?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiError
+     */
+    code?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiError
+     */
+    title?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiError
+     */
+    detail?: string;
+    /**
+     * 
+     * @type {ApiErrorSource}
+     * @memberof ApiError
+     */
+    source?: ApiErrorSource;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof ApiError
+     */
+    meta?: { [key: string]: string; };
 }
 /**
- *
+ * 
  * @export
  * @interface ApiErrorSource
  */
 export interface ApiErrorSource {
-  /**
-   *
-   * @type {string}
-   * @memberof ApiErrorSource
-   */
-  pointer?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof ApiErrorSource
-   */
-  parameter?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiErrorSource
+     */
+    pointer?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof ApiErrorSource
+     */
+    parameter?: string;
 }
 /**
  * 3D bounding-box
@@ -109,18 +101,18 @@ export interface ApiErrorSource {
  * @interface BoundingBox
  */
 export interface BoundingBox {
-  /**
-   *
-   * @type {Vector3}
-   * @memberof BoundingBox
-   */
-  min: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof BoundingBox
-   */
-  max: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof BoundingBox
+     */
+    min: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof BoundingBox
+     */
+    max: Vector3;
 }
 /**
  * Camera placement in 3D space.
@@ -128,24 +120,24 @@ export interface BoundingBox {
  * @interface Camera
  */
 export interface Camera {
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  position: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  lookAt: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  up: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof Camera
+     */
+    position: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof Camera
+     */
+    lookAt: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof Camera
+     */
+    up: Vector3;
 }
 /**
  * Fit camera in 3D space based on items in scene.
@@ -153,148 +145,148 @@ export interface Camera {
  * @interface CameraFit
  */
 export interface CameraFit {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CameraFit
-   */
-  type: CameraFitTypeEnum;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CameraFit
+     */
+    type: CameraFitTypeEnum;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum CameraFitTypeEnum {
-  FitVisibleSceneItems = 'fit-visible-scene-items',
+    FitVisibleSceneItems = 'fit-visible-scene-items'
 }
 
 /**
- *
+ * 
  * @export
  * @interface ChangeMaterialOperation
  */
 export interface ChangeMaterialOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof ChangeMaterialOperation
-   */
-  type: ChangeMaterialOperationTypeEnum;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof ChangeMaterialOperation
-   */
-  material: ColorMaterial;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof ChangeMaterialOperation
+     */
+    type: ChangeMaterialOperationTypeEnum;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof ChangeMaterialOperation
+     */
+    material: ColorMaterial;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum ChangeMaterialOperationTypeEnum {
-  ChangeMaterial = 'change-material',
+    ChangeMaterial = 'change-material'
 }
 
 /**
- *
+ * 
  * @export
  * @interface ChangeTransformOperation
  */
 export interface ChangeTransformOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof ChangeTransformOperation
-   */
-  type: ChangeTransformOperationTypeEnum;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof ChangeTransformOperation
-   */
-  transform: Matrix4;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof ChangeTransformOperation
+     */
+    type: ChangeTransformOperationTypeEnum;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof ChangeTransformOperation
+     */
+    transform: Matrix4;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum ChangeTransformOperationTypeEnum {
-  ChangeTransform = 'change-transform',
+    ChangeTransform = 'change-transform'
 }
 
 /**
- *
+ * 
  * @export
  * @interface ChangeVisibilityOperation
  */
 export interface ChangeVisibilityOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof ChangeVisibilityOperation
-   */
-  type: ChangeVisibilityOperationTypeEnum;
-  /**
-   * Item visibility.
-   * @type {boolean}
-   * @memberof ChangeVisibilityOperation
-   */
-  visible: boolean;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof ChangeVisibilityOperation
+     */
+    type: ChangeVisibilityOperationTypeEnum;
+    /**
+     * Item visibility.
+     * @type {boolean}
+     * @memberof ChangeVisibilityOperation
+     */
+    visible: boolean;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum ChangeVisibilityOperationTypeEnum {
-  ChangeVisibility = 'change-visibility',
+    ChangeVisibility = 'change-visibility'
 }
 
 /**
- *
+ * 
  * @export
  * @interface ClearMaterialOperation
  */
 export interface ClearMaterialOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof ClearMaterialOperation
-   */
-  type: ClearMaterialOperationTypeEnum;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof ClearMaterialOperation
+     */
+    type: ClearMaterialOperationTypeEnum;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum ClearMaterialOperationTypeEnum {
-  ClearMaterial = 'clear-material',
+    ClearMaterial = 'clear-material'
 }
 
 /**
- *
+ * 
  * @export
  * @interface ClearTransformOperation
  */
 export interface ClearTransformOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof ClearTransformOperation
-   */
-  type: ClearTransformOperationTypeEnum;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof ClearTransformOperation
+     */
+    type: ClearTransformOperationTypeEnum;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum ClearTransformOperationTypeEnum {
-  ClearTransform = 'clear-transform',
+    ClearTransform = 'clear-transform'
 }
 
 /**
@@ -303,24 +295,24 @@ export enum ClearTransformOperationTypeEnum {
  * @interface Color3
  */
 export interface Color3 {
-  /**
-   * Color value from 0 to 255.
-   * @type {number}
-   * @memberof Color3
-   */
-  r: number;
-  /**
-   * Color value from 0 to 255.
-   * @type {number}
-   * @memberof Color3
-   */
-  g: number;
-  /**
-   * Color value from 0 to 255.
-   * @type {number}
-   * @memberof Color3
-   */
-  b: number;
+    /**
+     * Color value from 0 to 255.
+     * @type {number}
+     * @memberof Color3
+     */
+    r: number;
+    /**
+     * Color value from 0 to 255.
+     * @type {number}
+     * @memberof Color3
+     */
+    g: number;
+    /**
+     * Color value from 0 to 255.
+     * @type {number}
+     * @memberof Color3
+     */
+    b: number;
 }
 /**
  * Color properties describing how a material looks.
@@ -328,42 +320,42 @@ export interface Color3 {
  * @interface ColorMaterial
  */
 export interface ColorMaterial {
-  /**
-   * Opacity from 0 to 100.
-   * @type {number}
-   * @memberof ColorMaterial
-   */
-  opacity: number;
-  /**
-   * Glossiness from 0 to 128.
-   * @type {number}
-   * @memberof ColorMaterial
-   */
-  glossiness: number;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterial
-   */
-  ambient: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterial
-   */
-  diffuse: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterial
-   */
-  specular: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterial
-   */
-  emissive: Color3;
+    /**
+     * Opacity from 0 to 100.
+     * @type {number}
+     * @memberof ColorMaterial
+     */
+    opacity: number;
+    /**
+     * Glossiness from 0 to 128.
+     * @type {number}
+     * @memberof ColorMaterial
+     */
+    glossiness: number;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterial
+     */
+    ambient: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterial
+     */
+    diffuse: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterial
+     */
+    specular: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterial
+     */
+    emissive: Color3;
 }
 /**
  * Color properties describing how a material looks.
@@ -371,851 +363,899 @@ export interface ColorMaterial {
  * @interface ColorMaterialNullable
  */
 export interface ColorMaterialNullable {
-  /**
-   * Opacity from 0 to 100.
-   * @type {number}
-   * @memberof ColorMaterialNullable
-   */
-  opacity: number;
-  /**
-   * Glossiness from 0 to 128.
-   * @type {number}
-   * @memberof ColorMaterialNullable
-   */
-  glossiness: number;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterialNullable
-   */
-  ambient: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterialNullable
-   */
-  diffuse: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterialNullable
-   */
-  specular: Color3;
-  /**
-   *
-   * @type {Color3}
-   * @memberof ColorMaterialNullable
-   */
-  emissive: Color3;
+    /**
+     * Opacity from 0 to 100.
+     * @type {number}
+     * @memberof ColorMaterialNullable
+     */
+    opacity: number;
+    /**
+     * Glossiness from 0 to 128.
+     * @type {number}
+     * @memberof ColorMaterialNullable
+     */
+    glossiness: number;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterialNullable
+     */
+    ambient: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterialNullable
+     */
+    diffuse: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterialNullable
+     */
+    specular: Color3;
+    /**
+     * 
+     * @type {Color3}
+     * @memberof ColorMaterialNullable
+     */
+    emissive: Color3;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateFileRequest
  */
 export interface CreateFileRequest {
-  /**
-   *
-   * @type {CreateFileRequestData}
-   * @memberof CreateFileRequest
-   */
-  data: CreateFileRequestData;
+    /**
+     * 
+     * @type {CreateFileRequestData}
+     * @memberof CreateFileRequest
+     */
+    data: CreateFileRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateFileRequestData
  */
 export interface CreateFileRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateFileRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateFileRequestDataAttributes}
-   * @memberof CreateFileRequestData
-   */
-  attributes: CreateFileRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateFileRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateFileRequestDataAttributes}
+     * @memberof CreateFileRequestData
+     */
+    attributes: CreateFileRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateFileRequestDataAttributes
  */
 export interface CreateFileRequestDataAttributes {
-  /**
-   * Name matching that of the file you are uploading, including file extension.
-   * @type {string}
-   * @memberof CreateFileRequestDataAttributes
-   */
-  name: string;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreateFileRequestDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   * File name of the root part or assembly, including file extension. Required if `name` references an archive file extension, ignored otherwise.
-   * @type {string}
-   * @memberof CreateFileRequestDataAttributes
-   */
-  rootFileName?: string;
+    /**
+     * Name matching that of the file you are uploading, including file extension.
+     * @type {string}
+     * @memberof CreateFileRequestDataAttributes
+     */
+    name: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreateFileRequestDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * File name of the root part or assembly, including file extension. Required if `name` references an archive file extension, ignored otherwise.
+     * @type {string}
+     * @memberof CreateFileRequestDataAttributes
+     */
+    rootFileName?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateGeometrySetRequest
  */
 export interface CreateGeometrySetRequest {
-  /**
-   *
-   * @type {CreateGeometrySetRequestData}
-   * @memberof CreateGeometrySetRequest
-   */
-  data: CreateGeometrySetRequestData;
+    /**
+     * 
+     * @type {CreateGeometrySetRequestData}
+     * @memberof CreateGeometrySetRequest
+     */
+    data: CreateGeometrySetRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateGeometrySetRequestData
  */
 export interface CreateGeometrySetRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateGeometrySetRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateGeometrySetRequestDataRelationships}
-   * @memberof CreateGeometrySetRequestData
-   */
-  relationships: CreateGeometrySetRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateGeometrySetRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateGeometrySetRequestDataRelationships}
+     * @memberof CreateGeometrySetRequestData
+     */
+    relationships: CreateGeometrySetRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateGeometrySetRequestDataRelationships
  */
 export interface CreateGeometrySetRequestDataRelationships {
-  /**
-   *
-   * @type {FileRelationship}
-   * @memberof CreateGeometrySetRequestDataRelationships
-   */
-  source: FileRelationship;
+    /**
+     * 
+     * @type {FileRelationship}
+     * @memberof CreateGeometrySetRequestDataRelationships
+     */
+    source: FileRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateHitRequest
  */
 export interface CreateHitRequest {
-  /**
-   *
-   * @type {CreateHitRequestData}
-   * @memberof CreateHitRequest
-   */
-  data: CreateHitRequestData;
+    /**
+     * 
+     * @type {CreateHitRequestData}
+     * @memberof CreateHitRequest
+     */
+    data: CreateHitRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateHitRequestData
  */
 export interface CreateHitRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateHitRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateHitRequestDataAttributes}
-   * @memberof CreateHitRequestData
-   */
-  attributes: CreateHitRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateHitRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateHitRequestDataAttributes}
+     * @memberof CreateHitRequestData
+     */
+    attributes: CreateHitRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateHitRequestDataAttributes
  */
 export interface CreateHitRequestDataAttributes {
-  /**
-   *
-   * @type {Point}
-   * @memberof CreateHitRequestDataAttributes
-   */
-  point: Point;
-  /**
-   *
-   * @type {Dimensions}
-   * @memberof CreateHitRequestDataAttributes
-   */
-  viewport: Dimensions;
+    /**
+     * 
+     * @type {Point}
+     * @memberof CreateHitRequestDataAttributes
+     */
+    point: Point;
+    /**
+     * 
+     * @type {Dimensions}
+     * @memberof CreateHitRequestDataAttributes
+     */
+    viewport: Dimensions;
 }
 /**
- *
+ * 
  * @export
  * @interface CreatePartRequest
  */
 export interface CreatePartRequest {
-  /**
-   *
-   * @type {CreatePartRequestData}
-   * @memberof CreatePartRequest
-   */
-  data: CreatePartRequestData;
+    /**
+     * 
+     * @type {CreatePartRequestData}
+     * @memberof CreatePartRequest
+     */
+    data: CreatePartRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreatePartRequestData
  */
 export interface CreatePartRequestData {
-  /**
-   * Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.
-   * @type {string}
-   * @memberof CreatePartRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreatePartRequestDataAttributes}
-   * @memberof CreatePartRequestData
-   */
-  attributes: CreatePartRequestDataAttributes;
-  /**
-   *
-   * @type {CreateGeometrySetRequestDataRelationships}
-   * @memberof CreatePartRequestData
-   */
-  relationships: CreateGeometrySetRequestDataRelationships;
+    /**
+     * Resource object type. Specify one and only one of suppliedId or suppliedIdKey and one and only one of suppliedRevisionId or suppliedRevisionIdKey.
+     * @type {string}
+     * @memberof CreatePartRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreatePartRequestDataAttributes}
+     * @memberof CreatePartRequestData
+     */
+    attributes: CreatePartRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateGeometrySetRequestDataRelationships}
+     * @memberof CreatePartRequestData
+     */
+    relationships: CreateGeometrySetRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreatePartRequestDataAttributes
  */
 export interface CreatePartRequestDataAttributes {
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  suppliedRevisionId?: string;
-  /**
-   * Whether or not to index metadata in the part file.
-   * @type {boolean}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  indexMetadata?: boolean;
-  /**
-   * Name to be used for the root part.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  name?: string;
-  /**
-   * Metadata key used to extract an ID used for correlation.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  suppliedIdKey?: string;
-  /**
-   * Metadata key used to extract an ID used for correlation.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  suppliedRevisionIdKey?: string;
-  /**
-   * Metadata key used to extract an ID used for correlation.
-   * @type {string}
-   * @memberof CreatePartRequestDataAttributes
-   */
-  suppliedInstanceIdKey?: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    suppliedRevisionId?: string;
+    /**
+     * Whether or not to index metadata in the part file.
+     * @type {boolean}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    indexMetadata?: boolean;
+    /**
+     * Name to be used for the root part.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    name?: string;
+    /**
+     * Metadata key used to extract an ID used for correlation.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    suppliedIdKey?: string;
+    /**
+     * Metadata key used to extract an ID used for correlation.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    suppliedRevisionIdKey?: string;
+    /**
+     * Metadata key used to extract an ID used for correlation.
+     * @type {string}
+     * @memberof CreatePartRequestDataAttributes
+     */
+    suppliedInstanceIdKey?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneAlterationRequest
  */
 export interface CreateSceneAlterationRequest {
-  /**
-   *
-   * @type {CreateSceneAlterationRequestData}
-   * @memberof CreateSceneAlterationRequest
-   */
-  data: CreateSceneAlterationRequestData;
+    /**
+     * 
+     * @type {CreateSceneAlterationRequestData}
+     * @memberof CreateSceneAlterationRequest
+     */
+    data: CreateSceneAlterationRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneAlterationRequestData
  */
 export interface CreateSceneAlterationRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneAlterationRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneAlterationRequestDataAttributes}
-   * @memberof CreateSceneAlterationRequestData
-   */
-  attributes: CreateSceneAlterationRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneAlterationRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneAlterationRequestDataAttributes}
+     * @memberof CreateSceneAlterationRequestData
+     */
+    attributes: CreateSceneAlterationRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneAlterationRequestDataAttributes
  */
 export interface CreateSceneAlterationRequestDataAttributes {
-  /**
-   * List of alterations to apply.
-   * @type {Array<SceneOperation>}
-   * @memberof CreateSceneAlterationRequestDataAttributes
-   */
-  alterations: Array<SceneOperation>;
+    /**
+     * List of alterations to apply.
+     * @type {Array<SceneOperation>}
+     * @memberof CreateSceneAlterationRequestDataAttributes
+     */
+    alterations: Array<SceneOperation>;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemOverrideRequest
  */
 export interface CreateSceneItemOverrideRequest {
-  /**
-   *
-   * @type {CreateSceneItemOverrideRequestData}
-   * @memberof CreateSceneItemOverrideRequest
-   */
-  data: CreateSceneItemOverrideRequestData;
+    /**
+     * 
+     * @type {CreateSceneItemOverrideRequestData}
+     * @memberof CreateSceneItemOverrideRequest
+     */
+    data: CreateSceneItemOverrideRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemOverrideRequestData
  */
 export interface CreateSceneItemOverrideRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneItemOverrideRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneItemOverrideRequestDataAttributes}
-   * @memberof CreateSceneItemOverrideRequestData
-   */
-  attributes: CreateSceneItemOverrideRequestDataAttributes;
-  /**
-   *
-   * @type {CreateSceneItemOverrideRequestDataRelationships}
-   * @memberof CreateSceneItemOverrideRequestData
-   */
-  relationships: CreateSceneItemOverrideRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneItemOverrideRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneItemOverrideRequestDataAttributes}
+     * @memberof CreateSceneItemOverrideRequestData
+     */
+    attributes: CreateSceneItemOverrideRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneItemOverrideRequestDataRelationships}
+     * @memberof CreateSceneItemOverrideRequestData
+     */
+    relationships: CreateSceneItemOverrideRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemOverrideRequestDataAttributes
  */
 export interface CreateSceneItemOverrideRequestDataAttributes {
-  /**
-   * Item visibility.
-   * @type {boolean}
-   * @memberof CreateSceneItemOverrideRequestDataAttributes
-   */
-  visible?: boolean;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof CreateSceneItemOverrideRequestDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof CreateSceneItemOverrideRequestDataAttributes
-   */
-  material?: ColorMaterial;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof CreateSceneItemOverrideRequestDataAttributes
-   */
-  selected?: ColorMaterial;
+    /**
+     * Item visibility.
+     * @type {boolean}
+     * @memberof CreateSceneItemOverrideRequestDataAttributes
+     */
+    visible?: boolean;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof CreateSceneItemOverrideRequestDataAttributes
+     */
+    transform?: Matrix4;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof CreateSceneItemOverrideRequestDataAttributes
+     */
+    material?: ColorMaterial;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof CreateSceneItemOverrideRequestDataAttributes
+     */
+    selected?: ColorMaterial;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemOverrideRequestDataRelationships
  */
 export interface CreateSceneItemOverrideRequestDataRelationships {
-  /**
-   *
-   * @type {SceneItemRelationship}
-   * @memberof CreateSceneItemOverrideRequestDataRelationships
-   */
-  sceneItem: SceneItemRelationship;
+    /**
+     * 
+     * @type {SceneItemRelationship}
+     * @memberof CreateSceneItemOverrideRequestDataRelationships
+     */
+    sceneItem: SceneItemRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemRequest
  */
 export interface CreateSceneItemRequest {
-  /**
-   *
-   * @type {CreateSceneItemRequestData}
-   * @memberof CreateSceneItemRequest
-   */
-  data: CreateSceneItemRequestData;
+    /**
+     * 
+     * @type {CreateSceneItemRequestData}
+     * @memberof CreateSceneItemRequest
+     */
+    data: CreateSceneItemRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemRequestData
  */
 export interface CreateSceneItemRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneItemRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneItemRequestDataAttributes}
-   * @memberof CreateSceneItemRequestData
-   */
-  attributes: CreateSceneItemRequestDataAttributes;
-  /**
-   *
-   * @type {CreateSceneItemRequestDataRelationships}
-   * @memberof CreateSceneItemRequestData
-   */
-  relationships: CreateSceneItemRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneItemRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneItemRequestDataAttributes}
+     * @memberof CreateSceneItemRequestData
+     */
+    attributes: CreateSceneItemRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneItemRequestDataRelationships}
+     * @memberof CreateSceneItemRequestData
+     */
+    relationships: CreateSceneItemRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemRequestDataAttributes
  */
 export interface CreateSceneItemRequestDataAttributes {
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  materialOverride?: ColorMaterial;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  name?: string;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  parent?: string;
-  /**
-   * Whether or not to use part instance supplied IDs as scene item supplied IDs.
-   * @type {boolean}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  partInstanceSuppliedIdsAsSuppliedIds?: boolean;
-  /**
-   *
-   * @type {PartRevisionSuppliedId}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  source?: PartRevisionSuppliedId;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   * Item visibility.
-   * @type {boolean}
-   * @memberof CreateSceneItemRequestDataAttributes
-   */
-  visible?: boolean;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    materialOverride?: ColorMaterial;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    name?: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    parent?: string;
+    /**
+     * Whether or not to use part instance supplied IDs as scene item supplied IDs.
+     * @type {boolean}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    partInstanceSuppliedIdsAsSuppliedIds?: boolean;
+    /**
+     * 
+     * @type {PartRevisionSuppliedId}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    source?: PartRevisionSuppliedId;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    transform?: Matrix4;
+    /**
+     * Item visibility.
+     * @type {boolean}
+     * @memberof CreateSceneItemRequestDataAttributes
+     */
+    visible?: boolean;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneItemRequestDataRelationships
  */
 export interface CreateSceneItemRequestDataRelationships {
-  /**
-   *
-   * @type {SceneItemRelationship}
-   * @memberof CreateSceneItemRequestDataRelationships
-   */
-  parent?: SceneItemRelationship;
-  /**
-   * Relationship to a `geometry-set`, `part-revision`, or `scene`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
-   * @memberof CreateSceneItemRequestDataRelationships
-   */
-  source?:
-    | GeometrySetRelationship
-    | PartRevisionRelationship
-    | SceneRelationship;
+    /**
+     * 
+     * @type {SceneItemRelationship}
+     * @memberof CreateSceneItemRequestDataRelationships
+     */
+    parent?: SceneItemRelationship;
+    /**
+     * Relationship to a `geometry-set`, `part-revision`, or `scene`.
+     * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
+     * @memberof CreateSceneItemRequestDataRelationships
+     */
+    source?: GeometrySetRelationship | PartRevisionRelationship | SceneRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneRequest
  */
 export interface CreateSceneRequest {
-  /**
-   *
-   * @type {CreateSceneRequestData}
-   * @memberof CreateSceneRequest
-   */
-  data: CreateSceneRequestData;
+    /**
+     * 
+     * @type {CreateSceneRequestData}
+     * @memberof CreateSceneRequest
+     */
+    data: CreateSceneRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneRequestData
  */
 export interface CreateSceneRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneRequestDataAttributes}
-   * @memberof CreateSceneRequestData
-   */
-  attributes: CreateSceneRequestDataAttributes;
-  /**
-   *
-   * @type {CreateSceneRequestDataRelationships}
-   * @memberof CreateSceneRequestData
-   */
-  relationships?: CreateSceneRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneRequestDataAttributes}
+     * @memberof CreateSceneRequestData
+     */
+    attributes: CreateSceneRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneRequestDataRelationships}
+     * @memberof CreateSceneRequestData
+     */
+    relationships?: CreateSceneRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneRequestDataAttributes
  */
 export interface CreateSceneRequestDataAttributes {
-  /**
-   *
-   * @type {Camera}
-   * @memberof CreateSceneRequestDataAttributes
-   */
-  camera?: Camera;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof CreateSceneRequestDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof CreateSceneRequestDataAttributes
-   */
-  name?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof CreateSceneRequestDataAttributes
-   */
-  treeEnabled?: boolean;
+    /**
+     * 
+     * @type {Camera}
+     * @memberof CreateSceneRequestDataAttributes
+     */
+    camera?: Camera;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof CreateSceneRequestDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSceneRequestDataAttributes
+     */
+    name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof CreateSceneRequestDataAttributes
+     */
+    treeEnabled?: boolean;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneRequestDataRelationships
  */
 export interface CreateSceneRequestDataRelationships {
-  /**
-   *
-   * @type {SceneRelationship}
-   * @memberof CreateSceneRequestDataRelationships
-   */
-  source: SceneRelationship;
+    /**
+     * 
+     * @type {SceneRelationship}
+     * @memberof CreateSceneRequestDataRelationships
+     */
+    source: SceneRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewRequest
  */
 export interface CreateSceneViewRequest {
-  /**
-   *
-   * @type {CreateSceneViewRequestData}
-   * @memberof CreateSceneViewRequest
-   */
-  data: CreateSceneViewRequestData;
+    /**
+     * 
+     * @type {CreateSceneViewRequestData}
+     * @memberof CreateSceneViewRequest
+     */
+    data: CreateSceneViewRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewRequestData
  */
 export interface CreateSceneViewRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneViewRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneViewRequestDataAttributes}
-   * @memberof CreateSceneViewRequestData
-   */
-  attributes: CreateSceneViewRequestDataAttributes;
-  /**
-   *
-   * @type {CreateSceneViewRequestDataRelationships}
-   * @memberof CreateSceneViewRequestData
-   */
-  relationships?: CreateSceneViewRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneViewRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneViewRequestDataAttributes}
+     * @memberof CreateSceneViewRequestData
+     */
+    attributes: CreateSceneViewRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneViewRequestDataRelationships}
+     * @memberof CreateSceneViewRequestData
+     */
+    relationships?: CreateSceneViewRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewRequestDataAttributes
  */
 export interface CreateSceneViewRequestDataAttributes {
-  /**
-   *
-   * @type {Camera}
-   * @memberof CreateSceneViewRequestDataAttributes
-   */
-  camera?: Camera;
-  /**
-   *
-   * @type {CrossSectioning}
-   * @memberof CreateSceneViewRequestDataAttributes
-   */
-  crossSectioning?: CrossSectioning | null;
+    /**
+     * 
+     * @type {Camera}
+     * @memberof CreateSceneViewRequestDataAttributes
+     */
+    camera?: Camera;
+    /**
+     * 
+     * @type {CrossSectioning}
+     * @memberof CreateSceneViewRequestDataAttributes
+     */
+    crossSectioning?: CrossSectioning | null;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewRequestDataRelationships
  */
 export interface CreateSceneViewRequestDataRelationships {
-  /**
-   *
-   * @type {SceneViewStateRelationship}
-   * @memberof CreateSceneViewRequestDataRelationships
-   */
-  sceneViewState?: SceneViewStateRelationship;
+    /**
+     * 
+     * @type {SceneViewStateRelationship}
+     * @memberof CreateSceneViewRequestDataRelationships
+     */
+    sceneViewState?: SceneViewStateRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewStateRequest
  */
 export interface CreateSceneViewStateRequest {
-  /**
-   *
-   * @type {CreateSceneViewStateRequestData}
-   * @memberof CreateSceneViewStateRequest
-   */
-  data: CreateSceneViewStateRequestData;
+    /**
+     * 
+     * @type {CreateSceneViewStateRequestData}
+     * @memberof CreateSceneViewStateRequest
+     */
+    data: CreateSceneViewStateRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewStateRequestData
  */
 export interface CreateSceneViewStateRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateSceneViewStateRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateSceneViewStateRequestDataAttributes}
-   * @memberof CreateSceneViewStateRequestData
-   */
-  attributes: CreateSceneViewStateRequestDataAttributes;
-  /**
-   *
-   * @type {CreateSceneViewStateRequestDataRelationships}
-   * @memberof CreateSceneViewStateRequestData
-   */
-  relationships: CreateSceneViewStateRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateSceneViewStateRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateSceneViewStateRequestDataAttributes}
+     * @memberof CreateSceneViewStateRequestData
+     */
+    attributes: CreateSceneViewStateRequestDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneViewStateRequestDataRelationships}
+     * @memberof CreateSceneViewStateRequestData
+     */
+    relationships: CreateSceneViewStateRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewStateRequestDataAttributes
  */
 export interface CreateSceneViewStateRequestDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof CreateSceneViewStateRequestDataAttributes
-   */
-  name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateSceneViewStateRequestDataAttributes
+     */
+    name?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateSceneViewStateRequestDataRelationships
  */
 export interface CreateSceneViewStateRequestDataRelationships {
-  /**
-   *
-   * @type {SceneViewRelationship}
-   * @memberof CreateSceneViewStateRequestDataRelationships
-   */
-  sceneView: SceneViewRelationship;
+    /**
+     * 
+     * @type {SceneViewRelationship}
+     * @memberof CreateSceneViewStateRequestDataRelationships
+     */
+    sceneView: SceneViewRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateStreamKeyRequest
  */
 export interface CreateStreamKeyRequest {
-  /**
-   *
-   * @type {CreateStreamKeyRequestData}
-   * @memberof CreateStreamKeyRequest
-   */
-  data: CreateStreamKeyRequestData;
+    /**
+     * 
+     * @type {CreateStreamKeyRequestData}
+     * @memberof CreateStreamKeyRequest
+     */
+    data: CreateStreamKeyRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateStreamKeyRequestData
  */
 export interface CreateStreamKeyRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateStreamKeyRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateStreamKeyRequestDataAttributes}
-   * @memberof CreateStreamKeyRequestData
-   */
-  attributes: CreateStreamKeyRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateStreamKeyRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateStreamKeyRequestDataAttributes}
+     * @memberof CreateStreamKeyRequestData
+     */
+    attributes: CreateStreamKeyRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateStreamKeyRequestDataAttributes
  */
 export interface CreateStreamKeyRequestDataAttributes {
-  /**
-   * Number of seconds before the `stream-key` expires.
-   * @type {number}
-   * @memberof CreateStreamKeyRequestDataAttributes
-   */
-  expiry?: number;
+    /**
+     * Number of seconds before the `stream-key` expires.
+     * @type {number}
+     * @memberof CreateStreamKeyRequestDataAttributes
+     */
+    expiry?: number;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateTranslationInspectionRequest
  */
 export interface CreateTranslationInspectionRequest {
-  /**
-   *
-   * @type {CreateTranslationInspectionRequestData}
-   * @memberof CreateTranslationInspectionRequest
-   */
-  data: CreateTranslationInspectionRequestData;
+    /**
+     * 
+     * @type {CreateTranslationInspectionRequestData}
+     * @memberof CreateTranslationInspectionRequest
+     */
+    data: CreateTranslationInspectionRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface CreateTranslationInspectionRequestData
  */
 export interface CreateTranslationInspectionRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof CreateTranslationInspectionRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {CreateGeometrySetRequestDataRelationships}
-   * @memberof CreateTranslationInspectionRequestData
-   */
-  relationships: CreateGeometrySetRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateTranslationInspectionRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateGeometrySetRequestDataRelationships}
+     * @memberof CreateTranslationInspectionRequestData
+     */
+    relationships: CreateGeometrySetRequestDataRelationships;
 }
 /**
- *
+ * 
+ * @export
+ * @interface CreateWebhookSubscriptionRequest
+ */
+export interface CreateWebhookSubscriptionRequest {
+    /**
+     * 
+     * @type {CreateWebhookSubscriptionRequestData}
+     * @memberof CreateWebhookSubscriptionRequest
+     */
+    data: CreateWebhookSubscriptionRequestData;
+}
+/**
+ * 
+ * @export
+ * @interface CreateWebhookSubscriptionRequestData
+ */
+export interface CreateWebhookSubscriptionRequestData {
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof CreateWebhookSubscriptionRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {CreateWebhookSubscriptionRequestDataAttributes}
+     * @memberof CreateWebhookSubscriptionRequestData
+     */
+    attributes: CreateWebhookSubscriptionRequestDataAttributes;
+}
+/**
+ * 
+ * @export
+ * @interface CreateWebhookSubscriptionRequestDataAttributes
+ */
+export interface CreateWebhookSubscriptionRequestDataAttributes {
+    /**
+     * 
+     * @type {string}
+     * @memberof CreateWebhookSubscriptionRequestDataAttributes
+     */
+    url: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof CreateWebhookSubscriptionRequestDataAttributes
+     */
+    topics: Array<string>;
+}
+/**
+ * 
  * @export
  * @interface CrossSectioning
  */
 export interface CrossSectioning {
-  /**
-   *
-   * @type {Array<SectionPlane>}
-   * @memberof CrossSectioning
-   */
-  planes: Array<SectionPlane>;
+    /**
+     * 
+     * @type {Array<SectionPlane>}
+     * @memberof CrossSectioning
+     */
+    planes: Array<SectionPlane>;
 }
 /**
- *
+ * 
  * @export
  * @interface DeselectOperation
  */
 export interface DeselectOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof DeselectOperation
-   */
-  type: DeselectOperationTypeEnum;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof DeselectOperation
+     */
+    type: DeselectOperationTypeEnum;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum DeselectOperationTypeEnum {
-  Deselect = 'deselect',
+    Deselect = 'deselect'
 }
 
 /**
@@ -1224,155 +1264,155 @@ export enum DeselectOperationTypeEnum {
  * @interface Dimensions
  */
 export interface Dimensions {
-  /**
-   * Item\'s height.
-   * @type {number}
-   * @memberof Dimensions
-   */
-  height: number;
-  /**
-   * Item\'s width.
-   * @type {number}
-   * @memberof Dimensions
-   */
-  width: number;
+    /**
+     * Item\'s height.
+     * @type {number}
+     * @memberof Dimensions
+     */
+    height: number;
+    /**
+     * Item\'s width.
+     * @type {number}
+     * @memberof Dimensions
+     */
+    width: number;
 }
 /**
- *
+ * 
  * @export
  * @interface Failure
  */
 export interface Failure {
-  /**
-   *
-   * @type {Set<ApiError>}
-   * @memberof Failure
-   */
-  errors: Set<ApiError>;
-  /**
-   *
-   * @type {{ [key: string]: string; }}
-   * @memberof Failure
-   */
-  meta?: { [key: string]: string };
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Failure
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {Set<ApiError>}
+     * @memberof Failure
+     */
+    errors: Set<ApiError>;
+    /**
+     * 
+     * @type {{ [key: string]: string; }}
+     * @memberof Failure
+     */
+    meta?: { [key: string]: string; };
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof Failure
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface FileList
  */
 export interface FileList {
-  /**
-   *
-   * @type {Array<FileMetadataData>}
-   * @memberof FileList
-   */
-  data: Array<FileMetadataData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof FileList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<FileMetadataData>}
+     * @memberof FileList
+     */
+    data: Array<FileMetadataData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof FileList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface FileMetadata
  */
 export interface FileMetadata {
-  /**
-   *
-   * @type {FileMetadataData}
-   * @memberof FileMetadata
-   */
-  data: FileMetadataData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof FileMetadata
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {FileMetadataData}
+     * @memberof FileMetadata
+     */
+    data: FileMetadataData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof FileMetadata
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface FileMetadataData
  */
 export interface FileMetadataData {
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof FileMetadataData
-   */
-  id: string;
-  /**
-   *
-   * @type {FileMetadataDataAttributes}
-   * @memberof FileMetadataData
-   */
-  attributes: FileMetadataDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof FileMetadataData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof FileMetadataData
+     */
+    id: string;
+    /**
+     * 
+     * @type {FileMetadataDataAttributes}
+     * @memberof FileMetadataData
+     */
+    attributes: FileMetadataDataAttributes;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof FileMetadataData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface FileMetadataDataAttributes
  */
 export interface FileMetadataDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  status: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  rootFileName?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {string}
-   * @memberof FileMetadataDataAttributes
-   */
-  uploaded?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    status: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    rootFileName?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof FileMetadataDataAttributes
+     */
+    uploaded?: string;
 }
 /**
  * Relationship to a `file`.
@@ -1380,109 +1420,109 @@ export interface FileMetadataDataAttributes {
  * @interface FileRelationship
  */
 export interface FileRelationship {
-  /**
-   *
-   * @type {FileRelationshipData}
-   * @memberof FileRelationship
-   */
-  data: FileRelationshipData;
+    /**
+     * 
+     * @type {FileRelationshipData}
+     * @memberof FileRelationship
+     */
+    data: FileRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface FileRelationshipData
  */
 export interface FileRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof FileRelationshipData
-   */
-  type: FileRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof FileRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof FileRelationshipData
+     */
+    type: FileRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof FileRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum FileRelationshipDataTypeEnum {
-  File = 'file',
+    File = 'file'
 }
 
 /**
- *
+ * 
  * @export
  * @interface GeometrySet
  */
 export interface GeometrySet {
-  /**
-   *
-   * @type {GeometrySetData}
-   * @memberof GeometrySet
-   */
-  data: GeometrySetData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof GeometrySet
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {GeometrySetData}
+     * @memberof GeometrySet
+     */
+    data: GeometrySetData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof GeometrySet
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface GeometrySetData
  */
 export interface GeometrySetData {
-  /**
-   *
-   * @type {string}
-   * @memberof GeometrySetData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof GeometrySetData
-   */
-  id: string;
-  /**
-   *
-   * @type {HitDataAttributes}
-   * @memberof GeometrySetData
-   */
-  attributes: HitDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof GeometrySetData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof GeometrySetData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof GeometrySetData
+     */
+    id: string;
+    /**
+     * 
+     * @type {HitDataAttributes}
+     * @memberof GeometrySetData
+     */
+    attributes: HitDataAttributes;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof GeometrySetData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface GeometrySetList
  */
 export interface GeometrySetList {
-  /**
-   *
-   * @type {Array<GeometrySetData>}
-   * @memberof GeometrySetList
-   */
-  data: Array<GeometrySetData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof GeometrySetList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<GeometrySetData>}
+     * @memberof GeometrySetList
+     */
+    data: Array<GeometrySetData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof GeometrySetList
+     */
+    links: { [key: string]: Link; };
 }
 /**
  * Relationship to a `geometry-set`.
@@ -1490,198 +1530,198 @@ export interface GeometrySetList {
  * @interface GeometrySetRelationship
  */
 export interface GeometrySetRelationship {
-  /**
-   *
-   * @type {GeometrySetRelationshipData}
-   * @memberof GeometrySetRelationship
-   */
-  data: GeometrySetRelationshipData;
+    /**
+     * 
+     * @type {GeometrySetRelationshipData}
+     * @memberof GeometrySetRelationship
+     */
+    data: GeometrySetRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface GeometrySetRelationshipData
  */
 export interface GeometrySetRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof GeometrySetRelationshipData
-   */
-  type: GeometrySetRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof GeometrySetRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof GeometrySetRelationshipData
+     */
+    type: GeometrySetRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof GeometrySetRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum GeometrySetRelationshipDataTypeEnum {
-  GeometrySet = 'geometry-set',
+    GeometrySet = 'geometry-set'
 }
 
 /**
- *
+ * 
  * @export
  * @interface Hit
  */
 export interface Hit {
-  /**
-   *
-   * @type {HitData}
-   * @memberof Hit
-   */
-  data: HitData;
-  /**
-   *
-   * @type {Array<HitResultData | SceneItemData | PartRevisionData>}
-   * @memberof Hit
-   */
-  included: Array<HitResultData | SceneItemData | PartRevisionData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Hit
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {HitData}
+     * @memberof Hit
+     */
+    data: HitData;
+    /**
+     * 
+     * @type {Array<HitResultData | SceneItemData | PartRevisionData>}
+     * @memberof Hit
+     */
+    included: Array<HitResultData | SceneItemData | PartRevisionData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof Hit
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface HitData
  */
 export interface HitData {
-  /**
-   *
-   * @type {string}
-   * @memberof HitData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof HitData
-   */
-  id: string;
-  /**
-   *
-   * @type {HitDataAttributes}
-   * @memberof HitData
-   */
-  attributes: HitDataAttributes;
-  /**
-   *
-   * @type {HitDataRelationships}
-   * @memberof HitData
-   */
-  relationships: HitDataRelationships;
+    /**
+     * 
+     * @type {string}
+     * @memberof HitData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof HitData
+     */
+    id: string;
+    /**
+     * 
+     * @type {HitDataAttributes}
+     * @memberof HitData
+     */
+    attributes: HitDataAttributes;
+    /**
+     * 
+     * @type {HitDataRelationships}
+     * @memberof HitData
+     */
+    relationships: HitDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface HitDataAttributes
  */
 export interface HitDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof HitDataAttributes
-   */
-  created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof HitDataAttributes
+     */
+    created: string;
 }
 /**
- *
+ * 
  * @export
  * @interface HitDataRelationships
  */
 export interface HitDataRelationships {
-  /**
-   *
-   * @type {Array<RelationshipData>}
-   * @memberof HitDataRelationships
-   */
-  results: Array<RelationshipData>;
+    /**
+     * 
+     * @type {Array<RelationshipData>}
+     * @memberof HitDataRelationships
+     */
+    results: Array<RelationshipData>;
 }
 /**
- *
+ * 
  * @export
  * @interface HitResultData
  */
 export interface HitResultData {
-  /**
-   *
-   * @type {string}
-   * @memberof HitResultData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof HitResultData
-   */
-  id: string;
-  /**
-   *
-   * @type {HitResultDataAttributes}
-   * @memberof HitResultData
-   */
-  attributes: HitResultDataAttributes;
-  /**
-   *
-   * @type {HitResultDataRelationships}
-   * @memberof HitResultData
-   */
-  relationships: HitResultDataRelationships;
+    /**
+     * 
+     * @type {string}
+     * @memberof HitResultData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof HitResultData
+     */
+    id: string;
+    /**
+     * 
+     * @type {HitResultDataAttributes}
+     * @memberof HitResultData
+     */
+    attributes: HitResultDataAttributes;
+    /**
+     * 
+     * @type {HitResultDataRelationships}
+     * @memberof HitResultData
+     */
+    relationships: HitResultDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface HitResultDataAttributes
  */
 export interface HitResultDataAttributes {
-  /**
-   *
-   * @type {Vector3}
-   * @memberof HitResultDataAttributes
-   */
-  point: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof HitResultDataAttributes
-   */
-  normal: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof HitResultDataAttributes
+     */
+    point: Vector3;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof HitResultDataAttributes
+     */
+    normal: Vector3;
 }
 /**
- *
+ * 
  * @export
  * @interface HitResultDataRelationships
  */
 export interface HitResultDataRelationships {
-  /**
-   *
-   * @type {RelationshipData}
-   * @memberof HitResultDataRelationships
-   */
-  sceneItem: RelationshipData;
+    /**
+     * 
+     * @type {RelationshipData}
+     * @memberof HitResultDataRelationships
+     */
+    sceneItem: RelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface Link
  */
 export interface Link {
-  /**
-   *
-   * @type {string}
-   * @memberof Link
-   */
-  href: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Link
+     */
+    href: string;
 }
 /**
  * Color material override.
@@ -1689,12 +1729,12 @@ export interface Link {
  * @interface MaterialOverride
  */
 export interface MaterialOverride {
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof MaterialOverride
-   */
-  value?: ColorMaterial;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof MaterialOverride
+     */
+    value?: ColorMaterial;
 }
 /**
  * 4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations) for details.
@@ -1702,30 +1742,30 @@ export interface MaterialOverride {
  * @interface Matrix4
  */
 export interface Matrix4 {
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4
-   */
-  r0: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4
-   */
-  r1: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4
-   */
-  r2: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4
-   */
-  r3: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4
+     */
+    r0: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4
+     */
+    r1: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4
+     */
+    r2: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4
+     */
+    r3: Vector4;
 }
 /**
  * 4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations) for details.
@@ -1733,406 +1773,406 @@ export interface Matrix4 {
  * @interface Matrix4Nullable
  */
 export interface Matrix4Nullable {
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4Nullable
-   */
-  r0: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4Nullable
-   */
-  r1: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4Nullable
-   */
-  r2: Vector4;
-  /**
-   *
-   * @type {Vector4}
-   * @memberof Matrix4Nullable
-   */
-  r3: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4Nullable
+     */
+    r0: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4Nullable
+     */
+    r1: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4Nullable
+     */
+    r2: Vector4;
+    /**
+     * 
+     * @type {Vector4}
+     * @memberof Matrix4Nullable
+     */
+    r3: Vector4;
 }
 /**
- *
+ * 
  * @export
  * @interface MetadataValue
  */
 export interface MetadataValue {
-  /**
-   * Metadata value.
-   * @type {string}
-   * @memberof MetadataValue
-   */
-  value?: string;
-  /**
-   * Type of metadata value.
-   * @type {string}
-   * @memberof MetadataValue
-   */
-  type: MetadataValueTypeEnum;
+    /**
+     * Metadata value.
+     * @type {string}
+     * @memberof MetadataValue
+     */
+    value?: string;
+    /**
+     * Type of metadata value.
+     * @type {string}
+     * @memberof MetadataValue
+     */
+    type: MetadataValueTypeEnum;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum MetadataValueTypeEnum {
-  String = 'string',
-  Long = 'long',
-  Float = 'float',
-  Date = 'date',
-  Null = 'null',
+    String = 'string',
+    Long = 'long',
+    Float = 'float',
+    Date = 'date',
+    Null = 'null'
 }
 
 /**
- *
+ * 
  * @export
  * @interface OAuth2BadRequest
  */
 export interface OAuth2BadRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof OAuth2BadRequest
-   */
-  error: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuth2BadRequest
+     */
+    error: string;
 }
 /**
- *
+ * 
  * @export
  * @interface OAuth2Token
  */
 export interface OAuth2Token {
-  /**
-   *
-   * @type {string}
-   * @memberof OAuth2Token
-   */
-  access_token: string;
-  /**
-   *
-   * @type {string}
-   * @memberof OAuth2Token
-   */
-  token_type: string;
-  /**
-   *
-   * @type {string}
-   * @memberof OAuth2Token
-   */
-  account_id: string;
-  /**
-   *
-   * @type {number}
-   * @memberof OAuth2Token
-   */
-  expires_in: number;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof OAuth2Token
-   */
-  scopes: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuth2Token
+     */
+    access_token: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuth2Token
+     */
+    token_type: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof OAuth2Token
+     */
+    account_id: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof OAuth2Token
+     */
+    expires_in: number;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof OAuth2Token
+     */
+    scopes: Array<string>;
 }
 /**
- *
+ * 
  * @export
  * @interface Part
  */
 export interface Part {
-  /**
-   *
-   * @type {PartData}
-   * @memberof Part
-   */
-  data: PartData;
-  /**
-   *
-   * @type {Array<PartRevisionData>}
-   * @memberof Part
-   */
-  included?: Array<PartRevisionData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Part
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {PartData}
+     * @memberof Part
+     */
+    data: PartData;
+    /**
+     * 
+     * @type {Array<PartRevisionData>}
+     * @memberof Part
+     */
+    included?: Array<PartRevisionData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof Part
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface PartData
  */
 export interface PartData {
-  /**
-   *
-   * @type {string}
-   * @memberof PartData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PartData
-   */
-  id: string;
-  /**
-   *
-   * @type {PartDataAttributes}
-   * @memberof PartData
-   */
-  attributes: PartDataAttributes;
-  /**
-   *
-   * @type {PartDataRelationships}
-   * @memberof PartData
-   */
-  relationships?: PartDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PartData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof PartData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof PartData
+     */
+    id: string;
+    /**
+     * 
+     * @type {PartDataAttributes}
+     * @memberof PartData
+     */
+    attributes: PartDataAttributes;
+    /**
+     * 
+     * @type {PartDataRelationships}
+     * @memberof PartData
+     */
+    relationships?: PartDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof PartData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface PartDataAttributes
  */
 export interface PartDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof PartDataAttributes
-   */
-  name: string;
-  /**
-   *
-   * @type {string}
-   * @memberof PartDataAttributes
-   */
-  suppliedId: string;
-  /**
-   *
-   * @type {string}
-   * @memberof PartDataAttributes
-   */
-  created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartDataAttributes
+     */
+    name: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartDataAttributes
+     */
+    suppliedId: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartDataAttributes
+     */
+    created: string;
 }
 /**
- *
+ * 
  * @export
  * @interface PartDataRelationships
  */
 export interface PartDataRelationships {
-  /**
-   *
-   * @type {Array<PartDataRelationshipsPartRevisions>}
-   * @memberof PartDataRelationships
-   */
-  partRevisions: Array<PartDataRelationshipsPartRevisions>;
+    /**
+     * 
+     * @type {Array<PartDataRelationshipsPartRevisions>}
+     * @memberof PartDataRelationships
+     */
+    partRevisions: Array<PartDataRelationshipsPartRevisions>;
 }
 /**
- *
+ * 
  * @export
  * @interface PartDataRelationshipsPartRevisions
  */
 export interface PartDataRelationshipsPartRevisions {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof PartDataRelationshipsPartRevisions
-   */
-  type: PartDataRelationshipsPartRevisionsTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PartDataRelationshipsPartRevisions
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof PartDataRelationshipsPartRevisions
+     */
+    type: PartDataRelationshipsPartRevisionsTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof PartDataRelationshipsPartRevisions
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum PartDataRelationshipsPartRevisionsTypeEnum {
-  PartRevision = 'part-revision',
+    PartRevision = 'part-revision'
 }
 
 /**
- *
+ * 
  * @export
  * @interface PartList
  */
 export interface PartList {
-  /**
-   *
-   * @type {Array<PartData>}
-   * @memberof PartList
-   */
-  data: Array<PartData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PartList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<PartData>}
+     * @memberof PartList
+     */
+    data: Array<PartData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof PartList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface PartRelationshipData
  */
 export interface PartRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof PartRelationshipData
-   */
-  type: PartRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PartRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof PartRelationshipData
+     */
+    type: PartRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof PartRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum PartRelationshipDataTypeEnum {
-  Part = 'part',
+    Part = 'part'
 }
 
 /**
- *
+ * 
  * @export
  * @interface PartRevision
  */
 export interface PartRevision {
-  /**
-   *
-   * @type {PartRevisionData}
-   * @memberof PartRevision
-   */
-  data: PartRevisionData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PartRevision
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {PartRevisionData}
+     * @memberof PartRevision
+     */
+    data: PartRevisionData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof PartRevision
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface PartRevisionData
  */
 export interface PartRevisionData {
-  /**
-   *
-   * @type {string}
-   * @memberof PartRevisionData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PartRevisionData
-   */
-  id: string;
-  /**
-   *
-   * @type {PartRevisionDataAttributes}
-   * @memberof PartRevisionData
-   */
-  attributes: PartRevisionDataAttributes;
-  /**
-   *
-   * @type {PartRevisionDataRelationships}
-   * @memberof PartRevisionData
-   */
-  relationships: PartRevisionDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PartRevisionData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof PartRevisionData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof PartRevisionData
+     */
+    id: string;
+    /**
+     * 
+     * @type {PartRevisionDataAttributes}
+     * @memberof PartRevisionData
+     */
+    attributes: PartRevisionDataAttributes;
+    /**
+     * 
+     * @type {PartRevisionDataRelationships}
+     * @memberof PartRevisionData
+     */
+    relationships: PartRevisionDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof PartRevisionData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface PartRevisionDataAttributes
  */
 export interface PartRevisionDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof PartRevisionDataAttributes
-   */
-  created?: string;
-  /**
-   *
-   * @type {{ [key: string]: MetadataValue; }}
-   * @memberof PartRevisionDataAttributes
-   */
-  metadata?: { [key: string]: MetadataValue };
-  /**
-   *
-   * @type {string}
-   * @memberof PartRevisionDataAttributes
-   */
-  suppliedId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof PartRevisionDataAttributes
+     */
+    created?: string;
+    /**
+     * 
+     * @type {{ [key: string]: MetadataValue; }}
+     * @memberof PartRevisionDataAttributes
+     */
+    metadata?: { [key: string]: MetadataValue; };
+    /**
+     * 
+     * @type {string}
+     * @memberof PartRevisionDataAttributes
+     */
+    suppliedId?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface PartRevisionDataRelationships
  */
 export interface PartRevisionDataRelationships {
-  /**
-   *
-   * @type {GeometrySetRelationshipData}
-   * @memberof PartRevisionDataRelationships
-   */
-  geometrySet?: GeometrySetRelationshipData;
-  /**
-   *
-   * @type {PartRelationshipData}
-   * @memberof PartRevisionDataRelationships
-   */
-  part?: PartRelationshipData;
+    /**
+     * 
+     * @type {GeometrySetRelationshipData}
+     * @memberof PartRevisionDataRelationships
+     */
+    geometrySet?: GeometrySetRelationshipData;
+    /**
+     * 
+     * @type {PartRelationshipData}
+     * @memberof PartRevisionDataRelationships
+     */
+    part?: PartRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface PartRevisionList
  */
 export interface PartRevisionList {
-  /**
-   *
-   * @type {Array<PartRevisionData>}
-   * @memberof PartRevisionList
-   */
-  data: Array<PartRevisionData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PartRevisionList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<PartRevisionData>}
+     * @memberof PartRevisionList
+     */
+    data: Array<PartRevisionData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof PartRevisionList
+     */
+    links: { [key: string]: Link; };
 }
 /**
  * Relationship to a `part-revision`.
@@ -2140,31 +2180,31 @@ export interface PartRevisionList {
  * @interface PartRevisionRelationship
  */
 export interface PartRevisionRelationship {
-  /**
-   *
-   * @type {PartDataRelationshipsPartRevisions}
-   * @memberof PartRevisionRelationship
-   */
-  data: PartDataRelationshipsPartRevisions;
+    /**
+     * 
+     * @type {PartDataRelationshipsPartRevisions}
+     * @memberof PartRevisionRelationship
+     */
+    data: PartDataRelationshipsPartRevisions;
 }
 /**
- *
+ * 
  * @export
  * @interface PartRevisionSuppliedId
  */
 export interface PartRevisionSuppliedId {
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof PartRevisionSuppliedId
-   */
-  suppliedPartId: string;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof PartRevisionSuppliedId
-   */
-  suppliedRevisionId: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof PartRevisionSuppliedId
+     */
+    suppliedPartId: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof PartRevisionSuppliedId
+     */
+    suppliedRevisionId: string;
 }
 /**
  * 2D point.
@@ -2172,18 +2212,18 @@ export interface PartRevisionSuppliedId {
  * @interface Point
  */
 export interface Point {
-  /**
-   * x-axis coordinate.
-   * @type {number}
-   * @memberof Point
-   */
-  dx: number;
-  /**
-   * y-axis coordinate.
-   * @type {number}
-   * @memberof Point
-   */
-  dy: number;
+    /**
+     * x-axis coordinate.
+     * @type {number}
+     * @memberof Point
+     */
+    dx: number;
+    /**
+     * y-axis coordinate.
+     * @type {number}
+     * @memberof Point
+     */
+    dy: number;
 }
 /**
  * Resource object type.
@@ -2191,726 +2231,723 @@ export interface Point {
  * @enum {string}
  */
 export enum QueryAll {
-  All = 'all',
+    All = 'all'
 }
 
 /**
- *
+ * 
  * @export
  * @interface QueryByCollection
  */
 export interface QueryByCollection {
-  /**
-   *
-   * @type {QueryByCollectionData}
-   * @memberof QueryByCollection
-   */
-  data: QueryByCollectionData;
+    /**
+     * 
+     * @type {QueryByCollectionData}
+     * @memberof QueryByCollection
+     */
+    data: QueryByCollectionData;
 }
 /**
- *
+ * 
  * @export
  * @interface QueryByCollectionData
  */
 export interface QueryByCollectionData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof QueryByCollectionData
-   */
-  type: QueryByCollectionDataTypeEnum;
-  /**
-   *
-   * @type {QueryByCollectionDataAttributes}
-   * @memberof QueryByCollectionData
-   */
-  attributes: QueryByCollectionDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof QueryByCollectionData
+     */
+    type: QueryByCollectionDataTypeEnum;
+    /**
+     * 
+     * @type {QueryByCollectionDataAttributes}
+     * @memberof QueryByCollectionData
+     */
+    attributes: QueryByCollectionDataAttributes;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum QueryByCollectionDataTypeEnum {
-  QueryByCollection = 'query-by-collection',
+    QueryByCollection = 'query-by-collection'
 }
 
 /**
- *
+ * 
  * @export
  * @interface QueryByCollectionDataAttributes
  */
 export interface QueryByCollectionDataAttributes {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof QueryByCollectionDataAttributes
-   */
-  type: QueryByCollectionDataAttributesTypeEnum;
-  /**
-   * Query `scene-items`.
-   * @type {Array<QueryById>}
-   * @memberof QueryByCollectionDataAttributes
-   */
-  values: Array<QueryById>;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof QueryByCollectionDataAttributes
+     */
+    type: QueryByCollectionDataAttributesTypeEnum;
+    /**
+     * Query `scene-items`.
+     * @type {Array<QueryById>}
+     * @memberof QueryByCollectionDataAttributes
+     */
+    values: Array<QueryById>;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum QueryByCollectionDataAttributesTypeEnum {
-  And = 'and',
-  Or = 'or',
+    And = 'and',
+    Or = 'or'
 }
 
 /**
- *
+ * 
  * @export
  * @interface QueryById
  */
 export interface QueryById {
-  /**
-   *
-   * @type {QueryByIdData}
-   * @memberof QueryById
-   */
-  data: QueryByIdData;
+    /**
+     * 
+     * @type {QueryByIdData}
+     * @memberof QueryById
+     */
+    data: QueryByIdData;
 }
 /**
- *
+ * 
  * @export
  * @interface QueryByIdData
  */
 export interface QueryByIdData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof QueryByIdData
-   */
-  type: QueryByIdDataTypeEnum;
-  /**
-   *
-   * @type {QueryByIdDataAttributes}
-   * @memberof QueryByIdData
-   */
-  attributes: QueryByIdDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof QueryByIdData
+     */
+    type: QueryByIdDataTypeEnum;
+    /**
+     * 
+     * @type {QueryByIdDataAttributes}
+     * @memberof QueryByIdData
+     */
+    attributes: QueryByIdDataAttributes;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum QueryByIdDataTypeEnum {
-  QueryById = 'query-by-id',
+    QueryById = 'query-by-id'
 }
 
 /**
- *
+ * 
  * @export
  * @interface QueryByIdDataAttributes
  */
 export interface QueryByIdDataAttributes {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof QueryByIdDataAttributes
-   */
-  type: QueryByIdDataAttributesTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof QueryByIdDataAttributes
-   */
-  value: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof QueryByIdDataAttributes
+     */
+    type: QueryByIdDataAttributesTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof QueryByIdDataAttributes
+     */
+    value: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum QueryByIdDataAttributesTypeEnum {
-  Id = 'id',
-  SuppliedId = 'suppliedId',
+    Id = 'id',
+    SuppliedId = 'suppliedId'
 }
 
 /**
- *
+ * 
  * @export
  * @interface QueuedJob
  */
 export interface QueuedJob {
-  /**
-   *
-   * @type {QueuedJobData}
-   * @memberof QueuedJob
-   */
-  data: QueuedJobData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof QueuedJob
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {QueuedJobData}
+     * @memberof QueuedJob
+     */
+    data: QueuedJobData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof QueuedJob
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface QueuedJobData
  */
 export interface QueuedJobData {
-  /**
-   *
-   * @type {string}
-   * @memberof QueuedJobData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof QueuedJobData
-   */
-  id: string;
-  /**
-   *
-   * @type {QueuedJobDataAttributes}
-   * @memberof QueuedJobData
-   */
-  attributes: QueuedJobDataAttributes;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueuedJobData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof QueuedJobData
+     */
+    id: string;
+    /**
+     * 
+     * @type {QueuedJobDataAttributes}
+     * @memberof QueuedJobData
+     */
+    attributes: QueuedJobDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface QueuedJobDataAttributes
  */
 export interface QueuedJobDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof QueuedJobDataAttributes
-   */
-  status: string;
-  /**
-   *
-   * @type {Set<ApiError>}
-   * @memberof QueuedJobDataAttributes
-   */
-  errors?: Set<ApiError>;
+    /**
+     * 
+     * @type {string}
+     * @memberof QueuedJobDataAttributes
+     */
+    status: string;
+    /**
+     * 
+     * @type {Set<ApiError>}
+     * @memberof QueuedJobDataAttributes
+     */
+    errors?: Set<ApiError>;
 }
 /**
- *
+ * 
  * @export
  * @interface RelationshipData
  */
 export interface RelationshipData {
-  /**
-   *
-   * @type {string}
-   * @memberof RelationshipData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof RelationshipData
-   */
-  id: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof RelationshipData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof RelationshipData
+     */
+    id: string;
 }
 /**
- *
+ * 
  * @export
  * @interface RevokeOAuth2TokenRequest
  */
 export interface RevokeOAuth2TokenRequest {
-  /**
-   *
-   * @type {RevokeOAuth2TokenRequestData}
-   * @memberof RevokeOAuth2TokenRequest
-   */
-  data: RevokeOAuth2TokenRequestData;
+    /**
+     * 
+     * @type {RevokeOAuth2TokenRequestData}
+     * @memberof RevokeOAuth2TokenRequest
+     */
+    data: RevokeOAuth2TokenRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface RevokeOAuth2TokenRequestData
  */
 export interface RevokeOAuth2TokenRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof RevokeOAuth2TokenRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {RevokeOAuth2TokenRequestDataAttributes}
-   * @memberof RevokeOAuth2TokenRequestData
-   */
-  attributes: RevokeOAuth2TokenRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof RevokeOAuth2TokenRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {RevokeOAuth2TokenRequestDataAttributes}
+     * @memberof RevokeOAuth2TokenRequestData
+     */
+    attributes: RevokeOAuth2TokenRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface RevokeOAuth2TokenRequestDataAttributes
  */
 export interface RevokeOAuth2TokenRequestDataAttributes {
-  /**
-   * Token to revoke.
-   * @type {string}
-   * @memberof RevokeOAuth2TokenRequestDataAttributes
-   */
-  token: string;
+    /**
+     * Token to revoke.
+     * @type {string}
+     * @memberof RevokeOAuth2TokenRequestDataAttributes
+     */
+    token: string;
 }
 /**
- *
+ * 
  * @export
  * @interface Scene
  */
 export interface Scene {
-  /**
-   *
-   * @type {SceneData}
-   * @memberof Scene
-   */
-  data: SceneData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Scene
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneData}
+     * @memberof Scene
+     */
+    data: SceneData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof Scene
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneAlteration
  */
 export interface SceneAlteration {
-  /**
-   *
-   * @type {SceneAlterationData}
-   * @memberof SceneAlteration
-   */
-  data: SceneAlterationData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneAlteration
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneAlterationData}
+     * @memberof SceneAlteration
+     */
+    data: SceneAlterationData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneAlteration
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneAlterationData
  */
 export interface SceneAlterationData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneAlterationData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneAlterationData
-   */
-  id: string;
-  /**
-   *
-   * @type {HitDataAttributes}
-   * @memberof SceneAlterationData
-   */
-  attributes: HitDataAttributes;
-  /**
-   *
-   * @type {CreateSceneViewStateRequestDataRelationships}
-   * @memberof SceneAlterationData
-   */
-  relationships: CreateSceneViewStateRequestDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneAlterationData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneAlterationData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneAlterationData
+     */
+    id: string;
+    /**
+     * 
+     * @type {HitDataAttributes}
+     * @memberof SceneAlterationData
+     */
+    attributes: HitDataAttributes;
+    /**
+     * 
+     * @type {CreateSceneViewStateRequestDataRelationships}
+     * @memberof SceneAlterationData
+     */
+    relationships: CreateSceneViewStateRequestDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneAlterationData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneAlterationList
  */
 export interface SceneAlterationList {
-  /**
-   *
-   * @type {Array<SceneAlterationData>}
-   * @memberof SceneAlterationList
-   */
-  data: Array<SceneAlterationData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneAlterationList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<SceneAlterationData>}
+     * @memberof SceneAlterationList
+     */
+    data: Array<SceneAlterationData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneAlterationList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneData
  */
 export interface SceneData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneData
-   */
-  id: string;
-  /**
-   *
-   * @type {SceneDataAttributes}
-   * @memberof SceneData
-   */
-  attributes: SceneDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneData
+     */
+    id: string;
+    /**
+     * 
+     * @type {SceneDataAttributes}
+     * @memberof SceneData
+     */
+    attributes: SceneDataAttributes;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneDataAttributes
  */
 export interface SceneDataAttributes {
-  /**
-   *
-   * @type {Camera}
-   * @memberof SceneDataAttributes
-   */
-  camera?: Camera;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneDataAttributes
-   */
-  state: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneDataAttributes
-   */
-  name?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof SceneDataAttributes
-   */
-  treeEnabled?: boolean;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneDataAttributes
-   */
-  modified: string;
+    /**
+     * 
+     * @type {Camera}
+     * @memberof SceneDataAttributes
+     */
+    camera?: Camera;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneDataAttributes
+     */
+    state: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneDataAttributes
+     */
+    name?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SceneDataAttributes
+     */
+    treeEnabled?: boolean;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneDataAttributes
+     */
+    modified: string;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItem
  */
 export interface SceneItem {
-  /**
-   *
-   * @type {SceneItemData}
-   * @memberof SceneItem
-   */
-  data: SceneItemData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItem
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneItemData}
+     * @memberof SceneItem
+     */
+    data: SceneItemData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItem
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemData
  */
 export interface SceneItemData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneItemData
-   */
-  id: string;
-  /**
-   *
-   * @type {SceneItemDataAttributes}
-   * @memberof SceneItemData
-   */
-  attributes: SceneItemDataAttributes;
-  /**
-   *
-   * @type {SceneItemDataRelationships}
-   * @memberof SceneItemData
-   */
-  relationships: SceneItemDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItemData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneItemData
+     */
+    id: string;
+    /**
+     * 
+     * @type {SceneItemDataAttributes}
+     * @memberof SceneItemData
+     */
+    attributes: SceneItemDataAttributes;
+    /**
+     * 
+     * @type {SceneItemDataRelationships}
+     * @memberof SceneItemData
+     */
+    relationships: SceneItemDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItemData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemDataAttributes
  */
 export interface SceneItemDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof SceneItemDataAttributes
-   */
-  visible?: boolean;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof SceneItemDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SceneItemDataAttributes
-   */
-  materialOverride?: ColorMaterial;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemDataAttributes
-   */
-  created?: string;
-  /**
-   *
-   * @type {BoundingBox}
-   * @memberof SceneItemDataAttributes
-   */
-  boundingBox?: BoundingBox;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemDataAttributes
-   */
-  name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SceneItemDataAttributes
+     */
+    visible?: boolean;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof SceneItemDataAttributes
+     */
+    transform?: Matrix4;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof SceneItemDataAttributes
+     */
+    materialOverride?: ColorMaterial;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemDataAttributes
+     */
+    created?: string;
+    /**
+     * 
+     * @type {BoundingBox}
+     * @memberof SceneItemDataAttributes
+     */
+    boundingBox?: BoundingBox;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemDataAttributes
+     */
+    name?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemDataRelationships
  */
 export interface SceneItemDataRelationships {
-  /**
-   *
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
-   * @memberof SceneItemDataRelationships
-   */
-  source?:
-    | GeometrySetRelationship
-    | PartRevisionRelationship
-    | SceneRelationship;
-  /**
-   *
-   * @type {SceneItemRelationship}
-   * @memberof SceneItemDataRelationships
-   */
-  parent?: SceneItemRelationship;
+    /**
+     * 
+     * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
+     * @memberof SceneItemDataRelationships
+     */
+    source?: GeometrySetRelationship | PartRevisionRelationship | SceneRelationship;
+    /**
+     * 
+     * @type {SceneItemRelationship}
+     * @memberof SceneItemDataRelationships
+     */
+    parent?: SceneItemRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemList
  */
 export interface SceneItemList {
-  /**
-   *
-   * @type {Array<SceneItemData>}
-   * @memberof SceneItemList
-   */
-  data: Array<SceneItemData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItemList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<SceneItemData>}
+     * @memberof SceneItemList
+     */
+    data: Array<SceneItemData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItemList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemOverride
  */
 export interface SceneItemOverride {
-  /**
-   *
-   * @type {SceneItemOverrideData}
-   * @memberof SceneItemOverride
-   */
-  data: SceneItemOverrideData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItemOverride
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneItemOverrideData}
+     * @memberof SceneItemOverride
+     */
+    data: SceneItemOverrideData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItemOverride
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemOverrideData
  */
 export interface SceneItemOverrideData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemOverrideData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneItemOverrideData
-   */
-  id: string;
-  /**
-   *
-   * @type {SceneItemOverrideDataAttributes}
-   * @memberof SceneItemOverrideData
-   */
-  attributes: SceneItemOverrideDataAttributes;
-  /**
-   *
-   * @type {SceneItemOverrideDataRelationships}
-   * @memberof SceneItemOverrideData
-   */
-  relationships: SceneItemOverrideDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItemOverrideData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemOverrideData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneItemOverrideData
+     */
+    id: string;
+    /**
+     * 
+     * @type {SceneItemOverrideDataAttributes}
+     * @memberof SceneItemOverrideData
+     */
+    attributes: SceneItemOverrideDataAttributes;
+    /**
+     * 
+     * @type {SceneItemOverrideDataRelationships}
+     * @memberof SceneItemOverrideData
+     */
+    relationships: SceneItemOverrideDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItemOverrideData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemOverrideDataAttributes
  */
 export interface SceneItemOverrideDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemOverrideDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof SceneItemOverrideDataAttributes
-   */
-  visible?: boolean;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof SceneItemOverrideDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SceneItemOverrideDataAttributes
-   */
-  material?: ColorMaterial;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SceneItemOverrideDataAttributes
-   */
-  selected?: ColorMaterial;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneItemOverrideDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {boolean}
+     * @memberof SceneItemOverrideDataAttributes
+     */
+    visible?: boolean;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof SceneItemOverrideDataAttributes
+     */
+    transform?: Matrix4;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof SceneItemOverrideDataAttributes
+     */
+    material?: ColorMaterial;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof SceneItemOverrideDataAttributes
+     */
+    selected?: ColorMaterial;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemOverrideDataRelationships
  */
 export interface SceneItemOverrideDataRelationships {
-  /**
-   *
-   * @type {SceneItemRelationship}
-   * @memberof SceneItemOverrideDataRelationships
-   */
-  sceneItem: SceneItemRelationship;
-  /**
-   *
-   * @type {SceneViewRelationship}
-   * @memberof SceneItemOverrideDataRelationships
-   */
-  sceneView: SceneViewRelationship;
+    /**
+     * 
+     * @type {SceneItemRelationship}
+     * @memberof SceneItemOverrideDataRelationships
+     */
+    sceneItem: SceneItemRelationship;
+    /**
+     * 
+     * @type {SceneViewRelationship}
+     * @memberof SceneItemOverrideDataRelationships
+     */
+    sceneView: SceneViewRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemOverrideList
  */
 export interface SceneItemOverrideList {
-  /**
-   *
-   * @type {Array<SceneItemOverrideData>}
-   * @memberof SceneItemOverrideList
-   */
-  data: Array<SceneItemOverrideData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneItemOverrideList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<SceneItemOverrideData>}
+     * @memberof SceneItemOverrideList
+     */
+    data: Array<SceneItemOverrideData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneItemOverrideList
+     */
+    links: { [key: string]: Link; };
 }
 /**
  * Relationship to a `scene-item`.
@@ -2918,86 +2955,78 @@ export interface SceneItemOverrideList {
  * @interface SceneItemRelationship
  */
 export interface SceneItemRelationship {
-  /**
-   *
-   * @type {SceneItemRelationshipData}
-   * @memberof SceneItemRelationship
-   */
-  data: SceneItemRelationshipData;
+    /**
+     * 
+     * @type {SceneItemRelationshipData}
+     * @memberof SceneItemRelationship
+     */
+    data: SceneItemRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneItemRelationshipData
  */
 export interface SceneItemRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof SceneItemRelationshipData
-   */
-  type: SceneItemRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneItemRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof SceneItemRelationshipData
+     */
+    type: SceneItemRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneItemRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum SceneItemRelationshipDataTypeEnum {
-  SceneItem = 'scene-item',
+    SceneItem = 'scene-item'
 }
 
 /**
- *
+ * 
  * @export
  * @interface SceneList
  */
 export interface SceneList {
-  /**
-   *
-   * @type {Array<SceneData>}
-   * @memberof SceneList
-   */
-  data: Array<SceneData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<SceneData>}
+     * @memberof SceneList
+     */
+    data: Array<SceneData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneOperation
  */
 export interface SceneOperation {
-  /**
-   * Query `scene-items`. Use `query-by-collection` to combine multiple queries.
-   * @type {QueryById | QueryByCollection | QueryAll}
-   * @memberof SceneOperation
-   */
-  query: QueryById | QueryByCollection | QueryAll;
-  /**
-   * List of operations to perform on `scene-items` matching the query.
-   * @type {Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation | ChangeTransformOperation | ClearTransformOperation | SelectOperation | DeselectOperation>}
-   * @memberof SceneOperation
-   */
-  operations: Array<
-    | ChangeVisibilityOperation
-    | ChangeMaterialOperation
-    | ClearMaterialOperation
-    | ChangeTransformOperation
-    | ClearTransformOperation
-    | SelectOperation
-    | DeselectOperation
-  >;
+    /**
+     * Query `scene-items`. Use `query-by-collection` to combine multiple queries.
+     * @type {QueryById | QueryByCollection | QueryAll}
+     * @memberof SceneOperation
+     */
+    query: QueryById | QueryByCollection | QueryAll;
+    /**
+     * List of operations to perform on `scene-items` matching the query.
+     * @type {Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation | ChangeTransformOperation | ClearTransformOperation | SelectOperation | DeselectOperation>}
+     * @memberof SceneOperation
+     */
+    operations: Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation | ChangeTransformOperation | ClearTransformOperation | SelectOperation | DeselectOperation>;
 }
 /**
  * Relationship to a `scene`.
@@ -3005,153 +3034,153 @@ export interface SceneOperation {
  * @interface SceneRelationship
  */
 export interface SceneRelationship {
-  /**
-   *
-   * @type {SceneRelationshipData}
-   * @memberof SceneRelationship
-   */
-  data: SceneRelationshipData;
+    /**
+     * 
+     * @type {SceneRelationshipData}
+     * @memberof SceneRelationship
+     */
+    data: SceneRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneRelationshipData
  */
 export interface SceneRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof SceneRelationshipData
-   */
-  type: SceneRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof SceneRelationshipData
+     */
+    type: SceneRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum SceneRelationshipDataTypeEnum {
-  Scene = 'scene',
+    Scene = 'scene'
 }
 
 /**
- *
+ * 
  * @export
  * @interface SceneView
  */
 export interface SceneView {
-  /**
-   *
-   * @type {SceneViewData}
-   * @memberof SceneView
-   */
-  data: SceneViewData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneView
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneViewData}
+     * @memberof SceneView
+     */
+    data: SceneViewData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneView
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewData
  */
 export interface SceneViewData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneViewData
-   */
-  id: string;
-  /**
-   *
-   * @type {SceneViewDataAttributes}
-   * @memberof SceneViewData
-   */
-  attributes: SceneViewDataAttributes;
-  /**
-   *
-   * @type {SceneViewDataRelationships}
-   * @memberof SceneViewData
-   */
-  relationships: SceneViewDataRelationships;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneViewData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneViewData
+     */
+    id: string;
+    /**
+     * 
+     * @type {SceneViewDataAttributes}
+     * @memberof SceneViewData
+     */
+    attributes: SceneViewDataAttributes;
+    /**
+     * 
+     * @type {SceneViewDataRelationships}
+     * @memberof SceneViewData
+     */
+    relationships: SceneViewDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewDataAttributes
  */
 export interface SceneViewDataAttributes {
-  /**
-   *
-   * @type {Camera}
-   * @memberof SceneViewDataAttributes
-   */
-  camera: Camera;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {CrossSectioning}
-   * @memberof SceneViewDataAttributes
-   */
-  crossSectioning?: CrossSectioning | null;
+    /**
+     * 
+     * @type {Camera}
+     * @memberof SceneViewDataAttributes
+     */
+    camera: Camera;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneViewDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {CrossSectioning}
+     * @memberof SceneViewDataAttributes
+     */
+    crossSectioning?: CrossSectioning | null;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewDataRelationships
  */
 export interface SceneViewDataRelationships {
-  /**
-   *
-   * @type {SceneRelationship}
-   * @memberof SceneViewDataRelationships
-   */
-  scene: SceneRelationship;
+    /**
+     * 
+     * @type {SceneRelationship}
+     * @memberof SceneViewDataRelationships
+     */
+    scene: SceneRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewItem
  */
 export interface SceneViewItem {
-  /**
-   *
-   * @type {SceneItemData}
-   * @memberof SceneViewItem
-   */
-  data: SceneItemData;
-  /**
-   *
-   * @type {Array<SceneItemOverrideData>}
-   * @memberof SceneViewItem
-   */
-  included?: Array<SceneItemOverrideData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneViewItem
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneItemData}
+     * @memberof SceneViewItem
+     */
+    data: SceneItemData;
+    /**
+     * 
+     * @type {Array<SceneItemOverrideData>}
+     * @memberof SceneViewItem
+     */
+    included?: Array<SceneItemOverrideData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneViewItem
+     */
+    links?: { [key: string]: Link; };
 }
 /**
  * Relationship to a `scene-view`.
@@ -3159,128 +3188,128 @@ export interface SceneViewItem {
  * @interface SceneViewRelationship
  */
 export interface SceneViewRelationship {
-  /**
-   *
-   * @type {SceneViewRelationshipData}
-   * @memberof SceneViewRelationship
-   */
-  data: SceneViewRelationshipData;
+    /**
+     * 
+     * @type {SceneViewRelationshipData}
+     * @memberof SceneViewRelationship
+     */
+    data: SceneViewRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewRelationshipData
  */
 export interface SceneViewRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof SceneViewRelationshipData
-   */
-  type: SceneViewRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneViewRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof SceneViewRelationshipData
+     */
+    type: SceneViewRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneViewRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum SceneViewRelationshipDataTypeEnum {
-  SceneView = 'scene-view',
+    SceneView = 'scene-view'
 }
 
 /**
- *
+ * 
  * @export
  * @interface SceneViewState
  */
 export interface SceneViewState {
-  /**
-   *
-   * @type {SceneViewStateData}
-   * @memberof SceneViewState
-   */
-  data: SceneViewStateData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneViewState
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {SceneViewStateData}
+     * @memberof SceneViewState
+     */
+    data: SceneViewStateData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneViewState
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewStateData
  */
 export interface SceneViewStateData {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewStateData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneViewStateData
-   */
-  id: string;
-  /**
-   *
-   * @type {SceneViewStateDataAttributes}
-   * @memberof SceneViewStateData
-   */
-  attributes: SceneViewStateDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneViewStateData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneViewStateData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneViewStateData
+     */
+    id: string;
+    /**
+     * 
+     * @type {SceneViewStateDataAttributes}
+     * @memberof SceneViewStateData
+     */
+    attributes: SceneViewStateDataAttributes;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneViewStateData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewStateDataAttributes
  */
 export interface SceneViewStateDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewStateDataAttributes
-   */
-  created: string;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewStateDataAttributes
-   */
-  name?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneViewStateDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof SceneViewStateDataAttributes
+     */
+    name?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewStateList
  */
 export interface SceneViewStateList {
-  /**
-   *
-   * @type {Array<SceneViewStateData>}
-   * @memberof SceneViewStateList
-   */
-  data: Array<SceneViewStateData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof SceneViewStateList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<SceneViewStateData>}
+     * @memberof SceneViewStateList
+     */
+    data: Array<SceneViewStateData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof SceneViewStateList
+     */
+    links: { [key: string]: Link; };
 }
 /**
  * Relationship to a `scene-view-state`.
@@ -3288,588 +3317,588 @@ export interface SceneViewStateList {
  * @interface SceneViewStateRelationship
  */
 export interface SceneViewStateRelationship {
-  /**
-   *
-   * @type {SceneViewStateRelationshipData}
-   * @memberof SceneViewStateRelationship
-   */
-  data: SceneViewStateRelationshipData;
+    /**
+     * 
+     * @type {SceneViewStateRelationshipData}
+     * @memberof SceneViewStateRelationship
+     */
+    data: SceneViewStateRelationshipData;
 }
 /**
- *
+ * 
  * @export
  * @interface SceneViewStateRelationshipData
  */
 export interface SceneViewStateRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof SceneViewStateRelationshipData
-   */
-  type: SceneViewStateRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneViewStateRelationshipData
-   */
-  id: string;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof SceneViewStateRelationshipData
+     */
+    type: SceneViewStateRelationshipDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof SceneViewStateRelationshipData
+     */
+    id: string;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum SceneViewStateRelationshipDataTypeEnum {
-  SceneViewState = 'scene-view-state',
+    SceneViewState = 'scene-view-state'
 }
 
 /**
- *
+ * 
  * @export
  * @interface SectionPlane
  */
 export interface SectionPlane {
-  /**
-   *
-   * @type {Vector3}
-   * @memberof SectionPlane
-   */
-  normal: Vector3;
-  /**
-   * Distance from the center point to move the plane.
-   * @type {number}
-   * @memberof SectionPlane
-   */
-  offset: number;
+    /**
+     * 
+     * @type {Vector3}
+     * @memberof SectionPlane
+     */
+    normal: Vector3;
+    /**
+     * Distance from the center point to move the plane.
+     * @type {number}
+     * @memberof SectionPlane
+     */
+    offset: number;
 }
 /**
- *
+ * 
  * @export
  * @interface SelectOperation
  */
 export interface SelectOperation {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof SelectOperation
-   */
-  type: SelectOperationTypeEnum;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SelectOperation
-   */
-  material: ColorMaterial;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof SelectOperation
+     */
+    type: SelectOperationTypeEnum;
+    /**
+     * 
+     * @type {ColorMaterial}
+     * @memberof SelectOperation
+     */
+    material: ColorMaterial;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum SelectOperationTypeEnum {
-  Select = 'select',
+    Select = 'select'
 }
 
 /**
- *
+ * 
  * @export
  * @interface StreamKey
  */
 export interface StreamKey {
-  /**
-   *
-   * @type {StreamKeyData}
-   * @memberof StreamKey
-   */
-  data: StreamKeyData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof StreamKey
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {StreamKeyData}
+     * @memberof StreamKey
+     */
+    data: StreamKeyData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof StreamKey
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface StreamKeyData
  */
 export interface StreamKeyData {
-  /**
-   *
-   * @type {string}
-   * @memberof StreamKeyData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof StreamKeyData
-   */
-  id: string;
-  /**
-   *
-   * @type {StreamKeyDataAttributes}
-   * @memberof StreamKeyData
-   */
-  attributes: StreamKeyDataAttributes;
-  /**
-   *
-   * @type {SceneViewDataRelationships}
-   * @memberof StreamKeyData
-   */
-  relationships: SceneViewDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof StreamKeyData
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {string}
+     * @memberof StreamKeyData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof StreamKeyData
+     */
+    id: string;
+    /**
+     * 
+     * @type {StreamKeyDataAttributes}
+     * @memberof StreamKeyData
+     */
+    attributes: StreamKeyDataAttributes;
+    /**
+     * 
+     * @type {SceneViewDataRelationships}
+     * @memberof StreamKeyData
+     */
+    relationships: SceneViewDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof StreamKeyData
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface StreamKeyDataAttributes
  */
 export interface StreamKeyDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof StreamKeyDataAttributes
-   */
-  key?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof StreamKeyDataAttributes
-   */
-  expiry: number;
-  /**
-   *
-   * @type {string}
-   * @memberof StreamKeyDataAttributes
-   */
-  created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreamKeyDataAttributes
+     */
+    key?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof StreamKeyDataAttributes
+     */
+    expiry: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof StreamKeyDataAttributes
+     */
+    created: string;
 }
 /**
- *
+ * 
  * @export
  * @interface StreamKeyList
  */
 export interface StreamKeyList {
-  /**
-   *
-   * @type {Array<StreamKeyData>}
-   * @memberof StreamKeyList
-   */
-  data: Array<StreamKeyData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof StreamKeyList
-   */
-  links: { [key: string]: Link };
+    /**
+     * 
+     * @type {Array<StreamKeyData>}
+     * @memberof StreamKeyList
+     */
+    data: Array<StreamKeyData>;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof StreamKeyList
+     */
+    links: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface TranslationInspectionJob
  */
 export interface TranslationInspectionJob {
-  /**
-   *
-   * @type {TranslationInspectionJobData}
-   * @memberof TranslationInspectionJob
-   */
-  data: TranslationInspectionJobData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof TranslationInspectionJob
-   */
-  links?: { [key: string]: Link };
+    /**
+     * 
+     * @type {TranslationInspectionJobData}
+     * @memberof TranslationInspectionJob
+     */
+    data: TranslationInspectionJobData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof TranslationInspectionJob
+     */
+    links?: { [key: string]: Link; };
 }
 /**
- *
+ * 
  * @export
  * @interface TranslationInspectionJobData
  */
 export interface TranslationInspectionJobData {
-  /**
-   *
-   * @type {string}
-   * @memberof TranslationInspectionJobData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof TranslationInspectionJobData
-   */
-  id: string;
-  /**
-   *
-   * @type {TranslationInspectionJobDataAttributes}
-   * @memberof TranslationInspectionJobData
-   */
-  attributes: TranslationInspectionJobDataAttributes;
+    /**
+     * 
+     * @type {string}
+     * @memberof TranslationInspectionJobData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof TranslationInspectionJobData
+     */
+    id: string;
+    /**
+     * 
+     * @type {TranslationInspectionJobDataAttributes}
+     * @memberof TranslationInspectionJobData
+     */
+    attributes: TranslationInspectionJobDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface TranslationInspectionJobDataAttributes
  */
 export interface TranslationInspectionJobDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof TranslationInspectionJobDataAttributes
-   */
-  status: string;
-  /**
-   *
-   * @type {Array<string>}
-   * @memberof TranslationInspectionJobDataAttributes
-   */
-  missing: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof TranslationInspectionJobDataAttributes
+     */
+    status: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof TranslationInspectionJobDataAttributes
+     */
+    missing: Array<string>;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdatePartRevisionRequest
  */
 export interface UpdatePartRevisionRequest {
-  /**
-   *
-   * @type {UpdatePartRevisionRequestData}
-   * @memberof UpdatePartRevisionRequest
-   */
-  data: UpdatePartRevisionRequestData;
+    /**
+     * 
+     * @type {UpdatePartRevisionRequestData}
+     * @memberof UpdatePartRevisionRequest
+     */
+    data: UpdatePartRevisionRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdatePartRevisionRequestData
  */
 export interface UpdatePartRevisionRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof UpdatePartRevisionRequestData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof UpdatePartRevisionRequestData
-   */
-  id: string;
-  /**
-   *
-   * @type {UpdatePartRevisionRequestDataAttributes}
-   * @memberof UpdatePartRevisionRequestData
-   */
-  attributes: UpdatePartRevisionRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof UpdatePartRevisionRequestData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof UpdatePartRevisionRequestData
+     */
+    id: string;
+    /**
+     * 
+     * @type {UpdatePartRevisionRequestDataAttributes}
+     * @memberof UpdatePartRevisionRequestData
+     */
+    attributes: UpdatePartRevisionRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdatePartRevisionRequestDataAttributes
  */
 export interface UpdatePartRevisionRequestDataAttributes {
-  /**
-   * Metadata about the `part` and/or `part-revision`.
-   * @type {{ [key: string]: MetadataValue; }}
-   * @memberof UpdatePartRevisionRequestDataAttributes
-   */
-  metadata?: { [key: string]: MetadataValue };
+    /**
+     * Metadata about the `part` and/or `part-revision`.
+     * @type {{ [key: string]: MetadataValue; }}
+     * @memberof UpdatePartRevisionRequestDataAttributes
+     */
+    metadata?: { [key: string]: MetadataValue; };
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemOverrideRequest
  */
 export interface UpdateSceneItemOverrideRequest {
-  /**
-   *
-   * @type {UpdateSceneItemOverrideRequestData}
-   * @memberof UpdateSceneItemOverrideRequest
-   */
-  data: UpdateSceneItemOverrideRequestData;
+    /**
+     * 
+     * @type {UpdateSceneItemOverrideRequestData}
+     * @memberof UpdateSceneItemOverrideRequest
+     */
+    data: UpdateSceneItemOverrideRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemOverrideRequestData
  */
 export interface UpdateSceneItemOverrideRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof UpdateSceneItemOverrideRequestData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof UpdateSceneItemOverrideRequestData
-   */
-  id: string;
-  /**
-   *
-   * @type {UpdateSceneItemOverrideRequestDataAttributes}
-   * @memberof UpdateSceneItemOverrideRequestData
-   */
-  attributes: UpdateSceneItemOverrideRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof UpdateSceneItemOverrideRequestData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof UpdateSceneItemOverrideRequestData
+     */
+    id: string;
+    /**
+     * 
+     * @type {UpdateSceneItemOverrideRequestDataAttributes}
+     * @memberof UpdateSceneItemOverrideRequestData
+     */
+    attributes: UpdateSceneItemOverrideRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemOverrideRequestDataAttributes
  */
 export interface UpdateSceneItemOverrideRequestDataAttributes {
-  /**
-   * Item visibility.
-   * @type {boolean}
-   * @memberof UpdateSceneItemOverrideRequestDataAttributes
-   */
-  visible?: boolean | null;
-  /**
-   *
-   * @type {Matrix4Nullable}
-   * @memberof UpdateSceneItemOverrideRequestDataAttributes
-   */
-  transform?: Matrix4Nullable | null;
-  /**
-   *
-   * @type {ColorMaterialNullable}
-   * @memberof UpdateSceneItemOverrideRequestDataAttributes
-   */
-  material?: ColorMaterialNullable | null;
-  /**
-   *
-   * @type {ColorMaterialNullable}
-   * @memberof UpdateSceneItemOverrideRequestDataAttributes
-   */
-  selected?: ColorMaterialNullable | null;
+    /**
+     * Item visibility.
+     * @type {boolean}
+     * @memberof UpdateSceneItemOverrideRequestDataAttributes
+     */
+    visible?: boolean | null;
+    /**
+     * 
+     * @type {Matrix4Nullable}
+     * @memberof UpdateSceneItemOverrideRequestDataAttributes
+     */
+    transform?: Matrix4Nullable | null;
+    /**
+     * 
+     * @type {ColorMaterialNullable}
+     * @memberof UpdateSceneItemOverrideRequestDataAttributes
+     */
+    material?: ColorMaterialNullable | null;
+    /**
+     * 
+     * @type {ColorMaterialNullable}
+     * @memberof UpdateSceneItemOverrideRequestDataAttributes
+     */
+    selected?: ColorMaterialNullable | null;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemRequest
  */
 export interface UpdateSceneItemRequest {
-  /**
-   *
-   * @type {UpdateSceneItemRequestData}
-   * @memberof UpdateSceneItemRequest
-   */
-  data: UpdateSceneItemRequestData;
+    /**
+     * 
+     * @type {UpdateSceneItemRequestData}
+     * @memberof UpdateSceneItemRequest
+     */
+    data: UpdateSceneItemRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemRequestData
  */
 export interface UpdateSceneItemRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof UpdateSceneItemRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {UpdateSceneItemRequestDataAttributes}
-   * @memberof UpdateSceneItemRequestData
-   */
-  attributes: UpdateSceneItemRequestDataAttributes;
-  /**
-   *
-   * @type {UpdateSceneItemRequestDataRelationships}
-   * @memberof UpdateSceneItemRequestData
-   */
-  relationships?: UpdateSceneItemRequestDataRelationships;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof UpdateSceneItemRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {UpdateSceneItemRequestDataAttributes}
+     * @memberof UpdateSceneItemRequestData
+     */
+    attributes: UpdateSceneItemRequestDataAttributes;
+    /**
+     * 
+     * @type {UpdateSceneItemRequestDataRelationships}
+     * @memberof UpdateSceneItemRequestData
+     */
+    relationships?: UpdateSceneItemRequestDataRelationships;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemRequestDataAttributes
  */
 export interface UpdateSceneItemRequestDataAttributes {
-  /**
-   * Item visibility.
-   * @type {boolean}
-   * @memberof UpdateSceneItemRequestDataAttributes
-   */
-  visible?: boolean;
-  /**
-   *
-   * @type {MaterialOverride}
-   * @memberof UpdateSceneItemRequestDataAttributes
-   */
-  materialOverride?: MaterialOverride;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof UpdateSceneItemRequestDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateSceneItemRequestDataAttributes
-   */
-  name?: string;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof UpdateSceneItemRequestDataAttributes
-   */
-  suppliedId?: string;
+    /**
+     * Item visibility.
+     * @type {boolean}
+     * @memberof UpdateSceneItemRequestDataAttributes
+     */
+    visible?: boolean;
+    /**
+     * 
+     * @type {MaterialOverride}
+     * @memberof UpdateSceneItemRequestDataAttributes
+     */
+    materialOverride?: MaterialOverride;
+    /**
+     * 
+     * @type {Matrix4}
+     * @memberof UpdateSceneItemRequestDataAttributes
+     */
+    transform?: Matrix4;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSceneItemRequestDataAttributes
+     */
+    name?: string;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof UpdateSceneItemRequestDataAttributes
+     */
+    suppliedId?: string;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneItemRequestDataRelationships
  */
 export interface UpdateSceneItemRequestDataRelationships {
-  /**
-   * Relationship to a `geometry-set` or `part-revision`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship}
-   * @memberof UpdateSceneItemRequestDataRelationships
-   */
-  source?: GeometrySetRelationship | PartRevisionRelationship;
+    /**
+     * Relationship to a `geometry-set` or `part-revision`.
+     * @type {GeometrySetRelationship | PartRevisionRelationship}
+     * @memberof UpdateSceneItemRequestDataRelationships
+     */
+    source?: GeometrySetRelationship | PartRevisionRelationship;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneRequest
  */
 export interface UpdateSceneRequest {
-  /**
-   *
-   * @type {UpdateSceneRequestData}
-   * @memberof UpdateSceneRequest
-   */
-  data: UpdateSceneRequestData;
+    /**
+     * 
+     * @type {UpdateSceneRequestData}
+     * @memberof UpdateSceneRequest
+     */
+    data: UpdateSceneRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneRequestData
  */
 export interface UpdateSceneRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof UpdateSceneRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {UpdateSceneRequestDataAttributes}
-   * @memberof UpdateSceneRequestData
-   */
-  attributes: UpdateSceneRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof UpdateSceneRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {UpdateSceneRequestDataAttributes}
+     * @memberof UpdateSceneRequestData
+     */
+    attributes: UpdateSceneRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneRequestDataAttributes
  */
 export interface UpdateSceneRequestDataAttributes {
-  /**
-   *
-   * @type {Camera | CameraFit}
-   * @memberof UpdateSceneRequestDataAttributes
-   */
-  camera?: Camera | CameraFit;
-  /**
-   * State of the scene.
-   * @type {string}
-   * @memberof UpdateSceneRequestDataAttributes
-   */
-  state?: UpdateSceneRequestDataAttributesStateEnum;
-  /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
-   * @type {string}
-   * @memberof UpdateSceneRequestDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof UpdateSceneRequestDataAttributes
-   */
-  name?: string;
-  /**
-   * Whether or not scene trees can be viewed for this scene.
-   * @type {boolean}
-   * @memberof UpdateSceneRequestDataAttributes
-   */
-  treeEnabled?: boolean;
+    /**
+     * 
+     * @type {Camera | CameraFit}
+     * @memberof UpdateSceneRequestDataAttributes
+     */
+    camera?: Camera | CameraFit;
+    /**
+     * State of the scene.
+     * @type {string}
+     * @memberof UpdateSceneRequestDataAttributes
+     */
+    state?: UpdateSceneRequestDataAttributesStateEnum;
+    /**
+     * ID provided for correlation. For example, an existing ID from a PLM system.
+     * @type {string}
+     * @memberof UpdateSceneRequestDataAttributes
+     */
+    suppliedId?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof UpdateSceneRequestDataAttributes
+     */
+    name?: string;
+    /**
+     * Whether or not scene trees can be viewed for this scene.
+     * @type {boolean}
+     * @memberof UpdateSceneRequestDataAttributes
+     */
+    treeEnabled?: boolean;
 }
 
 /**
- * @export
- * @enum {string}
- */
+    * @export
+    * @enum {string}
+    */
 export enum UpdateSceneRequestDataAttributesStateEnum {
-  Draft = 'draft',
-  Commit = 'commit',
+    Draft = 'draft',
+    Commit = 'commit'
 }
 
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneViewRequest
  */
 export interface UpdateSceneViewRequest {
-  /**
-   *
-   * @type {UpdateSceneViewRequestData}
-   * @memberof UpdateSceneViewRequest
-   */
-  data: UpdateSceneViewRequestData;
+    /**
+     * 
+     * @type {UpdateSceneViewRequestData}
+     * @memberof UpdateSceneViewRequest
+     */
+    data: UpdateSceneViewRequestData;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneViewRequestData
  */
 export interface UpdateSceneViewRequestData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof UpdateSceneViewRequestData
-   */
-  type: string;
-  /**
-   *
-   * @type {UpdateSceneViewRequestDataAttributes}
-   * @memberof UpdateSceneViewRequestData
-   */
-  attributes: UpdateSceneViewRequestDataAttributes;
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof UpdateSceneViewRequestData
+     */
+    type: string;
+    /**
+     * 
+     * @type {UpdateSceneViewRequestDataAttributes}
+     * @memberof UpdateSceneViewRequestData
+     */
+    attributes: UpdateSceneViewRequestDataAttributes;
 }
 /**
- *
+ * 
  * @export
  * @interface UpdateSceneViewRequestDataAttributes
  */
 export interface UpdateSceneViewRequestDataAttributes {
-  /**
-   *
-   * @type {Camera | CameraFit}
-   * @memberof UpdateSceneViewRequestDataAttributes
-   */
-  camera?: Camera | CameraFit;
-  /**
-   *
-   * @type {CrossSectioning}
-   * @memberof UpdateSceneViewRequestDataAttributes
-   */
-  crossSectioning?: CrossSectioning | null;
+    /**
+     * 
+     * @type {Camera | CameraFit}
+     * @memberof UpdateSceneViewRequestDataAttributes
+     */
+    camera?: Camera | CameraFit;
+    /**
+     * 
+     * @type {CrossSectioning}
+     * @memberof UpdateSceneViewRequestDataAttributes
+     */
+    crossSectioning?: CrossSectioning | null;
 }
 /**
  * 3D vector.
@@ -3877,24 +3906,24 @@ export interface UpdateSceneViewRequestDataAttributes {
  * @interface Vector3
  */
 export interface Vector3 {
-  /**
-   * x-axis coordinate.
-   * @type {number}
-   * @memberof Vector3
-   */
-  x: number;
-  /**
-   * y-axis coordinate.
-   * @type {number}
-   * @memberof Vector3
-   */
-  y: number;
-  /**
-   * z-axis coordinate.
-   * @type {number}
-   * @memberof Vector3
-   */
-  z: number;
+    /**
+     * x-axis coordinate.
+     * @type {number}
+     * @memberof Vector3
+     */
+    x: number;
+    /**
+     * y-axis coordinate.
+     * @type {number}
+     * @memberof Vector3
+     */
+    y: number;
+    /**
+     * z-axis coordinate.
+     * @type {number}
+     * @memberof Vector3
+     */
+    z: number;
 }
 /**
  * 4D vector.
@@ -3902,545 +3931,653 @@ export interface Vector3 {
  * @interface Vector4
  */
 export interface Vector4 {
-  /**
-   * x-axis coordinate.
-   * @type {number}
-   * @memberof Vector4
-   */
-  x: number;
-  /**
-   * y-axis coordinate.
-   * @type {number}
-   * @memberof Vector4
-   */
-  y: number;
-  /**
-   * z-axis coordinate.
-   * @type {number}
-   * @memberof Vector4
-   */
-  z: number;
-  /**
-   * w value.
-   * @type {number}
-   * @memberof Vector4
-   */
-  w: number;
+    /**
+     * x-axis coordinate.
+     * @type {number}
+     * @memberof Vector4
+     */
+    x: number;
+    /**
+     * y-axis coordinate.
+     * @type {number}
+     * @memberof Vector4
+     */
+    y: number;
+    /**
+     * z-axis coordinate.
+     * @type {number}
+     * @memberof Vector4
+     */
+    z: number;
+    /**
+     * w value.
+     * @type {number}
+     * @memberof Vector4
+     */
+    w: number;
 }
+/**
+ * 
+ * @export
+ * @interface WebhookEvent
+ */
+export interface WebhookEvent {
+    /**
+     * 
+     * @type {WebhookEventData}
+     * @memberof WebhookEvent
+     */
+    data: WebhookEventData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof WebhookEvent
+     */
+    links?: { [key: string]: Link; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookEventData
+ */
+export interface WebhookEventData {
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookEventData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof WebhookEventData
+     */
+    id: string;
+    /**
+     * 
+     * @type {WebhookEventDataAttributes}
+     * @memberof WebhookEventData
+     */
+    attributes: WebhookEventDataAttributes;
+    /**
+     * 
+     * @type {WebhookEventDataRelationships}
+     * @memberof WebhookEventData
+     */
+    relationships?: WebhookEventDataRelationships;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof WebhookEventData
+     */
+    links?: { [key: string]: Link; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookEventDataAttributes
+ */
+export interface WebhookEventDataAttributes {
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookEventDataAttributes
+     */
+    created: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookEventDataAttributes
+     */
+    topic: string;
+}
+/**
+ * 
+ * @export
+ * @interface WebhookEventDataRelationships
+ */
+export interface WebhookEventDataRelationships {
+    /**
+     * 
+     * @type {WebhookEventDataRelationshipsOwner}
+     * @memberof WebhookEventDataRelationships
+     */
+    owner: WebhookEventDataRelationshipsOwner;
+    /**
+     * 
+     * @type {WebhookEventDataRelationshipsResource}
+     * @memberof WebhookEventDataRelationships
+     */
+    resource: WebhookEventDataRelationshipsResource;
+}
+/**
+ * Relationship to an `owner`.
+ * @export
+ * @interface WebhookEventDataRelationshipsOwner
+ */
+export interface WebhookEventDataRelationshipsOwner {
+    /**
+     * 
+     * @type {WebhookEventDataRelationshipsOwnerData}
+     * @memberof WebhookEventDataRelationshipsOwner
+     */
+    data: WebhookEventDataRelationshipsOwnerData;
+    /**
+     * 
+     * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+     * @memberof WebhookEventDataRelationshipsOwner
+     */
+    links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookEventDataRelationshipsOwnerData
+ */
+export interface WebhookEventDataRelationshipsOwnerData {
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof WebhookEventDataRelationshipsOwnerData
+     */
+    type: WebhookEventDataRelationshipsOwnerDataTypeEnum;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof WebhookEventDataRelationshipsOwnerData
+     */
+    id: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum WebhookEventDataRelationshipsOwnerDataTypeEnum {
+    Account = 'account'
+}
+
+/**
+ * 
+ * @export
+ * @interface WebhookEventDataRelationshipsOwnerLinks
+ */
+export interface WebhookEventDataRelationshipsOwnerLinks {
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookEventDataRelationshipsOwnerLinks
+     */
+    related: string;
+}
+/**
+ * Relationship to a `resource`.
+ * @export
+ * @interface WebhookEventDataRelationshipsResource
+ */
+export interface WebhookEventDataRelationshipsResource {
+    /**
+     * 
+     * @type {WebhookEventDataRelationshipsResourceData}
+     * @memberof WebhookEventDataRelationshipsResource
+     */
+    data: WebhookEventDataRelationshipsResourceData;
+    /**
+     * 
+     * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+     * @memberof WebhookEventDataRelationshipsResource
+     */
+    links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookEventDataRelationshipsResourceData
+ */
+export interface WebhookEventDataRelationshipsResourceData {
+    /**
+     * Resource object type.
+     * @type {string}
+     * @memberof WebhookEventDataRelationshipsResourceData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof WebhookEventDataRelationshipsResourceData
+     */
+    id: string;
+}
+/**
+ * 
+ * @export
+ * @interface WebhookSubscription
+ */
+export interface WebhookSubscription {
+    /**
+     * 
+     * @type {WebhookSubscriptionData}
+     * @memberof WebhookSubscription
+     */
+    data: WebhookSubscriptionData;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof WebhookSubscription
+     */
+    links?: { [key: string]: Link; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookSubscriptionData
+ */
+export interface WebhookSubscriptionData {
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookSubscriptionData
+     */
+    type: string;
+    /**
+     * ID of the resource.
+     * @type {string}
+     * @memberof WebhookSubscriptionData
+     */
+    id: string;
+    /**
+     * 
+     * @type {WebhookSubscriptionDataAttributes}
+     * @memberof WebhookSubscriptionData
+     */
+    attributes: WebhookSubscriptionDataAttributes;
+    /**
+     * 
+     * @type {{ [key: string]: Link; }}
+     * @memberof WebhookSubscriptionData
+     */
+    links?: { [key: string]: Link; };
+}
+/**
+ * 
+ * @export
+ * @interface WebhookSubscriptionDataAttributes
+ */
+export interface WebhookSubscriptionDataAttributes {
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookSubscriptionDataAttributes
+     */
+    url: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookSubscriptionDataAttributes
+     */
+    secret: string;
+    /**
+     * 
+     * @type {Array<string>}
+     * @memberof WebhookSubscriptionDataAttributes
+     */
+    topics: Array<string>;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookSubscriptionDataAttributes
+     */
+    status: WebhookSubscriptionDataAttributesStatusEnum;
+    /**
+     * 
+     * @type {string}
+     * @memberof WebhookSubscriptionDataAttributes
+     */
+    created: string;
+}
+
+/**
+    * @export
+    * @enum {string}
+    */
+export enum WebhookSubscriptionDataAttributesStatusEnum {
+    Active = 'active',
+    Paused = 'paused'
+}
+
 
 /**
  * FilesApi - axios parameter creator
  * @export
  */
-export const FilesApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateFileRequest} createFileRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createFile: async (
-      createFileRequest: CreateFileRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createFileRequest' is not null or undefined
-      assertParamExists('createFile', 'createFileRequest', createFileRequest);
-      const localVarPath = `/files`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const FilesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateFileRequest} createFileRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFile: async (createFileRequest: CreateFileRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createFileRequest' is not null or undefined
+            assertParamExists('createFile', 'createFileRequest', createFileRequest)
+            const localVarPath = `/files`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createFileRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `file`.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteFile', 'id', id);
-      const localVarPath = `/files/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createFileRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `file`.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteFile', 'id', id)
+            const localVarPath = `/files/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `file` by ID.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getFile', 'id', id);
-      const localVarPath = `/files/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `file` by ID.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getFile', 'id', id)
+            const localVarPath = `/files/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `files`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getFiles: async (
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/files`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `files`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFiles: async (pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/files`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (filterSuppliedId !== undefined) {
-        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {any} body
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    uploadFile: async (
-      id: string,
-      body: any,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('uploadFile', 'id', id);
-      // verify required parameter 'body' is not null or undefined
-      assertParamExists('uploadFile', 'body', body);
-      const localVarPath = `/files/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (filterSuppliedId !== undefined) {
+                localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        body,
-        localVarRequestOptions,
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {any} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadFile: async (id: string, body: any, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('uploadFile', 'id', id)
+            // verify required parameter 'body' is not null or undefined
+            assertParamExists('uploadFile', 'body', body)
+            const localVarPath = `/files/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(body, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * FilesApi - functional programming interface
  * @export
  */
-export const FilesApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = FilesApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateFileRequest} createFileRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createFile(
-      createFileRequest: CreateFileRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createFile(
-        createFileRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `file`.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteFile(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFile(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `file` by ID.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getFile(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getFile(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `files`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getFiles(
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getFiles(
-        pageCursor,
-        pageSize,
-        filterSuppliedId,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {any} body
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async uploadFile(
-      id: string,
-      body: any,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFile(
-        id,
-        body,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const FilesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = FilesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateFileRequest} createFileRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createFile(createFileRequest: CreateFileRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createFile(createFileRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `file`.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteFile(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteFile(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `file` by ID.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getFile(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFile(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `files`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getFiles(pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getFiles(pageCursor, pageSize, filterSuppliedId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {any} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async uploadFile(id: string, body: any, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.uploadFile(id, body, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * FilesApi - factory interface
  * @export
  */
-export const FilesApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = FilesApiFp(configuration);
-  return {
-    /**
-     * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateFileRequest} createFileRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createFile(
-      createFileRequest: CreateFileRequest,
-      options?: any
-    ): AxiosPromise<FileMetadata> {
-      return localVarFp
-        .createFile(createFileRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `file`.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteFile(id: string, options?: any): AxiosPromise<FileMetadata> {
-      return localVarFp
-        .deleteFile(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `file` by ID.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getFile(id: string, options?: any): AxiosPromise<FileMetadata> {
-      return localVarFp
-        .getFile(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `files`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getFiles(
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): AxiosPromise<FileList> {
-      return localVarFp
-        .getFiles(pageCursor, pageSize, filterSuppliedId, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
-     * @param {string} id The &#x60;file&#x60; ID.
-     * @param {any} body
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    uploadFile(id: string, body: any, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .uploadFile(id, body, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const FilesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = FilesApiFp(configuration)
+    return {
+        /**
+         * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateFileRequest} createFileRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createFile(createFileRequest: CreateFileRequest, options?: any): AxiosPromise<FileMetadata> {
+            return localVarFp.createFile(createFileRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `file`.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteFile(id: string, options?: any): AxiosPromise<FileMetadata> {
+            return localVarFp.deleteFile(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `file` by ID.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFile(id: string, options?: any): AxiosPromise<FileMetadata> {
+            return localVarFp.getFile(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `files`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getFiles(pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): AxiosPromise<FileList> {
+            return localVarFp.getFiles(pageCursor, pageSize, filterSuppliedId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
+         * @param {string} id The &#x60;file&#x60; ID.
+         * @param {any} body 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        uploadFile(id: string, body: any, options?: any): AxiosPromise<void> {
+            return localVarFp.uploadFile(id, body, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -4449,12 +4586,12 @@ export const FilesApiFactory = function (
  * @interface FilesApiCreateFileRequest
  */
 export interface FilesApiCreateFileRequest {
-  /**
-   *
-   * @type {CreateFileRequest}
-   * @memberof FilesApiCreateFile
-   */
-  readonly createFileRequest: CreateFileRequest;
+    /**
+     * 
+     * @type {CreateFileRequest}
+     * @memberof FilesApiCreateFile
+     */
+    readonly createFileRequest: CreateFileRequest
 }
 
 /**
@@ -4463,12 +4600,12 @@ export interface FilesApiCreateFileRequest {
  * @interface FilesApiDeleteFileRequest
  */
 export interface FilesApiDeleteFileRequest {
-  /**
-   * The &#x60;file&#x60; ID.
-   * @type {string}
-   * @memberof FilesApiDeleteFile
-   */
-  readonly id: string;
+    /**
+     * The &#x60;file&#x60; ID.
+     * @type {string}
+     * @memberof FilesApiDeleteFile
+     */
+    readonly id: string
 }
 
 /**
@@ -4477,12 +4614,12 @@ export interface FilesApiDeleteFileRequest {
  * @interface FilesApiGetFileRequest
  */
 export interface FilesApiGetFileRequest {
-  /**
-   * The &#x60;file&#x60; ID.
-   * @type {string}
-   * @memberof FilesApiGetFile
-   */
-  readonly id: string;
+    /**
+     * The &#x60;file&#x60; ID.
+     * @type {string}
+     * @memberof FilesApiGetFile
+     */
+    readonly id: string
 }
 
 /**
@@ -4491,26 +4628,26 @@ export interface FilesApiGetFileRequest {
  * @interface FilesApiGetFilesRequest
  */
 export interface FilesApiGetFilesRequest {
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof FilesApiGetFiles
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof FilesApiGetFiles
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof FilesApiGetFiles
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof FilesApiGetFiles
+     */
+    readonly pageSize?: number
 
-  /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
-   * @memberof FilesApiGetFiles
-   */
-  readonly filterSuppliedId?: string;
+    /**
+     * Comma-separated list of supplied IDs to filter on.
+     * @type {string}
+     * @memberof FilesApiGetFiles
+     */
+    readonly filterSuppliedId?: string
 }
 
 /**
@@ -4519,19 +4656,19 @@ export interface FilesApiGetFilesRequest {
  * @interface FilesApiUploadFileRequest
  */
 export interface FilesApiUploadFileRequest {
-  /**
-   * The &#x60;file&#x60; ID.
-   * @type {string}
-   * @memberof FilesApiUploadFile
-   */
-  readonly id: string;
+    /**
+     * The &#x60;file&#x60; ID.
+     * @type {string}
+     * @memberof FilesApiUploadFile
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {any}
-   * @memberof FilesApiUploadFile
-   */
-  readonly body: any;
+    /**
+     * 
+     * @type {any}
+     * @memberof FilesApiUploadFile
+     */
+    readonly body: any
 }
 
 /**
@@ -4541,415 +4678,268 @@ export interface FilesApiUploadFileRequest {
  * @extends {BaseAPI}
  */
 export class FilesApi extends BaseAPI {
-  /**
-   * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-   * @param {FilesApiCreateFileRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof FilesApi
-   */
-  public createFile(
-    requestParameters: FilesApiCreateFileRequest,
-    options?: any
-  ) {
-    return FilesApiFp(this.configuration)
-      .createFile(requestParameters.createFileRequest, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * @param {FilesApiCreateFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FilesApi
+     */
+    public createFile(requestParameters: FilesApiCreateFileRequest, options?: any) {
+        return FilesApiFp(this.configuration).createFile(requestParameters.createFileRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `file`.
-   * @param {FilesApiDeleteFileRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof FilesApi
-   */
-  public deleteFile(
-    requestParameters: FilesApiDeleteFileRequest,
-    options?: any
-  ) {
-    return FilesApiFp(this.configuration)
-      .deleteFile(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `file`.
+     * @param {FilesApiDeleteFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FilesApi
+     */
+    public deleteFile(requestParameters: FilesApiDeleteFileRequest, options?: any) {
+        return FilesApiFp(this.configuration).deleteFile(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `file` by ID.
-   * @param {FilesApiGetFileRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof FilesApi
-   */
-  public getFile(requestParameters: FilesApiGetFileRequest, options?: any) {
-    return FilesApiFp(this.configuration)
-      .getFile(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `file` by ID.
+     * @param {FilesApiGetFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FilesApi
+     */
+    public getFile(requestParameters: FilesApiGetFileRequest, options?: any) {
+        return FilesApiFp(this.configuration).getFile(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `files`.
-   * @param {FilesApiGetFilesRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof FilesApi
-   */
-  public getFiles(
-    requestParameters: FilesApiGetFilesRequest = {},
-    options?: any
-  ) {
-    return FilesApiFp(this.configuration)
-      .getFiles(
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        requestParameters.filterSuppliedId,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `files`.
+     * @param {FilesApiGetFilesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FilesApi
+     */
+    public getFiles(requestParameters: FilesApiGetFilesRequest = {}, options?: any) {
+        return FilesApiFp(this.configuration).getFiles(requestParameters.pageCursor, requestParameters.pageSize, requestParameters.filterSuppliedId, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
-   * @param {FilesApiUploadFileRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof FilesApi
-   */
-  public uploadFile(
-    requestParameters: FilesApiUploadFileRequest,
-    options?: any
-  ) {
-    return FilesApiFp(this.configuration)
-      .uploadFile(requestParameters.id, requestParameters.body, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
+     * @param {FilesApiUploadFileRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof FilesApi
+     */
+    public uploadFile(requestParameters: FilesApiUploadFileRequest, options?: any) {
+        return FilesApiFp(this.configuration).uploadFile(requestParameters.id, requestParameters.body, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * GeometrySetsApi - axios parameter creator
  * @export
  */
-export const GeometrySetsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateGeometrySetRequest} createGeometrySetRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createGeometrySet: async (
-      createGeometrySetRequest: CreateGeometrySetRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createGeometrySetRequest' is not null or undefined
-      assertParamExists(
-        'createGeometrySet',
-        'createGeometrySetRequest',
-        createGeometrySetRequest
-      );
-      const localVarPath = `/geometry-sets`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const GeometrySetsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateGeometrySetRequest} createGeometrySetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGeometrySet: async (createGeometrySetRequest: CreateGeometrySetRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createGeometrySetRequest' is not null or undefined
+            assertParamExists('createGeometrySet', 'createGeometrySetRequest', createGeometrySetRequest)
+            const localVarPath = `/geometry-sets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createGeometrySetRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `geometry-set` by ID.
-     * @param {string} id The &#x60;geometry-set&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getGeometrySet: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getGeometrySet', 'id', id);
-      const localVarPath = `/geometry-sets/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createGeometrySetRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `geometry-set` by ID.
+         * @param {string} id The &#x60;geometry-set&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometrySet: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getGeometrySet', 'id', id)
+            const localVarPath = `/geometry-sets/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `geometry-sets`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getGeometrySets: async (
-      pageCursor?: string,
-      pageSize?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/geometry-sets`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `geometry-sets`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometrySets: async (pageCursor?: string, pageSize?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/geometry-sets`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * GeometrySetsApi - functional programming interface
  * @export
  */
-export const GeometrySetsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    GeometrySetsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateGeometrySetRequest} createGeometrySetRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createGeometrySet(
-      createGeometrySetRequest: CreateGeometrySetRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createGeometrySet(
-          createGeometrySetRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `geometry-set` by ID.
-     * @param {string} id The &#x60;geometry-set&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getGeometrySet(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometrySet>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometrySet(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `geometry-sets`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getGeometrySets(
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<GeometrySetList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometrySets(
-        pageCursor,
-        pageSize,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const GeometrySetsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = GeometrySetsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateGeometrySetRequest} createGeometrySetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createGeometrySet(createGeometrySetRequest: CreateGeometrySetRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createGeometrySet(createGeometrySetRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `geometry-set` by ID.
+         * @param {string} id The &#x60;geometry-set&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getGeometrySet(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometrySet>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometrySet(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `geometry-sets`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getGeometrySets(pageCursor?: string, pageSize?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometrySetList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getGeometrySets(pageCursor, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * GeometrySetsApi - factory interface
  * @export
  */
-export const GeometrySetsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = GeometrySetsApiFp(configuration);
-  return {
-    /**
-     * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreateGeometrySetRequest} createGeometrySetRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createGeometrySet(
-      createGeometrySetRequest: CreateGeometrySetRequest,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .createGeometrySet(createGeometrySetRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `geometry-set` by ID.
-     * @param {string} id The &#x60;geometry-set&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getGeometrySet(id: string, options?: any): AxiosPromise<GeometrySet> {
-      return localVarFp
-        .getGeometrySet(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `geometry-sets`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getGeometrySets(
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): AxiosPromise<GeometrySetList> {
-      return localVarFp
-        .getGeometrySets(pageCursor, pageSize, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const GeometrySetsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = GeometrySetsApiFp(configuration)
+    return {
+        /**
+         * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreateGeometrySetRequest} createGeometrySetRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createGeometrySet(createGeometrySetRequest: CreateGeometrySetRequest, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.createGeometrySet(createGeometrySetRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `geometry-set` by ID.
+         * @param {string} id The &#x60;geometry-set&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometrySet(id: string, options?: any): AxiosPromise<GeometrySet> {
+            return localVarFp.getGeometrySet(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `geometry-sets`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getGeometrySets(pageCursor?: string, pageSize?: number, options?: any): AxiosPromise<GeometrySetList> {
+            return localVarFp.getGeometrySets(pageCursor, pageSize, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -4958,12 +4948,12 @@ export const GeometrySetsApiFactory = function (
  * @interface GeometrySetsApiCreateGeometrySetRequest
  */
 export interface GeometrySetsApiCreateGeometrySetRequest {
-  /**
-   *
-   * @type {CreateGeometrySetRequest}
-   * @memberof GeometrySetsApiCreateGeometrySet
-   */
-  readonly createGeometrySetRequest: CreateGeometrySetRequest;
+    /**
+     * 
+     * @type {CreateGeometrySetRequest}
+     * @memberof GeometrySetsApiCreateGeometrySet
+     */
+    readonly createGeometrySetRequest: CreateGeometrySetRequest
 }
 
 /**
@@ -4972,12 +4962,12 @@ export interface GeometrySetsApiCreateGeometrySetRequest {
  * @interface GeometrySetsApiGetGeometrySetRequest
  */
 export interface GeometrySetsApiGetGeometrySetRequest {
-  /**
-   * The &#x60;geometry-set&#x60; ID.
-   * @type {string}
-   * @memberof GeometrySetsApiGetGeometrySet
-   */
-  readonly id: string;
+    /**
+     * The &#x60;geometry-set&#x60; ID.
+     * @type {string}
+     * @memberof GeometrySetsApiGetGeometrySet
+     */
+    readonly id: string
 }
 
 /**
@@ -4986,19 +4976,19 @@ export interface GeometrySetsApiGetGeometrySetRequest {
  * @interface GeometrySetsApiGetGeometrySetsRequest
  */
 export interface GeometrySetsApiGetGeometrySetsRequest {
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof GeometrySetsApiGetGeometrySets
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof GeometrySetsApiGetGeometrySets
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof GeometrySetsApiGetGeometrySets
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof GeometrySetsApiGetGeometrySets
+     */
+    readonly pageSize?: number
 }
 
 /**
@@ -5008,367 +4998,224 @@ export interface GeometrySetsApiGetGeometrySetsRequest {
  * @extends {BaseAPI}
  */
 export class GeometrySetsApi extends BaseAPI {
-  /**
-   * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-   * @param {GeometrySetsApiCreateGeometrySetRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof GeometrySetsApi
-   */
-  public createGeometrySet(
-    requestParameters: GeometrySetsApiCreateGeometrySetRequest,
-    options?: any
-  ) {
-    return GeometrySetsApiFp(this.configuration)
-      .createGeometrySet(requestParameters.createGeometrySetRequest, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `geometry-set`. Once created, create scenes via the createScene API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * @param {GeometrySetsApiCreateGeometrySetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeometrySetsApi
+     */
+    public createGeometrySet(requestParameters: GeometrySetsApiCreateGeometrySetRequest, options?: any) {
+        return GeometrySetsApiFp(this.configuration).createGeometrySet(requestParameters.createGeometrySetRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `geometry-set` by ID.
-   * @param {GeometrySetsApiGetGeometrySetRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof GeometrySetsApi
-   */
-  public getGeometrySet(
-    requestParameters: GeometrySetsApiGetGeometrySetRequest,
-    options?: any
-  ) {
-    return GeometrySetsApiFp(this.configuration)
-      .getGeometrySet(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `geometry-set` by ID.
+     * @param {GeometrySetsApiGetGeometrySetRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeometrySetsApi
+     */
+    public getGeometrySet(requestParameters: GeometrySetsApiGetGeometrySetRequest, options?: any) {
+        return GeometrySetsApiFp(this.configuration).getGeometrySet(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `geometry-sets`.
-   * @param {GeometrySetsApiGetGeometrySetsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof GeometrySetsApi
-   */
-  public getGeometrySets(
-    requestParameters: GeometrySetsApiGetGeometrySetsRequest = {},
-    options?: any
-  ) {
-    return GeometrySetsApiFp(this.configuration)
-      .getGeometrySets(
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `geometry-sets`.
+     * @param {GeometrySetsApiGetGeometrySetsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof GeometrySetsApi
+     */
+    public getGeometrySets(requestParameters: GeometrySetsApiGetGeometrySetsRequest = {}, options?: any) {
+        return GeometrySetsApiFp(this.configuration).getGeometrySets(requestParameters.pageCursor, requestParameters.pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * HitsApi - axios parameter creator
  * @export
  */
-export const HitsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `hit` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneHit: async (
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneHit', 'id', id);
-      // verify required parameter 'createHitRequest' is not null or undefined
-      assertParamExists('createSceneHit', 'createHitRequest', createHitRequest);
-      const localVarPath = `/scenes/{id}/hits`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const HitsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `hit` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneHit: async (id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneHit', 'id', id)
+            // verify required parameter 'createHitRequest' is not null or undefined
+            assertParamExists('createSceneHit', 'createHitRequest', createHitRequest)
+            const localVarPath = `/scenes/{id}/hits`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      if (include !== undefined) {
-        localVarQueryParameter['include'] = include;
-      }
+            if (include !== undefined) {
+                localVarQueryParameter['include'] = include;
+            }
 
-      if (fieldsPartRevision !== undefined) {
-        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
-      }
+            if (fieldsPartRevision !== undefined) {
+                localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createHitRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Create a `hit` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneViewHit: async (
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneViewHit', 'id', id);
-      // verify required parameter 'createHitRequest' is not null or undefined
-      assertParamExists(
-        'createSceneViewHit',
-        'createHitRequest',
-        createHitRequest
-      );
-      const localVarPath = `/scene-views/{id}/hits`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createHitRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Create a `hit` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneViewHit: async (id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneViewHit', 'id', id)
+            // verify required parameter 'createHitRequest' is not null or undefined
+            assertParamExists('createSceneViewHit', 'createHitRequest', createHitRequest)
+            const localVarPath = `/scene-views/{id}/hits`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (include !== undefined) {
-        localVarQueryParameter['include'] = include;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      if (fieldsPartRevision !== undefined) {
-        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
-      }
+            if (include !== undefined) {
+                localVarQueryParameter['include'] = include;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+            if (fieldsPartRevision !== undefined) {
+                localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createHitRequest,
-        localVarRequestOptions,
-        configuration
-      );
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createHitRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * HitsApi - functional programming interface
  * @export
  */
-export const HitsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = HitsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `hit` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneHit(
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneHit(
-        id,
-        createHitRequest,
-        include,
-        fieldsPartRevision,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Create a `hit` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneViewHit(
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createSceneViewHit(
-          id,
-          createHitRequest,
-          include,
-          fieldsPartRevision,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const HitsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = HitsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `hit` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneHit(id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneHit(id, createHitRequest, include, fieldsPartRevision, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Create a `hit` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneViewHit(id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneViewHit(id, createHitRequest, include, fieldsPartRevision, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * HitsApi - factory interface
  * @export
  */
-export const HitsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = HitsApiFp(configuration);
-  return {
-    /**
-     * Create a `hit` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneHit(
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): AxiosPromise<Hit> {
-      return localVarFp
-        .createSceneHit(
-          id,
-          createHitRequest,
-          include,
-          fieldsPartRevision,
-          options
-        )
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Create a `hit` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateHitRequest} createHitRequest
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneViewHit(
-      id: string,
-      createHitRequest: CreateHitRequest,
-      include?: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): AxiosPromise<Hit> {
-      return localVarFp
-        .createSceneViewHit(
-          id,
-          createHitRequest,
-          include,
-          fieldsPartRevision,
-          options
-        )
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const HitsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = HitsApiFp(configuration)
+    return {
+        /**
+         * Create a `hit` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneHit(id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options?: any): AxiosPromise<Hit> {
+            return localVarFp.createSceneHit(id, createHitRequest, include, fieldsPartRevision, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Create a `hit` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateHitRequest} createHitRequest 
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneViewHit(id: string, createHitRequest: CreateHitRequest, include?: string, fieldsPartRevision?: string, options?: any): AxiosPromise<Hit> {
+            return localVarFp.createSceneViewHit(id, createHitRequest, include, fieldsPartRevision, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -5377,33 +5224,33 @@ export const HitsApiFactory = function (
  * @interface HitsApiCreateSceneHitRequest
  */
 export interface HitsApiCreateSceneHitRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof HitsApiCreateSceneHit
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof HitsApiCreateSceneHit
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateHitRequest}
-   * @memberof HitsApiCreateSceneHit
-   */
-  readonly createHitRequest: CreateHitRequest;
+    /**
+     * 
+     * @type {CreateHitRequest}
+     * @memberof HitsApiCreateSceneHit
+     */
+    readonly createHitRequest: CreateHitRequest
 
-  /**
-   * Comma-separated list of relationships to include in response.
-   * @type {string}
-   * @memberof HitsApiCreateSceneHit
-   */
-  readonly include?: string;
+    /**
+     * Comma-separated list of relationships to include in response.
+     * @type {string}
+     * @memberof HitsApiCreateSceneHit
+     */
+    readonly include?: string
 
-  /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-   * @type {string}
-   * @memberof HitsApiCreateSceneHit
-   */
-  readonly fieldsPartRevision?: string;
+    /**
+     * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+     * @type {string}
+     * @memberof HitsApiCreateSceneHit
+     */
+    readonly fieldsPartRevision?: string
 }
 
 /**
@@ -5412,33 +5259,33 @@ export interface HitsApiCreateSceneHitRequest {
  * @interface HitsApiCreateSceneViewHitRequest
  */
 export interface HitsApiCreateSceneViewHitRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof HitsApiCreateSceneViewHit
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof HitsApiCreateSceneViewHit
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateHitRequest}
-   * @memberof HitsApiCreateSceneViewHit
-   */
-  readonly createHitRequest: CreateHitRequest;
+    /**
+     * 
+     * @type {CreateHitRequest}
+     * @memberof HitsApiCreateSceneViewHit
+     */
+    readonly createHitRequest: CreateHitRequest
 
-  /**
-   * Comma-separated list of relationships to include in response.
-   * @type {string}
-   * @memberof HitsApiCreateSceneViewHit
-   */
-  readonly include?: string;
+    /**
+     * Comma-separated list of relationships to include in response.
+     * @type {string}
+     * @memberof HitsApiCreateSceneViewHit
+     */
+    readonly include?: string
 
-  /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-   * @type {string}
-   * @memberof HitsApiCreateSceneViewHit
-   */
-  readonly fieldsPartRevision?: string;
+    /**
+     * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+     * @type {string}
+     * @memberof HitsApiCreateSceneViewHit
+     */
+    readonly fieldsPartRevision?: string
 }
 
 /**
@@ -5448,281 +5295,185 @@ export interface HitsApiCreateSceneViewHitRequest {
  * @extends {BaseAPI}
  */
 export class HitsApi extends BaseAPI {
-  /**
-   * Create a `hit` for a `scene`.
-   * @param {HitsApiCreateSceneHitRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HitsApi
-   */
-  public createSceneHit(
-    requestParameters: HitsApiCreateSceneHitRequest,
-    options?: any
-  ) {
-    return HitsApiFp(this.configuration)
-      .createSceneHit(
-        requestParameters.id,
-        requestParameters.createHitRequest,
-        requestParameters.include,
-        requestParameters.fieldsPartRevision,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `hit` for a `scene`.
+     * @param {HitsApiCreateSceneHitRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HitsApi
+     */
+    public createSceneHit(requestParameters: HitsApiCreateSceneHitRequest, options?: any) {
+        return HitsApiFp(this.configuration).createSceneHit(requestParameters.id, requestParameters.createHitRequest, requestParameters.include, requestParameters.fieldsPartRevision, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Create a `hit` for a `scene-view`.
-   * @param {HitsApiCreateSceneViewHitRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof HitsApi
-   */
-  public createSceneViewHit(
-    requestParameters: HitsApiCreateSceneViewHitRequest,
-    options?: any
-  ) {
-    return HitsApiFp(this.configuration)
-      .createSceneViewHit(
-        requestParameters.id,
-        requestParameters.createHitRequest,
-        requestParameters.include,
-        requestParameters.fieldsPartRevision,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `hit` for a `scene-view`.
+     * @param {HitsApiCreateSceneViewHitRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof HitsApi
+     */
+    public createSceneViewHit(requestParameters: HitsApiCreateSceneViewHitRequest, options?: any) {
+        return HitsApiFp(this.configuration).createSceneViewHit(requestParameters.id, requestParameters.createHitRequest, requestParameters.include, requestParameters.fieldsPartRevision, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * Oauth2Api - axios parameter creator
  * @export
  */
-export const Oauth2ApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
-     * @param {string} grantType
-     * @param {string} [scope]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createToken: async (
-      grantType: string,
-      scope?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'grantType' is not null or undefined
-      assertParamExists('createToken', 'grantType', grantType);
-      const localVarPath = `/oauth2/token`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const Oauth2ApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
+         * @param {string} grantType 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createToken: async (grantType: string, scope?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'grantType' is not null or undefined
+            assertParamExists('createToken', 'grantType', grantType)
+            const localVarPath = `/oauth2/token`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-      const localVarFormParams = new URLSearchParams();
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+            const localVarFormParams = new URLSearchParams();
 
-      // authentication basicAuth required
-      // http basic authentication required
-      setBasicAuthToObject(localVarRequestOptions, configuration);
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
 
-      if (scope !== undefined) {
-        localVarFormParams.set('scope', scope as any);
-      }
 
-      if (grantType !== undefined) {
-        localVarFormParams.set('grant_type', grantType as any);
-      }
+            if (scope !== undefined) { 
+                localVarFormParams.set('scope', scope as any);
+            }
+    
+            if (grantType !== undefined) { 
+                localVarFormParams.set('grant_type', grantType as any);
+            }
+    
+    
+            localVarHeaderParameter['Content-Type'] = 'application/x-www-form-urlencoded';
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = localVarFormParams.toString();
 
-      localVarHeaderParameter['Content-Type'] =
-        'application/x-www-form-urlencoded';
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Revoke an OAuth2 access token.
+         * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeToken: async (revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'revokeOAuth2TokenRequest' is not null or undefined
+            assertParamExists('revokeToken', 'revokeOAuth2TokenRequest', revokeOAuth2TokenRequest)
+            const localVarPath = `/oauth2/revoke`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = localVarFormParams.toString();
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Revoke an OAuth2 access token.
-     * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    revokeToken: async (
-      revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'revokeOAuth2TokenRequest' is not null or undefined
-      assertParamExists(
-        'revokeToken',
-        'revokeOAuth2TokenRequest',
-        revokeOAuth2TokenRequest
-      );
-      const localVarPath = `/oauth2/revoke`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication basicAuth required
+            // http basic authentication required
+            setBasicAuthToObject(localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication basicAuth required
-      // http basic authentication required
-      setBasicAuthToObject(localVarRequestOptions, configuration);
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(revokeOAuth2TokenRequest, localVarRequestOptions, configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        revokeOAuth2TokenRequest,
-        localVarRequestOptions,
-        configuration
-      );
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * Oauth2Api - functional programming interface
  * @export
  */
-export const Oauth2ApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = Oauth2ApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
-     * @param {string} grantType
-     * @param {string} [scope]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createToken(
-      grantType: string,
-      scope?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createToken(
-        grantType,
-        scope,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Revoke an OAuth2 access token.
-     * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async revokeToken(
-      revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.revokeToken(
-        revokeOAuth2TokenRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const Oauth2ApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = Oauth2ApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
+         * @param {string} grantType 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createToken(grantType: string, scope?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createToken(grantType, scope, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Revoke an OAuth2 access token.
+         * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async revokeToken(revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.revokeToken(revokeOAuth2TokenRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * Oauth2Api - factory interface
  * @export
  */
-export const Oauth2ApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = Oauth2ApiFp(configuration);
-  return {
-    /**
-     * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
-     * @param {string} grantType
-     * @param {string} [scope]
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createToken(
-      grantType: string,
-      scope?: string,
-      options?: any
-    ): AxiosPromise<OAuth2Token> {
-      return localVarFp
-        .createToken(grantType, scope, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Revoke an OAuth2 access token.
-     * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    revokeToken(
-      revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
-      options?: any
-    ): AxiosPromise<void> {
-      return localVarFp
-        .revokeToken(revokeOAuth2TokenRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const Oauth2ApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = Oauth2ApiFp(configuration)
+    return {
+        /**
+         * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
+         * @param {string} grantType 
+         * @param {string} [scope] 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createToken(grantType: string, scope?: string, options?: any): AxiosPromise<OAuth2Token> {
+            return localVarFp.createToken(grantType, scope, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Revoke an OAuth2 access token.
+         * @param {RevokeOAuth2TokenRequest} revokeOAuth2TokenRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        revokeToken(revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest, options?: any): AxiosPromise<void> {
+            return localVarFp.revokeToken(revokeOAuth2TokenRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -5731,19 +5482,19 @@ export const Oauth2ApiFactory = function (
  * @interface Oauth2ApiCreateTokenRequest
  */
 export interface Oauth2ApiCreateTokenRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof Oauth2ApiCreateToken
-   */
-  readonly grantType: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ApiCreateToken
+     */
+    readonly grantType: string
 
-  /**
-   *
-   * @type {string}
-   * @memberof Oauth2ApiCreateToken
-   */
-  readonly scope?: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Oauth2ApiCreateToken
+     */
+    readonly scope?: string
 }
 
 /**
@@ -5752,12 +5503,12 @@ export interface Oauth2ApiCreateTokenRequest {
  * @interface Oauth2ApiRevokeTokenRequest
  */
 export interface Oauth2ApiRevokeTokenRequest {
-  /**
-   *
-   * @type {RevokeOAuth2TokenRequest}
-   * @memberof Oauth2ApiRevokeToken
-   */
-  readonly revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest;
+    /**
+     * 
+     * @type {RevokeOAuth2TokenRequest}
+     * @memberof Oauth2ApiRevokeToken
+     */
+    readonly revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest
 }
 
 /**
@@ -5767,711 +5518,443 @@ export interface Oauth2ApiRevokeTokenRequest {
  * @extends {BaseAPI}
  */
 export class Oauth2Api extends BaseAPI {
-  /**
-   * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
-   * @param {Oauth2ApiCreateTokenRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof Oauth2Api
-   */
-  public createToken(
-    requestParameters: Oauth2ApiCreateTokenRequest,
-    options?: any
-  ) {
-    return Oauth2ApiFp(this.configuration)
-      .createToken(
-        requestParameters.grantType,
-        requestParameters.scope,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
+     * @param {Oauth2ApiCreateTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof Oauth2Api
+     */
+    public createToken(requestParameters: Oauth2ApiCreateTokenRequest, options?: any) {
+        return Oauth2ApiFp(this.configuration).createToken(requestParameters.grantType, requestParameters.scope, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Revoke an OAuth2 access token.
-   * @param {Oauth2ApiRevokeTokenRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof Oauth2Api
-   */
-  public revokeToken(
-    requestParameters: Oauth2ApiRevokeTokenRequest,
-    options?: any
-  ) {
-    return Oauth2ApiFp(this.configuration)
-      .revokeToken(requestParameters.revokeOAuth2TokenRequest, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Revoke an OAuth2 access token.
+     * @param {Oauth2ApiRevokeTokenRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof Oauth2Api
+     */
+    public revokeToken(requestParameters: Oauth2ApiRevokeTokenRequest, options?: any) {
+        return Oauth2ApiFp(this.configuration).revokeToken(requestParameters.revokeOAuth2TokenRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * PartRevisionsApi - axios parameter creator
  * @export
  */
-export const PartRevisionsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Delete a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deletePartRevision: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deletePartRevision', 'id', id);
-      const localVarPath = `/part-revisions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const PartRevisionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Delete a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePartRevision: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deletePartRevision', 'id', id)
+            const localVarPath = `/part-revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `part-revision` by ID.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPartRevision: async (
-      id: string,
-      fieldsPartRevision?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getPartRevision', 'id', id);
-      const localVarPath = `/part-revisions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `part-revision` by ID.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartRevision: async (id: string, fieldsPartRevision?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getPartRevision', 'id', id)
+            const localVarPath = `/part-revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (fieldsPartRevision !== undefined) {
-        localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (fieldsPartRevision !== undefined) {
+                localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `part-revisions` for a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPartRevisions: async (
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getPartRevisions', 'id', id);
-      const localVarPath = `/parts/{id}/part-revisions`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `part-revisions` for a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartRevisions: async (id: string, pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getPartRevisions', 'id', id)
+            const localVarPath = `/parts/{id}/part-revisions`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      if (filterSuppliedId !== undefined) {
-        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
-      }
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-part-revision-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedPartRevisionDeletion: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedPartRevisionDeletion', 'id', id);
-      const localVarPath = `/queued-part-revision-deletions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (filterSuppliedId !== undefined) {
+                localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+            }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-part-revision-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedPartRevisionDeletion: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedPartRevisionDeletion', 'id', id)
+            const localVarPath = `/queued-part-revision-deletions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a rendered image of a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderPartRevision: async (
-      id: string,
-      height?: number,
-      width?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('renderPartRevision', 'id', id);
-      const localVarPath = `/part-revisions/{id}/image`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      if (height !== undefined) {
-        localVarQueryParameter['height'] = height;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (width !== undefined) {
-        localVarQueryParameter['width'] = width;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a rendered image of a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderPartRevision: async (id: string, height?: number, width?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('renderPartRevision', 'id', id)
+            const localVarPath = `/part-revisions/{id}/image`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updatePartRevision: async (
-      id: string,
-      updatePartRevisionRequest: UpdatePartRevisionRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('updatePartRevision', 'id', id);
-      // verify required parameter 'updatePartRevisionRequest' is not null or undefined
-      assertParamExists(
-        'updatePartRevision',
-        'updatePartRevisionRequest',
-        updatePartRevisionRequest
-      );
-      const localVarPath = `/part-revisions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'PATCH',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (height !== undefined) {
+                localVarQueryParameter['height'] = height;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (width !== undefined) {
+                localVarQueryParameter['width'] = width;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        updatePartRevisionRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a `part-revision`. Note that metadata updates are eventually consistent.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {UpdatePartRevisionRequest} updatePartRevisionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePartRevision: async (id: string, updatePartRevisionRequest: UpdatePartRevisionRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updatePartRevision', 'id', id)
+            // verify required parameter 'updatePartRevisionRequest' is not null or undefined
+            assertParamExists('updatePartRevision', 'updatePartRevisionRequest', updatePartRevisionRequest)
+            const localVarPath = `/part-revisions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updatePartRevisionRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * PartRevisionsApi - functional programming interface
  * @export
  */
-export const PartRevisionsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    PartRevisionsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Delete a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deletePartRevision(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.deletePartRevision(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `part-revision` by ID.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getPartRevision(
-      id: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getPartRevision(
-        id,
-        fieldsPartRevision,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `part-revisions` for a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getPartRevisions(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<PartRevisionList>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getPartRevisions(
-          id,
-          pageCursor,
-          pageSize,
-          filterSuppliedId,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-part-revision-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedPartRevisionDeletion(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedPartRevisionDeletion(
-          id,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a rendered image of a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async renderPartRevision(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.renderPartRevision(
-          id,
-          height,
-          width,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updatePartRevision(
-      id: string,
-      updatePartRevisionRequest: UpdatePartRevisionRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.updatePartRevision(
-          id,
-          updatePartRevisionRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const PartRevisionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PartRevisionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Delete a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePartRevision(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePartRevision(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `part-revision` by ID.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPartRevision(id: string, fieldsPartRevision?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartRevision(id, fieldsPartRevision, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `part-revisions` for a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPartRevisions(id: string, pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevisionList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-part-revision-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedPartRevisionDeletion(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedPartRevisionDeletion(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a rendered image of a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async renderPartRevision(id: string, height?: number, width?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.renderPartRevision(id, height, width, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a `part-revision`. Note that metadata updates are eventually consistent.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {UpdatePartRevisionRequest} updatePartRevisionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updatePartRevision(id: string, updatePartRevisionRequest: UpdatePartRevisionRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updatePartRevision(id, updatePartRevisionRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * PartRevisionsApi - factory interface
  * @export
  */
-export const PartRevisionsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = PartRevisionsApiFp(configuration);
-  return {
-    /**
-     * Delete a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deletePartRevision(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .deletePartRevision(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `part-revision` by ID.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPartRevision(
-      id: string,
-      fieldsPartRevision?: string,
-      options?: any
-    ): AxiosPromise<PartRevision> {
-      return localVarFp
-        .getPartRevision(id, fieldsPartRevision, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `part-revisions` for a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPartRevisions(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): AxiosPromise<PartRevisionList> {
-      return localVarFp
-        .getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-part-revision-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedPartRevisionDeletion(
-      id: string,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedPartRevisionDeletion(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a rendered image of a `part-revision`.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderPartRevision(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): AxiosPromise<any> {
-      return localVarFp
-        .renderPartRevision(id, height, width, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updatePartRevision(
-      id: string,
-      updatePartRevisionRequest: UpdatePartRevisionRequest,
-      options?: any
-    ): AxiosPromise<PartRevision> {
-      return localVarFp
-        .updatePartRevision(id, updatePartRevisionRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const PartRevisionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PartRevisionsApiFp(configuration)
+    return {
+        /**
+         * Delete a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePartRevision(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.deletePartRevision(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `part-revision` by ID.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {string} [fieldsPartRevision] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartRevision(id: string, fieldsPartRevision?: string, options?: any): AxiosPromise<PartRevision> {
+            return localVarFp.getPartRevision(id, fieldsPartRevision, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `part-revisions` for a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPartRevisions(id: string, pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): AxiosPromise<PartRevisionList> {
+            return localVarFp.getPartRevisions(id, pageCursor, pageSize, filterSuppliedId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-part-revision-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-revision-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedPartRevisionDeletion(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedPartRevisionDeletion(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a rendered image of a `part-revision`.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderPartRevision(id: string, height?: number, width?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.renderPartRevision(id, height, width, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a `part-revision`. Note that metadata updates are eventually consistent.
+         * @param {string} id The &#x60;part-revision&#x60; ID.
+         * @param {UpdatePartRevisionRequest} updatePartRevisionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updatePartRevision(id: string, updatePartRevisionRequest: UpdatePartRevisionRequest, options?: any): AxiosPromise<PartRevision> {
+            return localVarFp.updatePartRevision(id, updatePartRevisionRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -6480,12 +5963,12 @@ export const PartRevisionsApiFactory = function (
  * @interface PartRevisionsApiDeletePartRevisionRequest
  */
 export interface PartRevisionsApiDeletePartRevisionRequest {
-  /**
-   * The &#x60;part-revision&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiDeletePartRevision
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part-revision&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiDeletePartRevision
+     */
+    readonly id: string
 }
 
 /**
@@ -6494,19 +5977,19 @@ export interface PartRevisionsApiDeletePartRevisionRequest {
  * @interface PartRevisionsApiGetPartRevisionRequest
  */
 export interface PartRevisionsApiGetPartRevisionRequest {
-  /**
-   * The &#x60;part-revision&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiGetPartRevision
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part-revision&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiGetPartRevision
+     */
+    readonly id: string
 
-  /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-   * @type {string}
-   * @memberof PartRevisionsApiGetPartRevision
-   */
-  readonly fieldsPartRevision?: string;
+    /**
+     * Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
+     * @type {string}
+     * @memberof PartRevisionsApiGetPartRevision
+     */
+    readonly fieldsPartRevision?: string
 }
 
 /**
@@ -6515,33 +5998,33 @@ export interface PartRevisionsApiGetPartRevisionRequest {
  * @interface PartRevisionsApiGetPartRevisionsRequest
  */
 export interface PartRevisionsApiGetPartRevisionsRequest {
-  /**
-   * The &#x60;part&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiGetPartRevisions
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiGetPartRevisions
+     */
+    readonly id: string
 
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof PartRevisionsApiGetPartRevisions
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof PartRevisionsApiGetPartRevisions
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof PartRevisionsApiGetPartRevisions
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof PartRevisionsApiGetPartRevisions
+     */
+    readonly pageSize?: number
 
-  /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
-   * @memberof PartRevisionsApiGetPartRevisions
-   */
-  readonly filterSuppliedId?: string;
+    /**
+     * Comma-separated list of supplied IDs to filter on.
+     * @type {string}
+     * @memberof PartRevisionsApiGetPartRevisions
+     */
+    readonly filterSuppliedId?: string
 }
 
 /**
@@ -6550,12 +6033,12 @@ export interface PartRevisionsApiGetPartRevisionsRequest {
  * @interface PartRevisionsApiGetQueuedPartRevisionDeletionRequest
  */
 export interface PartRevisionsApiGetQueuedPartRevisionDeletionRequest {
-  /**
-   * The &#x60;queued-part-revision-deletion&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiGetQueuedPartRevisionDeletion
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-part-revision-deletion&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiGetQueuedPartRevisionDeletion
+     */
+    readonly id: string
 }
 
 /**
@@ -6564,26 +6047,26 @@ export interface PartRevisionsApiGetQueuedPartRevisionDeletionRequest {
  * @interface PartRevisionsApiRenderPartRevisionRequest
  */
 export interface PartRevisionsApiRenderPartRevisionRequest {
-  /**
-   * The &#x60;part-revision&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiRenderPartRevision
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part-revision&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiRenderPartRevision
+     */
+    readonly id: string
 
-  /**
-   * The height of the image to render.
-   * @type {number}
-   * @memberof PartRevisionsApiRenderPartRevision
-   */
-  readonly height?: number;
+    /**
+     * The height of the image to render.
+     * @type {number}
+     * @memberof PartRevisionsApiRenderPartRevision
+     */
+    readonly height?: number
 
-  /**
-   * The width of the image to render.
-   * @type {number}
-   * @memberof PartRevisionsApiRenderPartRevision
-   */
-  readonly width?: number;
+    /**
+     * The width of the image to render.
+     * @type {number}
+     * @memberof PartRevisionsApiRenderPartRevision
+     */
+    readonly width?: number
 }
 
 /**
@@ -6592,19 +6075,19 @@ export interface PartRevisionsApiRenderPartRevisionRequest {
  * @interface PartRevisionsApiUpdatePartRevisionRequest
  */
 export interface PartRevisionsApiUpdatePartRevisionRequest {
-  /**
-   * The &#x60;part-revision&#x60; ID.
-   * @type {string}
-   * @memberof PartRevisionsApiUpdatePartRevision
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part-revision&#x60; ID.
+     * @type {string}
+     * @memberof PartRevisionsApiUpdatePartRevision
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {UpdatePartRevisionRequest}
-   * @memberof PartRevisionsApiUpdatePartRevision
-   */
-  readonly updatePartRevisionRequest: UpdatePartRevisionRequest;
+    /**
+     * 
+     * @type {UpdatePartRevisionRequest}
+     * @memberof PartRevisionsApiUpdatePartRevision
+     */
+    readonly updatePartRevisionRequest: UpdatePartRevisionRequest
 }
 
 /**
@@ -6614,631 +6097,405 @@ export interface PartRevisionsApiUpdatePartRevisionRequest {
  * @extends {BaseAPI}
  */
 export class PartRevisionsApi extends BaseAPI {
-  /**
-   * Delete a `part-revision`.
-   * @param {PartRevisionsApiDeletePartRevisionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public deletePartRevision(
-    requestParameters: PartRevisionsApiDeletePartRevisionRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .deletePartRevision(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `part-revision`.
+     * @param {PartRevisionsApiDeletePartRevisionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public deletePartRevision(requestParameters: PartRevisionsApiDeletePartRevisionRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).deletePartRevision(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `part-revision` by ID.
-   * @param {PartRevisionsApiGetPartRevisionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public getPartRevision(
-    requestParameters: PartRevisionsApiGetPartRevisionRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .getPartRevision(
-        requestParameters.id,
-        requestParameters.fieldsPartRevision,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `part-revision` by ID.
+     * @param {PartRevisionsApiGetPartRevisionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public getPartRevision(requestParameters: PartRevisionsApiGetPartRevisionRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).getPartRevision(requestParameters.id, requestParameters.fieldsPartRevision, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `part-revisions` for a `part`.
-   * @param {PartRevisionsApiGetPartRevisionsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public getPartRevisions(
-    requestParameters: PartRevisionsApiGetPartRevisionsRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .getPartRevisions(
-        requestParameters.id,
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        requestParameters.filterSuppliedId,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `part-revisions` for a `part`.
+     * @param {PartRevisionsApiGetPartRevisionsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public getPartRevisions(requestParameters: PartRevisionsApiGetPartRevisionsRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).getPartRevisions(requestParameters.id, requestParameters.pageCursor, requestParameters.pageSize, requestParameters.filterSuppliedId, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-part-revision-deletion` by ID.
-   * @param {PartRevisionsApiGetQueuedPartRevisionDeletionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public getQueuedPartRevisionDeletion(
-    requestParameters: PartRevisionsApiGetQueuedPartRevisionDeletionRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .getQueuedPartRevisionDeletion(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-part-revision-deletion` by ID.
+     * @param {PartRevisionsApiGetQueuedPartRevisionDeletionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public getQueuedPartRevisionDeletion(requestParameters: PartRevisionsApiGetQueuedPartRevisionDeletionRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).getQueuedPartRevisionDeletion(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a rendered image of a `part-revision`.
-   * @param {PartRevisionsApiRenderPartRevisionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public renderPartRevision(
-    requestParameters: PartRevisionsApiRenderPartRevisionRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .renderPartRevision(
-        requestParameters.id,
-        requestParameters.height,
-        requestParameters.width,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a rendered image of a `part-revision`.
+     * @param {PartRevisionsApiRenderPartRevisionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public renderPartRevision(requestParameters: PartRevisionsApiRenderPartRevisionRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).renderPartRevision(requestParameters.id, requestParameters.height, requestParameters.width, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Update a `part-revision`. Note that metadata updates are eventually consistent.
-   * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartRevisionsApi
-   */
-  public updatePartRevision(
-    requestParameters: PartRevisionsApiUpdatePartRevisionRequest,
-    options?: any
-  ) {
-    return PartRevisionsApiFp(this.configuration)
-      .updatePartRevision(
-        requestParameters.id,
-        requestParameters.updatePartRevisionRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Update a `part-revision`. Note that metadata updates are eventually consistent.
+     * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartRevisionsApi
+     */
+    public updatePartRevision(requestParameters: PartRevisionsApiUpdatePartRevisionRequest, options?: any) {
+        return PartRevisionsApiFp(this.configuration).updatePartRevision(requestParameters.id, requestParameters.updatePartRevisionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * PartsApi - axios parameter creator
  * @export
  */
-export const PartsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreatePartRequest} createPartRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createPart: async (
-      createPartRequest: CreatePartRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createPartRequest' is not null or undefined
-      assertParamExists('createPart', 'createPartRequest', createPartRequest);
-      const localVarPath = `/parts`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const PartsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreatePartRequest} createPartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPart: async (createPartRequest: CreatePartRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createPartRequest' is not null or undefined
+            assertParamExists('createPart', 'createPartRequest', createPartRequest)
+            const localVarPath = `/parts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createPartRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deletePart: async (id: string, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deletePart', 'id', id);
-      const localVarPath = `/parts/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createPartRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePart: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deletePart', 'id', id)
+            const localVarPath = `/parts/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `part` by ID.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPart: async (
-      id: string,
-      include?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getPart', 'id', id);
-      const localVarPath = `/parts/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `part` by ID.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPart: async (id: string, include?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getPart', 'id', id)
+            const localVarPath = `/parts/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (include !== undefined) {
-        localVarQueryParameter['include'] = include;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `parts`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getParts: async (
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/parts`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (include !== undefined) {
+                localVarQueryParameter['include'] = include;
+            }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `parts`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParts: async (pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/parts`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (filterSuppliedId !== undefined) {
-        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-part-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedPartDeletion: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedPartDeletion', 'id', id);
-      const localVarPath = `/queued-part-deletions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (filterSuppliedId !== undefined) {
+                localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-part-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedPartDeletion: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedPartDeletion', 'id', id)
+            const localVarPath = `/queued-part-deletions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * PartsApi - functional programming interface
  * @export
  */
-export const PartsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = PartsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreatePartRequest} createPartRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createPart(
-      createPartRequest: CreatePartRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createPart(
-        createPartRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deletePart(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deletePart(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `part` by ID.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getPart(
-      id: string,
-      include?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Part>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getPart(
-        id,
-        include,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `parts`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getParts(
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getParts(
-        pageCursor,
-        pageSize,
-        filterSuppliedId,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-part-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedPartDeletion(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedPartDeletion(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const PartsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = PartsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreatePartRequest} createPartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createPart(createPartRequest: CreatePartRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createPart(createPartRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deletePart(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deletePart(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `part` by ID.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getPart(id: string, include?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Part>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getPart(id, include, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `parts`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getParts(pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getParts(pageCursor, pageSize, filterSuppliedId, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-part-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedPartDeletion(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedPartDeletion(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * PartsApi - factory interface
  * @export
  */
-export const PartsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = PartsApiFp(configuration);
-  return {
-    /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-     * @param {CreatePartRequest} createPartRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createPart(
-      createPartRequest: CreatePartRequest,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .createPart(createPartRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `part`.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deletePart(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .deletePart(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `part` by ID.
-     * @param {string} id The &#x60;part&#x60; ID.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getPart(id: string, include?: string, options?: any): AxiosPromise<Part> {
-      return localVarFp
-        .getPart(id, include, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `parts`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getParts(
-      pageCursor?: string,
-      pageSize?: number,
-      filterSuppliedId?: string,
-      options?: any
-    ): AxiosPromise<PartList> {
-      return localVarFp
-        .getParts(pageCursor, pageSize, filterSuppliedId, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-part-deletion` by ID.
-     * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedPartDeletion(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedPartDeletion(id, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const PartsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = PartsApiFp(configuration)
+    return {
+        /**
+         * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+         * @param {CreatePartRequest} createPartRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createPart(createPartRequest: CreatePartRequest, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.createPart(createPartRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `part`.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deletePart(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.deletePart(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `part` by ID.
+         * @param {string} id The &#x60;part&#x60; ID.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getPart(id: string, include?: string, options?: any): AxiosPromise<Part> {
+            return localVarFp.getPart(id, include, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `parts`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getParts(pageCursor?: string, pageSize?: number, filterSuppliedId?: string, options?: any): AxiosPromise<PartList> {
+            return localVarFp.getParts(pageCursor, pageSize, filterSuppliedId, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-part-deletion` by ID.
+         * @param {string} id The &#x60;queued-part-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedPartDeletion(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedPartDeletion(id, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -7247,12 +6504,12 @@ export const PartsApiFactory = function (
  * @interface PartsApiCreatePartRequest
  */
 export interface PartsApiCreatePartRequest {
-  /**
-   *
-   * @type {CreatePartRequest}
-   * @memberof PartsApiCreatePart
-   */
-  readonly createPartRequest: CreatePartRequest;
+    /**
+     * 
+     * @type {CreatePartRequest}
+     * @memberof PartsApiCreatePart
+     */
+    readonly createPartRequest: CreatePartRequest
 }
 
 /**
@@ -7261,12 +6518,12 @@ export interface PartsApiCreatePartRequest {
  * @interface PartsApiDeletePartRequest
  */
 export interface PartsApiDeletePartRequest {
-  /**
-   * The &#x60;part&#x60; ID.
-   * @type {string}
-   * @memberof PartsApiDeletePart
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part&#x60; ID.
+     * @type {string}
+     * @memberof PartsApiDeletePart
+     */
+    readonly id: string
 }
 
 /**
@@ -7275,19 +6532,19 @@ export interface PartsApiDeletePartRequest {
  * @interface PartsApiGetPartRequest
  */
 export interface PartsApiGetPartRequest {
-  /**
-   * The &#x60;part&#x60; ID.
-   * @type {string}
-   * @memberof PartsApiGetPart
-   */
-  readonly id: string;
+    /**
+     * The &#x60;part&#x60; ID.
+     * @type {string}
+     * @memberof PartsApiGetPart
+     */
+    readonly id: string
 
-  /**
-   * Comma-separated list of relationships to include in response.
-   * @type {string}
-   * @memberof PartsApiGetPart
-   */
-  readonly include?: string;
+    /**
+     * Comma-separated list of relationships to include in response.
+     * @type {string}
+     * @memberof PartsApiGetPart
+     */
+    readonly include?: string
 }
 
 /**
@@ -7296,26 +6553,26 @@ export interface PartsApiGetPartRequest {
  * @interface PartsApiGetPartsRequest
  */
 export interface PartsApiGetPartsRequest {
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof PartsApiGetParts
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof PartsApiGetParts
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof PartsApiGetParts
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof PartsApiGetParts
+     */
+    readonly pageSize?: number
 
-  /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
-   * @memberof PartsApiGetParts
-   */
-  readonly filterSuppliedId?: string;
+    /**
+     * Comma-separated list of supplied IDs to filter on.
+     * @type {string}
+     * @memberof PartsApiGetParts
+     */
+    readonly filterSuppliedId?: string
 }
 
 /**
@@ -7324,12 +6581,12 @@ export interface PartsApiGetPartsRequest {
  * @interface PartsApiGetQueuedPartDeletionRequest
  */
 export interface PartsApiGetQueuedPartDeletionRequest {
-  /**
-   * The &#x60;queued-part-deletion&#x60; ID.
-   * @type {string}
-   * @memberof PartsApiGetQueuedPartDeletion
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-part-deletion&#x60; ID.
+     * @type {string}
+     * @memberof PartsApiGetQueuedPartDeletion
+     */
+    readonly id: string
 }
 
 /**
@@ -7339,508 +6596,322 @@ export interface PartsApiGetQueuedPartDeletionRequest {
  * @extends {BaseAPI}
  */
 export class PartsApi extends BaseAPI {
-  /**
-   * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
-   * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartsApi
-   */
-  public createPart(
-    requestParameters: PartsApiCreatePartRequest,
-    options?: any
-  ) {
-    return PartsApiFp(this.configuration)
-      .createPart(requestParameters.createPartRequest, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartsApi
+     */
+    public createPart(requestParameters: PartsApiCreatePartRequest, options?: any) {
+        return PartsApiFp(this.configuration).createPart(requestParameters.createPartRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `part`.
-   * @param {PartsApiDeletePartRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartsApi
-   */
-  public deletePart(
-    requestParameters: PartsApiDeletePartRequest,
-    options?: any
-  ) {
-    return PartsApiFp(this.configuration)
-      .deletePart(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `part`.
+     * @param {PartsApiDeletePartRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartsApi
+     */
+    public deletePart(requestParameters: PartsApiDeletePartRequest, options?: any) {
+        return PartsApiFp(this.configuration).deletePart(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `part` by ID.
-   * @param {PartsApiGetPartRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartsApi
-   */
-  public getPart(requestParameters: PartsApiGetPartRequest, options?: any) {
-    return PartsApiFp(this.configuration)
-      .getPart(requestParameters.id, requestParameters.include, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `part` by ID.
+     * @param {PartsApiGetPartRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartsApi
+     */
+    public getPart(requestParameters: PartsApiGetPartRequest, options?: any) {
+        return PartsApiFp(this.configuration).getPart(requestParameters.id, requestParameters.include, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `parts`.
-   * @param {PartsApiGetPartsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartsApi
-   */
-  public getParts(
-    requestParameters: PartsApiGetPartsRequest = {},
-    options?: any
-  ) {
-    return PartsApiFp(this.configuration)
-      .getParts(
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        requestParameters.filterSuppliedId,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `parts`.
+     * @param {PartsApiGetPartsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartsApi
+     */
+    public getParts(requestParameters: PartsApiGetPartsRequest = {}, options?: any) {
+        return PartsApiFp(this.configuration).getParts(requestParameters.pageCursor, requestParameters.pageSize, requestParameters.filterSuppliedId, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-part-deletion` by ID.
-   * @param {PartsApiGetQueuedPartDeletionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof PartsApi
-   */
-  public getQueuedPartDeletion(
-    requestParameters: PartsApiGetQueuedPartDeletionRequest,
-    options?: any
-  ) {
-    return PartsApiFp(this.configuration)
-      .getQueuedPartDeletion(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-part-deletion` by ID.
+     * @param {PartsApiGetQueuedPartDeletionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PartsApi
+     */
+    public getQueuedPartDeletion(requestParameters: PartsApiGetQueuedPartDeletionRequest, options?: any) {
+        return PartsApiFp(this.configuration).getQueuedPartDeletion(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * SceneAlterationsApi - axios parameter creator
  * @export
  */
-export const SceneAlterationsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene-alteration` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneAlteration: async (
-      id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneAlteration', 'id', id);
-      // verify required parameter 'createSceneAlterationRequest' is not null or undefined
-      assertParamExists(
-        'createSceneAlteration',
-        'createSceneAlterationRequest',
-        createSceneAlterationRequest
-      );
-      const localVarPath = `/scene-views/{id}/scene-alterations`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const SceneAlterationsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene-alteration` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneAlterationRequest} createSceneAlterationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneAlteration: async (id: string, createSceneAlterationRequest: CreateSceneAlterationRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneAlteration', 'id', id)
+            // verify required parameter 'createSceneAlterationRequest' is not null or undefined
+            assertParamExists('createSceneAlteration', 'createSceneAlterationRequest', createSceneAlterationRequest)
+            const localVarPath = `/scene-views/{id}/scene-alterations`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneAlterationRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-scene-alteration` by ID.
-     * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneAlteration: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedSceneAlteration', 'id', id);
-      const localVarPath = `/queued-scene-alterations/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneAlterationRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-scene-alteration` by ID.
+         * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneAlteration: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedSceneAlteration', 'id', id)
+            const localVarPath = `/queued-scene-alterations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene-alteration` by ID.
-     * @param {string} id The &#x60;scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneAlteration: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneAlteration', 'id', id);
-      const localVarPath = `/scene-alterations/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene-alteration` by ID.
+         * @param {string} id The &#x60;scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneAlteration: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneAlteration', 'id', id)
+            const localVarPath = `/scene-alterations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `scene-alterations` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneAlterations: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneAlterations', 'id', id);
-      const localVarPath = `/scene-views/{id}/scene-alterations`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `scene-alterations` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneAlterations: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneAlterations', 'id', id)
+            const localVarPath = `/scene-views/{id}/scene-alterations`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * SceneAlterationsApi - functional programming interface
  * @export
  */
-export const SceneAlterationsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    SceneAlterationsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene-alteration` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneAlteration(
-      id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createSceneAlteration(
-          id,
-          createSceneAlterationRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-scene-alteration` by ID.
-     * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedSceneAlteration(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedSceneAlteration(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene-alteration` by ID.
-     * @param {string} id The &#x60;scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneAlteration(
-      id: string,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneAlteration>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneAlteration(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `scene-alterations` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneAlterations(
-      id: string,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneAlterationList>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneAlterations(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const SceneAlterationsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SceneAlterationsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene-alteration` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneAlterationRequest} createSceneAlterationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneAlteration(id: string, createSceneAlterationRequest: CreateSceneAlterationRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneAlteration(id, createSceneAlterationRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-scene-alteration` by ID.
+         * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedSceneAlteration(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneAlteration(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene-alteration` by ID.
+         * @param {string} id The &#x60;scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneAlteration(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneAlteration>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneAlteration(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `scene-alterations` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneAlterations(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneAlterationList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneAlterations(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * SceneAlterationsApi - factory interface
  * @export
  */
-export const SceneAlterationsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SceneAlterationsApiFp(configuration);
-  return {
-    /**
-     * Create a `scene-alteration` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneAlteration(
-      id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .createSceneAlteration(id, createSceneAlterationRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-scene-alteration` by ID.
-     * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneAlteration(
-      id: string,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedSceneAlteration(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene-alteration` by ID.
-     * @param {string} id The &#x60;scene-alteration&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneAlteration(
-      id: string,
-      options?: any
-    ): AxiosPromise<SceneAlteration> {
-      return localVarFp
-        .getSceneAlteration(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `scene-alterations` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneAlterations(
-      id: string,
-      options?: any
-    ): AxiosPromise<SceneAlterationList> {
-      return localVarFp
-        .getSceneAlterations(id, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const SceneAlterationsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SceneAlterationsApiFp(configuration)
+    return {
+        /**
+         * Create a `scene-alteration` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneAlterationRequest} createSceneAlterationRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneAlteration(id: string, createSceneAlterationRequest: CreateSceneAlterationRequest, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.createSceneAlteration(id, createSceneAlterationRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-scene-alteration` by ID.
+         * @param {string} id The &#x60;queued-scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneAlteration(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedSceneAlteration(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene-alteration` by ID.
+         * @param {string} id The &#x60;scene-alteration&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneAlteration(id: string, options?: any): AxiosPromise<SceneAlteration> {
+            return localVarFp.getSceneAlteration(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `scene-alterations` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneAlterations(id: string, options?: any): AxiosPromise<SceneAlterationList> {
+            return localVarFp.getSceneAlterations(id, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -7849,19 +6920,19 @@ export const SceneAlterationsApiFactory = function (
  * @interface SceneAlterationsApiCreateSceneAlterationRequest
  */
 export interface SceneAlterationsApiCreateSceneAlterationRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneAlterationsApiCreateSceneAlteration
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneAlterationsApiCreateSceneAlteration
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateSceneAlterationRequest}
-   * @memberof SceneAlterationsApiCreateSceneAlteration
-   */
-  readonly createSceneAlterationRequest: CreateSceneAlterationRequest;
+    /**
+     * 
+     * @type {CreateSceneAlterationRequest}
+     * @memberof SceneAlterationsApiCreateSceneAlteration
+     */
+    readonly createSceneAlterationRequest: CreateSceneAlterationRequest
 }
 
 /**
@@ -7870,12 +6941,12 @@ export interface SceneAlterationsApiCreateSceneAlterationRequest {
  * @interface SceneAlterationsApiGetQueuedSceneAlterationRequest
  */
 export interface SceneAlterationsApiGetQueuedSceneAlterationRequest {
-  /**
-   * The &#x60;queued-scene-alteration&#x60; ID.
-   * @type {string}
-   * @memberof SceneAlterationsApiGetQueuedSceneAlteration
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-scene-alteration&#x60; ID.
+     * @type {string}
+     * @memberof SceneAlterationsApiGetQueuedSceneAlteration
+     */
+    readonly id: string
 }
 
 /**
@@ -7884,12 +6955,12 @@ export interface SceneAlterationsApiGetQueuedSceneAlterationRequest {
  * @interface SceneAlterationsApiGetSceneAlterationRequest
  */
 export interface SceneAlterationsApiGetSceneAlterationRequest {
-  /**
-   * The &#x60;scene-alteration&#x60; ID.
-   * @type {string}
-   * @memberof SceneAlterationsApiGetSceneAlteration
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-alteration&#x60; ID.
+     * @type {string}
+     * @memberof SceneAlterationsApiGetSceneAlteration
+     */
+    readonly id: string
 }
 
 /**
@@ -7898,12 +6969,12 @@ export interface SceneAlterationsApiGetSceneAlterationRequest {
  * @interface SceneAlterationsApiGetSceneAlterationsRequest
  */
 export interface SceneAlterationsApiGetSceneAlterationsRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneAlterationsApiGetSceneAlterations
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneAlterationsApiGetSceneAlterations
+     */
+    readonly id: string
 }
 
 /**
@@ -7913,519 +6984,319 @@ export interface SceneAlterationsApiGetSceneAlterationsRequest {
  * @extends {BaseAPI}
  */
 export class SceneAlterationsApi extends BaseAPI {
-  /**
-   * Create a `scene-alteration` for a `scene-view`.
-   * @param {SceneAlterationsApiCreateSceneAlterationRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneAlterationsApi
-   */
-  public createSceneAlteration(
-    requestParameters: SceneAlterationsApiCreateSceneAlterationRequest,
-    options?: any
-  ) {
-    return SceneAlterationsApiFp(this.configuration)
-      .createSceneAlteration(
-        requestParameters.id,
-        requestParameters.createSceneAlterationRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene-alteration` for a `scene-view`.
+     * @param {SceneAlterationsApiCreateSceneAlterationRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneAlterationsApi
+     */
+    public createSceneAlteration(requestParameters: SceneAlterationsApiCreateSceneAlterationRequest, options?: any) {
+        return SceneAlterationsApiFp(this.configuration).createSceneAlteration(requestParameters.id, requestParameters.createSceneAlterationRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-scene-alteration` by ID.
-   * @param {SceneAlterationsApiGetQueuedSceneAlterationRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneAlterationsApi
-   */
-  public getQueuedSceneAlteration(
-    requestParameters: SceneAlterationsApiGetQueuedSceneAlterationRequest,
-    options?: any
-  ) {
-    return SceneAlterationsApiFp(this.configuration)
-      .getQueuedSceneAlteration(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-scene-alteration` by ID.
+     * @param {SceneAlterationsApiGetQueuedSceneAlterationRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneAlterationsApi
+     */
+    public getQueuedSceneAlteration(requestParameters: SceneAlterationsApiGetQueuedSceneAlterationRequest, options?: any) {
+        return SceneAlterationsApiFp(this.configuration).getQueuedSceneAlteration(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene-alteration` by ID.
-   * @param {SceneAlterationsApiGetSceneAlterationRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneAlterationsApi
-   */
-  public getSceneAlteration(
-    requestParameters: SceneAlterationsApiGetSceneAlterationRequest,
-    options?: any
-  ) {
-    return SceneAlterationsApiFp(this.configuration)
-      .getSceneAlteration(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene-alteration` by ID.
+     * @param {SceneAlterationsApiGetSceneAlterationRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneAlterationsApi
+     */
+    public getSceneAlteration(requestParameters: SceneAlterationsApiGetSceneAlterationRequest, options?: any) {
+        return SceneAlterationsApiFp(this.configuration).getSceneAlteration(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `scene-alterations` for a `scene-view`.
-   * @param {SceneAlterationsApiGetSceneAlterationsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneAlterationsApi
-   */
-  public getSceneAlterations(
-    requestParameters: SceneAlterationsApiGetSceneAlterationsRequest,
-    options?: any
-  ) {
-    return SceneAlterationsApiFp(this.configuration)
-      .getSceneAlterations(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `scene-alterations` for a `scene-view`.
+     * @param {SceneAlterationsApiGetSceneAlterationsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneAlterationsApi
+     */
+    public getSceneAlterations(requestParameters: SceneAlterationsApiGetSceneAlterationsRequest, options?: any) {
+        return SceneAlterationsApiFp(this.configuration).getSceneAlterations(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * SceneItemOverridesApi - axios parameter creator
  * @export
  */
-export const SceneItemOverridesApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene-item-override` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneItemOverride: async (
-      id: string,
-      createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneItemOverride', 'id', id);
-      // verify required parameter 'createSceneItemOverrideRequest' is not null or undefined
-      assertParamExists(
-        'createSceneItemOverride',
-        'createSceneItemOverrideRequest',
-        createSceneItemOverrideRequest
-      );
-      const localVarPath = `/scene-views/{id}/scene-item-overrides`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const SceneItemOverridesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene-item-override` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneItemOverride: async (id: string, createSceneItemOverrideRequest: CreateSceneItemOverrideRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneItemOverride', 'id', id)
+            // verify required parameter 'createSceneItemOverrideRequest' is not null or undefined
+            assertParamExists('createSceneItemOverride', 'createSceneItemOverrideRequest', createSceneItemOverrideRequest)
+            const localVarPath = `/scene-views/{id}/scene-item-overrides`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneItemOverrideRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneItemOverride: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteSceneItemOverride', 'id', id);
-      const localVarPath = `/scene-item-overrides/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneItemOverrideRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneItemOverride: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteSceneItemOverride', 'id', id)
+            const localVarPath = `/scene-item-overrides/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `scene-item-overrides` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItemOverrides: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneItemOverrides', 'id', id);
-      const localVarPath = `/scene-views/{id}/scene-item-overrides`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `scene-item-overrides` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItemOverrides: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneItemOverrides', 'id', id)
+            const localVarPath = `/scene-views/{id}/scene-item-overrides`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Update a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneItemOverride: async (
-      id: string,
-      updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('updateSceneItemOverride', 'id', id);
-      // verify required parameter 'updateSceneItemOverrideRequest' is not null or undefined
-      assertParamExists(
-        'updateSceneItemOverride',
-        'updateSceneItemOverrideRequest',
-        updateSceneItemOverrideRequest
-      );
-      const localVarPath = `/scene-item-overrides/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'PATCH',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneItemOverride: async (id: string, updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateSceneItemOverride', 'id', id)
+            // verify required parameter 'updateSceneItemOverrideRequest' is not null or undefined
+            assertParamExists('updateSceneItemOverride', 'updateSceneItemOverrideRequest', updateSceneItemOverrideRequest)
+            const localVarPath = `/scene-item-overrides/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        updateSceneItemOverrideRequest,
-        localVarRequestOptions,
-        configuration
-      );
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSceneItemOverrideRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * SceneItemOverridesApi - functional programming interface
  * @export
  */
-export const SceneItemOverridesApiFp = function (
-  configuration?: Configuration
-) {
-  const localVarAxiosParamCreator =
-    SceneItemOverridesApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene-item-override` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneItemOverride(
-      id: string,
-      createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneItemOverride>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createSceneItemOverride(
-          id,
-          createSceneItemOverrideRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteSceneItemOverride(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.deleteSceneItemOverride(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `scene-item-overrides` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneItemOverrides(
-      id: string,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneItemOverrideList>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneItemOverrides(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Update a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateSceneItemOverride(
-      id: string,
-      updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneItemOverride>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.updateSceneItemOverride(
-          id,
-          updateSceneItemOverrideRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const SceneItemOverridesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SceneItemOverridesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene-item-override` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneItemOverride(id: string, createSceneItemOverrideRequest: CreateSceneItemOverrideRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemOverride>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneItemOverride(id, createSceneItemOverrideRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSceneItemOverride(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneItemOverride(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `scene-item-overrides` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneItemOverrides(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemOverrideList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItemOverrides(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSceneItemOverride(id: string, updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemOverride>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneItemOverride(id, updateSceneItemOverrideRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * SceneItemOverridesApi - factory interface
  * @export
  */
-export const SceneItemOverridesApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SceneItemOverridesApiFp(configuration);
-  return {
-    /**
-     * Create a `scene-item-override` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneItemOverride(
-      id: string,
-      createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
-      options?: any
-    ): AxiosPromise<SceneItemOverride> {
-      return localVarFp
-        .createSceneItemOverride(id, createSceneItemOverrideRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneItemOverride(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteSceneItemOverride(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `scene-item-overrides` for a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItemOverrides(
-      id: string,
-      options?: any
-    ): AxiosPromise<SceneItemOverrideList> {
-      return localVarFp
-        .getSceneItemOverrides(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Update a `scene-item-override`.
-     * @param {string} id The &#x60;scene-item-override&#x60; ID.
-     * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneItemOverride(
-      id: string,
-      updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
-      options?: any
-    ): AxiosPromise<SceneItemOverride> {
-      return localVarFp
-        .updateSceneItemOverride(id, updateSceneItemOverrideRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const SceneItemOverridesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SceneItemOverridesApiFp(configuration)
+    return {
+        /**
+         * Create a `scene-item-override` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {CreateSceneItemOverrideRequest} createSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneItemOverride(id: string, createSceneItemOverrideRequest: CreateSceneItemOverrideRequest, options?: any): AxiosPromise<SceneItemOverride> {
+            return localVarFp.createSceneItemOverride(id, createSceneItemOverrideRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneItemOverride(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSceneItemOverride(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `scene-item-overrides` for a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItemOverrides(id: string, options?: any): AxiosPromise<SceneItemOverrideList> {
+            return localVarFp.getSceneItemOverrides(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a `scene-item-override`.
+         * @param {string} id The &#x60;scene-item-override&#x60; ID.
+         * @param {UpdateSceneItemOverrideRequest} updateSceneItemOverrideRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneItemOverride(id: string, updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest, options?: any): AxiosPromise<SceneItemOverride> {
+            return localVarFp.updateSceneItemOverride(id, updateSceneItemOverrideRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -8434,19 +7305,19 @@ export const SceneItemOverridesApiFactory = function (
  * @interface SceneItemOverridesApiCreateSceneItemOverrideRequest
  */
 export interface SceneItemOverridesApiCreateSceneItemOverrideRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemOverridesApiCreateSceneItemOverride
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemOverridesApiCreateSceneItemOverride
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateSceneItemOverrideRequest}
-   * @memberof SceneItemOverridesApiCreateSceneItemOverride
-   */
-  readonly createSceneItemOverrideRequest: CreateSceneItemOverrideRequest;
+    /**
+     * 
+     * @type {CreateSceneItemOverrideRequest}
+     * @memberof SceneItemOverridesApiCreateSceneItemOverride
+     */
+    readonly createSceneItemOverrideRequest: CreateSceneItemOverrideRequest
 }
 
 /**
@@ -8455,12 +7326,12 @@ export interface SceneItemOverridesApiCreateSceneItemOverrideRequest {
  * @interface SceneItemOverridesApiDeleteSceneItemOverrideRequest
  */
 export interface SceneItemOverridesApiDeleteSceneItemOverrideRequest {
-  /**
-   * The &#x60;scene-item-override&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemOverridesApiDeleteSceneItemOverride
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-item-override&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemOverridesApiDeleteSceneItemOverride
+     */
+    readonly id: string
 }
 
 /**
@@ -8469,12 +7340,12 @@ export interface SceneItemOverridesApiDeleteSceneItemOverrideRequest {
  * @interface SceneItemOverridesApiGetSceneItemOverridesRequest
  */
 export interface SceneItemOverridesApiGetSceneItemOverridesRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemOverridesApiGetSceneItemOverrides
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemOverridesApiGetSceneItemOverrides
+     */
+    readonly id: string
 }
 
 /**
@@ -8483,19 +7354,19 @@ export interface SceneItemOverridesApiGetSceneItemOverridesRequest {
  * @interface SceneItemOverridesApiUpdateSceneItemOverrideRequest
  */
 export interface SceneItemOverridesApiUpdateSceneItemOverrideRequest {
-  /**
-   * The &#x60;scene-item-override&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemOverridesApiUpdateSceneItemOverride
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-item-override&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemOverridesApiUpdateSceneItemOverride
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {UpdateSceneItemOverrideRequest}
-   * @memberof SceneItemOverridesApiUpdateSceneItemOverride
-   */
-  readonly updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest;
+    /**
+     * 
+     * @type {UpdateSceneItemOverrideRequest}
+     * @memberof SceneItemOverridesApiUpdateSceneItemOverride
+     */
+    readonly updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest
 }
 
 /**
@@ -8505,854 +7376,529 @@ export interface SceneItemOverridesApiUpdateSceneItemOverrideRequest {
  * @extends {BaseAPI}
  */
 export class SceneItemOverridesApi extends BaseAPI {
-  /**
-   * Create a `scene-item-override` for a `scene-view`.
-   * @param {SceneItemOverridesApiCreateSceneItemOverrideRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemOverridesApi
-   */
-  public createSceneItemOverride(
-    requestParameters: SceneItemOverridesApiCreateSceneItemOverrideRequest,
-    options?: any
-  ) {
-    return SceneItemOverridesApiFp(this.configuration)
-      .createSceneItemOverride(
-        requestParameters.id,
-        requestParameters.createSceneItemOverrideRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene-item-override` for a `scene-view`.
+     * @param {SceneItemOverridesApiCreateSceneItemOverrideRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemOverridesApi
+     */
+    public createSceneItemOverride(requestParameters: SceneItemOverridesApiCreateSceneItemOverrideRequest, options?: any) {
+        return SceneItemOverridesApiFp(this.configuration).createSceneItemOverride(requestParameters.id, requestParameters.createSceneItemOverrideRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `scene-item-override`.
-   * @param {SceneItemOverridesApiDeleteSceneItemOverrideRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemOverridesApi
-   */
-  public deleteSceneItemOverride(
-    requestParameters: SceneItemOverridesApiDeleteSceneItemOverrideRequest,
-    options?: any
-  ) {
-    return SceneItemOverridesApiFp(this.configuration)
-      .deleteSceneItemOverride(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `scene-item-override`.
+     * @param {SceneItemOverridesApiDeleteSceneItemOverrideRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemOverridesApi
+     */
+    public deleteSceneItemOverride(requestParameters: SceneItemOverridesApiDeleteSceneItemOverrideRequest, options?: any) {
+        return SceneItemOverridesApiFp(this.configuration).deleteSceneItemOverride(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `scene-item-overrides` for a `scene-view`.
-   * @param {SceneItemOverridesApiGetSceneItemOverridesRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemOverridesApi
-   */
-  public getSceneItemOverrides(
-    requestParameters: SceneItemOverridesApiGetSceneItemOverridesRequest,
-    options?: any
-  ) {
-    return SceneItemOverridesApiFp(this.configuration)
-      .getSceneItemOverrides(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `scene-item-overrides` for a `scene-view`.
+     * @param {SceneItemOverridesApiGetSceneItemOverridesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemOverridesApi
+     */
+    public getSceneItemOverrides(requestParameters: SceneItemOverridesApiGetSceneItemOverridesRequest, options?: any) {
+        return SceneItemOverridesApiFp(this.configuration).getSceneItemOverrides(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Update a `scene-item-override`.
-   * @param {SceneItemOverridesApiUpdateSceneItemOverrideRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemOverridesApi
-   */
-  public updateSceneItemOverride(
-    requestParameters: SceneItemOverridesApiUpdateSceneItemOverrideRequest,
-    options?: any
-  ) {
-    return SceneItemOverridesApiFp(this.configuration)
-      .updateSceneItemOverride(
-        requestParameters.id,
-        requestParameters.updateSceneItemOverrideRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Update a `scene-item-override`.
+     * @param {SceneItemOverridesApiUpdateSceneItemOverrideRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemOverridesApi
+     */
+    public updateSceneItemOverride(requestParameters: SceneItemOverridesApiUpdateSceneItemOverrideRequest, options?: any) {
+        return SceneItemOverridesApiFp(this.configuration).updateSceneItemOverride(requestParameters.id, requestParameters.updateSceneItemOverrideRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * SceneItemsApi - axios parameter creator
  * @export
  */
-export const SceneItemsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneItemRequest} createSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneItem: async (
-      id: string,
-      createSceneItemRequest: CreateSceneItemRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneItem', 'id', id);
-      // verify required parameter 'createSceneItemRequest' is not null or undefined
-      assertParamExists(
-        'createSceneItem',
-        'createSceneItemRequest',
-        createSceneItemRequest
-      );
-      const localVarPath = `/scenes/{id}/scene-items`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const SceneItemsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneItemRequest} createSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneItem: async (id: string, createSceneItemRequest: CreateSceneItemRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneItem', 'id', id)
+            // verify required parameter 'createSceneItemRequest' is not null or undefined
+            assertParamExists('createSceneItem', 'createSceneItemRequest', createSceneItemRequest)
+            const localVarPath = `/scenes/{id}/scene-items`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneItemRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneItem: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteSceneItem', 'id', id);
-      const localVarPath = `/scene-items/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneItemRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneItem: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteSceneItem', 'id', id)
+            const localVarPath = `/scene-items/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneItem: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedSceneItem', 'id', id);
-      const localVarPath = `/queued-scene-items/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneItem: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedSceneItem', 'id', id)
+            const localVarPath = `/queued-scene-items/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-scene-item-deletion` by ID.
-     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneItemDeletion: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedSceneItemDeletion', 'id', id);
-      const localVarPath = `/queued-scene-item-deletions/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-scene-item-deletion` by ID.
+         * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneItemDeletion: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedSceneItemDeletion', 'id', id)
+            const localVarPath = `/queued-scene-item-deletions/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene-item` by ID.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItem: async (
-      id: string,
-      fieldsSceneItem?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneItem', 'id', id);
-      const localVarPath = `/scene-items/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      if (fieldsSceneItem !== undefined) {
-        localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene-item` by ID.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItem: async (id: string, fieldsSceneItem?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneItem', 'id', id)
+            const localVarPath = `/scene-items/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `scene-items` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSource] Source ID to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItems: async (
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSource?: string,
-      filterSuppliedId?: string,
-      filterParent?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneItems', 'id', id);
-      const localVarPath = `/scenes/{id}/scene-items`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (fieldsSceneItem !== undefined) {
+                localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
+            }
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (filterSource !== undefined) {
-        localVarQueryParameter['filter[source]'] = filterSource;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `scene-items` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSource] Source ID to filter on.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {string} [filterParent] Parent ID to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItems: async (id: string, pageCursor?: string, pageSize?: number, filterSource?: string, filterSuppliedId?: string, filterParent?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneItems', 'id', id)
+            const localVarPath = `/scenes/{id}/scene-items`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (filterSuppliedId !== undefined) {
-        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (filterParent !== undefined) {
-        localVarQueryParameter['filter[parent]'] = filterParent;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Update a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {UpdateSceneItemRequest} updateSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneItem: async (
-      id: string,
-      updateSceneItemRequest: UpdateSceneItemRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('updateSceneItem', 'id', id);
-      // verify required parameter 'updateSceneItemRequest' is not null or undefined
-      assertParamExists(
-        'updateSceneItem',
-        'updateSceneItemRequest',
-        updateSceneItemRequest
-      );
-      const localVarPath = `/scene-items/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      const localVarRequestOptions = {
-        method: 'PATCH',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (filterSource !== undefined) {
+                localVarQueryParameter['filter[source]'] = filterSource;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (filterSuppliedId !== undefined) {
+                localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+            if (filterParent !== undefined) {
+                localVarQueryParameter['filter[parent]'] = filterParent;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        updateSceneItemRequest,
-        localVarRequestOptions,
-        configuration
-      );
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {UpdateSceneItemRequest} updateSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneItem: async (id: string, updateSceneItemRequest: UpdateSceneItemRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateSceneItem', 'id', id)
+            // verify required parameter 'updateSceneItemRequest' is not null or undefined
+            assertParamExists('updateSceneItem', 'updateSceneItemRequest', updateSceneItemRequest)
+            const localVarPath = `/scene-items/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSceneItemRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * SceneItemsApi - functional programming interface
  * @export
  */
-export const SceneItemsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    SceneItemsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneItemRequest} createSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneItem(
-      id: string,
-      createSceneItemRequest: CreateSceneItemRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneItem(
-        id,
-        createSceneItemRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteSceneItem(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneItem(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedSceneItem(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedSceneItem(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-scene-item-deletion` by ID.
-     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedSceneItemDeletion(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedSceneItemDeletion(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene-item` by ID.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneItem(
-      id: string,
-      fieldsSceneItem?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItem(
-        id,
-        fieldsSceneItem,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `scene-items` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSource] Source ID to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneItems(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSource?: string,
-      filterSuppliedId?: string,
-      filterParent?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItems(
-        id,
-        pageCursor,
-        pageSize,
-        filterSource,
-        filterSuppliedId,
-        filterParent,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Update a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {UpdateSceneItemRequest} updateSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateSceneItem(
-      id: string,
-      updateSceneItemRequest: UpdateSceneItemRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneItem(
-        id,
-        updateSceneItemRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const SceneItemsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SceneItemsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneItemRequest} createSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneItem(id: string, createSceneItemRequest: CreateSceneItemRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneItem(id, createSceneItemRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSceneItem(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneItem(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedSceneItem(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneItem(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-scene-item-deletion` by ID.
+         * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedSceneItemDeletion(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedSceneItemDeletion(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene-item` by ID.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneItem(id: string, fieldsSceneItem?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItem(id, fieldsSceneItem, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `scene-items` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSource] Source ID to filter on.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {string} [filterParent] Parent ID to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneItems(id: string, pageCursor?: string, pageSize?: number, filterSource?: string, filterSuppliedId?: string, filterParent?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneItems(id, pageCursor, pageSize, filterSource, filterSuppliedId, filterParent, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {UpdateSceneItemRequest} updateSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSceneItem(id: string, updateSceneItemRequest: UpdateSceneItemRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneItem(id, updateSceneItemRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * SceneItemsApi - factory interface
  * @export
  */
-export const SceneItemsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SceneItemsApiFp(configuration);
-  return {
-    /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneItemRequest} createSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneItem(
-      id: string,
-      createSceneItemRequest: CreateSceneItemRequest,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .createSceneItem(id, createSceneItemRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneItem(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteSceneItem(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-scene-item&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneItem(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedSceneItem(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-scene-item-deletion` by ID.
-     * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedSceneItemDeletion(
-      id: string,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedSceneItemDeletion(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene-item` by ID.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItem(
-      id: string,
-      fieldsSceneItem?: string,
-      options?: any
-    ): AxiosPromise<SceneItem> {
-      return localVarFp
-        .getSceneItem(id, fieldsSceneItem, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `scene-items` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSource] Source ID to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneItems(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      filterSource?: string,
-      filterSuppliedId?: string,
-      filterParent?: string,
-      options?: any
-    ): AxiosPromise<SceneItemList> {
-      return localVarFp
-        .getSceneItems(
-          id,
-          pageCursor,
-          pageSize,
-          filterSource,
-          filterSuppliedId,
-          filterParent,
-          options
-        )
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Update a `scene-item`.
-     * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {UpdateSceneItemRequest} updateSceneItemRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneItem(
-      id: string,
-      updateSceneItemRequest: UpdateSceneItemRequest,
-      options?: any
-    ): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .updateSceneItem(id, updateSceneItemRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const SceneItemsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SceneItemsApiFp(configuration)
+    return {
+        /**
+         * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneItemRequest} createSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneItem(id: string, createSceneItemRequest: CreateSceneItemRequest, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.createSceneItem(id, createSceneItemRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneItem(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSceneItem(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-scene-item&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneItem(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedSceneItem(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-scene-item-deletion` by ID.
+         * @param {string} id The &#x60;queued-scene-item-deletion&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedSceneItemDeletion(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedSceneItemDeletion(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene-item` by ID.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItem(id: string, fieldsSceneItem?: string, options?: any): AxiosPromise<SceneItem> {
+            return localVarFp.getSceneItem(id, fieldsSceneItem, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `scene-items` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterSource] Source ID to filter on.
+         * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+         * @param {string} [filterParent] Parent ID to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneItems(id: string, pageCursor?: string, pageSize?: number, filterSource?: string, filterSuppliedId?: string, filterParent?: string, options?: any): AxiosPromise<SceneItemList> {
+            return localVarFp.getSceneItems(id, pageCursor, pageSize, filterSource, filterSuppliedId, filterParent, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a `scene-item`.
+         * @param {string} id The &#x60;scene-item&#x60; ID.
+         * @param {UpdateSceneItemRequest} updateSceneItemRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneItem(id: string, updateSceneItemRequest: UpdateSceneItemRequest, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.updateSceneItem(id, updateSceneItemRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -9361,19 +7907,19 @@ export const SceneItemsApiFactory = function (
  * @interface SceneItemsApiCreateSceneItemRequest
  */
 export interface SceneItemsApiCreateSceneItemRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiCreateSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiCreateSceneItem
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateSceneItemRequest}
-   * @memberof SceneItemsApiCreateSceneItem
-   */
-  readonly createSceneItemRequest: CreateSceneItemRequest;
+    /**
+     * 
+     * @type {CreateSceneItemRequest}
+     * @memberof SceneItemsApiCreateSceneItem
+     */
+    readonly createSceneItemRequest: CreateSceneItemRequest
 }
 
 /**
@@ -9382,12 +7928,12 @@ export interface SceneItemsApiCreateSceneItemRequest {
  * @interface SceneItemsApiDeleteSceneItemRequest
  */
 export interface SceneItemsApiDeleteSceneItemRequest {
-  /**
-   * The &#x60;scene-item&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiDeleteSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-item&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiDeleteSceneItem
+     */
+    readonly id: string
 }
 
 /**
@@ -9396,12 +7942,12 @@ export interface SceneItemsApiDeleteSceneItemRequest {
  * @interface SceneItemsApiGetQueuedSceneItemRequest
  */
 export interface SceneItemsApiGetQueuedSceneItemRequest {
-  /**
-   * The &#x60;queued-scene-item&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiGetQueuedSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-scene-item&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiGetQueuedSceneItem
+     */
+    readonly id: string
 }
 
 /**
@@ -9410,12 +7956,12 @@ export interface SceneItemsApiGetQueuedSceneItemRequest {
  * @interface SceneItemsApiGetQueuedSceneItemDeletionRequest
  */
 export interface SceneItemsApiGetQueuedSceneItemDeletionRequest {
-  /**
-   * The &#x60;queued-scene-item-deletion&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiGetQueuedSceneItemDeletion
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-scene-item-deletion&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiGetQueuedSceneItemDeletion
+     */
+    readonly id: string
 }
 
 /**
@@ -9424,19 +7970,19 @@ export interface SceneItemsApiGetQueuedSceneItemDeletionRequest {
  * @interface SceneItemsApiGetSceneItemRequest
  */
 export interface SceneItemsApiGetSceneItemRequest {
-  /**
-   * The &#x60;scene-item&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-item&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItem
+     */
+    readonly id: string
 
-  /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItem
-   */
-  readonly fieldsSceneItem?: string;
+    /**
+     * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItem
+     */
+    readonly fieldsSceneItem?: string
 }
 
 /**
@@ -9445,47 +7991,47 @@ export interface SceneItemsApiGetSceneItemRequest {
  * @interface SceneItemsApiGetSceneItemsRequest
  */
 export interface SceneItemsApiGetSceneItemsRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly id: string
 
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly pageSize?: number
 
-  /**
-   * Source ID to filter on.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly filterSource?: string;
+    /**
+     * Source ID to filter on.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly filterSource?: string
 
-  /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly filterSuppliedId?: string;
+    /**
+     * Comma-separated list of supplied IDs to filter on.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly filterSuppliedId?: string
 
-  /**
-   * Parent ID to filter on.
-   * @type {string}
-   * @memberof SceneItemsApiGetSceneItems
-   */
-  readonly filterParent?: string;
+    /**
+     * Parent ID to filter on.
+     * @type {string}
+     * @memberof SceneItemsApiGetSceneItems
+     */
+    readonly filterParent?: string
 }
 
 /**
@@ -9494,19 +8040,19 @@ export interface SceneItemsApiGetSceneItemsRequest {
  * @interface SceneItemsApiUpdateSceneItemRequest
  */
 export interface SceneItemsApiUpdateSceneItemRequest {
-  /**
-   * The &#x60;scene-item&#x60; ID.
-   * @type {string}
-   * @memberof SceneItemsApiUpdateSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-item&#x60; ID.
+     * @type {string}
+     * @memberof SceneItemsApiUpdateSceneItem
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {UpdateSceneItemRequest}
-   * @memberof SceneItemsApiUpdateSceneItem
-   */
-  readonly updateSceneItemRequest: UpdateSceneItemRequest;
+    /**
+     * 
+     * @type {UpdateSceneItemRequest}
+     * @memberof SceneItemsApiUpdateSceneItem
+     */
+    readonly updateSceneItemRequest: UpdateSceneItemRequest
 }
 
 /**
@@ -9516,574 +8062,358 @@ export interface SceneItemsApiUpdateSceneItemRequest {
  * @extends {BaseAPI}
  */
 export class SceneItemsApi extends BaseAPI {
-  /**
-   * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-   * @param {SceneItemsApiCreateSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public createSceneItem(
-    requestParameters: SceneItemsApiCreateSceneItemRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .createSceneItem(
-        requestParameters.id,
-        requestParameters.createSceneItemRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {SceneItemsApiCreateSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public createSceneItem(requestParameters: SceneItemsApiCreateSceneItemRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).createSceneItem(requestParameters.id, requestParameters.createSceneItemRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `scene-item`.
-   * @param {SceneItemsApiDeleteSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public deleteSceneItem(
-    requestParameters: SceneItemsApiDeleteSceneItemRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .deleteSceneItem(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `scene-item`.
+     * @param {SceneItemsApiDeleteSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public deleteSceneItem(requestParameters: SceneItemsApiDeleteSceneItemRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).deleteSceneItem(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-   * @param {SceneItemsApiGetQueuedSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public getQueuedSceneItem(
-    requestParameters: SceneItemsApiGetQueuedSceneItemRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .getQueuedSceneItem(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-scene-item`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-item`. Once created, commit the scene via the updateScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {SceneItemsApiGetQueuedSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public getQueuedSceneItem(requestParameters: SceneItemsApiGetQueuedSceneItemRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).getQueuedSceneItem(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-scene-item-deletion` by ID.
-   * @param {SceneItemsApiGetQueuedSceneItemDeletionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public getQueuedSceneItemDeletion(
-    requestParameters: SceneItemsApiGetQueuedSceneItemDeletionRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .getQueuedSceneItemDeletion(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-scene-item-deletion` by ID.
+     * @param {SceneItemsApiGetQueuedSceneItemDeletionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public getQueuedSceneItemDeletion(requestParameters: SceneItemsApiGetQueuedSceneItemDeletionRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).getQueuedSceneItemDeletion(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene-item` by ID.
-   * @param {SceneItemsApiGetSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public getSceneItem(
-    requestParameters: SceneItemsApiGetSceneItemRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .getSceneItem(
-        requestParameters.id,
-        requestParameters.fieldsSceneItem,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene-item` by ID.
+     * @param {SceneItemsApiGetSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public getSceneItem(requestParameters: SceneItemsApiGetSceneItemRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).getSceneItem(requestParameters.id, requestParameters.fieldsSceneItem, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `scene-items` for a `scene`.
-   * @param {SceneItemsApiGetSceneItemsRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public getSceneItems(
-    requestParameters: SceneItemsApiGetSceneItemsRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .getSceneItems(
-        requestParameters.id,
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        requestParameters.filterSource,
-        requestParameters.filterSuppliedId,
-        requestParameters.filterParent,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `scene-items` for a `scene`.
+     * @param {SceneItemsApiGetSceneItemsRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public getSceneItems(requestParameters: SceneItemsApiGetSceneItemsRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).getSceneItems(requestParameters.id, requestParameters.pageCursor, requestParameters.pageSize, requestParameters.filterSource, requestParameters.filterSuppliedId, requestParameters.filterParent, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Update a `scene-item`.
-   * @param {SceneItemsApiUpdateSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneItemsApi
-   */
-  public updateSceneItem(
-    requestParameters: SceneItemsApiUpdateSceneItemRequest,
-    options?: any
-  ) {
-    return SceneItemsApiFp(this.configuration)
-      .updateSceneItem(
-        requestParameters.id,
-        requestParameters.updateSceneItemRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Update a `scene-item`.
+     * @param {SceneItemsApiUpdateSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneItemsApi
+     */
+    public updateSceneItem(requestParameters: SceneItemsApiUpdateSceneItemRequest, options?: any) {
+        return SceneItemsApiFp(this.configuration).updateSceneItem(requestParameters.id, requestParameters.updateSceneItemRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * SceneViewStatesApi - axios parameter creator
  * @export
  */
-export const SceneViewStatesApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene-view-state` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneViewState: async (
-      id: string,
-      createSceneViewStateRequest: CreateSceneViewStateRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneViewState', 'id', id);
-      // verify required parameter 'createSceneViewStateRequest' is not null or undefined
-      assertParamExists(
-        'createSceneViewState',
-        'createSceneViewStateRequest',
-        createSceneViewStateRequest
-      );
-      const localVarPath = `/scenes/{id}/scene-view-states`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const SceneViewStatesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene-view-state` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewStateRequest} createSceneViewStateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneViewState: async (id: string, createSceneViewStateRequest: CreateSceneViewStateRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneViewState', 'id', id)
+            // verify required parameter 'createSceneViewStateRequest' is not null or undefined
+            assertParamExists('createSceneViewState', 'createSceneViewStateRequest', createSceneViewStateRequest)
+            const localVarPath = `/scenes/{id}/scene-view-states`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneViewStateRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `scene-view-state`.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneViewState: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteSceneViewState', 'id', id);
-      const localVarPath = `/scene-view-states/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneViewStateRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `scene-view-state`.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneViewState: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteSceneViewState', 'id', id)
+            const localVarPath = `/scene-view-states/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene-view-state` by ID.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneViewState: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneViewState', 'id', id);
-      const localVarPath = `/scene-view-states/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene-view-state` by ID.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneViewState: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneViewState', 'id', id)
+            const localVarPath = `/scene-view-states/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `scene-view-states` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneViewStates: async (
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneViewStates', 'id', id);
-      const localVarPath = `/scenes/{id}/scene-view-states`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `scene-view-states` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneViewStates: async (id: string, pageCursor?: string, pageSize?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneViewStates', 'id', id)
+            const localVarPath = `/scenes/{id}/scene-view-states`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
+
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * SceneViewStatesApi - functional programming interface
  * @export
  */
-export const SceneViewStatesApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    SceneViewStatesApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene-view-state` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneViewState(
-      id: string,
-      createSceneViewStateRequest: CreateSceneViewStateRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createSceneViewState(
-          id,
-          createSceneViewStateRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `scene-view-state`.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteSceneViewState(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.deleteSceneViewState(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene-view-state` by ID.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneViewState(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneViewState(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `scene-view-states` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneViewStates(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<SceneViewStateList>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneViewStates(
-          id,
-          pageCursor,
-          pageSize,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const SceneViewStatesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SceneViewStatesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene-view-state` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewStateRequest} createSceneViewStateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneViewState(id: string, createSceneViewStateRequest: CreateSceneViewStateRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneViewState(id, createSceneViewStateRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `scene-view-state`.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSceneViewState(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneViewState(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene-view-state` by ID.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneViewState(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewState(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `scene-view-states` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneViewStates(id: string, pageCursor?: string, pageSize?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewStateList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViewStates(id, pageCursor, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * SceneViewStatesApi - factory interface
  * @export
  */
-export const SceneViewStatesApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SceneViewStatesApiFp(configuration);
-  return {
-    /**
-     * Create a `scene-view-state` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewStateRequest} createSceneViewStateRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneViewState(
-      id: string,
-      createSceneViewStateRequest: CreateSceneViewStateRequest,
-      options?: any
-    ): AxiosPromise<SceneViewState> {
-      return localVarFp
-        .createSceneViewState(id, createSceneViewStateRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `scene-view-state`.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneViewState(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteSceneViewState(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene-view-state` by ID.
-     * @param {string} id The &#x60;scene-view-state&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneViewState(id: string, options?: any): AxiosPromise<SceneViewState> {
-      return localVarFp
-        .getSceneViewState(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `scene-view-states` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneViewStates(
-      id: string,
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): AxiosPromise<SceneViewStateList> {
-      return localVarFp
-        .getSceneViewStates(id, pageCursor, pageSize, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const SceneViewStatesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SceneViewStatesApiFp(configuration)
+    return {
+        /**
+         * Create a `scene-view-state` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewStateRequest} createSceneViewStateRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneViewState(id: string, createSceneViewStateRequest: CreateSceneViewStateRequest, options?: any): AxiosPromise<SceneViewState> {
+            return localVarFp.createSceneViewState(id, createSceneViewStateRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `scene-view-state`.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneViewState(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSceneViewState(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene-view-state` by ID.
+         * @param {string} id The &#x60;scene-view-state&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneViewState(id: string, options?: any): AxiosPromise<SceneViewState> {
+            return localVarFp.getSceneViewState(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `scene-view-states` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneViewStates(id: string, pageCursor?: string, pageSize?: number, options?: any): AxiosPromise<SceneViewStateList> {
+            return localVarFp.getSceneViewStates(id, pageCursor, pageSize, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -10092,19 +8422,19 @@ export const SceneViewStatesApiFactory = function (
  * @interface SceneViewStatesApiCreateSceneViewStateRequest
  */
 export interface SceneViewStatesApiCreateSceneViewStateRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewStatesApiCreateSceneViewState
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewStatesApiCreateSceneViewState
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateSceneViewStateRequest}
-   * @memberof SceneViewStatesApiCreateSceneViewState
-   */
-  readonly createSceneViewStateRequest: CreateSceneViewStateRequest;
+    /**
+     * 
+     * @type {CreateSceneViewStateRequest}
+     * @memberof SceneViewStatesApiCreateSceneViewState
+     */
+    readonly createSceneViewStateRequest: CreateSceneViewStateRequest
 }
 
 /**
@@ -10113,12 +8443,12 @@ export interface SceneViewStatesApiCreateSceneViewStateRequest {
  * @interface SceneViewStatesApiDeleteSceneViewStateRequest
  */
 export interface SceneViewStatesApiDeleteSceneViewStateRequest {
-  /**
-   * The &#x60;scene-view-state&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewStatesApiDeleteSceneViewState
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view-state&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewStatesApiDeleteSceneViewState
+     */
+    readonly id: string
 }
 
 /**
@@ -10127,12 +8457,12 @@ export interface SceneViewStatesApiDeleteSceneViewStateRequest {
  * @interface SceneViewStatesApiGetSceneViewStateRequest
  */
 export interface SceneViewStatesApiGetSceneViewStateRequest {
-  /**
-   * The &#x60;scene-view-state&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewStatesApiGetSceneViewState
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view-state&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewStatesApiGetSceneViewState
+     */
+    readonly id: string
 }
 
 /**
@@ -10141,26 +8471,26 @@ export interface SceneViewStatesApiGetSceneViewStateRequest {
  * @interface SceneViewStatesApiGetSceneViewStatesRequest
  */
 export interface SceneViewStatesApiGetSceneViewStatesRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewStatesApiGetSceneViewStates
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewStatesApiGetSceneViewStates
+     */
+    readonly id: string
 
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof SceneViewStatesApiGetSceneViewStates
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof SceneViewStatesApiGetSceneViewStates
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof SceneViewStatesApiGetSceneViewStates
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof SceneViewStatesApiGetSceneViewStates
+     */
+    readonly pageSize?: number
 }
 
 /**
@@ -10170,747 +8500,465 @@ export interface SceneViewStatesApiGetSceneViewStatesRequest {
  * @extends {BaseAPI}
  */
 export class SceneViewStatesApi extends BaseAPI {
-  /**
-   * Create a `scene-view-state` for a `scene`.
-   * @param {SceneViewStatesApiCreateSceneViewStateRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewStatesApi
-   */
-  public createSceneViewState(
-    requestParameters: SceneViewStatesApiCreateSceneViewStateRequest,
-    options?: any
-  ) {
-    return SceneViewStatesApiFp(this.configuration)
-      .createSceneViewState(
-        requestParameters.id,
-        requestParameters.createSceneViewStateRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene-view-state` for a `scene`.
+     * @param {SceneViewStatesApiCreateSceneViewStateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewStatesApi
+     */
+    public createSceneViewState(requestParameters: SceneViewStatesApiCreateSceneViewStateRequest, options?: any) {
+        return SceneViewStatesApiFp(this.configuration).createSceneViewState(requestParameters.id, requestParameters.createSceneViewStateRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `scene-view-state`.
-   * @param {SceneViewStatesApiDeleteSceneViewStateRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewStatesApi
-   */
-  public deleteSceneViewState(
-    requestParameters: SceneViewStatesApiDeleteSceneViewStateRequest,
-    options?: any
-  ) {
-    return SceneViewStatesApiFp(this.configuration)
-      .deleteSceneViewState(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `scene-view-state`.
+     * @param {SceneViewStatesApiDeleteSceneViewStateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewStatesApi
+     */
+    public deleteSceneViewState(requestParameters: SceneViewStatesApiDeleteSceneViewStateRequest, options?: any) {
+        return SceneViewStatesApiFp(this.configuration).deleteSceneViewState(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene-view-state` by ID.
-   * @param {SceneViewStatesApiGetSceneViewStateRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewStatesApi
-   */
-  public getSceneViewState(
-    requestParameters: SceneViewStatesApiGetSceneViewStateRequest,
-    options?: any
-  ) {
-    return SceneViewStatesApiFp(this.configuration)
-      .getSceneViewState(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene-view-state` by ID.
+     * @param {SceneViewStatesApiGetSceneViewStateRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewStatesApi
+     */
+    public getSceneViewState(requestParameters: SceneViewStatesApiGetSceneViewStateRequest, options?: any) {
+        return SceneViewStatesApiFp(this.configuration).getSceneViewState(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `scene-view-states` for a `scene`.
-   * @param {SceneViewStatesApiGetSceneViewStatesRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewStatesApi
-   */
-  public getSceneViewStates(
-    requestParameters: SceneViewStatesApiGetSceneViewStatesRequest,
-    options?: any
-  ) {
-    return SceneViewStatesApiFp(this.configuration)
-      .getSceneViewStates(
-        requestParameters.id,
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `scene-view-states` for a `scene`.
+     * @param {SceneViewStatesApiGetSceneViewStatesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewStatesApi
+     */
+    public getSceneViewStates(requestParameters: SceneViewStatesApiGetSceneViewStatesRequest, options?: any) {
+        return SceneViewStatesApiFp(this.configuration).getSceneViewStates(requestParameters.id, requestParameters.pageCursor, requestParameters.pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * SceneViewsApi - axios parameter creator
  * @export
  */
-export const SceneViewsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene-view` of a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewRequest} createSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneView: async (
-      id: string,
-      createSceneViewRequest: CreateSceneViewRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneView', 'id', id);
-      // verify required parameter 'createSceneViewRequest' is not null or undefined
-      assertParamExists(
-        'createSceneView',
-        'createSceneViewRequest',
-        createSceneViewRequest
-      );
-      const localVarPath = `/scenes/{id}/scene-views`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const SceneViewsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene-view` of a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewRequest} createSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneView: async (id: string, createSceneViewRequest: CreateSceneViewRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneView', 'id', id)
+            // verify required parameter 'createSceneViewRequest' is not null or undefined
+            assertParamExists('createSceneView', 'createSceneViewRequest', createSceneViewRequest)
+            const localVarPath = `/scenes/{id}/scene-views`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneViewRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneView: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteSceneView', 'id', id);
-      const localVarPath = `/scene-views/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneViewRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneView: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteSceneView', 'id', id)
+            const localVarPath = `/scene-views/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene-view` by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneView: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getSceneView', 'id', id);
-      const localVarPath = `/scene-views/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene-view` by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneView: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getSceneView', 'id', id)
+            const localVarPath = `/scene-views/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene-item` within a view by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getViewSceneItem: async (
-      id: string,
-      itemId: string,
-      fieldsSceneItem?: string,
-      include?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getViewSceneItem', 'id', id);
-      // verify required parameter 'itemId' is not null or undefined
-      assertParamExists('getViewSceneItem', 'itemId', itemId);
-      const localVarPath = `/scene-views/{id}/scene-items/{itemId}`
-        .replace(`{${'id'}}`, encodeURIComponent(String(id)))
-        .replace(`{${'itemId'}}`, encodeURIComponent(String(itemId)));
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (fieldsSceneItem !== undefined) {
-        localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene-item` within a view by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {string} itemId The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getViewSceneItem: async (id: string, itemId: string, fieldsSceneItem?: string, include?: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getViewSceneItem', 'id', id)
+            // verify required parameter 'itemId' is not null or undefined
+            assertParamExists('getViewSceneItem', 'itemId', itemId)
+            const localVarPath = `/scene-views/{id}/scene-items/{itemId}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"itemId"}}`, encodeURIComponent(String(itemId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (include !== undefined) {
-        localVarQueryParameter['include'] = include;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderSceneView: async (
-      id: string,
-      height?: number,
-      width?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('renderSceneView', 'id', id);
-      const localVarPath = `/scene-views/{id}/image`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            if (fieldsSceneItem !== undefined) {
+                localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
+            }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (include !== undefined) {
+                localVarQueryParameter['include'] = include;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      if (height !== undefined) {
-        localVarQueryParameter['height'] = height;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (width !== undefined) {
-        localVarQueryParameter['width'] = width;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderSceneView: async (id: string, height?: number, width?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('renderSceneView', 'id', id)
+            const localVarPath = `/scene-views/{id}/image`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Update a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {UpdateSceneViewRequest} updateSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneView: async (
-      id: string,
-      updateSceneViewRequest: UpdateSceneViewRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('updateSceneView', 'id', id);
-      // verify required parameter 'updateSceneViewRequest' is not null or undefined
-      assertParamExists(
-        'updateSceneView',
-        'updateSceneViewRequest',
-        updateSceneViewRequest
-      );
-      const localVarPath = `/scene-views/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'PATCH',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (height !== undefined) {
+                localVarQueryParameter['height'] = height;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (width !== undefined) {
+                localVarQueryParameter['width'] = width;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        updateSceneViewRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {UpdateSceneViewRequest} updateSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneView: async (id: string, updateSceneViewRequest: UpdateSceneViewRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateSceneView', 'id', id)
+            // verify required parameter 'updateSceneViewRequest' is not null or undefined
+            assertParamExists('updateSceneView', 'updateSceneViewRequest', updateSceneViewRequest)
+            const localVarPath = `/scene-views/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSceneViewRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * SceneViewsApi - functional programming interface
  * @export
  */
-export const SceneViewsApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    SceneViewsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene-view` of a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewRequest} createSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneView(
-      id: string,
-      createSceneViewRequest: CreateSceneViewRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneView(
-        id,
-        createSceneViewRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteSceneView(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneView(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene-view` by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getSceneView(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneView(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene-item` within a view by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getViewSceneItem(
-      id: string,
-      itemId: string,
-      fieldsSceneItem?: string,
-      include?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewItem>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getViewSceneItem(
-          id,
-          itemId,
-          fieldsSceneItem,
-          include,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async renderSceneView(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.renderSceneView(
-        id,
-        height,
-        width,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Update a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {UpdateSceneViewRequest} updateSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateSceneView(
-      id: string,
-      updateSceneViewRequest: UpdateSceneViewRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneView(
-        id,
-        updateSceneViewRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const SceneViewsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = SceneViewsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene-view` of a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewRequest} createSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneView(id: string, createSceneViewRequest: CreateSceneViewRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneView(id, createSceneViewRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteSceneView(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteSceneView(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene-view` by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getSceneView(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneView(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene-item` within a view by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {string} itemId The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getViewSceneItem(id: string, itemId: string, fieldsSceneItem?: string, include?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewItem>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getViewSceneItem(id, itemId, fieldsSceneItem, include, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async renderSceneView(id: string, height?: number, width?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.renderSceneView(id, height, width, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {UpdateSceneViewRequest} updateSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateSceneView(id: string, updateSceneViewRequest: UpdateSceneViewRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateSceneView(id, updateSceneViewRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * SceneViewsApi - factory interface
  * @export
  */
-export const SceneViewsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = SceneViewsApiFp(configuration);
-  return {
-    /**
-     * Create a `scene-view` of a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateSceneViewRequest} createSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneView(
-      id: string,
-      createSceneViewRequest: CreateSceneViewRequest,
-      options?: any
-    ): AxiosPromise<SceneView> {
-      return localVarFp
-        .createSceneView(id, createSceneViewRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteSceneView(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteSceneView(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene-view` by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getSceneView(id: string, options?: any): AxiosPromise<SceneView> {
-      return localVarFp
-        .getSceneView(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene-item` within a view by ID.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-     * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getViewSceneItem(
-      id: string,
-      itemId: string,
-      fieldsSceneItem?: string,
-      include?: string,
-      options?: any
-    ): AxiosPromise<SceneViewItem> {
-      return localVarFp
-        .getViewSceneItem(id, itemId, fieldsSceneItem, include, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderSceneView(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): AxiosPromise<any> {
-      return localVarFp
-        .renderSceneView(id, height, width, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Update a `scene-view`.
-     * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {UpdateSceneViewRequest} updateSceneViewRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateSceneView(
-      id: string,
-      updateSceneViewRequest: UpdateSceneViewRequest,
-      options?: any
-    ): AxiosPromise<SceneView> {
-      return localVarFp
-        .updateSceneView(id, updateSceneViewRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const SceneViewsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = SceneViewsApiFp(configuration)
+    return {
+        /**
+         * Create a `scene-view` of a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateSceneViewRequest} createSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneView(id: string, createSceneViewRequest: CreateSceneViewRequest, options?: any): AxiosPromise<SceneView> {
+            return localVarFp.createSceneView(id, createSceneViewRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteSceneView(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteSceneView(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene-view` by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getSceneView(id: string, options?: any): AxiosPromise<SceneView> {
+            return localVarFp.getSceneView(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene-item` within a view by ID.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {string} itemId The &#x60;scene-item&#x60; ID.
+         * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+         * @param {string} [include] Comma-separated list of relationships to include in response.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getViewSceneItem(id: string, itemId: string, fieldsSceneItem?: string, include?: string, options?: any): AxiosPromise<SceneViewItem> {
+            return localVarFp.getViewSceneItem(id, itemId, fieldsSceneItem, include, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderSceneView(id: string, height?: number, width?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.renderSceneView(id, height, width, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a `scene-view`.
+         * @param {string} id The &#x60;scene-view&#x60; ID.
+         * @param {UpdateSceneViewRequest} updateSceneViewRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateSceneView(id: string, updateSceneViewRequest: UpdateSceneViewRequest, options?: any): AxiosPromise<SceneView> {
+            return localVarFp.updateSceneView(id, updateSceneViewRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -10919,19 +8967,19 @@ export const SceneViewsApiFactory = function (
  * @interface SceneViewsApiCreateSceneViewRequest
  */
 export interface SceneViewsApiCreateSceneViewRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiCreateSceneView
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiCreateSceneView
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateSceneViewRequest}
-   * @memberof SceneViewsApiCreateSceneView
-   */
-  readonly createSceneViewRequest: CreateSceneViewRequest;
+    /**
+     * 
+     * @type {CreateSceneViewRequest}
+     * @memberof SceneViewsApiCreateSceneView
+     */
+    readonly createSceneViewRequest: CreateSceneViewRequest
 }
 
 /**
@@ -10940,12 +8988,12 @@ export interface SceneViewsApiCreateSceneViewRequest {
  * @interface SceneViewsApiDeleteSceneViewRequest
  */
 export interface SceneViewsApiDeleteSceneViewRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiDeleteSceneView
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiDeleteSceneView
+     */
+    readonly id: string
 }
 
 /**
@@ -10954,12 +9002,12 @@ export interface SceneViewsApiDeleteSceneViewRequest {
  * @interface SceneViewsApiGetSceneViewRequest
  */
 export interface SceneViewsApiGetSceneViewRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiGetSceneView
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiGetSceneView
+     */
+    readonly id: string
 }
 
 /**
@@ -10968,33 +9016,33 @@ export interface SceneViewsApiGetSceneViewRequest {
  * @interface SceneViewsApiGetViewSceneItemRequest
  */
 export interface SceneViewsApiGetViewSceneItemRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiGetViewSceneItem
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiGetViewSceneItem
+     */
+    readonly id: string
 
-  /**
-   * The &#x60;scene-item&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiGetViewSceneItem
-   */
-  readonly itemId: string;
+    /**
+     * The &#x60;scene-item&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiGetViewSceneItem
+     */
+    readonly itemId: string
 
-  /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
-   * @type {string}
-   * @memberof SceneViewsApiGetViewSceneItem
-   */
-  readonly fieldsSceneItem?: string;
+    /**
+     * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @type {string}
+     * @memberof SceneViewsApiGetViewSceneItem
+     */
+    readonly fieldsSceneItem?: string
 
-  /**
-   * Comma-separated list of relationships to include in response.
-   * @type {string}
-   * @memberof SceneViewsApiGetViewSceneItem
-   */
-  readonly include?: string;
+    /**
+     * Comma-separated list of relationships to include in response.
+     * @type {string}
+     * @memberof SceneViewsApiGetViewSceneItem
+     */
+    readonly include?: string
 }
 
 /**
@@ -11003,26 +9051,26 @@ export interface SceneViewsApiGetViewSceneItemRequest {
  * @interface SceneViewsApiRenderSceneViewRequest
  */
 export interface SceneViewsApiRenderSceneViewRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiRenderSceneView
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiRenderSceneView
+     */
+    readonly id: string
 
-  /**
-   * The height of the image to render.
-   * @type {number}
-   * @memberof SceneViewsApiRenderSceneView
-   */
-  readonly height?: number;
+    /**
+     * The height of the image to render.
+     * @type {number}
+     * @memberof SceneViewsApiRenderSceneView
+     */
+    readonly height?: number
 
-  /**
-   * The width of the image to render.
-   * @type {number}
-   * @memberof SceneViewsApiRenderSceneView
-   */
-  readonly width?: number;
+    /**
+     * The width of the image to render.
+     * @type {number}
+     * @memberof SceneViewsApiRenderSceneView
+     */
+    readonly width?: number
 }
 
 /**
@@ -11031,19 +9079,19 @@ export interface SceneViewsApiRenderSceneViewRequest {
  * @interface SceneViewsApiUpdateSceneViewRequest
  */
 export interface SceneViewsApiUpdateSceneViewRequest {
-  /**
-   * The &#x60;scene-view&#x60; ID.
-   * @type {string}
-   * @memberof SceneViewsApiUpdateSceneView
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene-view&#x60; ID.
+     * @type {string}
+     * @memberof SceneViewsApiUpdateSceneView
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {UpdateSceneViewRequest}
-   * @memberof SceneViewsApiUpdateSceneView
-   */
-  readonly updateSceneViewRequest: UpdateSceneViewRequest;
+    /**
+     * 
+     * @type {UpdateSceneViewRequest}
+     * @memberof SceneViewsApiUpdateSceneView
+     */
+    readonly updateSceneViewRequest: UpdateSceneViewRequest
 }
 
 /**
@@ -11053,840 +9101,525 @@ export interface SceneViewsApiUpdateSceneViewRequest {
  * @extends {BaseAPI}
  */
 export class SceneViewsApi extends BaseAPI {
-  /**
-   * Create a `scene-view` of a `scene`.
-   * @param {SceneViewsApiCreateSceneViewRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public createSceneView(
-    requestParameters: SceneViewsApiCreateSceneViewRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .createSceneView(
-        requestParameters.id,
-        requestParameters.createSceneViewRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene-view` of a `scene`.
+     * @param {SceneViewsApiCreateSceneViewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public createSceneView(requestParameters: SceneViewsApiCreateSceneViewRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).createSceneView(requestParameters.id, requestParameters.createSceneViewRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `scene-view`.
-   * @param {SceneViewsApiDeleteSceneViewRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public deleteSceneView(
-    requestParameters: SceneViewsApiDeleteSceneViewRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .deleteSceneView(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `scene-view`.
+     * @param {SceneViewsApiDeleteSceneViewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public deleteSceneView(requestParameters: SceneViewsApiDeleteSceneViewRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).deleteSceneView(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene-view` by ID.
-   * @param {SceneViewsApiGetSceneViewRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public getSceneView(
-    requestParameters: SceneViewsApiGetSceneViewRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .getSceneView(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene-view` by ID.
+     * @param {SceneViewsApiGetSceneViewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public getSceneView(requestParameters: SceneViewsApiGetSceneViewRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).getSceneView(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene-item` within a view by ID.
-   * @param {SceneViewsApiGetViewSceneItemRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public getViewSceneItem(
-    requestParameters: SceneViewsApiGetViewSceneItemRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .getViewSceneItem(
-        requestParameters.id,
-        requestParameters.itemId,
-        requestParameters.fieldsSceneItem,
-        requestParameters.include,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene-item` within a view by ID.
+     * @param {SceneViewsApiGetViewSceneItemRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public getViewSceneItem(requestParameters: SceneViewsApiGetViewSceneItemRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).getViewSceneItem(requestParameters.id, requestParameters.itemId, requestParameters.fieldsSceneItem, requestParameters.include, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-   * @param {SceneViewsApiRenderSceneViewRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public renderSceneView(
-    requestParameters: SceneViewsApiRenderSceneViewRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .renderSceneView(
-        requestParameters.id,
-        requestParameters.height,
-        requestParameters.width,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a rendered image of a `scene-view`. If a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+     * @param {SceneViewsApiRenderSceneViewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public renderSceneView(requestParameters: SceneViewsApiRenderSceneViewRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).renderSceneView(requestParameters.id, requestParameters.height, requestParameters.width, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Update a `scene-view`.
-   * @param {SceneViewsApiUpdateSceneViewRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof SceneViewsApi
-   */
-  public updateSceneView(
-    requestParameters: SceneViewsApiUpdateSceneViewRequest,
-    options?: any
-  ) {
-    return SceneViewsApiFp(this.configuration)
-      .updateSceneView(
-        requestParameters.id,
-        requestParameters.updateSceneViewRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Update a `scene-view`.
+     * @param {SceneViewsApiUpdateSceneViewRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SceneViewsApi
+     */
+    public updateSceneView(requestParameters: SceneViewsApiUpdateSceneViewRequest, options?: any) {
+        return SceneViewsApiFp(this.configuration).updateSceneView(requestParameters.id, requestParameters.updateSceneViewRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * ScenesApi - axios parameter creator
  * @export
  */
-export const ScenesApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {CreateSceneRequest} createSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createScene: async (
-      createSceneRequest: CreateSceneRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createSceneRequest' is not null or undefined
-      assertParamExists(
-        'createScene',
-        'createSceneRequest',
-        createSceneRequest
-      );
-      const localVarPath = `/scenes`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const ScenesApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {CreateSceneRequest} createSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createScene: async (createSceneRequest: CreateSceneRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createSceneRequest' is not null or undefined
+            assertParamExists('createScene', 'createSceneRequest', createSceneRequest)
+            const localVarPath = `/scenes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteScene: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteScene', 'id', id);
-      const localVarPath = `/scenes/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createSceneRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteScene: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteScene', 'id', id)
+            const localVarPath = `/scenes/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedScene: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedScene', 'id', id);
-      const localVarPath = `/queued-scenes/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedScene: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedScene', 'id', id)
+            const localVarPath = `/queued-scenes/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `scene` by ID.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getScene: async (id: string, options: any = {}): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getScene', 'id', id);
-      const localVarPath = `/scenes/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `scene` by ID.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScene: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getScene', 'id', id)
+            const localVarPath = `/scenes/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `scenes`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getScenes: async (
-      pageCursor?: string,
-      pageSize?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/scenes`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `scenes`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScenes: async (pageCursor?: string, pageSize?: number, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/scenes`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderScene: async (
-      id: string,
-      height?: number,
-      width?: number,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('renderScene', 'id', id);
-      const localVarPath = `/scenes/{id}/image`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      if (height !== undefined) {
-        localVarQueryParameter['height'] = height;
-      }
 
-      if (width !== undefined) {
-        localVarQueryParameter['width'] = width;
-      }
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderScene: async (id: string, height?: number, width?: number, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('renderScene', 'id', id)
+            const localVarPath = `/scenes/{id}/image`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {UpdateSceneRequest} updateSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateScene: async (
-      id: string,
-      updateSceneRequest: UpdateSceneRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('updateScene', 'id', id);
-      // verify required parameter 'updateSceneRequest' is not null or undefined
-      assertParamExists(
-        'updateScene',
-        'updateSceneRequest',
-        updateSceneRequest
-      );
-      const localVarPath = `/scenes/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      const localVarRequestOptions = {
-        method: 'PATCH',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            if (height !== undefined) {
+                localVarQueryParameter['height'] = height;
+            }
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+            if (width !== undefined) {
+                localVarQueryParameter['width'] = width;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        updateSceneRequest,
-        localVarRequestOptions,
-        configuration
-      );
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {UpdateSceneRequest} updateSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateScene: async (id: string, updateSceneRequest: UpdateSceneRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('updateScene', 'id', id)
+            // verify required parameter 'updateSceneRequest' is not null or undefined
+            assertParamExists('updateScene', 'updateSceneRequest', updateSceneRequest)
+            const localVarPath = `/scenes/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PATCH', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(updateSceneRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * ScenesApi - functional programming interface
  * @export
  */
-export const ScenesApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = ScenesApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {CreateSceneRequest} createSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createScene(
-      createSceneRequest: CreateSceneRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.createScene(
-        createSceneRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteScene(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteScene(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedScene(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedScene(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `scene` by ID.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getScene(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getScene(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `scenes`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getScenes(
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getScenes(
-        pageCursor,
-        pageSize,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async renderScene(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.renderScene(
-        id,
-        height,
-        width,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {UpdateSceneRequest} updateSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async updateScene(
-      id: string,
-      updateSceneRequest: UpdateSceneRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.updateScene(
-        id,
-        updateSceneRequest,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const ScenesApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = ScenesApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {CreateSceneRequest} createSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createScene(createSceneRequest: CreateSceneRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createScene(createSceneRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteScene(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteScene(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedScene(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedScene(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `scene` by ID.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScene(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScene(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `scenes`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getScenes(pageCursor?: string, pageSize?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getScenes(pageCursor, pageSize, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async renderScene(id: string, height?: number, width?: number, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.renderScene(id, height, width, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {UpdateSceneRequest} updateSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateScene(id: string, updateSceneRequest: UpdateSceneRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateScene(id, updateSceneRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * ScenesApi - factory interface
  * @export
  */
-export const ScenesApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = ScenesApiFp(configuration);
-  return {
-    /**
-     * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {CreateSceneRequest} createSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createScene(
-      createSceneRequest: CreateSceneRequest,
-      options?: any
-    ): AxiosPromise<Scene> {
-      return localVarFp
-        .createScene(createSceneRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteScene(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteScene(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedScene(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedScene(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `scene` by ID.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getScene(id: string, options?: any): AxiosPromise<Scene> {
-      return localVarFp
-        .getScene(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `scenes`.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getScenes(
-      pageCursor?: string,
-      pageSize?: number,
-      options?: any
-    ): AxiosPromise<SceneList> {
-      return localVarFp
-        .getScenes(pageCursor, pageSize, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {number} [height] The height of the image to render.
-     * @param {number} [width] The width of the image to render.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    renderScene(
-      id: string,
-      height?: number,
-      width?: number,
-      options?: any
-    ): AxiosPromise<any> {
-      return localVarFp
-        .renderScene(id, height, width, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {UpdateSceneRequest} updateSceneRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    updateScene(
-      id: string,
-      updateSceneRequest: UpdateSceneRequest,
-      options?: any
-    ): AxiosPromise<Scene> {
-      return localVarFp
-        .updateScene(id, updateSceneRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const ScenesApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = ScenesApiFp(configuration)
+    return {
+        /**
+         * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {CreateSceneRequest} createSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createScene(createSceneRequest: CreateSceneRequest, options?: any): AxiosPromise<Scene> {
+            return localVarFp.createScene(createSceneRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteScene(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteScene(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedScene(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedScene(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `scene` by ID.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScene(id: string, options?: any): AxiosPromise<Scene> {
+            return localVarFp.getScene(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `scenes`.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getScenes(pageCursor?: string, pageSize?: number, options?: any): AxiosPromise<SceneList> {
+            return localVarFp.getScenes(pageCursor, pageSize, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {number} [height] The height of the image to render.
+         * @param {number} [width] The width of the image to render.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        renderScene(id: string, height?: number, width?: number, options?: any): AxiosPromise<any> {
+            return localVarFp.renderScene(id, height, width, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {UpdateSceneRequest} updateSceneRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateScene(id: string, updateSceneRequest: UpdateSceneRequest, options?: any): AxiosPromise<Scene> {
+            return localVarFp.updateScene(id, updateSceneRequest, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -11895,12 +9628,12 @@ export const ScenesApiFactory = function (
  * @interface ScenesApiCreateSceneRequest
  */
 export interface ScenesApiCreateSceneRequest {
-  /**
-   *
-   * @type {CreateSceneRequest}
-   * @memberof ScenesApiCreateScene
-   */
-  readonly createSceneRequest: CreateSceneRequest;
+    /**
+     * 
+     * @type {CreateSceneRequest}
+     * @memberof ScenesApiCreateScene
+     */
+    readonly createSceneRequest: CreateSceneRequest
 }
 
 /**
@@ -11909,12 +9642,12 @@ export interface ScenesApiCreateSceneRequest {
  * @interface ScenesApiDeleteSceneRequest
  */
 export interface ScenesApiDeleteSceneRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof ScenesApiDeleteScene
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof ScenesApiDeleteScene
+     */
+    readonly id: string
 }
 
 /**
@@ -11923,12 +9656,12 @@ export interface ScenesApiDeleteSceneRequest {
  * @interface ScenesApiGetQueuedSceneRequest
  */
 export interface ScenesApiGetQueuedSceneRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof ScenesApiGetQueuedScene
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof ScenesApiGetQueuedScene
+     */
+    readonly id: string
 }
 
 /**
@@ -11937,12 +9670,12 @@ export interface ScenesApiGetQueuedSceneRequest {
  * @interface ScenesApiGetSceneRequest
  */
 export interface ScenesApiGetSceneRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof ScenesApiGetScene
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof ScenesApiGetScene
+     */
+    readonly id: string
 }
 
 /**
@@ -11951,19 +9684,19 @@ export interface ScenesApiGetSceneRequest {
  * @interface ScenesApiGetScenesRequest
  */
 export interface ScenesApiGetScenesRequest {
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof ScenesApiGetScenes
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof ScenesApiGetScenes
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof ScenesApiGetScenes
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof ScenesApiGetScenes
+     */
+    readonly pageSize?: number
 }
 
 /**
@@ -11972,26 +9705,26 @@ export interface ScenesApiGetScenesRequest {
  * @interface ScenesApiRenderSceneRequest
  */
 export interface ScenesApiRenderSceneRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof ScenesApiRenderScene
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof ScenesApiRenderScene
+     */
+    readonly id: string
 
-  /**
-   * The height of the image to render.
-   * @type {number}
-   * @memberof ScenesApiRenderScene
-   */
-  readonly height?: number;
+    /**
+     * The height of the image to render.
+     * @type {number}
+     * @memberof ScenesApiRenderScene
+     */
+    readonly height?: number
 
-  /**
-   * The width of the image to render.
-   * @type {number}
-   * @memberof ScenesApiRenderScene
-   */
-  readonly width?: number;
+    /**
+     * The width of the image to render.
+     * @type {number}
+     * @memberof ScenesApiRenderScene
+     */
+    readonly width?: number
 }
 
 /**
@@ -12000,19 +9733,19 @@ export interface ScenesApiRenderSceneRequest {
  * @interface ScenesApiUpdateSceneRequest
  */
 export interface ScenesApiUpdateSceneRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof ScenesApiUpdateScene
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof ScenesApiUpdateScene
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {UpdateSceneRequest}
-   * @memberof ScenesApiUpdateScene
-   */
-  readonly updateSceneRequest: UpdateSceneRequest;
+    /**
+     * 
+     * @type {UpdateSceneRequest}
+     * @memberof ScenesApiUpdateScene
+     */
+    readonly updateSceneRequest: UpdateSceneRequest
 }
 
 /**
@@ -12022,475 +9755,303 @@ export interface ScenesApiUpdateSceneRequest {
  * @extends {BaseAPI}
  */
 export class ScenesApi extends BaseAPI {
-  /**
-   * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-   * @param {ScenesApiCreateSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public createScene(
-    requestParameters: ScenesApiCreateSceneRequest,
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .createScene(requestParameters.createSceneRequest, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `scene`. Once created, add scene items via the createSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {ScenesApiCreateSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public createScene(requestParameters: ScenesApiCreateSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).createScene(requestParameters.createSceneRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `scene`.
-   * @param {ScenesApiDeleteSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public deleteScene(
-    requestParameters: ScenesApiDeleteSceneRequest,
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .deleteScene(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `scene`.
+     * @param {ScenesApiDeleteSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public deleteScene(requestParameters: ScenesApiDeleteSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).deleteScene(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-scene`.
-   * @param {ScenesApiGetQueuedSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public getQueuedScene(
-    requestParameters: ScenesApiGetQueuedSceneRequest,
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .getQueuedScene(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-scene`.
+     * @param {ScenesApiGetQueuedSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public getQueuedScene(requestParameters: ScenesApiGetQueuedSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).getQueuedScene(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `scene` by ID.
-   * @param {ScenesApiGetSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public getScene(requestParameters: ScenesApiGetSceneRequest, options?: any) {
-    return ScenesApiFp(this.configuration)
-      .getScene(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `scene` by ID.
+     * @param {ScenesApiGetSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public getScene(requestParameters: ScenesApiGetSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).getScene(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `scenes`.
-   * @param {ScenesApiGetScenesRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public getScenes(
-    requestParameters: ScenesApiGetScenesRequest = {},
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .getScenes(
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `scenes`.
+     * @param {ScenesApiGetScenesRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public getScenes(requestParameters: ScenesApiGetScenesRequest = {}, options?: any) {
+        return ScenesApiFp(this.configuration).getScenes(requestParameters.pageCursor, requestParameters.pageSize, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
-   * @param {ScenesApiRenderSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public renderScene(
-    requestParameters: ScenesApiRenderSceneRequest,
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .renderScene(
-        requestParameters.id,
-        requestParameters.height,
-        requestParameters.width,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a rendered image of a `scene`. If only a single pixel is returned, ensure the `scene` is in the `commit` state and contains scene items.
+     * @param {ScenesApiRenderSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public renderScene(requestParameters: ScenesApiRenderSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).renderScene(requestParameters.id, requestParameters.height, requestParameters.width, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-   * @param {ScenesApiUpdateSceneRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof ScenesApi
-   */
-  public updateScene(
-    requestParameters: ScenesApiUpdateSceneRequest,
-    options?: any
-  ) {
-    return ScenesApiFp(this.configuration)
-      .updateScene(
-        requestParameters.id,
-        requestParameters.updateSceneRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Update a `scene` camera and/or state. Once updated, view the scene via the renderScene API or with the Viewer SDK. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {ScenesApiUpdateSceneRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof ScenesApi
+     */
+    public updateScene(requestParameters: ScenesApiUpdateSceneRequest, options?: any) {
+        return ScenesApiFp(this.configuration).updateScene(requestParameters.id, requestParameters.updateSceneRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * StreamKeysApi - axios parameter creator
  * @export
  */
-export const StreamKeysApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `stream-key` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateStreamKeyRequest} createStreamKeyRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneStreamKey: async (
-      id: string,
-      createStreamKeyRequest: CreateStreamKeyRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createSceneStreamKey', 'id', id);
-      // verify required parameter 'createStreamKeyRequest' is not null or undefined
-      assertParamExists(
-        'createSceneStreamKey',
-        'createStreamKeyRequest',
-        createStreamKeyRequest
-      );
-      const localVarPath = `/scenes/{id}/stream-keys`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const StreamKeysApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `stream-key` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateStreamKeyRequest} createStreamKeyRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneStreamKey: async (id: string, createStreamKeyRequest: CreateStreamKeyRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('createSceneStreamKey', 'id', id)
+            // verify required parameter 'createStreamKeyRequest' is not null or undefined
+            assertParamExists('createSceneStreamKey', 'createStreamKeyRequest', createStreamKeyRequest)
+            const localVarPath = `/scenes/{id}/stream-keys`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createStreamKeyRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Delete a `stream-key`.
-     * @param {string} id The &#x60;stream-key&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteStreamKey: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('deleteStreamKey', 'id', id);
-      const localVarPath = `/stream-keys/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createStreamKeyRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'DELETE',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Delete a `stream-key`.
+         * @param {string} id The &#x60;stream-key&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteStreamKey: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('deleteStreamKey', 'id', id)
+            const localVarPath = `/stream-keys/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'DELETE', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get `stream-key`s.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterKey] Stream key to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getStreamKeys: async (
-      pageCursor?: string,
-      pageSize?: number,
-      filterKey?: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      const localVarPath = `/stream-keys`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get `stream-key`s.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterKey] Stream key to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStreamKeys: async (pageCursor?: string, pageSize?: number, filterKey?: string, options: any = {}): Promise<RequestArgs> => {
+            const localVarPath = `/stream-keys`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      if (pageCursor !== undefined) {
-        localVarQueryParameter['page[cursor]'] = pageCursor;
-      }
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      if (pageSize !== undefined) {
-        localVarQueryParameter['page[size]'] = pageSize;
-      }
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      if (filterKey !== undefined) {
-        localVarQueryParameter['filter[key]'] = filterKey;
-      }
+            if (pageCursor !== undefined) {
+                localVarQueryParameter['page[cursor]'] = pageCursor;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            if (pageSize !== undefined) {
+                localVarQueryParameter['page[size]'] = pageSize;
+            }
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            if (filterKey !== undefined) {
+                localVarQueryParameter['filter[key]'] = filterKey;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * StreamKeysApi - functional programming interface
  * @export
  */
-export const StreamKeysApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator =
-    StreamKeysApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `stream-key` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateStreamKeyRequest} createStreamKeyRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createSceneStreamKey(
-      id: string,
-      createStreamKeyRequest: CreateStreamKeyRequest,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKey>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createSceneStreamKey(
-          id,
-          createStreamKeyRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Delete a `stream-key`.
-     * @param {string} id The &#x60;stream-key&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async deleteStreamKey(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteStreamKey(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get `stream-key`s.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterKey] Stream key to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getStreamKeys(
-      pageCursor?: string,
-      pageSize?: number,
-      filterKey?: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKeyList>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getStreamKeys(
-        pageCursor,
-        pageSize,
-        filterKey,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const StreamKeysApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = StreamKeysApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `stream-key` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateStreamKeyRequest} createStreamKeyRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createSceneStreamKey(id: string, createStreamKeyRequest: CreateStreamKeyRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKey>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneStreamKey(id, createStreamKeyRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Delete a `stream-key`.
+         * @param {string} id The &#x60;stream-key&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async deleteStreamKey(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.deleteStreamKey(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get `stream-key`s.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterKey] Stream key to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getStreamKeys(pageCursor?: string, pageSize?: number, filterKey?: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKeyList>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getStreamKeys(pageCursor, pageSize, filterKey, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * StreamKeysApi - factory interface
  * @export
  */
-export const StreamKeysApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = StreamKeysApiFp(configuration);
-  return {
-    /**
-     * Create a `stream-key` for a `scene`.
-     * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {CreateStreamKeyRequest} createStreamKeyRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createSceneStreamKey(
-      id: string,
-      createStreamKeyRequest: CreateStreamKeyRequest,
-      options?: any
-    ): AxiosPromise<StreamKey> {
-      return localVarFp
-        .createSceneStreamKey(id, createStreamKeyRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Delete a `stream-key`.
-     * @param {string} id The &#x60;stream-key&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    deleteStreamKey(id: string, options?: any): AxiosPromise<void> {
-      return localVarFp
-        .deleteStreamKey(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get `stream-key`s.
-     * @param {string} [pageCursor] The cursor for the next page of items.
-     * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterKey] Stream key to filter on.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getStreamKeys(
-      pageCursor?: string,
-      pageSize?: number,
-      filterKey?: string,
-      options?: any
-    ): AxiosPromise<StreamKeyList> {
-      return localVarFp
-        .getStreamKeys(pageCursor, pageSize, filterKey, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const StreamKeysApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = StreamKeysApiFp(configuration)
+    return {
+        /**
+         * Create a `stream-key` for a `scene`.
+         * @param {string} id The &#x60;scene&#x60; ID.
+         * @param {CreateStreamKeyRequest} createStreamKeyRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createSceneStreamKey(id: string, createStreamKeyRequest: CreateStreamKeyRequest, options?: any): AxiosPromise<StreamKey> {
+            return localVarFp.createSceneStreamKey(id, createStreamKeyRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Delete a `stream-key`.
+         * @param {string} id The &#x60;stream-key&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        deleteStreamKey(id: string, options?: any): AxiosPromise<void> {
+            return localVarFp.deleteStreamKey(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get `stream-key`s.
+         * @param {string} [pageCursor] The cursor for the next page of items.
+         * @param {number} [pageSize] The number of items to return.
+         * @param {string} [filterKey] Stream key to filter on.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getStreamKeys(pageCursor?: string, pageSize?: number, filterKey?: string, options?: any): AxiosPromise<StreamKeyList> {
+            return localVarFp.getStreamKeys(pageCursor, pageSize, filterKey, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -12499,19 +10060,19 @@ export const StreamKeysApiFactory = function (
  * @interface StreamKeysApiCreateSceneStreamKeyRequest
  */
 export interface StreamKeysApiCreateSceneStreamKeyRequest {
-  /**
-   * The &#x60;scene&#x60; ID.
-   * @type {string}
-   * @memberof StreamKeysApiCreateSceneStreamKey
-   */
-  readonly id: string;
+    /**
+     * The &#x60;scene&#x60; ID.
+     * @type {string}
+     * @memberof StreamKeysApiCreateSceneStreamKey
+     */
+    readonly id: string
 
-  /**
-   *
-   * @type {CreateStreamKeyRequest}
-   * @memberof StreamKeysApiCreateSceneStreamKey
-   */
-  readonly createStreamKeyRequest: CreateStreamKeyRequest;
+    /**
+     * 
+     * @type {CreateStreamKeyRequest}
+     * @memberof StreamKeysApiCreateSceneStreamKey
+     */
+    readonly createStreamKeyRequest: CreateStreamKeyRequest
 }
 
 /**
@@ -12520,12 +10081,12 @@ export interface StreamKeysApiCreateSceneStreamKeyRequest {
  * @interface StreamKeysApiDeleteStreamKeyRequest
  */
 export interface StreamKeysApiDeleteStreamKeyRequest {
-  /**
-   * The &#x60;stream-key&#x60; ID.
-   * @type {string}
-   * @memberof StreamKeysApiDeleteStreamKey
-   */
-  readonly id: string;
+    /**
+     * The &#x60;stream-key&#x60; ID.
+     * @type {string}
+     * @memberof StreamKeysApiDeleteStreamKey
+     */
+    readonly id: string
 }
 
 /**
@@ -12534,26 +10095,26 @@ export interface StreamKeysApiDeleteStreamKeyRequest {
  * @interface StreamKeysApiGetStreamKeysRequest
  */
 export interface StreamKeysApiGetStreamKeysRequest {
-  /**
-   * The cursor for the next page of items.
-   * @type {string}
-   * @memberof StreamKeysApiGetStreamKeys
-   */
-  readonly pageCursor?: string;
+    /**
+     * The cursor for the next page of items.
+     * @type {string}
+     * @memberof StreamKeysApiGetStreamKeys
+     */
+    readonly pageCursor?: string
 
-  /**
-   * The number of items to return.
-   * @type {number}
-   * @memberof StreamKeysApiGetStreamKeys
-   */
-  readonly pageSize?: number;
+    /**
+     * The number of items to return.
+     * @type {number}
+     * @memberof StreamKeysApiGetStreamKeys
+     */
+    readonly pageSize?: number
 
-  /**
-   * Stream key to filter on.
-   * @type {string}
-   * @memberof StreamKeysApiGetStreamKeys
-   */
-  readonly filterKey?: string;
+    /**
+     * Stream key to filter on.
+     * @type {string}
+     * @memberof StreamKeysApiGetStreamKeys
+     */
+    readonly filterKey?: string
 }
 
 /**
@@ -12563,384 +10124,238 @@ export interface StreamKeysApiGetStreamKeysRequest {
  * @extends {BaseAPI}
  */
 export class StreamKeysApi extends BaseAPI {
-  /**
-   * Create a `stream-key` for a `scene`.
-   * @param {StreamKeysApiCreateSceneStreamKeyRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof StreamKeysApi
-   */
-  public createSceneStreamKey(
-    requestParameters: StreamKeysApiCreateSceneStreamKeyRequest,
-    options?: any
-  ) {
-    return StreamKeysApiFp(this.configuration)
-      .createSceneStreamKey(
-        requestParameters.id,
-        requestParameters.createStreamKeyRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `stream-key` for a `scene`.
+     * @param {StreamKeysApiCreateSceneStreamKeyRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreamKeysApi
+     */
+    public createSceneStreamKey(requestParameters: StreamKeysApiCreateSceneStreamKeyRequest, options?: any) {
+        return StreamKeysApiFp(this.configuration).createSceneStreamKey(requestParameters.id, requestParameters.createStreamKeyRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Delete a `stream-key`.
-   * @param {StreamKeysApiDeleteStreamKeyRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof StreamKeysApi
-   */
-  public deleteStreamKey(
-    requestParameters: StreamKeysApiDeleteStreamKeyRequest,
-    options?: any
-  ) {
-    return StreamKeysApiFp(this.configuration)
-      .deleteStreamKey(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Delete a `stream-key`.
+     * @param {StreamKeysApiDeleteStreamKeyRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreamKeysApi
+     */
+    public deleteStreamKey(requestParameters: StreamKeysApiDeleteStreamKeyRequest, options?: any) {
+        return StreamKeysApiFp(this.configuration).deleteStreamKey(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get `stream-key`s.
-   * @param {StreamKeysApiGetStreamKeysRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof StreamKeysApi
-   */
-  public getStreamKeys(
-    requestParameters: StreamKeysApiGetStreamKeysRequest = {},
-    options?: any
-  ) {
-    return StreamKeysApiFp(this.configuration)
-      .getStreamKeys(
-        requestParameters.pageCursor,
-        requestParameters.pageSize,
-        requestParameters.filterKey,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get `stream-key`s.
+     * @param {StreamKeysApiGetStreamKeysRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof StreamKeysApi
+     */
+    public getStreamKeys(requestParameters: StreamKeysApiGetStreamKeysRequest = {}, options?: any) {
+        return StreamKeysApiFp(this.configuration).getStreamKeys(requestParameters.pageCursor, requestParameters.pageSize, requestParameters.filterKey, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
 
 /**
  * TranslationInspectionsApi - axios parameter creator
  * @export
  */
-export const TranslationInspectionsApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Create a `translation-inspection`.
-     * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createTranslationInspection: async (
-      createTranslationInspectionRequest: CreateTranslationInspectionRequest,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'createTranslationInspectionRequest' is not null or undefined
-      assertParamExists(
-        'createTranslationInspection',
-        'createTranslationInspectionRequest',
-        createTranslationInspectionRequest
-      );
-      const localVarPath = `/translation-inspections`;
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+export const TranslationInspectionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `translation-inspection`.
+         * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslationInspection: async (createTranslationInspectionRequest: CreateTranslationInspectionRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createTranslationInspectionRequest' is not null or undefined
+            assertParamExists('createTranslationInspection', 'createTranslationInspectionRequest', createTranslationInspectionRequest)
+            const localVarPath = `/translation-inspections`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createTranslationInspectionRequest,
-        localVarRequestOptions,
-        configuration
-      );
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `translation-inspection` by ID.
-     * @param {string} id The &#x60;translation-inspection&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInspectionJob: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getInspectionJob', 'id', id);
-      const localVarPath = `/translation-inspections/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createTranslationInspectionRequest, localVarRequestOptions, configuration)
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `translation-inspection` by ID.
+         * @param {string} id The &#x60;translation-inspection&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInspectionJob: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getInspectionJob', 'id', id)
+            const localVarPath = `/translation-inspections/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-    /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-translation&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedTranslation: async (
-      id: string,
-      options: any = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getQueuedTranslation', 'id', id);
-      const localVarPath = `/queued-translations/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
 
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
 
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
+         * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-translation&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedTranslation: async (id: string, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            assertParamExists('getQueuedTranslation', 'id', id)
+            const localVarPath = `/queued-translations/{id}`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
 
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
 };
 
 /**
  * TranslationInspectionsApi - functional programming interface
  * @export
  */
-export const TranslationInspectionsApiFp = function (
-  configuration?: Configuration
-) {
-  const localVarAxiosParamCreator =
-    TranslationInspectionsApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Create a `translation-inspection`.
-     * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createTranslationInspection(
-      createTranslationInspectionRequest: CreateTranslationInspectionRequest,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<TranslationInspectionJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createTranslationInspection(
-          createTranslationInspectionRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `translation-inspection` by ID.
-     * @param {string} id The &#x60;translation-inspection&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getInspectionJob(
-      id: string,
-      options?: any
-    ): Promise<
-      (
-        axios?: AxiosInstance,
-        basePath?: string
-      ) => AxiosPromise<TranslationInspectionJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getInspectionJob(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-    /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-translation&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getQueuedTranslation(
-      id: string,
-      options?: any
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getQueuedTranslation(id, options);
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
+export const TranslationInspectionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = TranslationInspectionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `translation-inspection`.
+         * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createTranslationInspection(createTranslationInspectionRequest: CreateTranslationInspectionRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TranslationInspectionJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createTranslationInspection(createTranslationInspectionRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `translation-inspection` by ID.
+         * @param {string} id The &#x60;translation-inspection&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getInspectionJob(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<TranslationInspectionJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getInspectionJob(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
+         * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-translation&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getQueuedTranslation(id: string, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedTranslation(id, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
 };
 
 /**
  * TranslationInspectionsApi - factory interface
  * @export
  */
-export const TranslationInspectionsApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = TranslationInspectionsApiFp(configuration);
-  return {
-    /**
-     * Create a `translation-inspection`.
-     * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createTranslationInspection(
-      createTranslationInspectionRequest: CreateTranslationInspectionRequest,
-      options?: any
-    ): AxiosPromise<TranslationInspectionJob> {
-      return localVarFp
-        .createTranslationInspection(
-          createTranslationInspectionRequest,
-          options
-        )
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `translation-inspection` by ID.
-     * @param {string} id The &#x60;translation-inspection&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getInspectionJob(
-      id: string,
-      options?: any
-    ): AxiosPromise<TranslationInspectionJob> {
-      return localVarFp
-        .getInspectionJob(id, options)
-        .then((request) => request(axios, basePath));
-    },
-    /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-     * @param {string} id The &#x60;queued-translation&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getQueuedTranslation(id: string, options?: any): AxiosPromise<QueuedJob> {
-      return localVarFp
-        .getQueuedTranslation(id, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
+export const TranslationInspectionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = TranslationInspectionsApiFp(configuration)
+    return {
+        /**
+         * Create a `translation-inspection`.
+         * @param {CreateTranslationInspectionRequest} createTranslationInspectionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createTranslationInspection(createTranslationInspectionRequest: CreateTranslationInspectionRequest, options?: any): AxiosPromise<TranslationInspectionJob> {
+            return localVarFp.createTranslationInspection(createTranslationInspectionRequest, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `translation-inspection` by ID.
+         * @param {string} id The &#x60;translation-inspection&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getInspectionJob(id: string, options?: any): AxiosPromise<TranslationInspectionJob> {
+            return localVarFp.getInspectionJob(id, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+         * @param {string} id The &#x60;queued-translation&#x60; ID.
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getQueuedTranslation(id: string, options?: any): AxiosPromise<QueuedJob> {
+            return localVarFp.getQueuedTranslation(id, options).then((request) => request(axios, basePath));
+        },
+    };
 };
 
 /**
@@ -12949,12 +10364,12 @@ export const TranslationInspectionsApiFactory = function (
  * @interface TranslationInspectionsApiCreateTranslationInspectionRequest
  */
 export interface TranslationInspectionsApiCreateTranslationInspectionRequest {
-  /**
-   *
-   * @type {CreateTranslationInspectionRequest}
-   * @memberof TranslationInspectionsApiCreateTranslationInspection
-   */
-  readonly createTranslationInspectionRequest: CreateTranslationInspectionRequest;
+    /**
+     * 
+     * @type {CreateTranslationInspectionRequest}
+     * @memberof TranslationInspectionsApiCreateTranslationInspection
+     */
+    readonly createTranslationInspectionRequest: CreateTranslationInspectionRequest
 }
 
 /**
@@ -12963,12 +10378,12 @@ export interface TranslationInspectionsApiCreateTranslationInspectionRequest {
  * @interface TranslationInspectionsApiGetInspectionJobRequest
  */
 export interface TranslationInspectionsApiGetInspectionJobRequest {
-  /**
-   * The &#x60;translation-inspection&#x60; ID.
-   * @type {string}
-   * @memberof TranslationInspectionsApiGetInspectionJob
-   */
-  readonly id: string;
+    /**
+     * The &#x60;translation-inspection&#x60; ID.
+     * @type {string}
+     * @memberof TranslationInspectionsApiGetInspectionJob
+     */
+    readonly id: string
 }
 
 /**
@@ -12977,12 +10392,12 @@ export interface TranslationInspectionsApiGetInspectionJobRequest {
  * @interface TranslationInspectionsApiGetQueuedTranslationRequest
  */
 export interface TranslationInspectionsApiGetQueuedTranslationRequest {
-  /**
-   * The &#x60;queued-translation&#x60; ID.
-   * @type {string}
-   * @memberof TranslationInspectionsApiGetQueuedTranslation
-   */
-  readonly id: string;
+    /**
+     * The &#x60;queued-translation&#x60; ID.
+     * @type {string}
+     * @memberof TranslationInspectionsApiGetQueuedTranslation
+     */
+    readonly id: string
 }
 
 /**
@@ -12992,54 +10407,159 @@ export interface TranslationInspectionsApiGetQueuedTranslationRequest {
  * @extends {BaseAPI}
  */
 export class TranslationInspectionsApi extends BaseAPI {
-  /**
-   * Create a `translation-inspection`.
-   * @param {TranslationInspectionsApiCreateTranslationInspectionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TranslationInspectionsApi
-   */
-  public createTranslationInspection(
-    requestParameters: TranslationInspectionsApiCreateTranslationInspectionRequest,
-    options?: any
-  ) {
-    return TranslationInspectionsApiFp(this.configuration)
-      .createTranslationInspection(
-        requestParameters.createTranslationInspectionRequest,
-        options
-      )
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Create a `translation-inspection`.
+     * @param {TranslationInspectionsApiCreateTranslationInspectionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TranslationInspectionsApi
+     */
+    public createTranslationInspection(requestParameters: TranslationInspectionsApiCreateTranslationInspectionRequest, options?: any) {
+        return TranslationInspectionsApiFp(this.configuration).createTranslationInspection(requestParameters.createTranslationInspectionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `translation-inspection` by ID.
-   * @param {TranslationInspectionsApiGetInspectionJobRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TranslationInspectionsApi
-   */
-  public getInspectionJob(
-    requestParameters: TranslationInspectionsApiGetInspectionJobRequest,
-    options?: any
-  ) {
-    return TranslationInspectionsApiFp(this.configuration)
-      .getInspectionJob(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `translation-inspection` by ID.
+     * @param {TranslationInspectionsApiGetInspectionJobRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TranslationInspectionsApi
+     */
+    public getInspectionJob(requestParameters: TranslationInspectionsApiGetInspectionJobRequest, options?: any) {
+        return TranslationInspectionsApiFp(this.configuration).getInspectionJob(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 
-  /**
-   * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
-   * @param {TranslationInspectionsApiGetQueuedTranslationRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof TranslationInspectionsApi
-   */
-  public getQueuedTranslation(
-    requestParameters: TranslationInspectionsApiGetQueuedTranslationRequest,
-    options?: any
-  ) {
-    return TranslationInspectionsApiFp(this.configuration)
-      .getQueuedTranslation(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
+    /**
+     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {TranslationInspectionsApiGetQueuedTranslationRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof TranslationInspectionsApi
+     */
+    public getQueuedTranslation(requestParameters: TranslationInspectionsApiGetQueuedTranslationRequest, options?: any) {
+        return TranslationInspectionsApiFp(this.configuration).getQueuedTranslation(requestParameters.id, options).then((request) => request(this.axios, this.basePath));
+    }
 }
+
+
+/**
+ * WebhookSubscriptionsApi - axios parameter creator
+ * @export
+ */
+export const WebhookSubscriptionsApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * Create a `webhook-subscription`
+         * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createWebhookSubscription: async (createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest, options: any = {}): Promise<RequestArgs> => {
+            // verify required parameter 'createWebhookSubscriptionRequest' is not null or undefined
+            assertParamExists('createWebhookSubscription', 'createWebhookSubscriptionRequest', createWebhookSubscriptionRequest)
+            const localVarPath = `/webhook-subscriptions`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2 required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2", [], configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(createWebhookSubscriptionRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * WebhookSubscriptionsApi - functional programming interface
+ * @export
+ */
+export const WebhookSubscriptionsApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = WebhookSubscriptionsApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * Create a `webhook-subscription`
+         * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async createWebhookSubscription(createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest, options?: any): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<WebhookSubscription>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.createWebhookSubscription(createWebhookSubscriptionRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * WebhookSubscriptionsApi - factory interface
+ * @export
+ */
+export const WebhookSubscriptionsApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = WebhookSubscriptionsApiFp(configuration)
+    return {
+        /**
+         * Create a `webhook-subscription`
+         * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest 
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        createWebhookSubscription(createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest, options?: any): AxiosPromise<WebhookSubscription> {
+            return localVarFp.createWebhookSubscription(createWebhookSubscriptionRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * Request parameters for createWebhookSubscription operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest
+ */
+export interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest {
+    /**
+     * 
+     * @type {CreateWebhookSubscriptionRequest}
+     * @memberof WebhookSubscriptionsApiCreateWebhookSubscription
+     */
+    readonly createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest
+}
+
+/**
+ * WebhookSubscriptionsApi - object-oriented interface
+ * @export
+ * @class WebhookSubscriptionsApi
+ * @extends {BaseAPI}
+ */
+export class WebhookSubscriptionsApi extends BaseAPI {
+    /**
+     * Create a `webhook-subscription`
+     * @param {WebhookSubscriptionsApiCreateWebhookSubscriptionRequest} requestParameters Request parameters.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof WebhookSubscriptionsApi
+     */
+    public createWebhookSubscription(requestParameters: WebhookSubscriptionsApiCreateWebhookSubscriptionRequest, options?: any) {
+        return WebhookSubscriptionsApiFp(this.configuration).createWebhookSubscription(requestParameters.createWebhookSubscriptionRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
+
