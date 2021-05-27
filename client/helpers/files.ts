@@ -30,6 +30,7 @@ export async function deleteAllFiles({
   let files: FileMetadataData[] = [];
   let cursor: string | undefined;
   do {
+    // eslint-disable-next-line no-await-in-loop
     const res = await getPage(() =>
       client.files.getFiles({ pageCursor: cursor, pageSize })
     );
@@ -37,6 +38,7 @@ export async function deleteAllFiles({
       .map((d) => d.id)
       .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
+    // eslint-disable-next-line no-await-in-loop
     await Promise.all(ids.map((id) => client.files.deleteFile({ id })));
     files = files.concat(res.page.data);
   } while (cursor);

@@ -6,11 +6,11 @@ import { RenderImageReq, tryStream } from '../index';
  *
  * @param args - The {@link RenderImageReq}.
  */
-export async function renderSceneView<T>({
+export function renderSceneView<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
-  return tryStream(async () =>
+  return tryStream(() =>
     client.sceneViews.renderSceneView(
       { id, height, width },
       { responseType: 'stream' }

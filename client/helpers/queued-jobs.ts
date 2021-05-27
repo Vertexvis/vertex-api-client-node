@@ -48,7 +48,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
   allow404 = false,
   polling: { intervalMs, maxAttempts },
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
-  async function poll(ms: number): Promise<PollJobRes<T>> {
+  function poll(ms: number): Promise<PollJobRes<T>> {
     return new Promise((resolve) => {
       setTimeout(
         () =>
@@ -72,6 +72,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
     attempts <= maxAttempts
   ) {
     attempts += 1;
+    // eslint-disable-next-line no-await-in-loop
     pr = await poll(intervalMs);
   }
 

@@ -66,6 +66,10 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   }, [] as T[][]);
 }
 
+export function capitalize(s: string): string {
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+}
+
 /**
  * Create an OAuth2 token.
  *
@@ -80,7 +84,7 @@ export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
  *
  * @param ms - Amount of milliseconds to delay.
  */
-export async function delay(ms: number): Promise<void> {
+export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -168,13 +172,16 @@ export async function getPage<
  * @param getKey - Function returning key to group the array by.
  * @returns A 2D array.
  */
-export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const groupBy = <T, K extends keyof any>(
+  items: T[],
+  getKey: (item: T) => K
+): Record<K, T[]> =>
   items.reduce((acc, cur) => {
     const group = getKey(cur);
-    if (!acc[group]) acc[group] = [];
-    acc[group].push(cur);
+    acc[group] = [...(acc[group] ?? []), cur];
     return acc;
-  }, [] as T[][]);
+  }, {} as Record<K, T[]>);
 
 /**
  * Return the first item in an array.
@@ -184,6 +191,10 @@ export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
  */
 export function head<T>(items: T | T[]): T {
   return Array.isArray(items) ? items[0] : items;
+}
+
+export function kebabToCamel(kebab: string): string {
+  return kebab.replace(/-./g, (s) => s[1].toUpperCase());
 }
 
 /**
@@ -398,6 +409,7 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (error) {
+    // eslint-disable-next-line promise/param-names
     return new Promise((_resolve, reject) => {
       let res = '';
       error.response.data.setEncoding(Utf8);

@@ -246,6 +246,7 @@ export async function deleteAllScenes({
   let scenes: SceneData[] = [];
   let cursor: string | undefined;
   do {
+    // eslint-disable-next-line no-await-in-loop
     const res = await getPage(() =>
       client.scenes.getScenes({ pageCursor: cursor, pageSize })
     );
@@ -253,6 +254,7 @@ export async function deleteAllScenes({
       .map((d) => d.id)
       .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
+    // eslint-disable-next-line no-await-in-loop
     await Promise.all(ids.map((id) => client.scenes.deleteScene({ id })));
     scenes = scenes.concat(res.page.data);
   } while (cursor);
@@ -273,7 +275,7 @@ export async function pollSceneReady({
     maxAttempts: MaxAttempts,
   },
 }: PollSceneReadyReq): Promise<Scene> {
-  const poll = async (): Promise<Scene> =>
+  const poll = (): Promise<Scene> =>
     new Promise((resolve) => {
       setTimeout(
         async () => resolve((await client.scenes.getScene({ id })).data),
@@ -289,6 +291,7 @@ export async function pollSceneReady({
       throw new Error(
         `Polled scene ${id} ${polling.maxAttempts} times, giving up.`
       );
+    // eslint-disable-next-line no-await-in-loop
     scene = await poll();
   }
 
@@ -300,11 +303,11 @@ export async function pollSceneReady({
  *
  * @param args - The {@link RenderImageReq}.
  */
-export async function renderScene<T>({
+export function renderScene<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
-  return tryStream(async () =>
+  return tryStream(() =>
     client.scenes.renderScene({ id, height, width }, { responseType: 'stream' })
   );
 }
