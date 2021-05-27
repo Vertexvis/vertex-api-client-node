@@ -9,6 +9,7 @@ import {
   QueuedJob,
 } from '../index';
 import { DUMMY_BASE_URL } from '../common';
+import { createHmac } from 'crypto';
 
 interface Partitions<T> {
   a: T[];
@@ -311,11 +312,10 @@ export function defined<T>(obj?: T): obj is T {
 export function parseUrl(url?: string): ParsedUrlQuery | undefined {
   if (url === undefined) return undefined;
 
-  const absoluteUrl = url.startsWith('http')
-    ? url
-    : url.startsWith('/')
+  const slash = url.startsWith('/')
     ? `${DUMMY_BASE_URL}${url}`
     : `${DUMMY_BASE_URL}/${url}`;
+  const absoluteUrl = url.startsWith('http') ? url : slash;
   return parse(new URL(absoluteUrl).search);
 }
 
@@ -418,6 +418,22 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
         .on('end', () => reject(res));
     });
   }
+}
+
+/**
+ * Check if webhook signature is valid.
+ *
+ * @param body - body of webhook as string.
+ * @param secret - your webhook subscription secret.
+ * @param signature - signature from `x-vertex-signature` header.
+ * @returns `true` if webhook signature is valid and body is safe to parse.
+ */
+export function isWebhookValid(
+  body: string,
+  secret: string,
+  signature: string
+): boolean {
+  return signature === createHmac('sha256', secret).update(body).digest('hex');
 }
 
 /**
