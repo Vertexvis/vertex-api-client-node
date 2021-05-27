@@ -40,6 +40,7 @@ tags:
   - name: scene-view-states
   - name: stream-keys
   - name: translation-inspections
+  - name: webhook-subscriptions
 paths:
   /files:
     get:
@@ -4188,6 +4189,94 @@ paths:
         - OAuth2: []
       tags:
         - translation-inspections
+  /webhook-subscriptions:
+    post:
+      callbacks:
+        queued-scene-item.completed:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: queued_scene_item_completed_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
+        queued-translation.completed:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: queued_translation_completed_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
+        scene.updated:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: scene_updated_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
+      description: Create a `webhook-subscription`
+      operationId: createWebhookSubscription
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateWebhookSubscriptionRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscription'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - webhook-subscriptions
 components:
   headers:
     Location:
@@ -5106,6 +5195,64 @@ components:
       required:
         - data
       type: object
+    CreateWebhookSubscriptionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateWebhookSubscriptionRequest_data'
+      required:
+        - data
+      type: object
+    WebhookSubscription:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookSubscriptionData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    WebhookEvent:
+      additionalProperties: false
+      example:
+        data:
+          relationships:
+            owner:
+              data:
+                id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+                type: account
+              links:
+                key: '{}'
+            resource:
+              data:
+                id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+                type: queued-scene-item
+              links:
+                key: '{}'
+          attributes:
+            created: 2020-01-01T12:00:00Z
+            topic: some-string
+          links:
+            key:
+              href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          type: webhook-event
+        links:
+          key:
+            href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookEventData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     FileMetadataData:
       additionalProperties: false
       properties:
@@ -5820,8 +5967,81 @@ components:
         - relationships
         - type
       type: object
+    WebhookSubscriptionData:
+      additionalProperties: false
+      properties:
+        type:
+          example: webhook-subscription
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/WebhookSubscriptionData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    WebhookEventData:
+      additionalProperties: false
+      example:
+        relationships:
+          owner:
+            data:
+              id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+              type: account
+            links:
+              key: '{}'
+          resource:
+            data:
+              id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+              type: queued-scene-item
+            links:
+              key: '{}'
+        attributes:
+          created: 2020-01-01T12:00:00Z
+          topic: some-string
+        links:
+          key:
+            href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        type: webhook-event
+      properties:
+        type:
+          example: webhook-event
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/WebhookEventData_attributes'
+        relationships:
+          $ref: '#/components/schemas/WebhookEventData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     Link:
       additionalProperties: false
+      example:
+        href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
       properties:
         href:
           example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
@@ -6121,6 +6341,17 @@ components:
       required:
         - normal
         - offset
+      type: object
+    RelationshipLinks:
+      additionalProperties:
+        additionalProperties: false
+        properties:
+          related:
+            example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+            type: string
+        required:
+          - related
+        type: object
       type: object
     Color:
       description: Color value from 0 to 255.
@@ -6874,6 +7105,34 @@ components:
         - id
         - type
       type: object
+    CreateWebhookSubscriptionRequest_data_attributes:
+      properties:
+        url:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        topics:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      required:
+        - topics
+        - url
+      type: object
+    CreateWebhookSubscriptionRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: webhook-subscription
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateWebhookSubscriptionRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     FileMetadataData_attributes:
       properties:
         name:
@@ -7226,6 +7485,168 @@ components:
       required:
         - created
         - expiry
+      type: object
+    WebhookSubscriptionData_attributes:
+      properties:
+        url:
+          type: string
+        secret:
+          example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
+          type: string
+        topics:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+        status:
+          enum:
+            - active
+            - paused
+          example: active
+          maxLength: 32
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+      required:
+        - created
+        - secret
+        - status
+        - topics
+        - url
+      type: object
+    WebhookEventData_attributes:
+      example:
+        created: 2020-01-01T12:00:00Z
+        topic: some-string
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        topic:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - created
+        - topic
+      type: object
+    WebhookEventData_relationships_owner_data:
+      example:
+        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        type: account
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - account
+          example: account
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    WebhookEventData_relationships_owner:
+      description: Relationship to an `owner`.
+      example:
+        data:
+          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          type: account
+        links:
+          key: '{}'
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookEventData_relationships_owner_data'
+        links:
+          additionalProperties:
+            additionalProperties: false
+            properties:
+              related:
+                example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+                type: string
+            required:
+              - related
+            type: object
+          type: object
+      required:
+        - data
+      type: object
+    WebhookEventData_relationships_resource_data:
+      example:
+        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        type: queued-scene-item
+      properties:
+        type:
+          description: Resource object type.
+          example: queued-scene-item
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    WebhookEventData_relationships_resource:
+      description: Relationship to a `resource`.
+      example:
+        data:
+          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          type: queued-scene-item
+        links:
+          key: '{}'
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookEventData_relationships_resource_data'
+        links:
+          additionalProperties:
+            additionalProperties: false
+            properties:
+              related:
+                example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+                type: string
+            required:
+              - related
+            type: object
+          type: object
+      required:
+        - data
+      type: object
+    WebhookEventData_relationships:
+      example:
+        owner:
+          data:
+            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            type: account
+          links:
+            key: '{}'
+        resource:
+          data:
+            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            type: queued-scene-item
+          links:
+            key: '{}'
+      properties:
+        owner:
+          $ref: '#/components/schemas/WebhookEventData_relationships_owner'
+        resource:
+          $ref: '#/components/schemas/WebhookEventData_relationships_resource'
+      required:
+        - owner
+        - resource
       type: object
     QueryById_data_attributes:
       properties:

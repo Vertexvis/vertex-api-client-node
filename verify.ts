@@ -3,7 +3,7 @@ import { readFileSync } from 'fs';
 import { Configuration } from './configuration';
 import { FilesApiAxiosParamCreator } from './api';
 
-verify();
+void verify();
 
 async function verify(): Promise<void> {
   const config = new Configuration();

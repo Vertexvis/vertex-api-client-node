@@ -136,6 +136,7 @@ export async function deleteAllParts({
   let parts: PartData[] = [];
   let cursor: string | undefined;
   do {
+    // eslint-disable-next-line no-await-in-loop
     const res = await getPage(() =>
       client.parts.getParts({ pageCursor: cursor, pageSize })
     );
@@ -143,6 +144,7 @@ export async function deleteAllParts({
       .map((d) => d.id)
       .filter((id) => !exceptions.has(id));
     cursor = res.cursor;
+    // eslint-disable-next-line no-await-in-loop
     await Promise.all(ids.map((id) => client.parts.deletePart({ id })));
     parts = parts.concat(res.page.data);
   } while (cursor);
@@ -192,11 +194,11 @@ export async function getPartRevisionBySuppliedId({
  *
  * @param args - The {@link RenderImageReq}.
  */
-export async function renderPartRevision<T>({
+export function renderPartRevision<T>({
   client,
   renderReq: { id, height, width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
-  return tryStream(async () =>
+  return tryStream(() =>
     client.partRevisions.renderPartRevision(
       { id, height, width },
       { responseType: 'stream' }

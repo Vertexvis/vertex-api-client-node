@@ -9,6 +9,7 @@ import {
   QueuedJob,
 } from '../index';
 import { DUMMY_BASE_URL } from '../common';
+import { createHmac } from 'crypto';
 
 interface Partitions<T> {
   a: T[];
@@ -66,6 +67,10 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   }, [] as T[][]);
 }
 
+export function capitalize(s: string): string {
+  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
+}
+
 /**
  * Create an OAuth2 token.
  *
@@ -80,7 +85,7 @@ export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
  *
  * @param ms - Amount of milliseconds to delay.
  */
-export async function delay(ms: number): Promise<void> {
+export function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
@@ -168,13 +173,16 @@ export async function getPage<
  * @param getKey - Function returning key to group the array by.
  * @returns A 2D array.
  */
-export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const groupBy = <T, K extends keyof any>(
+  items: T[],
+  getKey: (item: T) => K
+): Record<K, T[]> =>
   items.reduce((acc, cur) => {
     const group = getKey(cur);
-    if (!acc[group]) acc[group] = [];
-    acc[group].push(cur);
+    acc[group] = [...(acc[group] ?? []), cur];
     return acc;
-  }, [] as T[][]);
+  }, {} as Record<K, T[]>);
 
 /**
  * Return the first item in an array.
@@ -184,6 +192,10 @@ export const groupBy = <T>(items: T[], getKey: (item: T) => number): T[][] =>
  */
 export function head<T>(items: T | T[]): T {
   return Array.isArray(items) ? items[0] : items;
+}
+
+export function kebabToCamel(kebab: string): string {
+  return kebab.replace(/-./g, (s) => s[1].toUpperCase());
 }
 
 /**
@@ -300,11 +312,10 @@ export function defined<T>(obj?: T): obj is T {
 export function parseUrl(url?: string): ParsedUrlQuery | undefined {
   if (url === undefined) return undefined;
 
-  const absoluteUrl = url.startsWith('http')
-    ? url
-    : url.startsWith('/')
+  const slash = url.startsWith('/')
     ? `${DUMMY_BASE_URL}${url}`
     : `${DUMMY_BASE_URL}/${url}`;
+  const absoluteUrl = url.startsWith('http') ? url : slash;
   return parse(new URL(absoluteUrl).search);
 }
 
@@ -398,6 +409,7 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (error) {
+    // eslint-disable-next-line promise/param-names
     return new Promise((_resolve, reject) => {
       let res = '';
       error.response.data.setEncoding(Utf8);
@@ -406,6 +418,22 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
         .on('end', () => reject(res));
     });
   }
+}
+
+/**
+ * Check if webhook signature is valid.
+ *
+ * @param body - body of webhook as string.
+ * @param secret - your webhook subscription secret.
+ * @param signature - signature from `x-vertex-signature` header.
+ * @returns `true` if webhook signature is valid and body is safe to parse.
+ */
+export function isWebhookValid(
+  body: string,
+  secret: string,
+  signature: string
+): boolean {
+  return signature === createHmac('sha256', secret).update(body).digest('hex');
 }
 
 /**

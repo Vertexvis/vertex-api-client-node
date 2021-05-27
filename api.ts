@@ -1186,6 +1186,57 @@ export interface CreateTranslationInspectionRequestData {
 /**
  *
  * @export
+ * @interface CreateWebhookSubscriptionRequest
+ */
+export interface CreateWebhookSubscriptionRequest {
+  /**
+   *
+   * @type {CreateWebhookSubscriptionRequestData}
+   * @memberof CreateWebhookSubscriptionRequest
+   */
+  data: CreateWebhookSubscriptionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateWebhookSubscriptionRequestData
+ */
+export interface CreateWebhookSubscriptionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateWebhookSubscriptionRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateWebhookSubscriptionRequestDataAttributes}
+   * @memberof CreateWebhookSubscriptionRequestData
+   */
+  attributes: CreateWebhookSubscriptionRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateWebhookSubscriptionRequestDataAttributes
+ */
+export interface CreateWebhookSubscriptionRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateWebhookSubscriptionRequestDataAttributes
+   */
+  url: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof CreateWebhookSubscriptionRequestDataAttributes
+   */
+  topics: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface CrossSectioning
  */
 export interface CrossSectioning {
@@ -3926,6 +3977,294 @@ export interface Vector4 {
    * @memberof Vector4
    */
   w: number;
+}
+/**
+ *
+ * @export
+ * @interface WebhookEvent
+ */
+export interface WebhookEvent {
+  /**
+   *
+   * @type {WebhookEventData}
+   * @memberof WebhookEvent
+   */
+  data: WebhookEventData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookEvent
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventData
+ */
+export interface WebhookEventData {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookEventData
+   */
+  id: string;
+  /**
+   *
+   * @type {WebhookEventDataAttributes}
+   * @memberof WebhookEventData
+   */
+  attributes: WebhookEventDataAttributes;
+  /**
+   *
+   * @type {WebhookEventDataRelationships}
+   * @memberof WebhookEventData
+   */
+  relationships?: WebhookEventDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookEventData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventDataAttributes
+ */
+export interface WebhookEventDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventDataAttributes
+   */
+  topic: string;
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventDataRelationships
+ */
+export interface WebhookEventDataRelationships {
+  /**
+   *
+   * @type {WebhookEventDataRelationshipsOwner}
+   * @memberof WebhookEventDataRelationships
+   */
+  owner: WebhookEventDataRelationshipsOwner;
+  /**
+   *
+   * @type {WebhookEventDataRelationshipsResource}
+   * @memberof WebhookEventDataRelationships
+   */
+  resource: WebhookEventDataRelationshipsResource;
+}
+/**
+ * Relationship to an `owner`.
+ * @export
+ * @interface WebhookEventDataRelationshipsOwner
+ */
+export interface WebhookEventDataRelationshipsOwner {
+  /**
+   *
+   * @type {WebhookEventDataRelationshipsOwnerData}
+   * @memberof WebhookEventDataRelationshipsOwner
+   */
+  data: WebhookEventDataRelationshipsOwnerData;
+  /**
+   *
+   * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+   * @memberof WebhookEventDataRelationshipsOwner
+   */
+  links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventDataRelationshipsOwnerData
+ */
+export interface WebhookEventDataRelationshipsOwnerData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof WebhookEventDataRelationshipsOwnerData
+   */
+  type: WebhookEventDataRelationshipsOwnerDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookEventDataRelationshipsOwnerData
+   */
+  id: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum WebhookEventDataRelationshipsOwnerDataTypeEnum {
+  Account = 'account',
+}
+
+/**
+ *
+ * @export
+ * @interface WebhookEventDataRelationshipsOwnerLinks
+ */
+export interface WebhookEventDataRelationshipsOwnerLinks {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventDataRelationshipsOwnerLinks
+   */
+  related: string;
+}
+/**
+ * Relationship to a `resource`.
+ * @export
+ * @interface WebhookEventDataRelationshipsResource
+ */
+export interface WebhookEventDataRelationshipsResource {
+  /**
+   *
+   * @type {WebhookEventDataRelationshipsResourceData}
+   * @memberof WebhookEventDataRelationshipsResource
+   */
+  data: WebhookEventDataRelationshipsResourceData;
+  /**
+   *
+   * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+   * @memberof WebhookEventDataRelationshipsResource
+   */
+  links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventDataRelationshipsResourceData
+ */
+export interface WebhookEventDataRelationshipsResourceData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof WebhookEventDataRelationshipsResourceData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookEventDataRelationshipsResourceData
+   */
+  id: string;
+}
+/**
+ *
+ * @export
+ * @interface WebhookSubscription
+ */
+export interface WebhookSubscription {
+  /**
+   *
+   * @type {WebhookSubscriptionData}
+   * @memberof WebhookSubscription
+   */
+  data: WebhookSubscriptionData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookSubscription
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface WebhookSubscriptionData
+ */
+export interface WebhookSubscriptionData {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookSubscriptionData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookSubscriptionData
+   */
+  id: string;
+  /**
+   *
+   * @type {WebhookSubscriptionDataAttributes}
+   * @memberof WebhookSubscriptionData
+   */
+  attributes: WebhookSubscriptionDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookSubscriptionData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface WebhookSubscriptionDataAttributes
+ */
+export interface WebhookSubscriptionDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookSubscriptionDataAttributes
+   */
+  url: string;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookSubscriptionDataAttributes
+   */
+  secret: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof WebhookSubscriptionDataAttributes
+   */
+  topics: Array<string>;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookSubscriptionDataAttributes
+   */
+  status: WebhookSubscriptionDataAttributesStatusEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookSubscriptionDataAttributes
+   */
+  created: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum WebhookSubscriptionDataAttributesStatusEnum {
+  Active = 'active',
+  Paused = 'paused',
 }
 
 /**
@@ -13040,6 +13379,188 @@ export class TranslationInspectionsApi extends BaseAPI {
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getQueuedTranslation(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * WebhookSubscriptionsApi - axios parameter creator
+ * @export
+ */
+export const WebhookSubscriptionsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `webhook-subscription`
+     * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createWebhookSubscription: async (
+      createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createWebhookSubscriptionRequest' is not null or undefined
+      assertParamExists(
+        'createWebhookSubscription',
+        'createWebhookSubscriptionRequest',
+        createWebhookSubscriptionRequest
+      );
+      const localVarPath = `/webhook-subscriptions`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createWebhookSubscriptionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * WebhookSubscriptionsApi - functional programming interface
+ * @export
+ */
+export const WebhookSubscriptionsApiFp = function (
+  configuration?: Configuration
+) {
+  const localVarAxiosParamCreator =
+    WebhookSubscriptionsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `webhook-subscription`
+     * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createWebhookSubscription(
+      createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<WebhookSubscription>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createWebhookSubscription(
+          createWebhookSubscriptionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * WebhookSubscriptionsApi - factory interface
+ * @export
+ */
+export const WebhookSubscriptionsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = WebhookSubscriptionsApiFp(configuration);
+  return {
+    /**
+     * Create a `webhook-subscription`
+     * @param {CreateWebhookSubscriptionRequest} createWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createWebhookSubscription(
+      createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest,
+      options?: any
+    ): AxiosPromise<WebhookSubscription> {
+      return localVarFp
+        .createWebhookSubscription(createWebhookSubscriptionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createWebhookSubscription operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest
+ */
+export interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest {
+  /**
+   *
+   * @type {CreateWebhookSubscriptionRequest}
+   * @memberof WebhookSubscriptionsApiCreateWebhookSubscription
+   */
+  readonly createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest;
+}
+
+/**
+ * WebhookSubscriptionsApi - object-oriented interface
+ * @export
+ * @class WebhookSubscriptionsApi
+ * @extends {BaseAPI}
+ */
+export class WebhookSubscriptionsApi extends BaseAPI {
+  /**
+   * Create a `webhook-subscription`
+   * @param {WebhookSubscriptionsApiCreateWebhookSubscriptionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhookSubscriptionsApi
+   */
+  public createWebhookSubscription(
+    requestParameters: WebhookSubscriptionsApiCreateWebhookSubscriptionRequest,
+    options?: any
+  ) {
+    return WebhookSubscriptionsApiFp(this.configuration)
+      .createWebhookSubscription(
+        requestParameters.createWebhookSubscriptionRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
