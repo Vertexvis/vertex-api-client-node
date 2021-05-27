@@ -67,10 +67,6 @@ export function arrayChunked<T>(a: T[], chunkSize: number): T[][] {
   }, [] as T[][]);
 }
 
-export function capitalize(s: string): string {
-  return `${s.charAt(0).toUpperCase()}${s.slice(1)}`;
-}
-
 /**
  * Create an OAuth2 token.
  *
@@ -192,10 +188,6 @@ export const groupBy = <T, K extends keyof any>(
  */
 export function head<T>(items: T | T[]): T {
   return Array.isArray(items) ? items[0] : items;
-}
-
-export function kebabToCamel(kebab: string): string {
-  return kebab.replace(/-./g, (s) => s[1].toUpperCase());
 }
 
 /**

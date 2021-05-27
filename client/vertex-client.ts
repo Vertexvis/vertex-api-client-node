@@ -16,6 +16,7 @@ import {
   PartsApi,
   ScenesApi,
   TranslationInspectionsApi,
+  WebhookSubscriptionsApi,
 } from '../index';
 import {
   BasePath,
@@ -122,6 +123,7 @@ export class VertexClient {
   public sceneViewStates: SceneViewStatesApi;
   public streamKeys: StreamKeysApi;
   public translationInspections: TranslationInspectionsApi;
+  public webhookSubscriptions: WebhookSubscriptionsApi;
 
   public axiosInstance: AxiosInstance;
   public config: Configuration;
@@ -168,6 +170,11 @@ export class VertexClient {
     );
     this.streamKeys = new StreamKeysApi(this.config, undefined, axiosInst);
     this.translationInspections = new TranslationInspectionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.webhookSubscriptions = new WebhookSubscriptionsApi(
       this.config,
       undefined,
       axiosInst
