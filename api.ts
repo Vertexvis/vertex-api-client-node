@@ -3205,6 +3205,25 @@ export interface SceneViewItem {
   links?: { [key: string]: Link };
 }
 /**
+ *
+ * @export
+ * @interface SceneViewList
+ */
+export interface SceneViewList {
+  /**
+   *
+   * @type {Array<SceneViewData>}
+   * @memberof SceneViewList
+   */
+  data: Array<SceneViewData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneViewList
+   */
+  links: { [key: string]: Link };
+}
+/**
  * Relationship to a `scene-view`.
  * @export
  * @interface SceneViewRelationship
@@ -4237,7 +4256,7 @@ export interface WebhookSubscriptionDataAttributes {
    * @type {string}
    * @memberof WebhookSubscriptionDataAttributes
    */
-  secret: string;
+  secret?: string;
   /**
    *
    * @type {Array<string>}
@@ -4265,6 +4284,26 @@ export interface WebhookSubscriptionDataAttributes {
 export enum WebhookSubscriptionDataAttributesStatusEnum {
   Active = 'active',
   Paused = 'paused',
+}
+
+/**
+ *
+ * @export
+ * @interface WebhookSubscriptionList
+ */
+export interface WebhookSubscriptionList {
+  /**
+   *
+   * @type {Array<WebhookSubscriptionData>}
+   * @memberof WebhookSubscriptionList
+   */
+  data: Array<WebhookSubscriptionData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookSubscriptionList
+   */
+  links: { [key: string]: Link };
 }
 
 /**
@@ -5844,12 +5883,16 @@ export const Oauth2ApiAxiosParamCreator = function (
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
+     * @param {string} [code]
+     * @param {string} [redirectUri]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createToken: async (
       grantType: string,
       scope?: string,
+      code?: string,
+      redirectUri?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'grantType' is not null or undefined
@@ -5877,6 +5920,14 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       if (scope !== undefined) {
         localVarFormParams.set('scope', scope as any);
+      }
+
+      if (code !== undefined) {
+        localVarFormParams.set('code', code as any);
+      }
+
+      if (redirectUri !== undefined) {
+        localVarFormParams.set('redirect_uri', redirectUri as any);
       }
 
       if (grantType !== undefined) {
@@ -5972,12 +6023,16 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
+     * @param {string} [code]
+     * @param {string} [redirectUri]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createToken(
       grantType: string,
       scope?: string,
+      code?: string,
+      redirectUri?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>
@@ -5985,6 +6040,8 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createToken(
         grantType,
         scope,
+        code,
+        redirectUri,
         options
       );
       return createRequestFunction(
@@ -6035,16 +6092,20 @@ export const Oauth2ApiFactory = function (
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
+     * @param {string} [code]
+     * @param {string} [redirectUri]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createToken(
       grantType: string,
       scope?: string,
+      code?: string,
+      redirectUri?: string,
       options?: any
     ): AxiosPromise<OAuth2Token> {
       return localVarFp
-        .createToken(grantType, scope, options)
+        .createToken(grantType, scope, code, redirectUri, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6083,6 +6144,20 @@ export interface Oauth2ApiCreateTokenRequest {
    * @memberof Oauth2ApiCreateToken
    */
   readonly scope?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly code?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly redirectUri?: string;
 }
 
 /**
@@ -6121,6 +6196,8 @@ export class Oauth2Api extends BaseAPI {
       .createToken(
         requestParameters.grantType,
         requestParameters.scope,
+        requestParameters.code,
+        requestParameters.redirectUri,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -10769,6 +10846,72 @@ export const SceneViewsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Get `scene-view`s for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViews: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneViews', 'id', id);
+      const localVarPath = `/scenes/{id}/scene-views`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
@@ -11056,6 +11199,35 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Get `scene-view`s for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneViews(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneViews(
+        id,
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
@@ -11196,6 +11368,24 @@ export const SceneViewsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Get `scene-view`s for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneViews(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<SceneViewList> {
+      return localVarFp
+        .getSceneViews(id, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
@@ -11299,6 +11489,34 @@ export interface SceneViewsApiGetSceneViewRequest {
    * @memberof SceneViewsApiGetSceneView
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneViews operation in SceneViewsApi.
+ * @export
+ * @interface SceneViewsApiGetSceneViewsRequest
+ */
+export interface SceneViewsApiGetSceneViewsRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewsApiGetSceneViews
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneViewsApiGetSceneViews
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneViewsApiGetSceneViews
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -11441,6 +11659,27 @@ export class SceneViewsApi extends BaseAPI {
   ) {
     return SceneViewsApiFp(this.configuration)
       .getSceneView(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `scene-view`s for a `scene`.
+   * @param {SceneViewsApiGetSceneViewsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewsApi
+   */
+  public getSceneViews(
+    requestParameters: SceneViewsApiGetSceneViewsRequest,
+    options?: any
+  ) {
+    return SceneViewsApiFp(this.configuration)
+      .getSceneViews(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -13453,6 +13692,119 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Get a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhookSubscription: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getWebhookSubscription', 'id', id);
+      const localVarPath = `/webhook-subscriptions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `webhook-subscription`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhookSubscriptions: async (
+      pageCursor?: string,
+      pageSize?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/webhook-subscriptions`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -13493,6 +13845,60 @@ export const WebhookSubscriptionsApiFp = function (
         configuration
       );
     },
+    /**
+     * Get a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getWebhookSubscription(
+      id: string,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<WebhookSubscription>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getWebhookSubscription(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `webhook-subscription`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getWebhookSubscriptions(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<WebhookSubscriptionList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getWebhookSubscriptions(
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -13521,6 +13927,36 @@ export const WebhookSubscriptionsApiFactory = function (
         .createWebhookSubscription(createWebhookSubscriptionRequest, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     * Get a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhookSubscription(
+      id: string,
+      options?: any
+    ): AxiosPromise<WebhookSubscription> {
+      return localVarFp
+        .getWebhookSubscription(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `webhook-subscription`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getWebhookSubscriptions(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<WebhookSubscriptionList> {
+      return localVarFp
+        .getWebhookSubscriptions(pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -13536,6 +13972,41 @@ export interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest {
    * @memberof WebhookSubscriptionsApiCreateWebhookSubscription
    */
   readonly createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest;
+}
+
+/**
+ * Request parameters for getWebhookSubscription operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiGetWebhookSubscriptionRequest
+ */
+export interface WebhookSubscriptionsApiGetWebhookSubscriptionRequest {
+  /**
+   * The &#x60;webhook-subscription&#x60; ID.
+   * @type {string}
+   * @memberof WebhookSubscriptionsApiGetWebhookSubscription
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getWebhookSubscriptions operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiGetWebhookSubscriptionsRequest
+ */
+export interface WebhookSubscriptionsApiGetWebhookSubscriptionsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof WebhookSubscriptionsApiGetWebhookSubscriptions
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof WebhookSubscriptionsApiGetWebhookSubscriptions
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -13559,6 +14030,42 @@ export class WebhookSubscriptionsApi extends BaseAPI {
     return WebhookSubscriptionsApiFp(this.configuration)
       .createWebhookSubscription(
         requestParameters.createWebhookSubscriptionRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `webhook-subscription`.
+   * @param {WebhookSubscriptionsApiGetWebhookSubscriptionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhookSubscriptionsApi
+   */
+  public getWebhookSubscription(
+    requestParameters: WebhookSubscriptionsApiGetWebhookSubscriptionRequest,
+    options?: any
+  ) {
+    return WebhookSubscriptionsApiFp(this.configuration)
+      .getWebhookSubscription(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `webhook-subscription`s.
+   * @param {WebhookSubscriptionsApiGetWebhookSubscriptionsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhookSubscriptionsApi
+   */
+  public getWebhookSubscriptions(
+    requestParameters: WebhookSubscriptionsApiGetWebhookSubscriptionsRequest = {},
+    options?: any
+  ) {
+    return WebhookSubscriptionsApiFp(this.configuration)
+      .getWebhookSubscriptions(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
         options
       )
       .then((request) => request(this.axios, this.basePath));
