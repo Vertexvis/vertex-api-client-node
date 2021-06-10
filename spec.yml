@@ -3337,6 +3337,18 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description:
+            Comma-separated list of fields to return in response. An empty
+            value returns no fields. `sceneItemCount` is only returned if explicitly
+            requested.
+          explode: true
+          in: query
+          name: fields[scene]
+          required: false
+          schema:
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -4464,6 +4476,81 @@ paths:
         - OAuth2: []
       tags:
         - webhook-subscriptions
+    patch:
+      description: Update a `webhook-subscription`.
+      operationId: updateWebhookSubscription
+      parameters:
+        - description: The `webhook-subscription` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateWebhookSubscriptionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/WebhookSubscription'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - webhook-subscriptions
 components:
   headers:
     Location:
@@ -4618,6 +4705,18 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    SceneFields:
+      description:
+        Comma-separated list of fields to return in response. An empty
+        value returns no fields. `sceneItemCount` is only returned if explicitly requested.
+      explode: true
+      in: query
+      name: fields[scene]
+      required: false
+      schema:
+        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+        type: string
+      style: form
     SceneItemId:
       description: The `scene-item` ID.
       explode: false
@@ -4732,6 +4831,15 @@ components:
         minimum: 1
         type: integer
       style: form
+    WebhookSubscriptionId:
+      description: The `webhook-subscription` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
   responses:
     Accepted:
       content:
@@ -4965,6 +5073,8 @@ components:
           example: client_credentials
           maxLength: 32
           type: string
+        refresh_token:
+          $ref: '#/components/schemas/NonEmptyString'
       required:
         - grant_type
       type: object
@@ -4988,6 +5098,9 @@ components:
           items:
             $ref: '#/components/schemas/NonEmptyString'
           type: array
+        refresh_token:
+          example: HnkQzHpk4iTaPfssu3zpI.PTbAxKdDIfrNcgrmsxQqg
+          type: string
       required:
         - access_token
         - account_id
@@ -5446,13 +5559,13 @@ components:
                 id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
                 type: account
               links:
-                key: '{}'
+                related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
             resource:
               data:
                 id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
                 type: queued-scene-item
               links:
-                key: '{}'
+                related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
           attributes:
             created: 2020-01-01T12:00:00Z
             topic: some-string
@@ -5471,6 +5584,14 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - data
+      type: object
+    UpdateWebhookSubscriptionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateWebhookSubscriptionRequest_data'
       required:
         - data
       type: object
@@ -6152,6 +6273,27 @@ components:
         - id
         - type
       type: object
+    Vector3:
+      additionalProperties: false
+      description: 3D vector.
+      properties:
+        x:
+          description: x-axis coordinate.
+          example: 1.0
+          type: number
+        y:
+          description: y-axis coordinate.
+          example: 0.0
+          type: number
+        z:
+          description: z-axis coordinate.
+          example: 0.0
+          type: number
+      required:
+        - x
+        - 'y'
+        - z
+      type: object
     SceneViewStateData:
       additionalProperties: false
       properties:
@@ -6243,13 +6385,13 @@ components:
               id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
               type: account
             links:
-              key: '{}'
+              related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
           resource:
             data:
               id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
               type: queued-scene-item
             links:
-              key: '{}'
+              related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
         attributes:
           created: 2020-01-01T12:00:00Z
           topic: some-string
@@ -6291,27 +6433,6 @@ components:
           type: string
       required:
         - href
-      type: object
-    Vector3:
-      additionalProperties: false
-      description: 3D vector.
-      properties:
-        x:
-          description: x-axis coordinate.
-          example: 1.0
-          type: number
-        y:
-          description: y-axis coordinate.
-          example: 0.0
-          type: number
-        z:
-          description: z-axis coordinate.
-          example: 0.0
-          type: number
-      required:
-        - x
-        - 'y'
-        - z
       type: object
     BoundingBox:
       additionalProperties: false
@@ -6586,15 +6707,15 @@ components:
         - offset
       type: object
     RelationshipLinks:
-      additionalProperties:
-        additionalProperties: false
-        properties:
-          related:
-            example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-            type: string
-        required:
-          - related
-        type: object
+      additionalProperties: false
+      example:
+        related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+      properties:
+        related:
+          example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+          type: string
+      required:
+        - related
       type: object
     Color:
       description: Color value from 0 to 255.
@@ -7142,6 +7263,8 @@ components:
         treeEnabled:
           example: false
           type: boolean
+        up:
+          $ref: '#/components/schemas/Vector3'
       type: object
     CreateSceneRequest_data_relationships:
       properties:
@@ -7194,6 +7317,8 @@ components:
         treeEnabled:
           description: Whether or not scene trees can be viewed for this scene.
           type: boolean
+        up:
+          $ref: '#/components/schemas/Vector3'
       type: object
     UpdateSceneRequest_data:
       properties:
@@ -7330,6 +7455,33 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/CreateWebhookSubscriptionRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdateWebhookSubscriptionRequest_data_attributes:
+      properties:
+        status:
+          description: Status of subscription.
+          enum:
+            - active
+            - paused
+          example: active
+          type: string
+        topics:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      type: object
+    UpdateWebhookSubscriptionRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: webhook-subscription
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateWebhookSubscriptionRequest_data_attributes'
       required:
         - attributes
         - type
@@ -7596,6 +7748,8 @@ components:
           type: string
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
+        up:
+          $ref: '#/components/schemas/Vector3'
       required:
         - camera
         - created
@@ -7653,10 +7807,14 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
-      required:
-        - created
-        - modified
-        - state
+        up:
+          $ref: '#/components/schemas/Vector3'
+        sceneItemCount:
+          description:
+            The number of scene items in this scene. (This field needs
+            to be explicitly requested)
+          example: 100
+          type: integer
       type: object
     SceneViewStateData_attributes:
       properties:
@@ -7783,21 +7941,12 @@ components:
           id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           type: account
         links:
-          key: '{}'
+          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
       properties:
         data:
           $ref: '#/components/schemas/WebhookEventData_relationships_owner_data'
         links:
-          additionalProperties:
-            additionalProperties: false
-            properties:
-              related:
-                example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-                type: string
-            required:
-              - related
-            type: object
-          type: object
+          $ref: '#/components/schemas/RelationshipLinks'
       required:
         - data
       type: object
@@ -7828,21 +7977,12 @@ components:
           id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           type: queued-scene-item
         links:
-          key: '{}'
+          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
       properties:
         data:
           $ref: '#/components/schemas/WebhookEventData_relationships_resource_data'
         links:
-          additionalProperties:
-            additionalProperties: false
-            properties:
-              related:
-                example: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-                type: string
-            required:
-              - related
-            type: object
-          type: object
+          $ref: '#/components/schemas/RelationshipLinks'
       required:
         - data
       type: object
@@ -7853,13 +7993,13 @@ components:
             id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
             type: account
           links:
-            key: '{}'
+            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
         resource:
           data:
             id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
             type: queued-scene-item
           links:
-            key: '{}'
+            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
       properties:
         owner:
           $ref: '#/components/schemas/WebhookEventData_relationships_owner'

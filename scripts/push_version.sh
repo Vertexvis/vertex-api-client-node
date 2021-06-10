@@ -34,7 +34,7 @@ function version_package() {
 function create_pull_request() {
   git commit --all --message "Update to latest spec"
   git push --set-upstream origin "$(git_current_branch)"
-  gh pr create --reviewer jareddellitt,kbpope,therockstorm --title "[$(git_current_branch | tr '[:lower:]' '[:upper:]')]: Update to latest spec" --body "$(cat ../.github/pull_request_template.md)"
+  gh pr create --reviewer jareddellitt,danschultz,therockstorm --title "[$(git_current_branch | tr '[:lower:]' '[:upper:]')]: Update to latest spec" --body "$(cat ../.github/pull_request_template.md)"
 }
 
 generate_client
