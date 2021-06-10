@@ -958,6 +958,12 @@ export interface CreateSceneRequestDataAttributes {
    * @memberof CreateSceneRequestDataAttributes
    */
   treeEnabled?: boolean;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof CreateSceneRequestDataAttributes
+   */
+  up?: Vector3;
 }
 /**
  *
@@ -1890,6 +1896,12 @@ export interface OAuth2Token {
    * @memberof OAuth2Token
    */
   scopes: Array<string>;
+  /**
+   *
+   * @type {string}
+   * @memberof OAuth2Token
+   */
+  refresh_token?: string;
 }
 /**
  *
@@ -2470,6 +2482,19 @@ export interface RelationshipData {
 /**
  *
  * @export
+ * @interface RelationshipLinks
+ */
+export interface RelationshipLinks {
+  /**
+   *
+   * @type {string}
+   * @memberof RelationshipLinks
+   */
+  related: string;
+}
+/**
+ *
+ * @export
  * @interface RevokeOAuth2TokenRequest
  */
 export interface RevokeOAuth2TokenRequest {
@@ -2654,13 +2679,13 @@ export interface SceneDataAttributes {
    * @type {string}
    * @memberof SceneDataAttributes
    */
-  state: string;
+  state?: string;
   /**
    *
    * @type {string}
    * @memberof SceneDataAttributes
    */
-  created: string;
+  created?: string;
   /**
    *
    * @type {string}
@@ -2684,7 +2709,19 @@ export interface SceneDataAttributes {
    * @type {string}
    * @memberof SceneDataAttributes
    */
-  modified: string;
+  modified?: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof SceneDataAttributes
+   */
+  up?: Vector3;
+  /**
+   * The number of scene items in this scene. (This field needs to be explicitly requested)
+   * @type {number}
+   * @memberof SceneDataAttributes
+   */
+  sceneItemCount?: number;
 }
 /**
  *
@@ -3165,6 +3202,12 @@ export interface SceneViewDataAttributes {
    * @memberof SceneViewDataAttributes
    */
   crossSectioning?: CrossSectioning | null;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof SceneViewDataAttributes
+   */
+  up?: Vector3;
 }
 /**
  *
@@ -3879,6 +3922,12 @@ export interface UpdateSceneRequestDataAttributes {
    * @memberof UpdateSceneRequestDataAttributes
    */
   treeEnabled?: boolean;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof UpdateSceneRequestDataAttributes
+   */
+  up?: Vector3;
 }
 
 /**
@@ -3941,6 +3990,67 @@ export interface UpdateSceneViewRequestDataAttributes {
    */
   crossSectioning?: CrossSectioning | null;
 }
+/**
+ *
+ * @export
+ * @interface UpdateWebhookSubscriptionRequest
+ */
+export interface UpdateWebhookSubscriptionRequest {
+  /**
+   *
+   * @type {UpdateWebhookSubscriptionRequestData}
+   * @memberof UpdateWebhookSubscriptionRequest
+   */
+  data: UpdateWebhookSubscriptionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateWebhookSubscriptionRequestData
+ */
+export interface UpdateWebhookSubscriptionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateWebhookSubscriptionRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateWebhookSubscriptionRequestDataAttributes}
+   * @memberof UpdateWebhookSubscriptionRequestData
+   */
+  attributes: UpdateWebhookSubscriptionRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateWebhookSubscriptionRequestDataAttributes
+ */
+export interface UpdateWebhookSubscriptionRequestDataAttributes {
+  /**
+   * Status of subscription.
+   * @type {string}
+   * @memberof UpdateWebhookSubscriptionRequestDataAttributes
+   */
+  status?: UpdateWebhookSubscriptionRequestDataAttributesStatusEnum;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UpdateWebhookSubscriptionRequestDataAttributes
+   */
+  topics?: Array<string>;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum UpdateWebhookSubscriptionRequestDataAttributesStatusEnum {
+  Active = 'active',
+  Paused = 'paused',
+}
+
 /**
  * 3D vector.
  * @export
@@ -4105,10 +4215,10 @@ export interface WebhookEventDataRelationshipsOwner {
   data: WebhookEventDataRelationshipsOwnerData;
   /**
    *
-   * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+   * @type {RelationshipLinks}
    * @memberof WebhookEventDataRelationshipsOwner
    */
-  links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks };
+  links?: RelationshipLinks;
 }
 /**
  *
@@ -4139,19 +4249,6 @@ export enum WebhookEventDataRelationshipsOwnerDataTypeEnum {
 }
 
 /**
- *
- * @export
- * @interface WebhookEventDataRelationshipsOwnerLinks
- */
-export interface WebhookEventDataRelationshipsOwnerLinks {
-  /**
-   *
-   * @type {string}
-   * @memberof WebhookEventDataRelationshipsOwnerLinks
-   */
-  related: string;
-}
-/**
  * Relationship to a `resource`.
  * @export
  * @interface WebhookEventDataRelationshipsResource
@@ -4165,10 +4262,10 @@ export interface WebhookEventDataRelationshipsResource {
   data: WebhookEventDataRelationshipsResourceData;
   /**
    *
-   * @type {{ [key: string]: WebhookEventDataRelationshipsOwnerLinks; }}
+   * @type {RelationshipLinks}
    * @memberof WebhookEventDataRelationshipsResource
    */
-  links?: { [key: string]: WebhookEventDataRelationshipsOwnerLinks };
+  links?: RelationshipLinks;
 }
 /**
  *
@@ -5885,6 +5982,7 @@ export const Oauth2ApiAxiosParamCreator = function (
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [refreshToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -5893,6 +5991,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       scope?: string,
       code?: string,
       redirectUri?: string,
+      refreshToken?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'grantType' is not null or undefined
@@ -5932,6 +6031,10 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       if (grantType !== undefined) {
         localVarFormParams.set('grant_type', grantType as any);
+      }
+
+      if (refreshToken !== undefined) {
+        localVarFormParams.set('refresh_token', refreshToken as any);
       }
 
       localVarHeaderParameter['Content-Type'] =
@@ -6025,6 +6128,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [refreshToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6033,6 +6137,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       scope?: string,
       code?: string,
       redirectUri?: string,
+      refreshToken?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>
@@ -6042,6 +6147,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
         scope,
         code,
         redirectUri,
+        refreshToken,
         options
       );
       return createRequestFunction(
@@ -6094,6 +6200,7 @@ export const Oauth2ApiFactory = function (
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [refreshToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6102,10 +6209,11 @@ export const Oauth2ApiFactory = function (
       scope?: string,
       code?: string,
       redirectUri?: string,
+      refreshToken?: string,
       options?: any
     ): AxiosPromise<OAuth2Token> {
       return localVarFp
-        .createToken(grantType, scope, code, redirectUri, options)
+        .createToken(grantType, scope, code, redirectUri, refreshToken, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -6158,6 +6266,13 @@ export interface Oauth2ApiCreateTokenRequest {
    * @memberof Oauth2ApiCreateToken
    */
   readonly redirectUri?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly refreshToken?: string;
 }
 
 /**
@@ -6198,6 +6313,7 @@ export class Oauth2Api extends BaseAPI {
         requestParameters.scope,
         requestParameters.code,
         requestParameters.redirectUri,
+        requestParameters.refreshToken,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -11928,10 +12044,15 @@ export const ScenesApiAxiosParamCreator = function (
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getScene: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    getScene: async (
+      id: string,
+      fieldsScene?: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getScene', 'id', id);
       const localVarPath = `/scenes/{id}`.replace(
@@ -11961,6 +12082,10 @@ export const ScenesApiAxiosParamCreator = function (
         [],
         configuration
       );
+
+      if (fieldsScene !== undefined) {
+        localVarQueryParameter['fields[scene]'] = fieldsScene;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions =
@@ -12252,17 +12377,20 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getScene(
       id: string,
+      fieldsScene?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getScene(
         id,
+        fieldsScene,
         options
       );
       return createRequestFunction(
@@ -12406,12 +12534,17 @@ export const ScenesApiFactory = function (
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getScene(id: string, options?: any): AxiosPromise<Scene> {
+    getScene(
+      id: string,
+      fieldsScene?: string,
+      options?: any
+    ): AxiosPromise<Scene> {
       return localVarFp
-        .getScene(id, options)
+        .getScene(id, fieldsScene, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -12521,6 +12654,13 @@ export interface ScenesApiGetSceneRequest {
    * @memberof ScenesApiGetScene
    */
   readonly id: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
+   * @type {string}
+   * @memberof ScenesApiGetScene
+   */
+  readonly fieldsScene?: string;
 }
 
 /**
@@ -12657,7 +12797,7 @@ export class ScenesApi extends BaseAPI {
    */
   public getScene(requestParameters: ScenesApiGetSceneRequest, options?: any) {
     return ScenesApiFp(this.configuration)
-      .getScene(requestParameters.id, options)
+      .getScene(requestParameters.id, requestParameters.fieldsScene, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -13805,6 +13945,75 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Update a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {UpdateWebhookSubscriptionRequest} updateWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateWebhookSubscription: async (
+      id: string,
+      updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateWebhookSubscription', 'id', id);
+      // verify required parameter 'updateWebhookSubscriptionRequest' is not null or undefined
+      assertParamExists(
+        'updateWebhookSubscription',
+        'updateWebhookSubscriptionRequest',
+        updateWebhookSubscriptionRequest
+      );
+      const localVarPath = `/webhook-subscriptions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateWebhookSubscriptionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -13899,6 +14108,36 @@ export const WebhookSubscriptionsApiFp = function (
         configuration
       );
     },
+    /**
+     * Update a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {UpdateWebhookSubscriptionRequest} updateWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateWebhookSubscription(
+      id: string,
+      updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<WebhookSubscription>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateWebhookSubscription(
+          id,
+          updateWebhookSubscriptionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -13957,6 +14196,26 @@ export const WebhookSubscriptionsApiFactory = function (
         .getWebhookSubscriptions(pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     * Update a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {UpdateWebhookSubscriptionRequest} updateWebhookSubscriptionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateWebhookSubscription(
+      id: string,
+      updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest,
+      options?: any
+    ): AxiosPromise<WebhookSubscription> {
+      return localVarFp
+        .updateWebhookSubscription(
+          id,
+          updateWebhookSubscriptionRequest,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -14007,6 +14266,27 @@ export interface WebhookSubscriptionsApiGetWebhookSubscriptionsRequest {
    * @memberof WebhookSubscriptionsApiGetWebhookSubscriptions
    */
   readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for updateWebhookSubscription operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiUpdateWebhookSubscriptionRequest
+ */
+export interface WebhookSubscriptionsApiUpdateWebhookSubscriptionRequest {
+  /**
+   * The &#x60;webhook-subscription&#x60; ID.
+   * @type {string}
+   * @memberof WebhookSubscriptionsApiUpdateWebhookSubscription
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateWebhookSubscriptionRequest}
+   * @memberof WebhookSubscriptionsApiUpdateWebhookSubscription
+   */
+  readonly updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest;
 }
 
 /**
@@ -14066,6 +14346,26 @@ export class WebhookSubscriptionsApi extends BaseAPI {
       .getWebhookSubscriptions(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `webhook-subscription`.
+   * @param {WebhookSubscriptionsApiUpdateWebhookSubscriptionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhookSubscriptionsApi
+   */
+  public updateWebhookSubscription(
+    requestParameters: WebhookSubscriptionsApiUpdateWebhookSubscriptionRequest,
+    options?: any
+  ) {
+    return WebhookSubscriptionsApiFp(this.configuration)
+      .updateWebhookSubscription(
+        requestParameters.id,
+        requestParameters.updateWebhookSubscriptionRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
