@@ -6273,26 +6273,17 @@ components:
         - id
         - type
       type: object
-    Vector3:
+    Orientation:
       additionalProperties: false
-      description: 3D vector.
+      description: Normals describing up & front directions
       properties:
-        x:
-          description: x-axis coordinate.
-          example: 1.0
-          type: number
-        y:
-          description: y-axis coordinate.
-          example: 0.0
-          type: number
-        z:
-          description: z-axis coordinate.
-          example: 0.0
-          type: number
+        up:
+          $ref: '#/components/schemas/Vector3'
+        front:
+          $ref: '#/components/schemas/Vector3'
       required:
-        - x
-        - 'y'
-        - z
+        - front
+        - up
       type: object
     SceneViewStateData:
       additionalProperties: false
@@ -6433,6 +6424,27 @@ components:
           type: string
       required:
         - href
+      type: object
+    Vector3:
+      additionalProperties: false
+      description: 3D vector.
+      properties:
+        x:
+          description: x-axis coordinate.
+          example: 1.0
+          type: number
+        y:
+          description: y-axis coordinate.
+          example: 0.0
+          type: number
+        z:
+          description: z-axis coordinate.
+          example: 0.0
+          type: number
+      required:
+        - x
+        - 'y'
+        - z
       type: object
     BoundingBox:
       additionalProperties: false
@@ -7263,8 +7275,8 @@ components:
         treeEnabled:
           example: false
           type: boolean
-        up:
-          $ref: '#/components/schemas/Vector3'
+        worldOrientation:
+          $ref: '#/components/schemas/Orientation'
       type: object
     CreateSceneRequest_data_relationships:
       properties:
@@ -7317,8 +7329,8 @@ components:
         treeEnabled:
           description: Whether or not scene trees can be viewed for this scene.
           type: boolean
-        up:
-          $ref: '#/components/schemas/Vector3'
+        worldOrientation:
+          $ref: '#/components/schemas/Orientation'
       type: object
     UpdateSceneRequest_data:
       properties:
@@ -7748,8 +7760,8 @@ components:
           type: string
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
-        up:
-          $ref: '#/components/schemas/Vector3'
+        worldOrientation:
+          $ref: '#/components/schemas/Orientation'
       required:
         - camera
         - created
@@ -7807,8 +7819,8 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
-        up:
-          $ref: '#/components/schemas/Vector3'
+        worldOrientation:
+          $ref: '#/components/schemas/Orientation'
         sceneItemCount:
           description:
             The number of scene items in this scene. (This field needs

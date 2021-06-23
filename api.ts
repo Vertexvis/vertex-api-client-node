@@ -960,10 +960,10 @@ export interface CreateSceneRequestDataAttributes {
   treeEnabled?: boolean;
   /**
    *
-   * @type {Vector3}
+   * @type {Orientation}
    * @memberof CreateSceneRequestDataAttributes
    */
-  up?: Vector3;
+  worldOrientation?: Orientation;
 }
 /**
  *
@@ -1904,6 +1904,25 @@ export interface OAuth2Token {
   refresh_token?: string;
 }
 /**
+ * Normals describing up & front directions
+ * @export
+ * @interface Orientation
+ */
+export interface Orientation {
+  /**
+   *
+   * @type {Vector3}
+   * @memberof Orientation
+   */
+  up: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof Orientation
+   */
+  front: Vector3;
+}
+/**
  *
  * @export
  * @interface Part
@@ -2712,10 +2731,10 @@ export interface SceneDataAttributes {
   modified?: string;
   /**
    *
-   * @type {Vector3}
+   * @type {Orientation}
    * @memberof SceneDataAttributes
    */
-  up?: Vector3;
+  worldOrientation?: Orientation;
   /**
    * The number of scene items in this scene. (This field needs to be explicitly requested)
    * @type {number}
@@ -3204,10 +3223,10 @@ export interface SceneViewDataAttributes {
   crossSectioning?: CrossSectioning | null;
   /**
    *
-   * @type {Vector3}
+   * @type {Orientation}
    * @memberof SceneViewDataAttributes
    */
-  up?: Vector3;
+  worldOrientation?: Orientation;
 }
 /**
  *
@@ -3924,10 +3943,10 @@ export interface UpdateSceneRequestDataAttributes {
   treeEnabled?: boolean;
   /**
    *
-   * @type {Vector3}
+   * @type {Orientation}
    * @memberof UpdateSceneRequestDataAttributes
    */
-  up?: Vector3;
+  worldOrientation?: Orientation;
 }
 
 /**
