@@ -156,10 +156,7 @@ export async function getPage<
   const nextCursor = next
     ? next[PageCursor] ?? next[`?${PageCursor}`]
     : undefined;
-  return {
-    page,
-    cursor: Array.isArray(nextCursor) ? nextCursor[0] : nextCursor,
-  };
+  return { page, cursor: head(nextCursor) };
 }
 
 /**
