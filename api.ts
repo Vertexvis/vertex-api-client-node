@@ -4012,6 +4012,38 @@ export interface UpdateSceneViewRequestDataAttributes {
 /**
  *
  * @export
+ * @interface UpdateSceneViewStateRequest
+ */
+export interface UpdateSceneViewStateRequest {
+  /**
+   *
+   * @type {UpdateSceneViewStateRequestData}
+   * @memberof UpdateSceneViewStateRequest
+   */
+  data: UpdateSceneViewStateRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneViewStateRequestData
+ */
+export interface UpdateSceneViewStateRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateSceneViewStateRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateSceneViewStateRequestDataAttributes}
+   * @memberof UpdateSceneViewStateRequestData
+   */
+  attributes: CreateSceneViewStateRequestDataAttributes;
+}
+/**
+ *
+ * @export
  * @interface UpdateWebhookSubscriptionRequest
  */
 export interface UpdateWebhookSubscriptionRequest {
@@ -10451,6 +10483,75 @@ export const SceneViewStatesApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Update a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {UpdateSceneViewStateRequest} updateSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSceneViewState: async (
+      id: string,
+      updateSceneViewStateRequest: UpdateSceneViewStateRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateSceneViewState', 'id', id);
+      // verify required parameter 'updateSceneViewStateRequest' is not null or undefined
+      assertParamExists(
+        'updateSceneViewState',
+        'updateSceneViewStateRequest',
+        updateSceneViewStateRequest
+      );
+      const localVarPath = `/scene-view-states/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateSceneViewStateRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -10564,6 +10665,33 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
         configuration
       );
     },
+    /**
+     * Update a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {UpdateSceneViewStateRequest} updateSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateSceneViewState(
+      id: string,
+      updateSceneViewStateRequest: UpdateSceneViewStateRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateSceneViewState(
+          id,
+          updateSceneViewStateRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -10632,6 +10760,22 @@ export const SceneViewStatesApiFactory = function (
     ): AxiosPromise<SceneViewStateList> {
       return localVarFp
         .getSceneViewStates(id, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update a `scene-view-state`.
+     * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {UpdateSceneViewStateRequest} updateSceneViewStateRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSceneViewState(
+      id: string,
+      updateSceneViewStateRequest: UpdateSceneViewStateRequest,
+      options?: any
+    ): AxiosPromise<SceneViewState> {
+      return localVarFp
+        .updateSceneViewState(id, updateSceneViewStateRequest, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -10715,6 +10859,27 @@ export interface SceneViewStatesApiGetSceneViewStatesRequest {
 }
 
 /**
+ * Request parameters for updateSceneViewState operation in SceneViewStatesApi.
+ * @export
+ * @interface SceneViewStatesApiUpdateSceneViewStateRequest
+ */
+export interface SceneViewStatesApiUpdateSceneViewStateRequest {
+  /**
+   * The &#x60;scene-view-state&#x60; ID.
+   * @type {string}
+   * @memberof SceneViewStatesApiUpdateSceneViewState
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneViewStateRequest}
+   * @memberof SceneViewStatesApiUpdateSceneViewState
+   */
+  readonly updateSceneViewStateRequest: UpdateSceneViewStateRequest;
+}
+
+/**
  * SceneViewStatesApi - object-oriented interface
  * @export
  * @class SceneViewStatesApi
@@ -10789,6 +10954,26 @@ export class SceneViewStatesApi extends BaseAPI {
         requestParameters.id,
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `scene-view-state`.
+   * @param {SceneViewStatesApiUpdateSceneViewStateRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneViewStatesApi
+   */
+  public updateSceneViewState(
+    requestParameters: SceneViewStatesApiUpdateSceneViewStateRequest,
+    options?: any
+  ) {
+    return SceneViewStatesApiFp(this.configuration)
+      .updateSceneViewState(
+        requestParameters.id,
+        requestParameters.updateSceneViewStateRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -12124,12 +12309,14 @@ export const ScenesApiAxiosParamCreator = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getScenes: async (
       pageCursor?: string,
       pageSize?: number,
+      filterSuppliedId?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
@@ -12163,6 +12350,10 @@ export const ScenesApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -12423,12 +12614,14 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getScenes(
       pageCursor?: string,
       pageSize?: number,
+      filterSuppliedId?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
@@ -12436,6 +12629,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getScenes(
         pageCursor,
         pageSize,
+        filterSuppliedId,
         options
       );
       return createRequestFunction(
@@ -12570,16 +12764,18 @@ export const ScenesApiFactory = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getScenes(
       pageCursor?: string,
       pageSize?: number,
+      filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<SceneList> {
       return localVarFp
-        .getScenes(pageCursor, pageSize, options)
+        .getScenes(pageCursor, pageSize, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -12701,6 +12897,13 @@ export interface ScenesApiGetScenesRequest {
    * @memberof ScenesApiGetScenes
    */
   readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterSuppliedId?: string;
 }
 
 /**
@@ -12835,6 +13038,7 @@ export class ScenesApi extends BaseAPI {
       .getScenes(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
         options
       )
       .then((request) => request(this.axios, this.basePath));
