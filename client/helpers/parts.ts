@@ -201,7 +201,7 @@ export function renderPartRevision<T>({
   return tryStream(() =>
     client.partRevisions.renderPartRevision(
       { id, height, width },
-      { responseType: 'stream' }
+      { headers: { accept: 'image/png' }, responseType: 'stream' }
     )
   );
 }

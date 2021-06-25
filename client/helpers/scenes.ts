@@ -308,7 +308,10 @@ export function renderScene<T>({
   renderReq: { id, height, width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(() =>
-    client.scenes.renderScene({ id, height, width }, { responseType: 'stream' })
+    client.scenes.renderScene(
+      { id, height, width },
+      { headers: { accept: 'image/png' }, responseType: 'stream' }
+    )
   );
 }
 

@@ -13,7 +13,7 @@ export function renderSceneView<T>({
   return tryStream(() =>
     client.sceneViews.renderSceneView(
       { id, height, width },
-      { responseType: 'stream' }
+      { headers: { accept: 'image/png' }, responseType: 'stream' }
     )
   );
 }
