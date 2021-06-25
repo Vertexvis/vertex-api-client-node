@@ -196,12 +196,15 @@ export async function getPartRevisionBySuppliedId({
  */
 export function renderPartRevision<T>({
   client,
-  renderReq: { id, height, width },
+  renderReq: { id, height, type = 'png', width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(() =>
     client.partRevisions.renderPartRevision(
       { id, height, width },
-      { responseType: 'stream' }
+      {
+        headers: { accept: type === 'png' ? 'image/png' : 'image/jpg' },
+        responseType: 'stream',
+      }
     )
   );
 }

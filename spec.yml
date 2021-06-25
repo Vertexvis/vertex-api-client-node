@@ -1051,6 +1051,10 @@ paths:
               schema:
                 format: binary
                 type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
           description: OK
         '401':
           content:
@@ -2862,6 +2866,10 @@ paths:
               schema:
                 format: binary
                 type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
           description: OK
         '401':
           content:
@@ -3173,6 +3181,16 @@ paths:
             maximum: 200
             minimum: 1
             type: integer
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
           style: form
       responses:
         '200':
@@ -3520,6 +3538,10 @@ paths:
               schema:
                 format: binary
                 type: string
+            image/png:
+              schema:
+                format: binary
+                type: string
           description: OK
         '401':
           content:
@@ -3853,6 +3875,81 @@ paths:
               schema:
                 $ref: '#/components/schemas/SceneViewState'
           description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-view-states
+    patch:
+      description: Update a `scene-view-state`.
+      operationId: updateSceneViewState
+      parameters:
+        - description: The `scene-view-state` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateSceneViewStateRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneViewState'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
         '401':
           content:
             application/vnd.api+json:
@@ -5456,6 +5553,14 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - data
+      type: object
+    UpdateSceneViewStateRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateSceneViewStateRequest_data'
       required:
         - data
       type: object
@@ -7374,6 +7479,19 @@ components:
       required:
         - attributes
         - relationships
+        - type
+      type: object
+    UpdateSceneViewStateRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: scene-view-state
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSceneViewStateRequest_data_attributes'
+      required:
+        - attributes
         - type
       type: object
     CreateStreamKeyRequest_data_attributes:

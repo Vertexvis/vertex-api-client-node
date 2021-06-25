@@ -305,10 +305,16 @@ export async function pollSceneReady({
  */
 export function renderScene<T>({
   client,
-  renderReq: { id, height, width },
+  renderReq: { id, height, type = 'png', width },
 }: RenderImageReq): Promise<AxiosResponse<T>> {
   return tryStream(() =>
-    client.scenes.renderScene({ id, height, width }, { responseType: 'stream' })
+    client.scenes.renderScene(
+      { id, height, width },
+      {
+        headers: { accept: type === 'png' ? 'image/png' : 'image/jpg' },
+        responseType: 'stream',
+      }
+    )
   );
 }
 
