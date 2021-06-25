@@ -80,6 +80,9 @@ export interface RenderReq {
   /** Height of resulting image. */
   readonly height?: number;
 
+  /** Type of resulting image. */
+  readonly type?: 'png' | 'jpg';
+
   /** Width of resulting image. */
   readonly width?: number;
 }
