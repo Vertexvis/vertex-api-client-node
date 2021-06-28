@@ -2459,6 +2459,12 @@ export interface QueuedJobData {
    * @memberof QueuedJobData
    */
   attributes: QueuedJobDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof QueuedJobData
+   */
+  links?: { [key: string]: Link };
 }
 /**
  *
@@ -2474,10 +2480,35 @@ export interface QueuedJobDataAttributes {
   status: string;
   /**
    *
+   * @type {string}
+   * @memberof QueuedJobDataAttributes
+   */
+  created: string;
+  /**
+   *
    * @type {Set<ApiError>}
    * @memberof QueuedJobDataAttributes
    */
   errors?: Set<ApiError>;
+}
+/**
+ *
+ * @export
+ * @interface QueuedJobList
+ */
+export interface QueuedJobList {
+  /**
+   *
+   * @type {Array<QueuedJobData>}
+   * @memberof QueuedJobList
+   */
+  data: Array<QueuedJobData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof QueuedJobList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -13740,6 +13771,71 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslations: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/queued-translations`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterStatus !== undefined) {
+        localVarQueryParameter['filter[status]'] = filterStatus;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -13825,6 +13921,36 @@ export const TranslationInspectionsApiFp = function (
         configuration
       );
     },
+    /**
+     * Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedTranslations(
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJobList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedTranslations(
+          pageCursor,
+          pageSize,
+          filterStatus,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -13881,6 +14007,24 @@ export const TranslationInspectionsApiFactory = function (
         .getQueuedTranslation(id, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     * Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslations(
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options?: any
+    ): AxiosPromise<QueuedJobList> {
+      return localVarFp
+        .getQueuedTranslations(pageCursor, pageSize, filterStatus, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -13924,6 +14068,34 @@ export interface TranslationInspectionsApiGetQueuedTranslationRequest {
    * @memberof TranslationInspectionsApiGetQueuedTranslation
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedTranslations operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiGetQueuedTranslationsRequest
+ */
+export interface TranslationInspectionsApiGetQueuedTranslationsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslations
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof TranslationInspectionsApiGetQueuedTranslations
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Status to filter on.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslations
+   */
+  readonly filterStatus?: string;
 }
 
 /**
@@ -13981,6 +14153,27 @@ export class TranslationInspectionsApi extends BaseAPI {
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getQueuedTranslation(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `queued-translation`s.
+   * @param {TranslationInspectionsApiGetQueuedTranslationsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TranslationInspectionsApi
+   */
+  public getQueuedTranslations(
+    requestParameters: TranslationInspectionsApiGetQueuedTranslationsRequest = {},
+    options?: any
+  ) {
+    return TranslationInspectionsApiFp(this.configuration)
+      .getQueuedTranslations(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterStatus,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
