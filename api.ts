@@ -6671,6 +6671,9 @@ export const PartRevisionsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {number} [height] The height of the image to render.
      * @param {number} [width] The width of the image to render.
+     * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
+     * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
+     * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6678,6 +6681,9 @@ export const PartRevisionsApiAxiosParamCreator = function (
       id: string,
       height?: number,
       width?: number,
+      cameraPosition?: Vector3,
+      cameraUp?: Vector3,
+      cameraLookAt?: Vector3,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -6716,6 +6722,18 @@ export const PartRevisionsApiAxiosParamCreator = function (
 
       if (width !== undefined) {
         localVarQueryParameter['width'] = width;
+      }
+
+      if (cameraPosition !== undefined) {
+        localVarQueryParameter['camera[position]'] = cameraPosition;
+      }
+
+      if (cameraUp !== undefined) {
+        localVarQueryParameter['camera[up]'] = cameraUp;
+      }
+
+      if (cameraLookAt !== undefined) {
+        localVarQueryParameter['camera[lookAt]'] = cameraLookAt;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -6924,6 +6942,9 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {number} [height] The height of the image to render.
      * @param {number} [width] The width of the image to render.
+     * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
+     * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
+     * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -6931,6 +6952,9 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       id: string,
       height?: number,
       width?: number,
+      cameraPosition?: Vector3,
+      cameraUp?: Vector3,
+      cameraLookAt?: Vector3,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
@@ -6940,6 +6964,9 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
           id,
           height,
           width,
+          cameraPosition,
+          cameraUp,
+          cameraLookAt,
           options
         );
       return createRequestFunction(
@@ -7056,6 +7083,9 @@ export const PartRevisionsApiFactory = function (
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {number} [height] The height of the image to render.
      * @param {number} [width] The width of the image to render.
+     * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
+     * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
+     * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -7063,10 +7093,21 @@ export const PartRevisionsApiFactory = function (
       id: string,
       height?: number,
       width?: number,
+      cameraPosition?: Vector3,
+      cameraUp?: Vector3,
+      cameraLookAt?: Vector3,
       options?: any
     ): AxiosPromise<any> {
       return localVarFp
-        .renderPartRevision(id, height, width, options)
+        .renderPartRevision(
+          id,
+          height,
+          width,
+          cameraPosition,
+          cameraUp,
+          cameraLookAt,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -7198,6 +7239,27 @@ export interface PartRevisionsApiRenderPartRevisionRequest {
    * @memberof PartRevisionsApiRenderPartRevision
    */
   readonly width?: number;
+
+  /**
+   * The &#x60;camera&#x60; position vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraPosition?: Vector3;
+
+  /**
+   * The &#x60;camera&#x60; up vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraUp?: Vector3;
+
+  /**
+   * The &#x60;camera&#x60; lookAt vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraLookAt?: Vector3;
 }
 
 /**
@@ -7318,6 +7380,9 @@ export class PartRevisionsApi extends BaseAPI {
         requestParameters.id,
         requestParameters.height,
         requestParameters.width,
+        requestParameters.cameraPosition,
+        requestParameters.cameraUp,
+        requestParameters.cameraLookAt,
         options
       )
       .then((request) => request(this.axios, this.basePath));
