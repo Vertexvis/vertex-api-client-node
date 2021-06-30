@@ -59,6 +59,8 @@ export interface BuildReq {
     readonly id?: string;
     readonly secret?: string;
   };
+
+  readonly initialToken?: OAuth2Token;
 }
 
 /**
@@ -239,7 +241,8 @@ export class VertexClient {
       basePath,
       axiosInst
     );
-    const token = await createToken(auth);
+
+    const token = args?.initialToken || (await createToken(auth));
 
     return new VertexClient({ auth, axiosInst, basePath, token });
   };
