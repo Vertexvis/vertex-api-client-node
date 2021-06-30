@@ -1044,6 +1044,30 @@ paths:
             minimum: 1
             type: integer
           style: form
+        - description: The `camera` position vector.
+          explode: true
+          in: query
+          name: camera[position]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The `camera` up vector.
+          explode: true
+          in: query
+          name: camera[up]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The `camera` lookAt vector.
+          explode: true
+          in: query
+          name: camera[lookAt]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
       responses:
         '200':
           content:
@@ -4765,6 +4789,33 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    CameraUp:
+      description: The `camera` up vector.
+      explode: true
+      in: query
+      name: camera[up]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    CameraPosition:
+      description: The `camera` position vector.
+      explode: true
+      in: query
+      name: camera[position]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    CameraLookAt:
+      description: The `camera` lookAt vector.
+      explode: true
+      in: query
+      name: camera[lookAt]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
     FileId:
       description: The `file` ID.
       explode: false
@@ -5336,6 +5387,27 @@ components:
           $ref: '#/components/schemas/UpdatePartRevisionRequest_data'
       required:
         - data
+      type: object
+    Vector3:
+      additionalProperties: false
+      description: 3D vector.
+      properties:
+        x:
+          description: x-axis coordinate.
+          example: 1.0
+          type: number
+        y:
+          description: y-axis coordinate.
+          example: 0.0
+          type: number
+        z:
+          description: z-axis coordinate.
+          example: 0.0
+          type: number
+      required:
+        - x
+        - 'y'
+        - z
       type: object
     PartRevisionList:
       additionalProperties: false
@@ -6662,27 +6734,6 @@ components:
           type: string
       required:
         - href
-      type: object
-    Vector3:
-      additionalProperties: false
-      description: 3D vector.
-      properties:
-        x:
-          description: x-axis coordinate.
-          example: 1.0
-          type: number
-        y:
-          description: y-axis coordinate.
-          example: 0.0
-          type: number
-        z:
-          description: z-axis coordinate.
-          example: 0.0
-          type: number
-      required:
-        - x
-        - 'y'
-        - z
       type: object
     BoundingBox:
       additionalProperties: false
