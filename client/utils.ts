@@ -11,6 +11,11 @@ import {
 import { DUMMY_BASE_URL } from '../common';
 import { createHmac } from 'crypto';
 
+export interface Cursors {
+  readonly next?: string;
+  readonly self?: string;
+}
+
 interface Partitions<T> {
   a: T[];
   b: T[];
@@ -82,7 +87,9 @@ export async function createToken(auth: Oauth2Api): Promise<OAuth2Token> {
  * @param ms - Amount of milliseconds to delay.
  */
 export function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
 
 /**
@@ -124,6 +131,11 @@ export async function getBySuppliedId<
   return undefined;
 }
 
+function getCursor(url?: string): string | undefined {
+  const u = parseUrl(url);
+  return head(u ? u[PageCursor] ?? u[`?${PageCursor}`] : undefined);
+}
+
 /**
  * Get an Error message produced by {@link VertexClient}.
  *
@@ -147,16 +159,24 @@ export function getErrorMessage(error: VertexError | AxiosError): string {
  * @returns Page of results and optional cursor to get next page.
  */
 export async function getPage<
-  T extends { data: unknown[]; links: { next?: { href: string } } }
+  T extends {
+    data: unknown[];
+    links: { next?: { href: string }; self?: { href: string } };
+  }
 >(
   getListing: () => Promise<AxiosResponse<T>>
-): Promise<{ page: T; cursor?: string }> {
+): Promise<{
+  page: T;
+  cursor?: string;
+  cursors: Cursors;
+}> {
   const page = (await getListing()).data;
-  const next = parseUrl(page.links.next?.href);
-  const nextCursor = next
-    ? next[PageCursor] ?? next[`?${PageCursor}`]
-    : undefined;
-  return { page, cursor: head(nextCursor) };
+  const next = getCursor(page.links.next?.href);
+  return {
+    page,
+    cursor: next,
+    cursors: { next, self: getCursor(page.links.self?.href) },
+  };
 }
 
 /**
