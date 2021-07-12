@@ -20,6 +20,7 @@ import {
   PollIntervalMs,
   prettyJson,
   RenderImageReq,
+  toAccept,
   tryStream,
   uploadFileIfNotExists,
 } from '../index';
@@ -201,10 +202,7 @@ export function renderPartRevision<T>({
   return tryStream(() =>
     client.partRevisions.renderPartRevision(
       { id, height, width },
-      {
-        headers: { accept: type === 'png' ? 'image/png' : 'image/jpg' },
-        responseType: 'stream',
-      }
+      { headers: { accept: toAccept(type) }, responseType: 'stream' }
     )
   );
 }

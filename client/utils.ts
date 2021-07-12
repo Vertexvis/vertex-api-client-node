@@ -3,6 +3,7 @@ import { parse, ParsedUrlQuery } from 'querystring';
 import {
   ApiError,
   Failure,
+  ImageType,
   Matrix4,
   Oauth2Api,
   OAuth2Token,
@@ -361,6 +362,10 @@ export function required<T>(name: string, value?: T): T {
 export function thrw(error: string | Error): never {
   if (error instanceof Error) throw error;
   throw new Error(error);
+}
+
+export function toAccept(type: ImageType): string {
+  return type === 'png' ? 'image/png' : 'image/jpeg';
 }
 
 /**

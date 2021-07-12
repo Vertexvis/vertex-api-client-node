@@ -72,6 +72,8 @@ export interface RenderImageReq extends BaseReq {
   readonly renderReq: RenderReq;
 }
 
+export type ImageType = 'png' | 'jpg';
+
 /** Image rendering request arguments. */
 export interface RenderReq {
   /** ID of resource. */
@@ -81,7 +83,7 @@ export interface RenderReq {
   readonly height?: number;
 
   /** Type of resulting image. */
-  readonly type?: 'png' | 'jpg';
+  readonly type?: ImageType;
 
   /** Width of resulting image. */
   readonly width?: number;

@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { RenderImageReq, tryStream } from '../index';
+import { RenderImageReq, toAccept, tryStream } from '../index';
 
 /**
  * Render a scene view.
@@ -13,10 +13,7 @@ export function renderSceneView<T>({
   return tryStream(() =>
     client.sceneViews.renderSceneView(
       { id, height, width },
-      {
-        headers: { accept: type === 'png' ? 'image/png' : 'image/jpg' },
-        responseType: 'stream',
-      }
+      { headers: { accept: toAccept(type) }, responseType: 'stream' }
     )
   );
 }

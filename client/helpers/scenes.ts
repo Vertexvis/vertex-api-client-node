@@ -28,6 +28,7 @@ import {
   tryStream,
   VertexClient,
 } from '../index';
+import { toAccept } from '../utils';
 import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
 
 export interface CreateSceneAndSceneItemsReq extends BaseReq {
@@ -310,10 +311,7 @@ export function renderScene<T>({
   return tryStream(() =>
     client.scenes.renderScene(
       { id, height, width },
-      {
-        headers: { accept: type === 'png' ? 'image/png' : 'image/jpg' },
-        responseType: 'stream',
-      }
+      { headers: { accept: toAccept(type) }, responseType: 'stream' }
     )
   );
 }
