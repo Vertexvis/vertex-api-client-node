@@ -6195,7 +6195,7 @@ components:
         attributes:
           $ref: '#/components/schemas/Hit_data_attributes'
         relationships:
-          $ref: '#/components/schemas/CreateSceneViewStateRequest_data_relationships'
+          $ref: '#/components/schemas/SceneAlterationData_relationships'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -7610,10 +7610,12 @@ components:
       type: object
     CreateSceneViewStateRequest_data_relationships:
       properties:
-        sceneView:
-          $ref: '#/components/schemas/SceneViewRelationship'
+        source:
+          oneOf:
+            - $ref: '#/components/schemas/SceneViewRelationship'
+            - $ref: '#/components/schemas/SceneViewStateRelationship'
       required:
-        - sceneView
+        - source
       type: object
     CreateSceneViewStateRequest_data:
       properties:
@@ -7970,6 +7972,13 @@ components:
           type: array
       required:
         - partRevisions
+      type: object
+    SceneAlterationData_relationships:
+      properties:
+        sceneView:
+          $ref: '#/components/schemas/SceneViewRelationship'
+      required:
+        - sceneView
       type: object
     SceneItemOverrideData_attributes:
       properties:

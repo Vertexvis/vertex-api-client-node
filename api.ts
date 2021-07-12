@@ -1107,10 +1107,10 @@ export interface CreateSceneViewStateRequestDataAttributes {
 export interface CreateSceneViewStateRequestDataRelationships {
   /**
    *
-   * @type {SceneViewRelationship}
+   * @type {SceneViewRelationship | SceneViewStateRelationship}
    * @memberof CreateSceneViewStateRequestDataRelationships
    */
-  sceneView: SceneViewRelationship;
+  source: SceneViewRelationship | SceneViewStateRelationship;
 }
 /**
  *
@@ -2651,16 +2651,29 @@ export interface SceneAlterationData {
   attributes: HitDataAttributes;
   /**
    *
-   * @type {CreateSceneViewStateRequestDataRelationships}
+   * @type {SceneAlterationDataRelationships}
    * @memberof SceneAlterationData
    */
-  relationships: CreateSceneViewStateRequestDataRelationships;
+  relationships: SceneAlterationDataRelationships;
   /**
    *
    * @type {{ [key: string]: Link; }}
    * @memberof SceneAlterationData
    */
   links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneAlterationDataRelationships
+ */
+export interface SceneAlterationDataRelationships {
+  /**
+   *
+   * @type {SceneViewRelationship}
+   * @memberof SceneAlterationDataRelationships
+   */
+  sceneView: SceneViewRelationship;
 }
 /**
  *
