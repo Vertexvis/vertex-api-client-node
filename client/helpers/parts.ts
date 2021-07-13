@@ -1,12 +1,15 @@
 import { AxiosResponse } from 'axios';
 import {
   CreateFileRequest,
+  CreateGeometrySetRequest,
   CreatePartRequest,
+  Failure,
   Part,
   PartData,
   PartList,
   PartRevisionData,
   PartRevisionList,
+  QueuedJob,
 } from '../../index';
 import {
   BaseReq,
@@ -39,6 +42,22 @@ export interface CreatePartFromFileReq extends BaseReq {
 
   /** {@link Polling} */
   readonly polling?: Polling;
+
+  /** Whether or not to return queued translation. */
+  readonly returnQueued?: boolean;
+}
+
+export interface CreatePartFromFileRes {
+  /** A {@link PartRevisionData}. */
+  readonly partRevision: PartRevisionData;
+
+  /** Only populated if `returnQueued` is true in request. */
+  queued?: QueuedTranslation;
+}
+
+interface QueuedTranslation {
+  req: CreatePartRequest | CreateGeometrySetRequest;
+  res?: Failure | QueuedJob;
 }
 
 /** Get part revision by supplied ID arguments. */
@@ -55,15 +74,16 @@ export interface GetPartRevisionBySuppliedIdReq extends BaseReq {
  *
  * @param args - The {@link CreatePartFromFileReq}.
  */
-export async function createPartFromFileIfNotExists({
+export async function createPartFromFile({
   client,
   createFileReq,
   createPartReq,
   fileData,
   onMsg = console.log,
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  returnQueued = false,
   verbose,
-}: CreatePartFromFileReq): Promise<PartRevisionData> {
+}: CreatePartFromFileReq): Promise<CreatePartFromFileRes> {
   const file = await uploadFileIfNotExists({
     client,
     verbose,
@@ -91,7 +111,10 @@ export async function createPartFromFileIfNotExists({
             `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
         );
       }
-      return existingPartRev;
+      return {
+        partRevision: existingPartRev,
+        queued: returnQueued ? { req: createPartRequest } : undefined,
+      };
     }
   }
 
@@ -100,6 +123,9 @@ export async function createPartFromFileIfNotExists({
   if (verbose)
     onMsg(`Created part with queued-translation ${queuedId}, file ${file.id}`);
 
+  const queued = returnQueued
+    ? { req: createPartRequest, res: createPartRes.data }
+    : undefined;
   const pollRes = await pollQueuedJob<Part>({
     id: queuedId,
     getQueuedJob: (id) =>
@@ -108,20 +134,36 @@ export async function createPartFromFileIfNotExists({
   });
   if (isPollError(pollRes.res)) throwOnError(pollRes);
 
-  const partRev = head(
+  const partRevision = head(
     pollRes.res.included?.filter(
       (pr) => pr.attributes.suppliedId === suppliedRevisionId
     )
   );
-  if (!partRev)
+  if (!partRevision)
     throw new Error(
       `Error creating part revision.\nRes: ${prettyJson(pollRes)}`
     );
 
-  if (verbose)
-    onMsg(`Created part ${pollRes.res?.data.id}, part-revision ${partRev.id}`);
+  if (verbose) {
+    onMsg(
+      `Created part ${pollRes.res?.data.id}, part-revision ${partRevision.id}`
+    );
+  }
 
-  return partRev;
+  return { partRevision, queued };
+}
+
+/**
+ * Create part and file resources if they don't already exist.
+ *
+ * @deprecated Use {@link createPartFromFile} instead.
+ *
+ * @param args - The {@link CreatePartFromFileReq}.
+ */
+export async function createPartFromFileIfNotExists(
+  req: CreatePartFromFileReq
+): Promise<PartRevisionData> {
+  return (await createPartFromFile(req)).partRevision;
 }
 
 /**

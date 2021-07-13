@@ -49,11 +49,17 @@ export interface CreateSceneAndSceneItemsReq extends BaseReq {
 
   /** Callback with total number of requests and number complete. */
   onProgress?: (complete: number, total: number) => void;
+
+  /** Whether or not to return queued scene items. */
+  readonly returnQueued?: boolean;
 }
 
 export interface CreateSceneAndSceneItemsRes {
   errors: QueuedSceneItem[];
   scene: Scene;
+
+  /** Only populated if `returnQueued` is true in request. */
+  queued: QueuedSceneItem[];
 }
 
 export interface CreateSceneItemsReq extends Base {
@@ -114,11 +120,12 @@ export async function createSceneAndSceneItems({
   client,
   createSceneItemReqs,
   createSceneReq,
-  failFast,
+  failFast = false,
   onMsg = console.log,
   onProgress,
   parallelism,
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  returnQueued = false,
   verbose,
 }: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsRes> {
   const scene = (
@@ -128,7 +135,7 @@ export async function createSceneAndSceneItems({
   const res = await createSceneItems({
     client,
     createSceneItemReqs,
-    failFast: failFast ?? false,
+    failFast,
     onProgress,
     parallelism,
     sceneId,
@@ -138,8 +145,10 @@ export async function createSceneAndSceneItems({
     (i: QueuedSceneItem) => isQueuedJob(i.res)
   );
 
-  if (queuedItems.length === 0 || errors.length === res.leaves)
-    return { errors, scene };
+  const queued = returnQueued ? res.queuedSceneItems : [];
+  if (queuedItems.length === 0 || errors.length === res.leaves) {
+    return { errors, queued, scene };
+  }
 
   const limit = pLimit(parallelism);
   await Promise.all(
@@ -178,7 +187,7 @@ export async function createSceneAndSceneItems({
       sceneId,
     })
   ).scene;
-  return { errors, scene: updated };
+  return { errors, queued, scene: updated };
 }
 
 /**
