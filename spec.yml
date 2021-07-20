@@ -6534,6 +6534,7 @@ components:
           description: Resource object type.
           enum:
             - fit-visible-scene-items
+            - reset
           example: fit-visible-scene-items
           maxLength: 32
           type: string

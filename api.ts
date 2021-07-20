@@ -167,6 +167,7 @@ export interface CameraFit {
  */
 export enum CameraFitTypeEnum {
   FitVisibleSceneItems = 'fit-visible-scene-items',
+  Reset = 'reset',
 }
 
 /**
@@ -2272,6 +2273,7 @@ export interface Point {
  * @export
  * @enum {string}
  */
+
 export enum QueryAll {
   All = 'all',
 }

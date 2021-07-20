@@ -1,5 +1,5 @@
 import { AxiosResponse } from 'axios';
-import { Failure, Polling, QueuedJob } from '../../index';
+import { ApiError, Failure, Polling, QueuedJob } from '../../index';
 import { isFailure, isQueuedJob, prettyJson } from '../utils';
 
 export const PollIntervalMs = 5000;
@@ -54,16 +54,27 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
         () =>
           getQueuedJob(id)
             .then((r) => resolve({ status: r.status, res: r.data }))
-            .catch((error) =>
-              console.log(`pollQueuedJob error, continuing. '${error.message}'`)
-            ),
+            .catch((error) => {
+              console.log(
+                `pollQueuedJob error, continuing. '${error.message}'`
+              );
+              const errors = new Set<ApiError>();
+              errors.add({
+                status: '503',
+                code: 'ServiceUnavailable',
+                title: 'Node client caught error in pollQueuedJob.',
+                detail: error.message,
+              });
+              resolve({ status: 500, res: { errors } });
+            }),
         ms
       );
     });
   }
 
   const allowed404 = (status: number): boolean => allow404 && status === 404;
-  const validJob = <T>(r: PollRes<T>): boolean => isQueuedJob(r) && !isError(r);
+  const validJob = <TI>(r: PollRes<TI>): boolean =>
+    isQueuedJob(r) && !isError(r);
 
   let attempts = 1;
   let pr = await poll(0);
@@ -76,7 +87,7 @@ export async function pollQueuedJob<T extends { data: { id: string } }>({
     pr = await poll(intervalMs);
   }
 
-  // At this point, `res` is one of the following,
+  // At this point, the result is one of the following,
   //  - An item of type `T` after being redirected to it
   //  - A QueuedJob (after either exceeding `maxAttempts` or with `error` status)
   //  - A Failure
