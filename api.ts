@@ -3433,13 +3433,19 @@ export interface SceneViewStateDataAttributes {
    * @type {string}
    * @memberof SceneViewStateDataAttributes
    */
-  created: string;
+  created?: string;
   /**
    *
    * @type {string}
    * @memberof SceneViewStateDataAttributes
    */
   name?: string;
+  /**
+   *
+   * @type {Array<ThumbnailData>}
+   * @memberof SceneViewStateDataAttributes
+   */
+  thumbnails?: Array<ThumbnailData>;
 }
 /**
  *
@@ -3647,6 +3653,31 @@ export interface StreamKeyList {
    * @memberof StreamKeyList
    */
   links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ThumbnailData
+ */
+export interface ThumbnailData {
+  /**
+   *
+   * @type {string}
+   * @memberof ThumbnailData
+   */
+  uri: string;
+  /**
+   *
+   * @type {number}
+   * @memberof ThumbnailData
+   */
+  height: number;
+  /**
+   *
+   * @type {number}
+   * @memberof ThumbnailData
+   */
+  width: number;
 }
 /**
  *
@@ -10477,11 +10508,13 @@ export const SceneViewStatesApiAxiosParamCreator = function (
     /**
      * Get a `scene-view-state` by ID.
      * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneViewState: async (
       id: string,
+      fieldsSceneViewState?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -10514,6 +10547,11 @@ export const SceneViewStatesApiAxiosParamCreator = function (
         configuration
       );
 
+      if (fieldsSceneViewState !== undefined) {
+        localVarQueryParameter['fields[scene-view-state]'] =
+          fieldsSceneViewState;
+      }
+
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
@@ -10533,6 +10571,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10540,6 +10579,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      fieldsSceneViewState?: string,
       options: any = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -10578,6 +10618,11 @@ export const SceneViewStatesApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (fieldsSceneViewState !== undefined) {
+        localVarQueryParameter['fields[scene-view-state]'] =
+          fieldsSceneViewState;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
@@ -10725,17 +10770,23 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     /**
      * Get a `scene-view-state` by ID.
      * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getSceneViewState(
       id: string,
+      fieldsSceneViewState?: string,
       options?: any
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneViewState(id, options);
+        await localVarAxiosParamCreator.getSceneViewState(
+          id,
+          fieldsSceneViewState,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -10748,6 +10799,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10755,6 +10807,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      fieldsSceneViewState?: string,
       options?: any
     ): Promise<
       (
@@ -10767,6 +10820,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
           id,
           pageCursor,
           pageSize,
+          fieldsSceneViewState,
           options
         );
       return createRequestFunction(
@@ -10847,12 +10901,17 @@ export const SceneViewStatesApiFactory = function (
     /**
      * Get a `scene-view-state` by ID.
      * @param {string} id The &#x60;scene-view-state&#x60; ID.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getSceneViewState(id: string, options?: any): AxiosPromise<SceneViewState> {
+    getSceneViewState(
+      id: string,
+      fieldsSceneViewState?: string,
+      options?: any
+    ): AxiosPromise<SceneViewState> {
       return localVarFp
-        .getSceneViewState(id, options)
+        .getSceneViewState(id, fieldsSceneViewState, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -10860,6 +10919,7 @@ export const SceneViewStatesApiFactory = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10867,10 +10927,17 @@ export const SceneViewStatesApiFactory = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      fieldsSceneViewState?: string,
       options?: any
     ): AxiosPromise<SceneViewStateList> {
       return localVarFp
-        .getSceneViewStates(id, pageCursor, pageSize, options)
+        .getSceneViewStates(
+          id,
+          pageCursor,
+          pageSize,
+          fieldsSceneViewState,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -10939,6 +11006,13 @@ export interface SceneViewStatesApiGetSceneViewStateRequest {
    * @memberof SceneViewStatesApiGetSceneViewState
    */
   readonly id: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewState
+   */
+  readonly fieldsSceneViewState?: string;
 }
 
 /**
@@ -10967,6 +11041,13 @@ export interface SceneViewStatesApiGetSceneViewStatesRequest {
    * @memberof SceneViewStatesApiGetSceneViewStates
    */
   readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly fieldsSceneViewState?: string;
 }
 
 /**
@@ -11045,7 +11126,11 @@ export class SceneViewStatesApi extends BaseAPI {
     options?: any
   ) {
     return SceneViewStatesApiFp(this.configuration)
-      .getSceneViewState(requestParameters.id, options)
+      .getSceneViewState(
+        requestParameters.id,
+        requestParameters.fieldsSceneViewState,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -11065,6 +11150,7 @@ export class SceneViewStatesApi extends BaseAPI {
         requestParameters.id,
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.fieldsSceneViewState,
         options
       )
       .then((request) => request(this.axios, this.basePath));
