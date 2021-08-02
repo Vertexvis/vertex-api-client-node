@@ -3430,6 +3430,12 @@ export interface SceneViewStateData {
 export interface SceneViewStateDataAttributes {
   /**
    *
+   * @type {Camera}
+   * @memberof SceneViewStateDataAttributes
+   */
+  camera?: Camera;
+  /**
+   *
    * @type {string}
    * @memberof SceneViewStateDataAttributes
    */
@@ -4168,6 +4174,12 @@ export interface UpdateWebhookSubscriptionRequestDataAttributes {
    * @memberof UpdateWebhookSubscriptionRequestDataAttributes
    */
   topics?: Array<string>;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateWebhookSubscriptionRequestDataAttributes
+   */
+  url?: string;
 }
 
 /**

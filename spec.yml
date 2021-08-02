@@ -7803,6 +7803,11 @@ components:
           items:
             $ref: '#/components/schemas/NonEmptyString'
           type: array
+        url:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
       type: object
     UpdateWebhookSubscriptionRequest_data:
       properties:
@@ -8175,6 +8180,8 @@ components:
       type: object
     SceneViewStateData_attributes:
       properties:
+        camera:
+          $ref: '#/components/schemas/Camera'
         created:
           example: 2020-01-01T12:00:00Z
           format: date-time
