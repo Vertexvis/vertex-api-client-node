@@ -14427,6 +14427,60 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Delete a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteWebhookSubscription: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteWebhookSubscription', 'id', id);
+      const localVarPath = `/webhook-subscriptions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `webhook-subscription`.
      * @param {string} id The &#x60;webhook-subscription&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -14649,6 +14703,27 @@ export const WebhookSubscriptionsApiFp = function (
       );
     },
     /**
+     * Delete a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteWebhookSubscription(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteWebhookSubscription(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get a `webhook-subscription`.
      * @param {string} id The &#x60;webhook-subscription&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -14761,6 +14836,17 @@ export const WebhookSubscriptionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Delete a `webhook-subscription`.
+     * @param {string} id The &#x60;webhook-subscription&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteWebhookSubscription(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteWebhookSubscription(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a `webhook-subscription`.
      * @param {string} id The &#x60;webhook-subscription&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -14825,6 +14911,20 @@ export interface WebhookSubscriptionsApiCreateWebhookSubscriptionRequest {
    * @memberof WebhookSubscriptionsApiCreateWebhookSubscription
    */
   readonly createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest;
+}
+
+/**
+ * Request parameters for deleteWebhookSubscription operation in WebhookSubscriptionsApi.
+ * @export
+ * @interface WebhookSubscriptionsApiDeleteWebhookSubscriptionRequest
+ */
+export interface WebhookSubscriptionsApiDeleteWebhookSubscriptionRequest {
+  /**
+   * The &#x60;webhook-subscription&#x60; ID.
+   * @type {string}
+   * @memberof WebhookSubscriptionsApiDeleteWebhookSubscription
+   */
+  readonly id: string;
 }
 
 /**
@@ -14906,6 +15006,22 @@ export class WebhookSubscriptionsApi extends BaseAPI {
         requestParameters.createWebhookSubscriptionRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete a `webhook-subscription`.
+   * @param {WebhookSubscriptionsApiDeleteWebhookSubscriptionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof WebhookSubscriptionsApi
+   */
+  public deleteWebhookSubscription(
+    requestParameters: WebhookSubscriptionsApiDeleteWebhookSubscriptionRequest,
+    options?: any
+  ) {
+    return WebhookSubscriptionsApiFp(this.configuration)
+      .deleteWebhookSubscription(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 

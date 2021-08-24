@@ -4643,6 +4643,60 @@ paths:
       tags:
         - webhook-subscriptions
   /webhook-subscriptions/{id}:
+    delete:
+      description: Delete a `webhook-subscription`.
+      operationId: deleteWebhookSubscription
+      parameters:
+        - description: The `webhook-subscription` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - webhook-subscriptions
     get:
       description: Get a `webhook-subscription`.
       operationId: getWebhookSubscription
