@@ -24,7 +24,7 @@ interface Partitions<T> {
 
 export const Utf8 = 'utf8';
 
-type VertexError = Error & {
+export type VertexError = Error & {
   vertexError?: { method: Method; url: string; req: unknown; res: Failure };
   vertexErrorMessage?: string;
 };
