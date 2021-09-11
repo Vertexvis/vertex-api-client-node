@@ -75,6 +75,7 @@ export async function pollQueuedJob<T>({
       () => cancelSrc.cancel(`Connect timeout after ${ConnectTimeoutMs}ms.`),
       ConnectTimeoutMs
     );
+
     const start = hrtime.bigint();
 
     try {
@@ -84,23 +85,21 @@ export async function pollQueuedJob<T>({
         );
       }
       const r = await getQueuedJob(id, cancelSrc.token);
-      const end = hrtime.bigint();
       if (Debug) {
         console.log(
           `[id=${id}, attempt=${attempt}, type=${
             r.data.data?.type
-          }, durationMs=${(end - start) / BigInt(1000000)}]`
+          }, durationMs=${durationMs(start)}]`
         );
       }
       clearTimeout(timerId);
       return { status: r.status, res: r.data };
     } catch (error) {
       const e = error as Error;
-      const end = hrtime.bigint();
       console.log(
-        `[id=${id}, attempt=${attempt}, durationMs=${
-          (end - start) / BigInt(1000000)
-        }] pollQueuedJob error, ${e.message}`
+        `[id=${id}, attempt=${attempt}, durationMs=${durationMs(
+          start
+        )}] pollQueuedJob error, ${e.message}`
       );
 
       const ve = e as VertexError;
@@ -123,19 +122,11 @@ export async function pollQueuedJob<T>({
     }
   }
 
-  function allowed404(status: number): boolean {
-    return allow404 && status === 404;
-  }
-
-  function validJob<TI>(r: PollRes<TI>): boolean {
-    return isQueuedJob(r) && !isStatusError(r);
-  }
-
   let attempts = 1;
   let pollRes = await poll(attempts);
   /* eslint-disable no-await-in-loop */
   while (
-    (allowed404(pollRes.status) ||
+    (allowed404(allow404, pollRes.status) ||
       validJob(pollRes.res) ||
       isClientError(pollRes.res)) &&
     attempts <= maxAttempts
@@ -165,6 +156,18 @@ export function throwOnError<T>(r: PollQueuedJobRes<T>): never {
           r.attempts
         } times, giving up.\n${prettyJson(r.res)}`
   );
+}
+
+function durationMs(start: bigint): bigint {
+  return (hrtime.bigint() - start) / BigInt(1000000);
+}
+
+function allowed404(allow404: boolean, status: number): boolean {
+  return allow404 && status === 404;
+}
+
+function validJob<TI>(r: PollRes<TI>): boolean {
+  return isQueuedJob(r) && !isStatusError(r);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
