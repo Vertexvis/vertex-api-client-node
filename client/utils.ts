@@ -26,14 +26,14 @@ interface Partitions<T> {
 export const Utf8 = 'utf8';
 
 export type VertexError = Error & {
-  vertexError?: {
-    method: Method;
-    req: unknown;
-    res: Failure;
-    status: number;
-    url: string;
+  readonly vertexError?: {
+    readonly method: Method;
+    readonly req: unknown;
+    readonly res: Failure;
+    readonly status: number;
+    readonly url: string;
   };
-  vertexErrorMessage?: string;
+  readonly vertexErrorMessage?: string;
 };
 
 const PageCursor = 'page[cursor]';
