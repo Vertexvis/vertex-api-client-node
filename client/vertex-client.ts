@@ -1,20 +1,22 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+
 import {
+  BatchesApi,
   Configuration,
   FilesApi,
   GeometrySetsApi,
   HitsApi,
+  Oauth2Api,
+  OAuth2Token,
   PartRevisionsApi,
+  PartsApi,
   SceneAlterationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
+  ScenesApi,
   SceneViewsApi,
   SceneViewStatesApi,
   StreamKeysApi,
-  Oauth2Api,
-  OAuth2Token,
-  PartsApi,
-  ScenesApi,
   TranslationInspectionsApi,
   WebhookSubscriptionsApi,
 } from '../index';
@@ -112,6 +114,7 @@ const SecToMs = 1000;
  * @see {@link https://developer.vertexvis.com/docs/guides|Developer Guides} to get started.
  */
 export class VertexClient {
+  public batches: BatchesApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
   public hits: HitsApi;
@@ -143,6 +146,7 @@ export class VertexClient {
       basePath,
     });
     this.axiosInstance = axiosInst;
+    this.batches = new BatchesApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
     this.hits = new HitsApi(this.config, undefined, axiosInst);
@@ -219,9 +223,10 @@ export class VertexClient {
           if (isFailure(r.data)) {
             error.vertexError = {
               method: m,
-              url: c.url,
               req: octetStream ? undefined : c.data,
               res: r.data,
+              status: r.status,
+              url: c.url,
             };
           }
           error.vertexErrorMessage = `${m} '${c.url}' error.\n${

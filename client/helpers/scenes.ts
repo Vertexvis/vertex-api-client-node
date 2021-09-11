@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
+
 import {
   CameraFitTypeEnum,
   CreateSceneItemRequest,
@@ -28,7 +29,7 @@ import {
   tryStream,
   VertexClient,
 } from '../index';
-import { toAccept } from '../utils';
+import { delay, toAccept } from '../utils';
 import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
 
 export interface CreateSceneAndSceneItemsReq extends BaseReq {
@@ -55,11 +56,11 @@ export interface CreateSceneAndSceneItemsReq extends BaseReq {
 }
 
 export interface CreateSceneAndSceneItemsRes {
-  errors: QueuedSceneItem[];
-  scene: Scene;
+  readonly errors: QueuedSceneItem[];
+  readonly scene: Scene;
 
   /** Only populated if `returnQueued` is true in request. */
-  queued: QueuedSceneItem[];
+  readonly queued: QueuedSceneItem[];
 }
 
 export interface CreateSceneItemsReq extends Base {
@@ -77,8 +78,8 @@ export interface CreateSceneItemsReq extends Base {
 }
 
 export interface CreateSceneItemsRes {
-  leaves: number;
-  queuedSceneItems: QueuedSceneItem[];
+  readonly leaves: number;
+  readonly queuedSceneItems: QueuedSceneItem[];
 }
 
 /**
@@ -97,7 +98,7 @@ export interface UpdateSceneReq extends Base {
 }
 
 export interface UpdateSceneRes {
-  scene: Scene;
+  readonly scene: Scene;
 }
 
 interface Base {
@@ -109,9 +110,11 @@ interface Base {
 }
 
 interface QueuedSceneItem {
-  req: CreateSceneItemRequest;
-  res?: Failure | QueuedJob;
+  readonly req: CreateSceneItemRequest;
+  readonly res?: Failure | QueuedJob;
 }
+
+const PollPercentage = 10;
 
 /**
  * Create a scene with scene items.
@@ -132,7 +135,7 @@ export async function createSceneAndSceneItems({
     await client.scenes.createScene({ createSceneRequest: createSceneReq() })
   ).data;
   const sceneId = scene.data.id;
-  const res = await createSceneItems({
+  const createRes = await createSceneItems({
     client,
     createSceneItemReqs,
     failFast,
@@ -141,33 +144,38 @@ export async function createSceneAndSceneItems({
     sceneId,
   });
   const { a: queuedItems, b: errors } = partition(
-    res.queuedSceneItems,
+    createRes.queuedSceneItems,
     (i: QueuedSceneItem) => isQueuedJob(i.res)
   );
 
-  const queued = returnQueued ? res.queuedSceneItems : [];
-  if (queuedItems.length === 0 || errors.length === res.leaves) {
+  const queued = returnQueued ? createRes.queuedSceneItems : [];
+  if (queuedItems.length === 0 || errors.length === createRes.leaves) {
     return { errors, queued, scene };
   }
 
-  const limit = pLimit(parallelism);
-  await Promise.all(
-    queuedItems.map((is) =>
-      limit<QueuedSceneItem[], void>(async (req: QueuedSceneItem) => {
-        const r = await pollQueuedJob<SceneItem>({
-          id: (req.res as QueuedJob).data.id,
-          getQueuedJob: (id) => client.sceneItems.getQueuedSceneItem({ id }),
-          allow404: true,
-          polling,
-        });
-        if (isPollError(r.res)) {
-          failFast
-            ? throwOnError(r)
-            : errors.push({ req: req.req, res: r.res });
-        }
-      }, is)
-    )
-  );
+  if (verbose) onMsg(`Polling for completed scene-items...`);
+
+  const limit = pLimit(Math.min(parallelism, 20));
+  const cnt = queuedItems.length;
+  const step = Math.floor(cnt / ((PollPercentage / 100) * cnt));
+  const qis = [];
+  // Poll for percentage of items starting at end of `queuedItems` array
+  for (let i = 0; i < cnt; i += step) qis.push(queuedItems[cnt - i - 1]);
+
+  async function poll({ req, res }: QueuedSceneItem): Promise<void> {
+    const r = await pollQueuedJob<SceneItem>({
+      id: (res as QueuedJob).data.id,
+      getQueuedJob: (id, cancelToken) =>
+        client.sceneItems.getQueuedSceneItem({ id }, { cancelToken }),
+      allow404: true,
+      limit,
+      polling,
+    });
+    if (isPollError(r.res)) {
+      failFast ? throwOnError(r) : errors.push({ req, res: r.res });
+    }
+  }
+  await Promise.all(qis.map((is) => limit<QueuedSceneItem[], void>(poll, is)));
 
   if (verbose) onMsg(`Committing scene and polling until ready...`);
 
@@ -280,30 +288,26 @@ export async function deleteAllScenes({
 export async function pollSceneReady({
   client,
   id,
-  polling = {
+  polling: { intervalMs, maxAttempts } = {
     intervalMs: PollIntervalMs,
     maxAttempts: MaxAttempts,
   },
 }: PollSceneReadyReq): Promise<Scene> {
-  const poll = (): Promise<Scene> =>
-    new Promise((resolve) => {
-      setTimeout(
-        async () => resolve((await client.scenes.getScene({ id })).data),
-        polling.intervalMs
-      );
-    });
+  async function poll(): Promise<Scene> {
+    return (await client.scenes.getScene({ id })).data;
+  }
 
   let attempts = 1;
   let scene = await poll();
+  /* eslint-disable no-await-in-loop */
   while (scene.data.attributes.state !== 'ready') {
     attempts += 1;
-    if (attempts > polling.maxAttempts)
-      throw new Error(
-        `Polled scene ${id} ${polling.maxAttempts} times, giving up.`
-      );
-    // eslint-disable-next-line no-await-in-loop
+    if (attempts > maxAttempts)
+      throw new Error(`Polled scene ${id} ${maxAttempts} times, giving up.`);
+    await delay(intervalMs);
     scene = await poll();
   }
+  /* eslint-enable no-await-in-loop */
 
   return scene;
 }

@@ -26,6 +26,7 @@ servers:
   - url: https://platform.vertexvis.com
   - url: https://platform.platdev.vertexvis.io
 tags:
+  - name: batches
   - name: files
   - name: geometry-sets
   - name: hits
@@ -42,6 +43,189 @@ tags:
   - name: translation-inspections
   - name: webhook-subscriptions
 paths:
+  /batches:
+    post:
+      description:
+        Create a `batch`. This API is asynchronous, returning the location
+        of a `queued-batch`. Check the status via the getQueuedBatch API.
+      operationId: createBatch
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateBatchRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - batches
+  /batches/{id}:
+    get:
+      description: Get a `batch` by ID.
+      operationId: getBatch
+      parameters:
+        - description: The `file` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Batch'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - batches
+  /queued-batches/{id}:
+    get:
+      description:
+        Get a `queued-batch`. The response is either the status if `running`
+        or `error` or, upon completion, redirects to the created `batch`.
+      operationId: getQueuedBatch
+      parameters:
+        - description: The `queued-batch` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '301':
+          description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - batches
   /files:
     get:
       description: Get `files`.
@@ -5252,20 +5436,29 @@ components:
             $ref: '#/components/schemas/Failure'
       description: GatewayTimeout
   schemas:
-    FileList:
+    CreateBatchRequest:
+      additionalProperties: false
+      properties:
+        vertexvis/batch:operations:
+          description: List of operations to perform as a batch.
+          items:
+            $ref: '#/components/schemas/BatchOperation'
+          maxItems: 250
+          type: array
+      required:
+        - vertexvis/batch:operations
+      type: object
+    QueuedJob:
       additionalProperties: false
       properties:
         data:
-          items:
-            $ref: '#/components/schemas/FileMetadataData'
-          type: array
+          $ref: '#/components/schemas/QueuedJobData'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
-        - links
       type: object
     Failure:
       additionalProperties: false
@@ -5287,6 +5480,38 @@ components:
       required:
         - errors
       type: object
+    Uuid:
+      description: ID of the resource.
+      example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+      format: uuid
+      maxLength: 36
+      type: string
+    Batch:
+      additionalProperties: false
+      properties:
+        vertexvis/batch:results:
+          description: List of operation results.
+          items:
+            $ref: '#/components/schemas/Batch_vertexvis_batch_results'
+          type: array
+      required:
+        - vertexvis/batch:results
+      type: object
+    FileList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/FileMetadataData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     CreateFileRequest:
       additionalProperties: false
       properties:
@@ -5307,12 +5532,6 @@ components:
       required:
         - data
       type: object
-    Uuid:
-      description: ID of the resource.
-      example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-      format: uuid
-      maxLength: 36
-      type: string
     GeometrySetList:
       additionalProperties: false
       properties:
@@ -5333,18 +5552,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/CreateGeometrySetRequest_data'
-      required:
-        - data
-      type: object
-    QueuedJob:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/QueuedJobData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
       required:
         - data
       type: object
@@ -5668,7 +5875,7 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/CreateSceneItemRequest_data'
+          $ref: '#/components/schemas/CreateSceneItemRequestData'
       required:
         - data
       type: object
@@ -5968,11 +6175,34 @@ components:
       required:
         - data
       type: object
-    FileMetadataData:
+    BatchOperation:
+      additionalProperties: false
+      properties:
+        data:
+          anyOf:
+            - $ref: '#/components/schemas/CreateSceneItemRequestData'
+          description: Operation's primary data.
+        op:
+          description: Batch operation type type.
+          enum:
+            - add
+          example: add
+          maxLength: 32
+          type: string
+        ref:
+          $ref: '#/components/schemas/BatchOperation_ref'
+      required:
+        - data
+        - op
+        - ref
+      type: object
+    QueuedJobData:
       additionalProperties: false
       properties:
         type:
-          example: file
+          example: some-string
+          maxLength: 1024
+          minLength: 1
           type: string
         id:
           description: ID of the resource.
@@ -5981,7 +6211,7 @@ components:
           maxLength: 36
           type: string
         attributes:
-          $ref: '#/components/schemas/FileMetadataData_attributes'
+          $ref: '#/components/schemas/QueuedJobData_attributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -6028,6 +6258,29 @@ components:
       additionalProperties:
         type: string
       type: object
+    FileMetadataData:
+      additionalProperties: false
+      properties:
+        type:
+          example: file
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/FileMetadataData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     GeometrySetData:
       additionalProperties: false
       properties:
@@ -6059,31 +6312,6 @@ components:
           $ref: '#/components/schemas/FileRelationship_data'
       required:
         - data
-      type: object
-    QueuedJobData:
-      additionalProperties: false
-      properties:
-        type:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/QueuedJobData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
-        - type
       type: object
     Point:
       additionalProperties: false
@@ -6536,33 +6764,22 @@ components:
       required:
         - data
       type: object
-    PartRevisionSuppliedId:
+    CreateSceneItemRequestData:
       additionalProperties: false
       properties:
-        suppliedPartId:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
-          maxLength: 1024
+        type:
+          description: Resource object type.
+          example: scene-item
+          maxLength: 32
           type: string
-        suppliedRevisionId:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
-          maxLength: 1024
-          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSceneItemRequestData_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateSceneItemRequestData_relationships'
       required:
-        - suppliedPartId
-        - suppliedRevisionId
-      type: object
-    SceneRelationship:
-      additionalProperties: false
-      description: Relationship to a `scene`.
-      properties:
-        data:
-          $ref: '#/components/schemas/SceneRelationship_data'
-      required:
-        - data
+        - attributes
+        - relationships
+        - type
       type: object
     SceneViewData:
       additionalProperties: false
@@ -6683,6 +6900,15 @@ components:
       required:
         - front
         - up
+      type: object
+    SceneRelationship:
+      additionalProperties: false
+      description: Relationship to a `scene`.
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneRelationship_data'
+      required:
+        - data
       type: object
     SceneViewStateData:
       additionalProperties: false
@@ -7083,6 +7309,25 @@ components:
         - g
         - r
       type: object
+    PartRevisionSuppliedId:
+      additionalProperties: false
+      properties:
+        suppliedPartId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          maxLength: 1024
+          type: string
+        suppliedRevisionId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          maxLength: 1024
+          type: string
+      required:
+        - suppliedPartId
+        - suppliedRevisionId
+      type: object
     SectionPlane:
       additionalProperties: false
       properties:
@@ -7128,6 +7373,21 @@ components:
       maximum: 255
       minimum: 0
       type: integer
+    Batch_vertexvis_batch_results:
+      properties:
+        type:
+          example: scene-item
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
     CreateFileRequest_data_attributes:
       properties:
         name:
@@ -7500,71 +7760,6 @@ components:
         - attributes
         - type
       type: object
-    CreateSceneItemRequest_data_attributes:
-      properties:
-        materialOverride:
-          $ref: '#/components/schemas/ColorMaterial'
-        name:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        parent:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
-          example: PN12345
-          maxLength: 1024
-          type: string
-        partInstanceSuppliedIdsAsSuppliedIds:
-          description:
-            Whether or not to use part instance supplied IDs as scene item
-            supplied IDs.
-          example: false
-          type: boolean
-        source:
-          $ref: '#/components/schemas/PartRevisionSuppliedId'
-        suppliedId:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
-          example: PN12345
-          maxLength: 1024
-          type: string
-        transform:
-          $ref: '#/components/schemas/Matrix4'
-        visible:
-          description: Item visibility.
-          example: true
-          type: boolean
-      type: object
-    CreateSceneItemRequest_data_relationships:
-      properties:
-        parent:
-          $ref: '#/components/schemas/SceneItemRelationship'
-        source:
-          anyOf:
-            - $ref: '#/components/schemas/GeometrySetRelationship'
-            - $ref: '#/components/schemas/PartRevisionRelationship'
-            - $ref: '#/components/schemas/SceneRelationship'
-          description: Relationship to a `geometry-set`, `part-revision`, or `scene`.
-      type: object
-    CreateSceneItemRequest_data:
-      properties:
-        type:
-          description: Resource object type.
-          example: scene-item
-          maxLength: 32
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CreateSceneItemRequest_data_attributes'
-        relationships:
-          $ref: '#/components/schemas/CreateSceneItemRequest_data_relationships'
-      required:
-        - attributes
-        - relationships
-        - type
-      type: object
     UpdateSceneViewRequest_data_attributes:
       properties:
         camera:
@@ -7876,6 +8071,54 @@ components:
         - attributes
         - type
       type: object
+    BatchOperation_ref:
+      description: Target of batch operation.
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - scene
+          example: scene
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    QueuedJobData_attributes:
+      properties:
+        status:
+          example: running
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        errors:
+          items:
+            $ref: '#/components/schemas/ApiError'
+          maxItems: 20
+          type: array
+          uniqueItems: true
+      required:
+        - created
+        - status
+      type: object
+    ApiError_source:
+      properties:
+        pointer:
+          example: /body/data/attributes
+          type: string
+        parameter:
+          example: page[cursor]
+          type: string
+      type: object
     FileMetadataData_attributes:
       properties:
         name:
@@ -7909,15 +8152,6 @@ components:
         - name
         - status
       type: object
-    ApiError_source:
-      properties:
-        pointer:
-          example: /body/data/attributes
-          type: string
-        parameter:
-          example: page[cursor]
-          type: string
-      type: object
     FileRelationship_data:
       properties:
         type:
@@ -7936,25 +8170,6 @@ components:
       required:
         - id
         - type
-      type: object
-    QueuedJobData_attributes:
-      properties:
-        status:
-          example: running
-          type: string
-        created:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        errors:
-          items:
-            $ref: '#/components/schemas/ApiError'
-          maxItems: 20
-          type: array
-          uniqueItems: true
-      required:
-        - created
-        - status
       type: object
     HitResultData_attributes:
       properties:
@@ -8135,24 +8350,54 @@ components:
         - id
         - type
       type: object
-    SceneRelationship_data:
+    CreateSceneItemRequestData_attributes:
       properties:
-        type:
-          description: Resource object type.
-          enum:
-            - scene
-          example: scene
-          maxLength: 32
+        materialOverride:
+          $ref: '#/components/schemas/ColorMaterial'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
           type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
+        parent:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 1024
           type: string
-      required:
-        - id
-        - type
+        partInstanceSuppliedIdsAsSuppliedIds:
+          description:
+            Whether or not to use part instance supplied IDs as scene item
+            supplied IDs.
+          example: false
+          type: boolean
+        source:
+          $ref: '#/components/schemas/PartRevisionSuppliedId'
+        suppliedId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 1024
+          type: string
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+        visible:
+          description: Item visibility.
+          example: true
+          type: boolean
+      type: object
+    CreateSceneItemRequestData_relationships:
+      properties:
+        parent:
+          $ref: '#/components/schemas/SceneItemRelationship'
+        source:
+          anyOf:
+            - $ref: '#/components/schemas/GeometrySetRelationship'
+            - $ref: '#/components/schemas/PartRevisionRelationship'
+            - $ref: '#/components/schemas/SceneRelationship'
+          description: Relationship to a `geometry-set`, `part-revision`, or `scene`.
       type: object
     SceneViewData_attributes:
       properties:
@@ -8231,6 +8476,25 @@ components:
             to be explicitly requested)
           example: 100
           type: integer
+      type: object
+    SceneRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - scene
+          example: scene
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     SceneViewStateData_attributes:
       properties:

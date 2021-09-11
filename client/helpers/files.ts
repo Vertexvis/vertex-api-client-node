@@ -1,12 +1,12 @@
-import { CreateFileRequest, FileMetadataData, FileList } from '../../index';
 import {
   BaseReq,
-  DeleteReq,
   delay,
+  DeleteReq,
   encodeIfNotEncoded,
   getBySuppliedId,
   getPage,
 } from '../../client/index';
+import { CreateFileRequest, FileList, FileMetadataData } from '../../index';
 
 /** Upload file arguments. */
 export interface UploadFileReq extends BaseReq {

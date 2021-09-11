@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import {
   CreateFileRequest,
   CreateGeometrySetRequest,
@@ -52,12 +53,12 @@ export interface CreatePartFromFileRes {
   readonly partRevision: PartRevisionData;
 
   /** Only populated if `returnQueued` is true in request. */
-  queued?: QueuedTranslation;
+  readonly queued?: QueuedTranslation;
 }
 
 interface QueuedTranslation {
-  req: CreatePartRequest | CreateGeometrySetRequest;
-  res?: Failure | QueuedJob;
+  readonly req: CreatePartRequest | CreateGeometrySetRequest;
+  readonly res?: Failure | QueuedJob;
 }
 
 /** Get part revision by supplied ID arguments. */

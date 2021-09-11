@@ -1,6 +1,17 @@
-import { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, CancelToken } from 'axios';
+import { Limit } from 'p-limit';
+import { hrtime } from 'process';
+
 import { ApiError, Failure, Polling, QueuedJob } from '../../index';
-import { isFailure, isQueuedJob, prettyJson } from '../utils';
+import {
+  delay,
+  hasVertexError,
+  head,
+  isFailure,
+  isQueuedJob,
+  prettyJson,
+  VertexError,
+} from '../utils';
 
 export const PollIntervalMs = 5000;
 
@@ -14,26 +25,35 @@ export interface PollQueuedJobReq {
   readonly id: string;
 
   /** Function called to get queued job. */
-  readonly getQueuedJob: (id: string) => Promise<AxiosResponse<QueuedJob>>;
+  readonly getQueuedJob: (
+    id: string,
+    cancelToken: CancelToken
+  ) => Promise<AxiosResponse<QueuedJob>>;
 
   /** If `true`, doesn't fail if API returns 404 status code. */
   readonly allow404?: boolean;
+
+  readonly limit?: Limit;
 
   /** {@link Polling} */
   readonly polling: Polling;
 }
 
 export interface PollQueuedJobRes<T> extends PollJobRes<T> {
-  attempts: number;
-  id: string;
+  readonly attempts: number;
+  readonly id: string;
 }
 
 type PollRes<T> = Failure | QueuedJob | T;
 
 interface PollJobRes<T> {
-  res: PollRes<T>;
-  status: number;
+  readonly res: PollRes<T>;
+  readonly status: number;
 }
+
+const ConnectTimeoutMs = 8000;
+const ClientErrorId = 'node-client-error';
+const Debug = true;
 
 /**
  * Poll `getQueuedJob` until redirected to resulting resource, `error`, or reach
@@ -42,56 +62,95 @@ interface PollJobRes<T> {
  * @param req - {@link PollQueuedJobReq}.
  * @returns {@link PollQueuedJobRes}.
  */
-export async function pollQueuedJob<T extends { data: { id: string } }>({
+export async function pollQueuedJob<T>({
   id,
   getQueuedJob,
   allow404 = false,
+  limit,
   polling: { intervalMs, maxAttempts },
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
-  function poll(ms: number): Promise<PollJobRes<T>> {
-    return new Promise((resolve) => {
-      setTimeout(
-        () =>
-          getQueuedJob(id)
-            .then((r) => resolve({ status: r.status, res: r.data }))
-            .catch((error) => {
-              console.log(
-                `pollQueuedJob error, continuing. '${error.message}'`
-              );
-              const errors = new Set<ApiError>();
-              errors.add({
-                status: '503',
-                code: 'ServiceUnavailable',
-                title: 'Node client caught error in pollQueuedJob.',
-                detail: error.message,
-              });
-              resolve({ status: 500, res: { errors } });
-            }),
-        ms
+  async function poll(attempt: number): Promise<PollJobRes<T>> {
+    const cancelSrc = axios.CancelToken.source();
+    const timerId = setTimeout(
+      () => cancelSrc.cancel(`Connect timeout after ${ConnectTimeoutMs}ms.`),
+      ConnectTimeoutMs
+    );
+    const start = hrtime.bigint();
+
+    try {
+      if (Debug) {
+        console.log(
+          `[id=${id}, attempt=${attempt}, active=${limit?.activeCount}, pending=${limit?.pendingCount}]`
+        );
+      }
+      const r = await getQueuedJob(id, cancelSrc.token);
+      const end = hrtime.bigint();
+      if (Debug) {
+        console.log(
+          `[id=${id}, attempt=${attempt}, type=${
+            r.data.data?.type
+          }, durationMs=${(end - start) / BigInt(1000000)}]`
+        );
+      }
+      clearTimeout(timerId);
+      return { status: r.status, res: r.data };
+    } catch (error) {
+      const e = error as Error;
+      const end = hrtime.bigint();
+      console.log(
+        `[id=${id}, attempt=${attempt}, durationMs=${
+          (end - start) / BigInt(1000000)
+        }] pollQueuedJob error, ${e.message}`
       );
-    });
+
+      const ve = e as VertexError;
+      return hasVertexError(e) && ve.vertexError?.res != null
+        ? { status: ve.vertexError.status, res: ve.vertexError.res }
+        : {
+            status: 503,
+            res: {
+              errors: new Set<ApiError>([
+                {
+                  id: ClientErrorId,
+                  status: '503',
+                  code: 'ServiceUnavailable',
+                  title: `Node client caught error in pollQueuedJob.`,
+                  detail: e.message,
+                },
+              ]),
+            },
+          };
+    }
   }
 
-  const allowed404 = (status: number): boolean => allow404 && status === 404;
-  const validJob = <TI>(r: PollRes<TI>): boolean =>
-    isQueuedJob(r) && !isError(r);
+  function allowed404(status: number): boolean {
+    return allow404 && status === 404;
+  }
+
+  function validJob<TI>(r: PollRes<TI>): boolean {
+    return isQueuedJob(r) && !isStatusError(r);
+  }
 
   let attempts = 1;
-  let pr = await poll(0);
+  let pollRes = await poll(attempts);
+  /* eslint-disable no-await-in-loop */
   while (
-    (allowed404(pr.status) || validJob(pr.res)) &&
+    (allowed404(pollRes.status) ||
+      validJob(pollRes.res) ||
+      isClientError(pollRes.res)) &&
     attempts <= maxAttempts
   ) {
     attempts += 1;
-    // eslint-disable-next-line no-await-in-loop
-    pr = await poll(intervalMs);
+    await delay(intervalMs);
+    pollRes = await poll(attempts);
   }
+  /* eslint-enable no-await-in-loop */
 
   // At this point, the result is one of the following,
   //  - An item of type `T` after being redirected to it
   //  - A QueuedJob (after either exceeding `maxAttempts` or with `error` status)
   //  - A Failure
-  return { ...pr, attempts, id };
+  return { ...pollRes, attempts, id };
 }
 
 export function isPollError<T>(r: PollRes<T>): r is QueuedJob | Failure {
@@ -110,9 +169,13 @@ export function throwOnError<T>(r: PollQueuedJobRes<T>): never {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 function isQueuedJobError(obj: any): obj is QueuedJob {
-  return isQueuedJob(obj) && isError(obj);
+  return isQueuedJob(obj) && isStatusError(obj);
 }
 
-function isError(job: QueuedJob): boolean {
+function isStatusError(job: QueuedJob): boolean {
   return job.data.attributes.status === 'error';
+}
+
+function isClientError<T>(res: PollRes<T>): boolean {
+  return isFailure(res) && head([...res.errors.values()])?.id === ClientErrorId;
 }

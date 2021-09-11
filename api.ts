@@ -104,6 +104,100 @@ export interface ApiErrorSource {
   parameter?: string;
 }
 /**
+ *
+ * @export
+ * @interface Batch
+ */
+export interface Batch {
+  /**
+   * List of operation results.
+   * @type {Array<BatchVertexvisBatchResults>}
+   * @memberof Batch
+   */
+  vertexvis_batchresults: Array<BatchVertexvisBatchResults>;
+}
+/**
+ *
+ * @export
+ * @interface BatchOperation
+ */
+export interface BatchOperation {
+  /**
+   * Operation\'s primary data.
+   * @type {CreateSceneItemRequestData}
+   * @memberof BatchOperation
+   */
+  data: CreateSceneItemRequestData;
+  /**
+   * Batch operation type type.
+   * @type {string}
+   * @memberof BatchOperation
+   */
+  op: BatchOperationOpEnum;
+  /**
+   *
+   * @type {BatchOperationRef}
+   * @memberof BatchOperation
+   */
+  ref: BatchOperationRef;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum BatchOperationOpEnum {
+  Add = 'add',
+}
+
+/**
+ * Target of batch operation.
+ * @export
+ * @interface BatchOperationRef
+ */
+export interface BatchOperationRef {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof BatchOperationRef
+   */
+  type: BatchOperationRefTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof BatchOperationRef
+   */
+  id: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum BatchOperationRefTypeEnum {
+  Scene = 'scene',
+}
+
+/**
+ *
+ * @export
+ * @interface BatchVertexvisBatchResults
+ */
+export interface BatchVertexvisBatchResults {
+  /**
+   *
+   * @type {string}
+   * @memberof BatchVertexvisBatchResults
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof BatchVertexvisBatchResults
+   */
+  id: string;
+}
+/**
  * 3D bounding-box
  * @export
  * @interface BoundingBox
@@ -408,6 +502,19 @@ export interface ColorMaterialNullable {
    * @memberof ColorMaterialNullable
    */
   emissive: Color3;
+}
+/**
+ *
+ * @export
+ * @interface CreateBatchRequest
+ */
+export interface CreateBatchRequest {
+  /**
+   * List of operations to perform as a batch.
+   * @type {Array<BatchOperation>}
+   * @memberof CreateBatchRequest
+   */
+  vertexvis_batchoperations: Array<BatchOperation>;
 }
 /**
  *
@@ -4541,6 +4648,408 @@ export interface WebhookSubscriptionList {
    * @memberof WebhookSubscriptionList
    */
   links: { [key: string]: Link };
+}
+
+/**
+ * BatchesApi - axios parameter creator
+ * @export
+ */
+export const BatchesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `batch`. This API is asynchronous, returning the location of a `queued-batch`. Check the status via the getQueuedBatch API.
+     * @param {CreateBatchRequest} createBatchRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createBatch: async (
+      createBatchRequest: CreateBatchRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createBatchRequest' is not null or undefined
+      assertParamExists(
+        'createBatch',
+        'createBatchRequest',
+        createBatchRequest
+      );
+      const localVarPath = `/batches`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createBatchRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `batch` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBatch: async (id: string, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getBatch', 'id', id);
+      const localVarPath = `/batches/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `queued-batch`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `batch`.
+     * @param {string} id The &#x60;queued-batch&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedBatch: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getQueuedBatch', 'id', id);
+      const localVarPath = `/queued-batches/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * BatchesApi - functional programming interface
+ * @export
+ */
+export const BatchesApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = BatchesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `batch`. This API is asynchronous, returning the location of a `queued-batch`. Check the status via the getQueuedBatch API.
+     * @param {CreateBatchRequest} createBatchRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createBatch(
+      createBatchRequest: CreateBatchRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createBatch(
+        createBatchRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `batch` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getBatch(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Batch>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getBatch(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `queued-batch`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `batch`.
+     * @param {string} id The &#x60;queued-batch&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedBatch(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedBatch(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * BatchesApi - factory interface
+ * @export
+ */
+export const BatchesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = BatchesApiFp(configuration);
+  return {
+    /**
+     * Create a `batch`. This API is asynchronous, returning the location of a `queued-batch`. Check the status via the getQueuedBatch API.
+     * @param {CreateBatchRequest} createBatchRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createBatch(
+      createBatchRequest: CreateBatchRequest,
+      options?: any
+    ): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .createBatch(createBatchRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `batch` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getBatch(id: string, options?: any): AxiosPromise<Batch> {
+      return localVarFp
+        .getBatch(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `queued-batch`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `batch`.
+     * @param {string} id The &#x60;queued-batch&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedBatch(id: string, options?: any): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .getQueuedBatch(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createBatch operation in BatchesApi.
+ * @export
+ * @interface BatchesApiCreateBatchRequest
+ */
+export interface BatchesApiCreateBatchRequest {
+  /**
+   *
+   * @type {CreateBatchRequest}
+   * @memberof BatchesApiCreateBatch
+   */
+  readonly createBatchRequest: CreateBatchRequest;
+}
+
+/**
+ * Request parameters for getBatch operation in BatchesApi.
+ * @export
+ * @interface BatchesApiGetBatchRequest
+ */
+export interface BatchesApiGetBatchRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof BatchesApiGetBatch
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedBatch operation in BatchesApi.
+ * @export
+ * @interface BatchesApiGetQueuedBatchRequest
+ */
+export interface BatchesApiGetQueuedBatchRequest {
+  /**
+   * The &#x60;queued-batch&#x60; ID.
+   * @type {string}
+   * @memberof BatchesApiGetQueuedBatch
+   */
+  readonly id: string;
+}
+
+/**
+ * BatchesApi - object-oriented interface
+ * @export
+ * @class BatchesApi
+ * @extends {BaseAPI}
+ */
+export class BatchesApi extends BaseAPI {
+  /**
+   * Create a `batch`. This API is asynchronous, returning the location of a `queued-batch`. Check the status via the getQueuedBatch API.
+   * @param {BatchesApiCreateBatchRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof BatchesApi
+   */
+  public createBatch(
+    requestParameters: BatchesApiCreateBatchRequest,
+    options?: any
+  ) {
+    return BatchesApiFp(this.configuration)
+      .createBatch(requestParameters.createBatchRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `batch` by ID.
+   * @param {BatchesApiGetBatchRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof BatchesApi
+   */
+  public getBatch(requestParameters: BatchesApiGetBatchRequest, options?: any) {
+    return BatchesApiFp(this.configuration)
+      .getBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `queued-batch`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `batch`.
+   * @param {BatchesApiGetQueuedBatchRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof BatchesApi
+   */
+  public getQueuedBatch(
+    requestParameters: BatchesApiGetQueuedBatchRequest,
+    options?: any
+  ) {
+    return BatchesApiFp(this.configuration)
+      .getQueuedBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
 }
 
 /**
