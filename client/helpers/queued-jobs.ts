@@ -53,7 +53,7 @@ interface PollJobRes<T> {
 
 const ConnectTimeoutMs = 8000;
 const ClientErrorId = 'node-client-error';
-const Debug = true;
+const Debug = false;
 
 /**
  * Poll `getQueuedJob` until redirected to resulting resource, `error`, or reach
