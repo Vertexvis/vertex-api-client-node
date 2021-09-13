@@ -111,10 +111,10 @@ export interface ApiErrorSource {
 export interface Batch {
   /**
    * List of operation results.
-   * @type {Array<BatchVertexvisBatchResults>}
+   * @type {Array<RelationshipData | ApiError>}
    * @memberof Batch
    */
-  vertexvis_batchresults: Array<BatchVertexvisBatchResults>;
+  vertexvis_batchresults: Array<RelationshipData | ApiError>;
 }
 /**
  *
@@ -178,25 +178,6 @@ export enum BatchOperationRefTypeEnum {
   Scene = 'scene',
 }
 
-/**
- *
- * @export
- * @interface BatchVertexvisBatchResults
- */
-export interface BatchVertexvisBatchResults {
-  /**
-   *
-   * @type {string}
-   * @memberof BatchVertexvisBatchResults
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof BatchVertexvisBatchResults
-   */
-  id: string;
-}
 /**
  * 3D bounding-box
  * @export
@@ -2626,17 +2607,17 @@ export interface QueuedJobList {
  */
 export interface RelationshipData {
   /**
-   *
-   * @type {string}
-   * @memberof RelationshipData
-   */
-  type: string;
-  /**
    * ID of the resource.
    * @type {string}
    * @memberof RelationshipData
    */
   id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof RelationshipData
+   */
+  type: string;
 }
 /**
  *
@@ -2999,6 +2980,12 @@ export interface SceneItemDataAttributes {
    * @memberof SceneItemDataAttributes
    */
   name?: string;
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof SceneItemDataAttributes
+   */
+  worldTransform?: Matrix4;
 }
 /**
  *

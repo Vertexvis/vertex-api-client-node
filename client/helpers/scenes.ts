@@ -2,6 +2,10 @@ import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
 
 import {
+  Batch,
+  BatchOperation,
+  BatchOperationOpEnum,
+  BatchOperationRefTypeEnum,
   CameraFitTypeEnum,
   CreateSceneItemRequest,
   CreateSceneRequest,
@@ -29,7 +33,7 @@ import {
   tryStream,
   VertexClient,
 } from '../index';
-import { delay, toAccept } from '../utils';
+import { arrayChunked, delay, toAccept } from '../utils';
 import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
 
 export interface CreateSceneAndSceneItemsReq extends BaseReq {
@@ -63,6 +67,14 @@ export interface CreateSceneAndSceneItemsRes {
   readonly queued: QueuedSceneItem[];
 }
 
+export interface CreateSceneAndSceneItemsResEXPERIMENTAL {
+  readonly errors: QueuedBatchOps[];
+  readonly scene: Scene;
+
+  /** Only populated if `returnQueued` is true in request. */
+  readonly queued: QueuedBatchOps[];
+}
+
 export interface CreateSceneItemsReq extends Base {
   /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
@@ -80,6 +92,16 @@ export interface CreateSceneItemsReq extends Base {
 export interface CreateSceneItemsRes {
   readonly leaves: number;
   readonly queuedSceneItems: QueuedSceneItem[];
+}
+
+export interface CreateSceneItemsResEXPERIMENTAL {
+  readonly chunks: number;
+  readonly queuedBatchOps: QueuedBatchOps[];
+}
+
+export interface QueuedBatchOps {
+  readonly ops: BatchOperation[];
+  readonly res?: Failure | QueuedJob;
 }
 
 /**
@@ -109,7 +131,7 @@ interface Base {
   readonly sceneId: string;
 }
 
-interface QueuedSceneItem {
+export interface QueuedSceneItem {
   readonly req: CreateSceneItemRequest;
   readonly res?: Failure | QueuedJob;
 }
@@ -145,9 +167,8 @@ export async function createSceneAndSceneItems({
   });
   const { a: queuedItems, b: errors } = partition(
     createRes.queuedSceneItems,
-    (i: QueuedSceneItem) => isQueuedJob(i.res)
+    (i) => isQueuedJob(i.res)
   );
-
   const queued = returnQueued ? createRes.queuedSceneItems : [];
   if (queuedItems.length === 0 || errors.length === createRes.leaves) {
     return { errors, queued, scene };
@@ -249,6 +270,152 @@ export async function createSceneItems({
   );
 
   return { leaves, queuedSceneItems };
+}
+
+/**
+ * Create a scene with scene items.
+ */
+export async function createSceneAndSceneItemsEXPERIMENTAL({
+  client,
+  createSceneItemReqs,
+  createSceneReq,
+  failFast = false,
+  onMsg = console.log,
+  onProgress,
+  parallelism,
+  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  returnQueued = false,
+  verbose,
+}: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
+  const scene = (
+    await client.scenes.createScene({ createSceneRequest: createSceneReq() })
+  ).data;
+  const sceneId = scene.data.id;
+  const createRes = await createSceneItemsEXPERIMENTAL({
+    client,
+    createSceneItemReqs,
+    failFast,
+    onProgress,
+    parallelism,
+    sceneId,
+  });
+  const { a: queuedOps, b: errors } = partition(createRes.queuedBatchOps, (i) =>
+    isQueuedJob(i.res)
+  );
+
+  const queued = returnQueued ? createRes.queuedBatchOps : [];
+  if (queuedOps.length === 0 || errors.length === createRes.chunks) {
+    return { errors, queued, scene };
+  }
+
+  if (verbose) onMsg(`Polling for completed scene-item batches...`);
+
+  const limit = pLimit(Math.min(parallelism, 20));
+  async function poll({ ops, res }: QueuedBatchOps): Promise<void> {
+    const r = await pollQueuedJob<Batch>({
+      id: (res as QueuedJob).data.id,
+      getQueuedJob: (id, cancelToken) =>
+        client.batches.getQueuedBatch({ id }, { cancelToken }),
+      allow404: true,
+      limit,
+      polling,
+    });
+    if (isPollError(r.res)) {
+      failFast ? throwOnError(r) : errors.push({ ops, res: r.res });
+    }
+  }
+  await Promise.all(
+    queuedOps.map((is) => limit<QueuedBatchOps[], void>(poll, is))
+  );
+
+  if (verbose) onMsg(`Committing scene and polling until ready...`);
+
+  await updateScene({
+    attributes: { state: UpdateSceneRequestDataAttributesStateEnum.Commit },
+    client,
+    sceneId,
+  });
+  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
+
+  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
+
+  const updated = (
+    await updateScene({
+      attributes: { camera: { type: CameraFitTypeEnum.FitVisibleSceneItems } },
+      client,
+      sceneId,
+    })
+  ).scene;
+  return { errors, queued, scene: updated };
+}
+
+/**
+ * Create scene items within a scene.
+ */
+export async function createSceneItemsEXPERIMENTAL({
+  client,
+  createSceneItemReqs,
+  failFast,
+  onProgress,
+  parallelism,
+  sceneId,
+}: CreateSceneItemsReq): Promise<CreateSceneItemsResEXPERIMENTAL> {
+  const limit = pLimit(parallelism);
+  const batchSize = 250;
+  let complete = 0;
+
+  const opChunks = arrayChunked(
+    createSceneItemReqs.map((req) => ({
+      data: req.data,
+      op: BatchOperationOpEnum.Add,
+      ref: {
+        type: BatchOperationRefTypeEnum.Scene,
+        id: sceneId,
+      },
+    })),
+    batchSize
+  );
+
+  const queuedBatchOps = await Promise.all(
+    opChunks.map((opChunk) =>
+      limit<BatchOperation[][], QueuedBatchOps>(
+        async (ops: BatchOperation[]) => {
+          let res: Failure | QueuedJob | undefined;
+          try {
+            res = (
+              await client.batches.createBatch({
+                createBatchRequest: {
+                  vertexvis_batchoperations: ops,
+                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                  // @ts-ignore
+                  toJSON() {
+                    return {
+                      'vertexvis/batch:operations':
+                        this.vertexvis_batchoperations,
+                    };
+                  },
+                },
+              })
+            ).data;
+          } catch (error) {
+            if (!failFast && hasVertexError(error)) {
+              res = error.vertexError?.res;
+            } else throw error;
+          }
+
+          if (onProgress != null) {
+            complete += opChunk.length;
+            onProgress(complete, createSceneItemReqs.length);
+          }
+
+          return { ops, res };
+        },
+        opChunk
+      )
+    )
+  );
+
+  return { chunks: opChunks.length, queuedBatchOps };
 }
 
 /**

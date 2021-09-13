@@ -56,7 +56,7 @@ export interface CreatePartFromFileRes {
   readonly queued?: QueuedTranslation;
 }
 
-interface QueuedTranslation {
+export interface QueuedTranslation {
   readonly req: CreatePartRequest | CreateGeometrySetRequest;
   readonly res?: Failure | QueuedJob;
 }

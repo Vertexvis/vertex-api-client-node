@@ -21,6 +21,9 @@ export const MaxAttempts = 60 * AttemptsPerMin; // Try for an hour
 
 /** Polling async queued job request arguments. */
 export interface PollQueuedJobReq {
+  /** Whether or not to fail if any scene item fails initial validation. */
+  readonly failFast?: boolean;
+
   /** Queued job ID. */
   readonly id: string;
 
@@ -44,7 +47,7 @@ export interface PollQueuedJobRes<T> extends PollJobRes<T> {
   readonly id: string;
 }
 
-type PollRes<T> = Failure | QueuedJob | T;
+export type PollRes<T> = Failure | QueuedJob | T;
 
 interface PollJobRes<T> {
   readonly res: PollRes<T>;
