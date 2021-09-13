@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import { RenderImageReq, toAccept, tryStream } from '../index';
 
 /**

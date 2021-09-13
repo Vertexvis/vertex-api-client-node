@@ -1,5 +1,8 @@
 import { AxiosError, AxiosResponse, Method } from 'axios';
+import { createHmac } from 'crypto';
 import { parse, ParsedUrlQuery } from 'querystring';
+
+import { DUMMY_BASE_URL } from '../common';
 import {
   ApiError,
   Failure,
@@ -9,8 +12,6 @@ import {
   OAuth2Token,
   QueuedJob,
 } from '../index';
-import { DUMMY_BASE_URL } from '../common';
-import { createHmac } from 'crypto';
 
 export interface Cursors {
   readonly next?: string;
@@ -18,15 +19,21 @@ export interface Cursors {
 }
 
 interface Partitions<T> {
-  a: T[];
-  b: T[];
+  readonly a: T[];
+  readonly b: T[];
 }
 
 export const Utf8 = 'utf8';
 
 export type VertexError = Error & {
-  vertexError?: { method: Method; url: string; req: unknown; res: Failure };
-  vertexErrorMessage?: string;
+  readonly vertexError?: {
+    readonly method: Method;
+    readonly req: unknown;
+    readonly res: Failure;
+    readonly status: number;
+    readonly url: string;
+  };
+  readonly vertexErrorMessage?: string;
 };
 
 const PageCursor = 'page[cursor]';
@@ -235,34 +242,39 @@ export function isEncoded(s: string): boolean {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isApiError(error: any): error is ApiError {
-  return defined(error.id) && defined(error.status) && defined(error.code);
+  const ae = error as ApiError;
+  return defined(ae.id) && defined(ae.status) && defined(ae.code);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isFailure(obj: any): obj is Failure {
-  return !defined(obj.errors) || obj.errors.length === 0
+  const f = obj as Failure;
+  return !defined(f.errors) || f.errors.size === 0
     ? false
-    : isApiError(head(obj.errors));
+    : isApiError(head([...f.errors.values()]));
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function isQueuedJob(obj: any): obj is QueuedJob {
+  const qj = obj as QueuedJob;
   return (
-    defined(obj.data) &&
-    defined(obj.data?.attributes) &&
-    defined(obj.data?.type) &&
-    obj.data.type.startsWith('queued-')
+    defined(qj.data) &&
+    defined(qj.data?.attributes) &&
+    defined(qj.data?.type) &&
+    qj.data.type.startsWith('queued-')
   );
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function hasVertexError(error: any): error is VertexError {
-  return defined(error.vertexError);
+  const ve = error as VertexError;
+  return defined(ve.vertexError);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 export function hasVertexErrorMessage(error: any): error is VertexError {
-  return defined(error.vertexErrorMessage);
+  const ve = error as VertexError;
+  return defined(ve.vertexErrorMessage);
 }
 
 /**
@@ -423,11 +435,12 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (error) {
+    const ae = error as AxiosError;
     // eslint-disable-next-line promise/param-names
     return new Promise((_resolve, reject) => {
       let res = '';
-      error.response.data.setEncoding(Utf8);
-      error.response.data
+      ae.response?.data.setEncoding(Utf8);
+      ae.response?.data
         .on('data', (data: string) => (res += data))
         .on('end', () => reject(res));
     });

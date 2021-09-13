@@ -19,3 +19,4 @@ sed -i "" "s/, setBearerAuthToObject, /, /" api.ts
 yarn generate:docs
 
 yarn format
+yarn lint --fix
