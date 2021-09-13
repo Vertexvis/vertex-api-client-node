@@ -2,8 +2,9 @@ import axios, { AxiosResponse, CancelToken } from 'axios';
 import { Limit } from 'p-limit';
 import { hrtime } from 'process';
 
-import { ApiError, Failure, Polling, QueuedJob } from '../../index';
+import { ApiError, Batch, Failure, Polling, QueuedJob } from '../../index';
 import {
+  defined,
   delay,
   hasVertexError,
   head,
@@ -146,6 +147,11 @@ export async function pollQueuedJob<T>({
 
 export function isPollError<T>(r: PollRes<T>): r is QueuedJob | Failure {
   return isQueuedJobError(r) || isFailure(r);
+}
+
+export function isBatch(obj: PollRes<Batch>): obj is Batch {
+  const b = obj as Batch;
+  return defined(b) && defined(b.vertexvis_batchresults);
 }
 
 export function throwOnError<T>(r: PollQueuedJobRes<T>): never {

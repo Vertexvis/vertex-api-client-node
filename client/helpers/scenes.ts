@@ -2,12 +2,14 @@ import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
 
 import {
+  ApiError,
   Batch,
   BatchOperation,
   BatchOperationOpEnum,
   BatchOperationRefTypeEnum,
   CameraFitTypeEnum,
   CreateSceneItemRequest,
+  CreateSceneItemRequestData,
   CreateSceneRequest,
   Failure,
   QueuedJob,
@@ -33,8 +35,14 @@ import {
   tryStream,
   VertexClient,
 } from '../index';
-import { arrayChunked, delay, toAccept } from '../utils';
-import { isPollError, pollQueuedJob, throwOnError } from './queued-jobs';
+import { arrayChunked, delay, isApiError, toAccept } from '../utils';
+import {
+  isBatch,
+  isPollError,
+  pollQueuedJob,
+  PollQueuedJobRes,
+  throwOnError,
+} from './queued-jobs';
 
 export interface CreateSceneAndSceneItemsReq extends BaseReq {
   /** A list of {@link CreateSceneItemRequest}. */
@@ -70,6 +78,7 @@ export interface CreateSceneAndSceneItemsRes {
 export interface CreateSceneAndSceneItemsResEXPERIMENTAL {
   readonly errors: QueuedBatchOps[];
   readonly scene: Scene;
+  readonly sceneItemErrors: SceneItemError[];
 
   /** Only populated if `returnQueued` is true in request. */
   readonly queued: QueuedBatchOps[];
@@ -102,6 +111,11 @@ export interface CreateSceneItemsResEXPERIMENTAL {
 export interface QueuedBatchOps {
   readonly ops: BatchOperation[];
   readonly res?: Failure | QueuedJob;
+}
+
+interface SceneItemError {
+  readonly req: CreateSceneItemRequestData;
+  readonly res?: ApiError;
 }
 
 /**
@@ -304,14 +318,18 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   );
 
   const queued = returnQueued ? createRes.queuedBatchOps : [];
+  // Nothing succeeded, return early as something is likely wrong
   if (queuedOps.length === 0 || errors.length === createRes.chunks) {
-    return { errors, queued, scene };
+    return { errors, queued, scene, sceneItemErrors: [] };
   }
 
   if (verbose) onMsg(`Polling for completed scene-item batches...`);
 
   const limit = pLimit(Math.min(parallelism, 20));
-  async function poll({ ops, res }: QueuedBatchOps): Promise<void> {
+  async function poll({
+    ops,
+    res,
+  }: QueuedBatchOps): Promise<PollQueuedJobRes<Batch>> {
     const r = await pollQueuedJob<Batch>({
       id: (res as QueuedJob).data.id,
       getQueuedJob: (id, cancelToken) =>
@@ -323,9 +341,12 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
     if (isPollError(r.res)) {
       failFast ? throwOnError(r) : errors.push({ ops, res: r.res });
     }
+    return r;
   }
-  await Promise.all(
-    queuedOps.map((is) => limit<QueuedBatchOps[], void>(poll, is))
+  const batchRes = await Promise.all(
+    queuedOps.map((is) =>
+      limit<QueuedBatchOps[], PollQueuedJobRes<Batch>>(poll, is)
+    )
   );
 
   if (verbose) onMsg(`Committing scene and polling until ready...`);
@@ -339,14 +360,30 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
 
   if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
 
-  const updated = (
-    await updateScene({
-      attributes: { camera: { type: CameraFitTypeEnum.FitVisibleSceneItems } },
-      client,
-      sceneId,
-    })
-  ).scene;
-  return { errors, queued, scene: updated };
+  return {
+    errors,
+    queued,
+    scene: (
+      await updateScene({
+        attributes: {
+          camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+        },
+        client,
+        sceneId,
+      })
+    ).scene,
+    sceneItemErrors: batchRes
+      .flatMap((b, i) =>
+        isBatch(b.res)
+          ? b.res.vertexvis_batchresults.map((r, j) =>
+              isApiError(r)
+                ? { req: queuedOps[i].ops[j].data, res: r }
+                : undefined
+            )
+          : []
+      )
+      .filter(defined),
+  };
 }
 
 /**
