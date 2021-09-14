@@ -1,7 +1,7 @@
 {
   "name": "Vertex API Client",
   "entryPoints": ["./index.ts"],
-  "theme": "minimal",
+  "theme": "default",
   "excludePrivate": true,
   "excludeProtected": true,
   "excludeInternal": true,

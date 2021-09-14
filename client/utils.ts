@@ -18,7 +18,7 @@ export interface Cursors {
   readonly self?: string;
 }
 
-interface Partitions<T> {
+export interface Partitions<T> {
   readonly a: T[];
   readonly b: T[];
 }

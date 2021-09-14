@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/api-client-node",
-  "version": "0.14.6",
+  "version": "0.14.7",
   "description": "The Vertex REST API client for Node.js.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -62,7 +62,7 @@
     "eslint-plugin-promise": "^5.1",
     "eslint-plugin-simple-import-sort": "^7.0",
     "eslint-plugin-tsdoc": "^0.2",
-    "jest": "^27.1",
+    "jest": "^27.2",
     "pinst": "^2.1",
     "prettier": "^2.4",
     "ts-jest": "^27.0",
