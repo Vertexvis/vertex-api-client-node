@@ -398,7 +398,7 @@ export async function createSceneItemsEXPERIMENTAL({
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsResEXPERIMENTAL> {
   const limit = pLimit(parallelism);
-  const batchSize = 250;
+  const batchSize = 500;
   let complete = 0;
 
   const opChunks = arrayChunked(

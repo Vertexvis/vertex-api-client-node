@@ -26,6 +26,8 @@ servers:
   - url: https://platform.vertexvis.com
   - url: https://platform.platdev.vertexvis.io
 tags:
+  - name: accounts
+  - name: applications
   - name: batches
   - name: files
   - name: geometry-sets
@@ -43,6 +45,650 @@ tags:
   - name: translation-inspections
   - name: webhook-subscriptions
 paths:
+  /accounts:
+    post:
+      description: Create an `account`.
+      operationId: createAccount
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateAccountRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Account'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2Internal:
+            - accounts.*
+            - accounts.write
+      tags:
+        - accounts
+  /accounts/{id}:
+    delete:
+      description: Delete an `account`.
+      operationId: deleteAccount
+      parameters:
+        - description: The `account` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2Internal:
+            - accounts.*
+            - accounts.write
+      tags:
+        - accounts
+    get:
+      description: Get an `account`.
+      operationId: getAccount
+      parameters:
+        - description: The `account` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Account'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2Internal:
+            - accounts.*
+            - accounts.read
+      tags:
+        - accounts
+    patch:
+      description: Update an `account`.
+      operationId: updateAccount
+      parameters:
+        - description: The `account` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateAccountRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Account'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2Internal:
+            - accounts.*
+            - accounts.write
+      tags:
+        - accounts
+  /accounts/{id}/applications:
+    post:
+      description: Create an `application` for an `account`.
+      operationId: createApplicationForAccount
+      parameters:
+        - description: The `account` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/AdminCreateApplicationRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CreatedApplication'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2Internal:
+            - accounts.*
+            - accounts.write
+      tags:
+        - accounts
+      x-scala-package: accounts
+  /applications:
+    get:
+      description: Get `applications`.
+      operationId: getApplications
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ApplicationList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - applications
+    post:
+      description: Create an OAuth2 `application`.
+      operationId: createApplication
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateApplicationRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CreatedApplication'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - applications
+  /applications/{id}:
+    delete:
+      description: Delete an `application`.
+      operationId: deleteApplication
+      parameters:
+        - description: The `application` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - applications
+    get:
+      description: Get an `application`.
+      operationId: getApplication
+      parameters:
+        - description: The `application` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - applications
+    patch:
+      description: Update an `application`.
+      operationId: updateApplication
+      parameters:
+        - description: The `application` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateApplicationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Application'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - applications
   /batches:
     post:
       description:
@@ -978,6 +1624,112 @@ paths:
           description: No Content
       security:
         - basicAuth: []
+      tags:
+        - oauth2
+  /oauth2/auth/requests/login/accept:
+    post:
+      description: Accept Login Challenge with subject & login challenge
+      operationId: adminAcceptLogin
+      parameters:
+        - description: Login Challenge ID from oauth2 flow
+          explode: true
+          in: query
+          name: login_challenge
+          required: true
+          schema:
+            type: string
+          style: form
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/AdminLoginAcceptRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/AdminRedirectTo'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2Internal:
+            - admin-login
+      tags:
+        - oauth2
+  /oauth2/auth/requests/consent/accept:
+    post:
+      description: Accept Consent Challenge to login.
+      operationId: adminAcceptConsent
+      parameters:
+        - description: Challenge ID from oauth2 flow
+          explode: true
+          in: query
+          name: challenge
+          required: true
+          schema:
+            type: string
+          style: form
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/AdminConsentAcceptRequest'
+        required: false
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/AdminRedirectTo'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2Internal:
+            - admin-login
       tags:
         - oauth2
   /part-revisions/{id}:
@@ -2378,7 +3130,8 @@ paths:
           style: simple
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `boundingBox` is only returned if explicitly requested.
+            value returns no fields. `boundingBox` and `metadata` are only returned
+            if explicitly requested.
           explode: true
           in: query
           name: fields[scene-item]
@@ -3152,7 +3905,8 @@ paths:
           style: simple
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `boundingBox` is only returned if explicitly requested.
+            value returns no fields. `boundingBox` and `metadata` are only returned
+            if explicitly requested.
           explode: true
           in: query
           name: fields[scene-item]
@@ -5231,7 +5985,8 @@ components:
     SceneItemFields:
       description:
         Comma-separated list of fields to return in response. An empty
-        value returns no fields. `boundingBox` is only returned if explicitly requested.
+        value returns no fields. `boundingBox` and `metadata` are only returned if
+        explicitly requested.
       explode: true
       in: query
       name: fields[scene-item]
@@ -5436,23 +6191,19 @@ components:
             $ref: '#/components/schemas/Failure'
       description: GatewayTimeout
   schemas:
-    CreateBatchRequest:
-      additionalProperties: false
-      properties:
-        vertexvis/batch:operations:
-          description: List of operations to perform as a batch.
-          items:
-            $ref: '#/components/schemas/BatchOperation'
-          maxItems: 250
-          type: array
-      required:
-        - vertexvis/batch:operations
-      type: object
-    QueuedJob:
+    CreateAccountRequest:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/QueuedJobData'
+          $ref: '#/components/schemas/CreateAccountRequest_data'
+      required:
+        - data
+      type: object
+    Account:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/Account_data'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -5486,6 +6237,97 @@ components:
       format: uuid
       maxLength: 36
       type: string
+    UpdateAccountRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateAccountRequest_data'
+      required:
+        - data
+      type: object
+    AdminCreateApplicationRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AdminCreateApplicationRequest_data'
+      required:
+        - data
+      type: object
+    CreatedApplication:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreatedApplication_data'
+      required:
+        - data
+      type: object
+    ApplicationList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ApplicationData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreateApplicationRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateAccountRequest_data'
+      required:
+        - data
+      type: object
+    Application:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ApplicationData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    UpdateApplicationRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateApplicationRequest_data'
+      required:
+        - data
+      type: object
+    CreateBatchRequest:
+      additionalProperties: false
+      properties:
+        vertexvis/batch:operations:
+          description: List of operations to perform as a batch.
+          items:
+            $ref: '#/components/schemas/BatchOperation'
+          maxItems: 250
+          type: array
+      required:
+        - vertexvis/batch:operations
+      type: object
+    QueuedJob:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/QueuedJobData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     Batch:
       additionalProperties: false
       properties:
@@ -5662,6 +6504,33 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/RevokeOAuth2TokenRequest_data'
+      required:
+        - data
+      type: object
+    AdminLoginAcceptRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AdminLoginAcceptRequest_data'
+      required:
+        - data
+      type: object
+    AdminRedirectTo:
+      additionalProperties: false
+      properties:
+        redirectTo:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - redirectTo
+      type: object
+    AdminConsentAcceptRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AdminConsentAcceptRequest_data'
       required:
         - data
       type: object
@@ -6177,6 +7046,75 @@ components:
       required:
         - data
       type: object
+    NonEmptyString:
+      example: some-string
+      maxLength: 1024
+      minLength: 1
+      type: string
+    DateTime:
+      example: 2020-01-01T12:00:00Z
+      format: date-time
+      type: string
+    Links:
+      additionalProperties:
+        $ref: '#/components/schemas/Link'
+      type: object
+    ApiError:
+      additionalProperties: false
+      properties:
+        id:
+          example: 7c46d4c3-e065-4eae-87ec-08233cf8743b
+          type: string
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        status:
+          example: '400'
+          type: string
+        code:
+          example: ValidationError
+          type: string
+        title:
+          example: A validation error occurred.
+          type: string
+        detail:
+          example: '$.data.attributes.suppliedId: is missing but it is required'
+          type: string
+        source:
+          $ref: '#/components/schemas/ApiError_source'
+        meta:
+          additionalProperties:
+            type: string
+          type: object
+      type: object
+    Meta:
+      additionalProperties:
+        type: string
+      type: object
+    ApplicationData:
+      additionalProperties: false
+      properties:
+        type:
+          example: application
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ApplicationData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     BatchOperation:
       additionalProperties: false
       properties:
@@ -6222,43 +7160,6 @@ components:
         - attributes
         - id
         - type
-      type: object
-    Links:
-      additionalProperties:
-        $ref: '#/components/schemas/Link'
-      type: object
-    ApiError:
-      additionalProperties: false
-      properties:
-        id:
-          example: 7c46d4c3-e065-4eae-87ec-08233cf8743b
-          type: string
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-        status:
-          example: '400'
-          type: string
-        code:
-          example: ValidationError
-          type: string
-        title:
-          example: A validation error occurred.
-          type: string
-        detail:
-          example: '$.data.attributes.suppliedId: is missing but it is required'
-          type: string
-        source:
-          $ref: '#/components/schemas/ApiError_source'
-        meta:
-          additionalProperties:
-            type: string
-          type: object
-      type: object
-    Meta:
-      additionalProperties:
-        type: string
       type: object
     RelationshipData:
       additionalProperties: false
@@ -6369,10 +7270,6 @@ components:
         - height
         - width
       type: object
-    DateTime:
-      example: 2020-01-01T12:00:00Z
-      format: date-time
-      type: string
     HitResultData:
       additionalProperties: false
       properties:
@@ -6447,11 +7344,6 @@ components:
         - relationships
         - type
       type: object
-    NonEmptyString:
-      example: some-string
-      maxLength: 1024
-      minLength: 1
-      type: string
     MetadataValue:
       properties:
         value:
@@ -7375,6 +8267,197 @@ components:
       maximum: 255
       minimum: 0
       type: integer
+    CreateAccountRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - name
+      type: object
+    CreateAccountRequest_data:
+      properties:
+        type:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateAccountRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    Account_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        status:
+          example: active
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+      required:
+        - created
+        - name
+      type: object
+    Account_data:
+      properties:
+        type:
+          example: account
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/Account_data_attributes'
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    UpdateAccountRequest_data_attributes:
+      properties:
+        status:
+          enum:
+            - active
+            - disabled
+          example: active
+          maxLength: 32
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        owner:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      type: object
+    UpdateAccountRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: account
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateAccountRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    AdminCreateApplicationRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        scopes:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+        redirect_uris:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      required:
+        - name
+      type: object
+    AdminCreateApplicationRequest_data:
+      properties:
+        type:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        attributes:
+          $ref: '#/components/schemas/AdminCreateApplicationRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreatedApplication_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        clientId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        secret:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        scopes:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+        redirect_uris:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      required:
+        - clientId
+        - created
+        - name
+        - redirect_uris
+        - scopes
+        - secret
+      type: object
+    CreatedApplication_data:
+      properties:
+        type:
+          example: application
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreatedApplication_data_attributes'
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    UpdateApplicationRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: application
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateAccountRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateFileRequest_data_attributes:
       properties:
         name:
@@ -7516,6 +8599,45 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/RevokeOAuth2TokenRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    AdminLoginAcceptRequest_data_attributes:
+      properties:
+        subject:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - subject
+      type: object
+    AdminLoginAcceptRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          type: string
+        attributes:
+          $ref: '#/components/schemas/AdminLoginAcceptRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    AdminConsentAcceptRequest_data_attributes:
+      properties:
+        session:
+          type: object
+      required:
+        - session
+      type: object
+    AdminConsentAcceptRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          type: string
+        attributes:
+          $ref: '#/components/schemas/AdminConsentAcceptRequest_data_attributes'
       required:
         - attributes
         - type
@@ -8058,6 +9180,41 @@ components:
         - attributes
         - type
       type: object
+    ApiError_source:
+      properties:
+        pointer:
+          example: /body/data/attributes
+          type: string
+        parameter:
+          example: page[cursor]
+          type: string
+      type: object
+    ApplicationData_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        clientId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        scopes:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      required:
+        - clientId
+        - created
+        - name
+        - scopes
+      type: object
     BatchOperation_ref:
       description: Target of batch operation.
       properties:
@@ -8096,15 +9253,6 @@ components:
       required:
         - created
         - status
-      type: object
-    ApiError_source:
-      properties:
-        pointer:
-          example: /body/data/attributes
-          type: string
-        parameter:
-          example: page[cursor]
-          type: string
       type: object
     FileMetadataData_attributes:
       properties:
@@ -8177,29 +9325,33 @@ components:
       type: object
     SceneItemData_attributes:
       properties:
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-        visible:
-          example: true
-          type: boolean
-        transform:
-          $ref: '#/components/schemas/Matrix4'
-        materialOverride:
-          $ref: '#/components/schemas/ColorMaterial'
+        boundingBox:
+          $ref: '#/components/schemas/BoundingBox'
         created:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
-        boundingBox:
-          $ref: '#/components/schemas/BoundingBox'
+        materialOverride:
+          $ref: '#/components/schemas/ColorMaterial'
+        metadata:
+          additionalProperties:
+            $ref: '#/components/schemas/MetadataValue'
+          type: object
         name:
           example: some-string
           maxLength: 1024
           minLength: 1
           type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+        visible:
+          example: true
+          type: boolean
         worldTransform:
           $ref: '#/components/schemas/Matrix4'
       type: object
@@ -8755,6 +9907,15 @@ components:
       flows:
         clientCredentials:
           scopes: {}
+          tokenUrl: /oauth2/token
+      type: oauth2
+    OAuth2Internal:
+      flows:
+        clientCredentials:
+          scopes:
+            accounts.*: Read and write access to account endpoints
+            accounts.read: Read-only access to account endpoints
+            accounts.write: Write-only access to account endpoints
           tokenUrl: /oauth2/token
       type: oauth2
     basicAuth:

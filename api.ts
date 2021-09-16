@@ -32,6 +32,235 @@ import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
 /**
  *
  * @export
+ * @interface Account
+ */
+export interface Account {
+  /**
+   *
+   * @type {AccountData}
+   * @memberof Account
+   */
+  data: AccountData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Account
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface AccountData
+ */
+export interface AccountData {
+  /**
+   *
+   * @type {string}
+   * @memberof AccountData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof AccountData
+   */
+  id: string;
+  /**
+   *
+   * @type {AccountDataAttributes}
+   * @memberof AccountData
+   */
+  attributes: AccountDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface AccountDataAttributes
+ */
+export interface AccountDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof AccountDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AccountDataAttributes
+   */
+  status?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof AccountDataAttributes
+   */
+  created: string;
+}
+/**
+ *
+ * @export
+ * @interface AdminConsentAcceptRequest
+ */
+export interface AdminConsentAcceptRequest {
+  /**
+   *
+   * @type {AdminConsentAcceptRequestData}
+   * @memberof AdminConsentAcceptRequest
+   */
+  data: AdminConsentAcceptRequestData;
+}
+/**
+ *
+ * @export
+ * @interface AdminConsentAcceptRequestData
+ */
+export interface AdminConsentAcceptRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof AdminConsentAcceptRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {AdminConsentAcceptRequestDataAttributes}
+   * @memberof AdminConsentAcceptRequestData
+   */
+  attributes: AdminConsentAcceptRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface AdminConsentAcceptRequestDataAttributes
+ */
+export interface AdminConsentAcceptRequestDataAttributes {
+  /**
+   *
+   * @type {object}
+   * @memberof AdminConsentAcceptRequestDataAttributes
+   */
+  session: object;
+}
+/**
+ *
+ * @export
+ * @interface AdminCreateApplicationRequest
+ */
+export interface AdminCreateApplicationRequest {
+  /**
+   *
+   * @type {AdminCreateApplicationRequestData}
+   * @memberof AdminCreateApplicationRequest
+   */
+  data: AdminCreateApplicationRequestData;
+}
+/**
+ *
+ * @export
+ * @interface AdminCreateApplicationRequestData
+ */
+export interface AdminCreateApplicationRequestData {
+  /**
+   *
+   * @type {string}
+   * @memberof AdminCreateApplicationRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {AdminCreateApplicationRequestDataAttributes}
+   * @memberof AdminCreateApplicationRequestData
+   */
+  attributes: AdminCreateApplicationRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface AdminCreateApplicationRequestDataAttributes
+ */
+export interface AdminCreateApplicationRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof AdminCreateApplicationRequestDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof AdminCreateApplicationRequestDataAttributes
+   */
+  scopes?: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof AdminCreateApplicationRequestDataAttributes
+   */
+  redirect_uris?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface AdminLoginAcceptRequest
+ */
+export interface AdminLoginAcceptRequest {
+  /**
+   *
+   * @type {AdminLoginAcceptRequestData}
+   * @memberof AdminLoginAcceptRequest
+   */
+  data: AdminLoginAcceptRequestData;
+}
+/**
+ *
+ * @export
+ * @interface AdminLoginAcceptRequestData
+ */
+export interface AdminLoginAcceptRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof AdminLoginAcceptRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {AdminLoginAcceptRequestDataAttributes}
+   * @memberof AdminLoginAcceptRequestData
+   */
+  attributes: AdminLoginAcceptRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface AdminLoginAcceptRequestDataAttributes
+ */
+export interface AdminLoginAcceptRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof AdminLoginAcceptRequestDataAttributes
+   */
+  subject: string;
+}
+/**
+ *
+ * @export
+ * @interface AdminRedirectTo
+ */
+export interface AdminRedirectTo {
+  /**
+   *
+   * @type {string}
+   * @memberof AdminRedirectTo
+   */
+  redirectTo: string;
+}
+/**
+ *
+ * @export
  * @interface ApiError
  */
 export interface ApiError {
@@ -102,6 +331,106 @@ export interface ApiErrorSource {
    * @memberof ApiErrorSource
    */
   parameter?: string;
+}
+/**
+ *
+ * @export
+ * @interface Application
+ */
+export interface Application {
+  /**
+   *
+   * @type {ApplicationData}
+   * @memberof Application
+   */
+  data: ApplicationData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Application
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ApplicationData
+ */
+export interface ApplicationData {
+  /**
+   *
+   * @type {string}
+   * @memberof ApplicationData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ApplicationData
+   */
+  id: string;
+  /**
+   *
+   * @type {ApplicationDataAttributes}
+   * @memberof ApplicationData
+   */
+  attributes: ApplicationDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ApplicationData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ApplicationDataAttributes
+ */
+export interface ApplicationDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof ApplicationDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApplicationDataAttributes
+   */
+  clientId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ApplicationDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApplicationDataAttributes
+   */
+  scopes: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface ApplicationList
+ */
+export interface ApplicationList {
+  /**
+   *
+   * @type {Array<ApplicationData>}
+   * @memberof ApplicationList
+   */
+  data: Array<ApplicationData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ApplicationList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -483,6 +812,64 @@ export interface ColorMaterialNullable {
    * @memberof ColorMaterialNullable
    */
   emissive: Color3;
+}
+/**
+ *
+ * @export
+ * @interface CreateAccountRequest
+ */
+export interface CreateAccountRequest {
+  /**
+   *
+   * @type {CreateAccountRequestData}
+   * @memberof CreateAccountRequest
+   */
+  data: CreateAccountRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateAccountRequestData
+ */
+export interface CreateAccountRequestData {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateAccountRequestDataAttributes}
+   * @memberof CreateAccountRequestData
+   */
+  attributes: CreateAccountRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateAccountRequestDataAttributes
+ */
+export interface CreateAccountRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateAccountRequestDataAttributes
+   */
+  name: string;
+}
+/**
+ *
+ * @export
+ * @interface CreateApplicationRequest
+ */
+export interface CreateApplicationRequest {
+  /**
+   *
+   * @type {CreateAccountRequestData}
+   * @memberof CreateApplicationRequest
+   */
+  data: CreateAccountRequestData;
 }
 /**
  *
@@ -1328,6 +1715,87 @@ export interface CreateWebhookSubscriptionRequestDataAttributes {
    * @memberof CreateWebhookSubscriptionRequestDataAttributes
    */
   topics: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface CreatedApplication
+ */
+export interface CreatedApplication {
+  /**
+   *
+   * @type {CreatedApplicationData}
+   * @memberof CreatedApplication
+   */
+  data: CreatedApplicationData;
+}
+/**
+ *
+ * @export
+ * @interface CreatedApplicationData
+ */
+export interface CreatedApplicationData {
+  /**
+   *
+   * @type {string}
+   * @memberof CreatedApplicationData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CreatedApplicationData
+   */
+  id: string;
+  /**
+   *
+   * @type {CreatedApplicationDataAttributes}
+   * @memberof CreatedApplicationData
+   */
+  attributes: CreatedApplicationDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreatedApplicationDataAttributes
+ */
+export interface CreatedApplicationDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  clientId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  secret: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  scopes: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof CreatedApplicationDataAttributes
+   */
+  redirect_uris: Array<string>;
 }
 /**
  *
@@ -2940,36 +3408,6 @@ export interface SceneItemData {
 export interface SceneItemDataAttributes {
   /**
    *
-   * @type {string}
-   * @memberof SceneItemDataAttributes
-   */
-  suppliedId?: string;
-  /**
-   *
-   * @type {boolean}
-   * @memberof SceneItemDataAttributes
-   */
-  visible?: boolean;
-  /**
-   *
-   * @type {Matrix4}
-   * @memberof SceneItemDataAttributes
-   */
-  transform?: Matrix4;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SceneItemDataAttributes
-   */
-  materialOverride?: ColorMaterial;
-  /**
-   *
-   * @type {string}
-   * @memberof SceneItemDataAttributes
-   */
-  created?: string;
-  /**
-   *
    * @type {BoundingBox}
    * @memberof SceneItemDataAttributes
    */
@@ -2979,7 +3417,43 @@ export interface SceneItemDataAttributes {
    * @type {string}
    * @memberof SceneItemDataAttributes
    */
+  created?: string;
+  /**
+   *
+   * @type {ColorMaterial}
+   * @memberof SceneItemDataAttributes
+   */
+  materialOverride?: ColorMaterial;
+  /**
+   *
+   * @type {{ [key: string]: MetadataValue; }}
+   * @memberof SceneItemDataAttributes
+   */
+  metadata?: { [key: string]: MetadataValue };
+  /**
+   *
+   * @type {string}
+   * @memberof SceneItemDataAttributes
+   */
   name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneItemDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof SceneItemDataAttributes
+   */
+  transform?: Matrix4;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SceneItemDataAttributes
+   */
+  visible?: boolean;
   /**
    *
    * @type {Matrix4}
@@ -3845,6 +4319,105 @@ export interface TranslationInspectionJobDataAttributes {
 /**
  *
  * @export
+ * @interface UpdateAccountRequest
+ */
+export interface UpdateAccountRequest {
+  /**
+   *
+   * @type {UpdateAccountRequestData}
+   * @memberof UpdateAccountRequest
+   */
+  data: UpdateAccountRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateAccountRequestData
+ */
+export interface UpdateAccountRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateAccountRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateAccountRequestDataAttributes}
+   * @memberof UpdateAccountRequestData
+   */
+  attributes: UpdateAccountRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateAccountRequestDataAttributes
+ */
+export interface UpdateAccountRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateAccountRequestDataAttributes
+   */
+  status?: UpdateAccountRequestDataAttributesStatusEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateAccountRequestDataAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateAccountRequestDataAttributes
+   */
+  owner?: string;
+}
+
+/**
+ * @export
+ * @enum {string}
+ */
+export enum UpdateAccountRequestDataAttributesStatusEnum {
+  Active = 'active',
+  Disabled = 'disabled',
+}
+
+/**
+ *
+ * @export
+ * @interface UpdateApplicationRequest
+ */
+export interface UpdateApplicationRequest {
+  /**
+   *
+   * @type {UpdateApplicationRequestData}
+   * @memberof UpdateApplicationRequest
+   */
+  data: UpdateApplicationRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateApplicationRequestData
+ */
+export interface UpdateApplicationRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateApplicationRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateAccountRequestDataAttributes}
+   * @memberof UpdateApplicationRequestData
+   */
+  attributes: CreateAccountRequestDataAttributes;
+}
+/**
+ *
+ * @export
  * @interface UpdatePartRevisionRequest
  */
 export interface UpdatePartRevisionRequest {
@@ -4635,6 +5208,1428 @@ export interface WebhookSubscriptionList {
    * @memberof WebhookSubscriptionList
    */
   links: { [key: string]: Link };
+}
+
+/**
+ * AccountsApi - axios parameter creator
+ * @export
+ */
+export const AccountsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create an `account`.
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAccount: async (
+      createAccountRequest: CreateAccountRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createAccountRequest' is not null or undefined
+      assertParamExists(
+        'createAccount',
+        'createAccountRequest',
+        createAccountRequest
+      );
+      const localVarPath = `/accounts`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        ['accounts.*', 'accounts.write'],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createAccountRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Create an `application` for an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {AdminCreateApplicationRequest} adminCreateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApplicationForAccount: async (
+      id: string,
+      adminCreateApplicationRequest: AdminCreateApplicationRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createApplicationForAccount', 'id', id);
+      // verify required parameter 'adminCreateApplicationRequest' is not null or undefined
+      assertParamExists(
+        'createApplicationForAccount',
+        'adminCreateApplicationRequest',
+        adminCreateApplicationRequest
+      );
+      const localVarPath = `/accounts/{id}/applications`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        ['accounts.*', 'accounts.write'],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        adminCreateApplicationRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteAccount: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteAccount', 'id', id);
+      const localVarPath = `/accounts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        ['accounts.*', 'accounts.write'],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAccount: async (id: string, options: any = {}): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getAccount', 'id', id);
+      const localVarPath = `/accounts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        ['accounts.*', 'accounts.read'],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Update an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {UpdateAccountRequest} updateAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateAccount: async (
+      id: string,
+      updateAccountRequest: UpdateAccountRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateAccount', 'id', id);
+      // verify required parameter 'updateAccountRequest' is not null or undefined
+      assertParamExists(
+        'updateAccount',
+        'updateAccountRequest',
+        updateAccountRequest
+      );
+      const localVarPath = `/accounts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        ['accounts.*', 'accounts.write'],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateAccountRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * AccountsApi - functional programming interface
+ * @export
+ */
+export const AccountsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = AccountsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create an `account`.
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createAccount(
+      createAccountRequest: CreateAccountRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createAccount(
+        createAccountRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Create an `application` for an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {AdminCreateApplicationRequest} adminCreateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createApplicationForAccount(
+      id: string,
+      adminCreateApplicationRequest: AdminCreateApplicationRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CreatedApplication>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createApplicationForAccount(
+          id,
+          adminCreateApplicationRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteAccount(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteAccount(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getAccount(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getAccount(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Update an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {UpdateAccountRequest} updateAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateAccount(
+      id: string,
+      updateAccountRequest: UpdateAccountRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateAccount(
+        id,
+        updateAccountRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * AccountsApi - factory interface
+ * @export
+ */
+export const AccountsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = AccountsApiFp(configuration);
+  return {
+    /**
+     * Create an `account`.
+     * @param {CreateAccountRequest} createAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAccount(
+      createAccountRequest: CreateAccountRequest,
+      options?: any
+    ): AxiosPromise<Account> {
+      return localVarFp
+        .createAccount(createAccountRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Create an `application` for an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {AdminCreateApplicationRequest} adminCreateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApplicationForAccount(
+      id: string,
+      adminCreateApplicationRequest: AdminCreateApplicationRequest,
+      options?: any
+    ): AxiosPromise<CreatedApplication> {
+      return localVarFp
+        .createApplicationForAccount(id, adminCreateApplicationRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteAccount(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteAccount(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getAccount(id: string, options?: any): AxiosPromise<Account> {
+      return localVarFp
+        .getAccount(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update an `account`.
+     * @param {string} id The &#x60;account&#x60; ID.
+     * @param {UpdateAccountRequest} updateAccountRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateAccount(
+      id: string,
+      updateAccountRequest: UpdateAccountRequest,
+      options?: any
+    ): AxiosPromise<Account> {
+      return localVarFp
+        .updateAccount(id, updateAccountRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiCreateAccountRequest
+ */
+export interface AccountsApiCreateAccountRequest {
+  /**
+   *
+   * @type {CreateAccountRequest}
+   * @memberof AccountsApiCreateAccount
+   */
+  readonly createAccountRequest: CreateAccountRequest;
+}
+
+/**
+ * Request parameters for createApplicationForAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiCreateApplicationForAccountRequest
+ */
+export interface AccountsApiCreateApplicationForAccountRequest {
+  /**
+   * The &#x60;account&#x60; ID.
+   * @type {string}
+   * @memberof AccountsApiCreateApplicationForAccount
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {AdminCreateApplicationRequest}
+   * @memberof AccountsApiCreateApplicationForAccount
+   */
+  readonly adminCreateApplicationRequest: AdminCreateApplicationRequest;
+}
+
+/**
+ * Request parameters for deleteAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiDeleteAccountRequest
+ */
+export interface AccountsApiDeleteAccountRequest {
+  /**
+   * The &#x60;account&#x60; ID.
+   * @type {string}
+   * @memberof AccountsApiDeleteAccount
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiGetAccountRequest
+ */
+export interface AccountsApiGetAccountRequest {
+  /**
+   * The &#x60;account&#x60; ID.
+   * @type {string}
+   * @memberof AccountsApiGetAccount
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for updateAccount operation in AccountsApi.
+ * @export
+ * @interface AccountsApiUpdateAccountRequest
+ */
+export interface AccountsApiUpdateAccountRequest {
+  /**
+   * The &#x60;account&#x60; ID.
+   * @type {string}
+   * @memberof AccountsApiUpdateAccount
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateAccountRequest}
+   * @memberof AccountsApiUpdateAccount
+   */
+  readonly updateAccountRequest: UpdateAccountRequest;
+}
+
+/**
+ * AccountsApi - object-oriented interface
+ * @export
+ * @class AccountsApi
+ * @extends {BaseAPI}
+ */
+export class AccountsApi extends BaseAPI {
+  /**
+   * Create an `account`.
+   * @param {AccountsApiCreateAccountRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountsApi
+   */
+  public createAccount(
+    requestParameters: AccountsApiCreateAccountRequest,
+    options?: any
+  ) {
+    return AccountsApiFp(this.configuration)
+      .createAccount(requestParameters.createAccountRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create an `application` for an `account`.
+   * @param {AccountsApiCreateApplicationForAccountRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountsApi
+   */
+  public createApplicationForAccount(
+    requestParameters: AccountsApiCreateApplicationForAccountRequest,
+    options?: any
+  ) {
+    return AccountsApiFp(this.configuration)
+      .createApplicationForAccount(
+        requestParameters.id,
+        requestParameters.adminCreateApplicationRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete an `account`.
+   * @param {AccountsApiDeleteAccountRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountsApi
+   */
+  public deleteAccount(
+    requestParameters: AccountsApiDeleteAccountRequest,
+    options?: any
+  ) {
+    return AccountsApiFp(this.configuration)
+      .deleteAccount(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get an `account`.
+   * @param {AccountsApiGetAccountRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountsApi
+   */
+  public getAccount(
+    requestParameters: AccountsApiGetAccountRequest,
+    options?: any
+  ) {
+    return AccountsApiFp(this.configuration)
+      .getAccount(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update an `account`.
+   * @param {AccountsApiUpdateAccountRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AccountsApi
+   */
+  public updateAccount(
+    requestParameters: AccountsApiUpdateAccountRequest,
+    options?: any
+  ) {
+    return AccountsApiFp(this.configuration)
+      .updateAccount(
+        requestParameters.id,
+        requestParameters.updateAccountRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * ApplicationsApi - axios parameter creator
+ * @export
+ */
+export const ApplicationsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create an OAuth2 `application`.
+     * @param {CreateApplicationRequest} createApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApplication: async (
+      createApplicationRequest: CreateApplicationRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createApplicationRequest' is not null or undefined
+      assertParamExists(
+        'createApplication',
+        'createApplicationRequest',
+        createApplicationRequest
+      );
+      const localVarPath = `/applications`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createApplicationRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteApplication: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteApplication', 'id', id);
+      const localVarPath = `/applications/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApplication: async (
+      id: string,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getApplication', 'id', id);
+      const localVarPath = `/applications/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `applications`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApplications: async (
+      pageCursor?: string,
+      pageSize?: number,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/applications`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Update an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {UpdateApplicationRequest} updateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateApplication: async (
+      id: string,
+      updateApplicationRequest: UpdateApplicationRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateApplication', 'id', id);
+      // verify required parameter 'updateApplicationRequest' is not null or undefined
+      assertParamExists(
+        'updateApplication',
+        'updateApplicationRequest',
+        updateApplicationRequest
+      );
+      const localVarPath = `/applications/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateApplicationRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * ApplicationsApi - functional programming interface
+ * @export
+ */
+export const ApplicationsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    ApplicationsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create an OAuth2 `application`.
+     * @param {CreateApplicationRequest} createApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createApplication(
+      createApplicationRequest: CreateApplicationRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CreatedApplication>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createApplication(
+          createApplicationRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteApplication(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteApplication(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getApplication(
+      id: string,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Application>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getApplication(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `applications`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getApplications(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<ApplicationList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getApplications(
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Update an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {UpdateApplicationRequest} updateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateApplication(
+      id: string,
+      updateApplicationRequest: UpdateApplicationRequest,
+      options?: any
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Application>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateApplication(
+          id,
+          updateApplicationRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * ApplicationsApi - factory interface
+ * @export
+ */
+export const ApplicationsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = ApplicationsApiFp(configuration);
+  return {
+    /**
+     * Create an OAuth2 `application`.
+     * @param {CreateApplicationRequest} createApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createApplication(
+      createApplicationRequest: CreateApplicationRequest,
+      options?: any
+    ): AxiosPromise<CreatedApplication> {
+      return localVarFp
+        .createApplication(createApplicationRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteApplication(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteApplication(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApplication(id: string, options?: any): AxiosPromise<Application> {
+      return localVarFp
+        .getApplication(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `applications`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getApplications(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<ApplicationList> {
+      return localVarFp
+        .getApplications(pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update an `application`.
+     * @param {string} id The &#x60;application&#x60; ID.
+     * @param {UpdateApplicationRequest} updateApplicationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateApplication(
+      id: string,
+      updateApplicationRequest: UpdateApplicationRequest,
+      options?: any
+    ): AxiosPromise<Application> {
+      return localVarFp
+        .updateApplication(id, updateApplicationRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createApplication operation in ApplicationsApi.
+ * @export
+ * @interface ApplicationsApiCreateApplicationRequest
+ */
+export interface ApplicationsApiCreateApplicationRequest {
+  /**
+   *
+   * @type {CreateApplicationRequest}
+   * @memberof ApplicationsApiCreateApplication
+   */
+  readonly createApplicationRequest: CreateApplicationRequest;
+}
+
+/**
+ * Request parameters for deleteApplication operation in ApplicationsApi.
+ * @export
+ * @interface ApplicationsApiDeleteApplicationRequest
+ */
+export interface ApplicationsApiDeleteApplicationRequest {
+  /**
+   * The &#x60;application&#x60; ID.
+   * @type {string}
+   * @memberof ApplicationsApiDeleteApplication
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getApplication operation in ApplicationsApi.
+ * @export
+ * @interface ApplicationsApiGetApplicationRequest
+ */
+export interface ApplicationsApiGetApplicationRequest {
+  /**
+   * The &#x60;application&#x60; ID.
+   * @type {string}
+   * @memberof ApplicationsApiGetApplication
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getApplications operation in ApplicationsApi.
+ * @export
+ * @interface ApplicationsApiGetApplicationsRequest
+ */
+export interface ApplicationsApiGetApplicationsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ApplicationsApiGetApplications
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ApplicationsApiGetApplications
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for updateApplication operation in ApplicationsApi.
+ * @export
+ * @interface ApplicationsApiUpdateApplicationRequest
+ */
+export interface ApplicationsApiUpdateApplicationRequest {
+  /**
+   * The &#x60;application&#x60; ID.
+   * @type {string}
+   * @memberof ApplicationsApiUpdateApplication
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateApplicationRequest}
+   * @memberof ApplicationsApiUpdateApplication
+   */
+  readonly updateApplicationRequest: UpdateApplicationRequest;
+}
+
+/**
+ * ApplicationsApi - object-oriented interface
+ * @export
+ * @class ApplicationsApi
+ * @extends {BaseAPI}
+ */
+export class ApplicationsApi extends BaseAPI {
+  /**
+   * Create an OAuth2 `application`.
+   * @param {ApplicationsApiCreateApplicationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ApplicationsApi
+   */
+  public createApplication(
+    requestParameters: ApplicationsApiCreateApplicationRequest,
+    options?: any
+  ) {
+    return ApplicationsApiFp(this.configuration)
+      .createApplication(requestParameters.createApplicationRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete an `application`.
+   * @param {ApplicationsApiDeleteApplicationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ApplicationsApi
+   */
+  public deleteApplication(
+    requestParameters: ApplicationsApiDeleteApplicationRequest,
+    options?: any
+  ) {
+    return ApplicationsApiFp(this.configuration)
+      .deleteApplication(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get an `application`.
+   * @param {ApplicationsApiGetApplicationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ApplicationsApi
+   */
+  public getApplication(
+    requestParameters: ApplicationsApiGetApplicationRequest,
+    options?: any
+  ) {
+    return ApplicationsApiFp(this.configuration)
+      .getApplication(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `applications`.
+   * @param {ApplicationsApiGetApplicationsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ApplicationsApi
+   */
+  public getApplications(
+    requestParameters: ApplicationsApiGetApplicationsRequest = {},
+    options?: any
+  ) {
+    return ApplicationsApiFp(this.configuration)
+      .getApplications(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update an `application`.
+   * @param {ApplicationsApiUpdateApplicationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ApplicationsApi
+   */
+  public updateApplication(
+    requestParameters: ApplicationsApiUpdateApplicationRequest,
+    options?: any
+  ) {
+    return ApplicationsApiFp(this.configuration)
+      .updateApplication(
+        requestParameters.id,
+        requestParameters.updateApplicationRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
 }
 
 /**
@@ -6613,6 +8608,140 @@ export const Oauth2ApiAxiosParamCreator = function (
 ) {
   return {
     /**
+     * Accept Consent Challenge to login.
+     * @param {string} challenge Challenge ID from oauth2 flow
+     * @param {AdminConsentAcceptRequest} [adminConsentAcceptRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    adminAcceptConsent: async (
+      challenge: string,
+      adminConsentAcceptRequest?: AdminConsentAcceptRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'challenge' is not null or undefined
+      assertParamExists('adminAcceptConsent', 'challenge', challenge);
+      const localVarPath = `/oauth2/auth/requests/consent/accept`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        [],
+        configuration
+      );
+
+      if (challenge !== undefined) {
+        localVarQueryParameter['challenge'] = challenge;
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        adminConsentAcceptRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Accept Login Challenge with subject & login challenge
+     * @param {string} loginChallenge Login Challenge ID from oauth2 flow
+     * @param {AdminLoginAcceptRequest} adminLoginAcceptRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    adminAcceptLogin: async (
+      loginChallenge: string,
+      adminLoginAcceptRequest: AdminLoginAcceptRequest,
+      options: any = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'loginChallenge' is not null or undefined
+      assertParamExists('adminAcceptLogin', 'loginChallenge', loginChallenge);
+      // verify required parameter 'adminLoginAcceptRequest' is not null or undefined
+      assertParamExists(
+        'adminAcceptLogin',
+        'adminLoginAcceptRequest',
+        adminLoginAcceptRequest
+      );
+      const localVarPath = `/oauth2/auth/requests/login/accept`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2Internal required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2Internal',
+        [],
+        configuration
+      );
+
+      if (loginChallenge !== undefined) {
+        localVarQueryParameter['login_challenge'] = loginChallenge;
+      }
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        adminLoginAcceptRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
@@ -6759,6 +8888,66 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = Oauth2ApiAxiosParamCreator(configuration);
   return {
     /**
+     * Accept Consent Challenge to login.
+     * @param {string} challenge Challenge ID from oauth2 flow
+     * @param {AdminConsentAcceptRequest} [adminConsentAcceptRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async adminAcceptConsent(
+      challenge: string,
+      adminConsentAcceptRequest?: AdminConsentAcceptRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<AdminRedirectTo>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.adminAcceptConsent(
+          challenge,
+          adminConsentAcceptRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Accept Login Challenge with subject & login challenge
+     * @param {string} loginChallenge Login Challenge ID from oauth2 flow
+     * @param {AdminLoginAcceptRequest} adminLoginAcceptRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async adminAcceptLogin(
+      loginChallenge: string,
+      adminLoginAcceptRequest: AdminLoginAcceptRequest,
+      options?: any
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<AdminRedirectTo>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.adminAcceptLogin(
+          loginChallenge,
+          adminLoginAcceptRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
@@ -6831,6 +9020,38 @@ export const Oauth2ApiFactory = function (
   const localVarFp = Oauth2ApiFp(configuration);
   return {
     /**
+     * Accept Consent Challenge to login.
+     * @param {string} challenge Challenge ID from oauth2 flow
+     * @param {AdminConsentAcceptRequest} [adminConsentAcceptRequest]
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    adminAcceptConsent(
+      challenge: string,
+      adminConsentAcceptRequest?: AdminConsentAcceptRequest,
+      options?: any
+    ): AxiosPromise<AdminRedirectTo> {
+      return localVarFp
+        .adminAcceptConsent(challenge, adminConsentAcceptRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Accept Login Challenge with subject & login challenge
+     * @param {string} loginChallenge Login Challenge ID from oauth2 flow
+     * @param {AdminLoginAcceptRequest} adminLoginAcceptRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    adminAcceptLogin(
+      loginChallenge: string,
+      adminLoginAcceptRequest: AdminLoginAcceptRequest,
+      options?: any
+    ): AxiosPromise<AdminRedirectTo> {
+      return localVarFp
+        .adminAcceptLogin(loginChallenge, adminLoginAcceptRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
      * @param {string} grantType
      * @param {string} [scope]
@@ -6868,6 +9089,48 @@ export const Oauth2ApiFactory = function (
     },
   };
 };
+
+/**
+ * Request parameters for adminAcceptConsent operation in Oauth2Api.
+ * @export
+ * @interface Oauth2ApiAdminAcceptConsentRequest
+ */
+export interface Oauth2ApiAdminAcceptConsentRequest {
+  /**
+   * Challenge ID from oauth2 flow
+   * @type {string}
+   * @memberof Oauth2ApiAdminAcceptConsent
+   */
+  readonly challenge: string;
+
+  /**
+   *
+   * @type {AdminConsentAcceptRequest}
+   * @memberof Oauth2ApiAdminAcceptConsent
+   */
+  readonly adminConsentAcceptRequest?: AdminConsentAcceptRequest;
+}
+
+/**
+ * Request parameters for adminAcceptLogin operation in Oauth2Api.
+ * @export
+ * @interface Oauth2ApiAdminAcceptLoginRequest
+ */
+export interface Oauth2ApiAdminAcceptLoginRequest {
+  /**
+   * Login Challenge ID from oauth2 flow
+   * @type {string}
+   * @memberof Oauth2ApiAdminAcceptLogin
+   */
+  readonly loginChallenge: string;
+
+  /**
+   *
+   * @type {AdminLoginAcceptRequest}
+   * @memberof Oauth2ApiAdminAcceptLogin
+   */
+  readonly adminLoginAcceptRequest: AdminLoginAcceptRequest;
+}
 
 /**
  * Request parameters for createToken operation in Oauth2Api.
@@ -6932,6 +9195,46 @@ export interface Oauth2ApiRevokeTokenRequest {
  * @extends {BaseAPI}
  */
 export class Oauth2Api extends BaseAPI {
+  /**
+   * Accept Consent Challenge to login.
+   * @param {Oauth2ApiAdminAcceptConsentRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof Oauth2Api
+   */
+  public adminAcceptConsent(
+    requestParameters: Oauth2ApiAdminAcceptConsentRequest,
+    options?: any
+  ) {
+    return Oauth2ApiFp(this.configuration)
+      .adminAcceptConsent(
+        requestParameters.challenge,
+        requestParameters.adminConsentAcceptRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Accept Login Challenge with subject & login challenge
+   * @param {Oauth2ApiAdminAcceptLoginRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof Oauth2Api
+   */
+  public adminAcceptLogin(
+    requestParameters: Oauth2ApiAdminAcceptLoginRequest,
+    options?: any
+  ) {
+    return Oauth2ApiFp(this.configuration)
+      .adminAcceptLogin(
+        requestParameters.loginChallenge,
+        requestParameters.adminLoginAcceptRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    * Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication) guide.
    * @param {Oauth2ApiCreateTokenRequest} requestParameters Request parameters.
@@ -10053,7 +12356,7 @@ export const SceneItemsApiAxiosParamCreator = function (
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10368,7 +12671,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10524,7 +12827,7 @@ export const SceneItemsApiFactory = function (
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -10665,7 +12968,7 @@ export interface SceneItemsApiGetSceneItemRequest {
   readonly id: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
    * @type {string}
    * @memberof SceneItemsApiGetSceneItem
    */
@@ -11940,7 +14243,7 @@ export const SceneViewsApiAxiosParamCreator = function (
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12256,7 +14559,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12414,7 +14717,7 @@ export const SceneViewsApiFactory = function (
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -12565,7 +14868,7 @@ export interface SceneViewsApiGetViewSceneItemRequest {
   readonly itemId: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; is only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
    * @type {string}
    * @memberof SceneViewsApiGetViewSceneItem
    */

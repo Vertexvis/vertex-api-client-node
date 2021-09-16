@@ -1,6 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
 import {
+  AccountsApi,
+  ApplicationsApi,
   BatchesApi,
   Configuration,
   FilesApi,
@@ -114,6 +116,8 @@ const SecToMs = 1000;
  * @see {@link https://developer.vertexvis.com/docs/guides|Developer Guides} to get started.
  */
 export class VertexClient {
+  public accounts: AccountsApi;
+  public applications: ApplicationsApi;
   public batches: BatchesApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
@@ -146,6 +150,8 @@ export class VertexClient {
       basePath,
     });
     this.axiosInstance = axiosInst;
+    this.accounts = new AccountsApi(this.config, undefined, axiosInst);
+    this.applications = new ApplicationsApi(this.config, undefined, axiosInst);
     this.batches = new BatchesApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
