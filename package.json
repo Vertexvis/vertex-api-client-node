@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/api-client-node",
-  "version": "0.14.7",
+  "version": "0.14.8",
   "description": "The Vertex REST API client for Node.js.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
