@@ -38,8 +38,12 @@ export interface CreatePartFromFileReq extends BaseReq {
   /** Function returning a {@link CreatePartRequest}. */
   readonly createPartReq: (fileId: string) => CreatePartRequest;
 
-  /** File data, use {@link Buffer} in Node. */
-  readonly fileData: unknown;
+  /** File data.
+   * @deprecated Use {@link filePath} instead.
+   */
+  readonly fileData?: unknown;
+
+  readonly filePath?: string;
 
   /** {@link Polling} */
   readonly polling?: Polling;
@@ -80,6 +84,7 @@ export async function createPartFromFile({
   createFileReq,
   createPartReq,
   fileData,
+  filePath,
   onMsg = console.log,
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   returnQueued = false,
@@ -89,6 +94,7 @@ export async function createPartFromFile({
     client,
     verbose,
     fileData,
+    filePath,
     createFileReq,
     onMsg,
   });

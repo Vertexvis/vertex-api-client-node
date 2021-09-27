@@ -44,7 +44,7 @@ export interface Polling {
 }
 
 /**
- * Render image arguments. Render functions return Streams in Node. Here's an
+ * Render image arguments. Render functions return Streams. Here's an
  * example awaiting file creation,
  *
  * @example
