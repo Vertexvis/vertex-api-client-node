@@ -36,7 +36,7 @@ import { version } from './version';
  */
 export interface BuildReq {
   /**
-   * A {@link AxiosRequestConfig}. For example, to use HTTP keep-alive in Node,
+   * A {@link AxiosRequestConfig}. For example, to use HTTP keep-alive,
    *
    *  * @example
    * ```typescript

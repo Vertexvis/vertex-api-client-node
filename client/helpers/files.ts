@@ -19,7 +19,7 @@ export interface UploadFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  /** File data, use {@link Buffer} in Node.
+  /** File data.
    * @deprecated Use {@link filePath} instead.
    */
   readonly fileData?: unknown;
