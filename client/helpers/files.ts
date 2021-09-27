@@ -1,3 +1,6 @@
+import fs from 'fs';
+import { promisify } from 'util';
+
 import {
   BaseReq,
   delay,
@@ -8,20 +11,20 @@ import {
 } from '../../client/index';
 import { CreateFileRequest, FileList, FileMetadataData } from '../../index';
 
+const readFile = promisify(fs.readFile);
+const stat = promisify(fs.stat);
+
 /** Upload file arguments. */
 export interface UploadFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  readonly file?: {
-    readonly data: Buffer;
-    readonly size: number;
-  };
-
   /** File data, use {@link Buffer} in Node.
-   * @deprecated Use {@link file} instead.
+   * @deprecated Use {@link filePath} instead.
    */
   readonly fileData?: unknown;
+
+  readonly filePath?: string;
 }
 
 /**
@@ -61,8 +64,8 @@ export async function deleteAllFiles({
 export async function uploadFileIfNotExists({
   client,
   createFileReq,
-  file,
   fileData,
+  filePath,
   onMsg = console.log,
   verbose,
 }: UploadFileReq): Promise<FileMetadataData> {
@@ -99,7 +102,14 @@ export async function uploadFileIfNotExists({
     }
   }
 
-  return uploadFile({ client, createFileReq, file, fileData, onMsg, verbose });
+  return uploadFile({
+    client,
+    createFileReq,
+    fileData,
+    filePath,
+    onMsg,
+    verbose,
+  });
 }
 
 /**
@@ -110,8 +120,8 @@ export async function uploadFileIfNotExists({
 export async function uploadFile({
   client,
   createFileReq,
-  file,
   fileData,
+  filePath,
   onMsg = console.log,
   verbose,
 }: UploadFileReq): Promise<FileMetadataData> {
@@ -122,16 +132,19 @@ export async function uploadFile({
   const fileId = createRes.data.data.id;
   if (verbose) onMsg(`Created file '${fileName}', ${fileId}`);
 
+  const [body, { size }] = filePath
+    ? await Promise.all([readFile(filePath), stat(filePath)])
+    : [fileData, { size: -1 }];
   await client.files.uploadFile(
-    { id: fileId, body: file?.data ?? fileData },
-    { headers: file?.size ? { 'Content-Length': file.size } : undefined }
+    { id: fileId, body },
+    { headers: size >= 0 ? { 'Content-Length': size } : undefined }
   );
   if (verbose) onMsg(`Uploaded file ${fileId}`);
 
   const updated = (await client.files.getFile({ id: fileId })).data.data;
-  if (file?.size && updated.attributes.size !== file.size) {
+  if (size >= 0 && updated.attributes.size !== size) {
     onMsg(
-      `File size mismatch, expected ${file.size} got ${updated.attributes.size}`
+      `File ${fileId} size mismatch, expected ${size} got ${updated.attributes.size}`
     );
   }
 
