@@ -129,6 +129,12 @@ export async function uploadFile({
   if (verbose) onMsg(`Uploaded file ${fileId}`);
 
   const updated = (await client.files.getFile({ id: fileId })).data.data;
+  if (file?.size && updated.attributes.size !== file.size) {
+    onMsg(
+      `File size mismatch, expected ${file.size} got ${updated.attributes.size}`
+    );
+  }
+
   const status = updated.attributes.status;
   if (status === 'error')
     throw new Error(`Uploading file ${fileId} failed with status ${status}`);

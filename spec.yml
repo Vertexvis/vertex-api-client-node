@@ -6311,7 +6311,7 @@ components:
           description: List of operations to perform as a batch.
           items:
             $ref: '#/components/schemas/BatchOperation'
-          maxItems: 250
+          maxItems: 500
           type: array
       required:
         - vertexvis/batch:operations
@@ -9282,6 +9282,9 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        size:
+          format: int64
+          type: integer
       required:
         - created
         - name

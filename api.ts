@@ -1987,6 +1987,12 @@ export interface FileMetadataDataAttributes {
    * @memberof FileMetadataDataAttributes
    */
   uploaded?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof FileMetadataDataAttributes
+   */
+  size?: number;
 }
 /**
  * Relationship to a `file`.
@@ -7459,7 +7465,6 @@ export const FilesApiFp = function (configuration?: Configuration) {
         body,
         options
       );
-      // console.log("ROCKY:", localVarAxiosArgs)
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
