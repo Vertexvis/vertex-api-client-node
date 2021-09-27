@@ -1987,6 +1987,12 @@ export interface FileMetadataDataAttributes {
    * @memberof FileMetadataDataAttributes
    */
   uploaded?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof FileMetadataDataAttributes
+   */
+  size?: number;
 }
 /**
  * Relationship to a `file`.
