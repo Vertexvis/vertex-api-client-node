@@ -1,6 +1,7 @@
 .lib/
 coverage/
 dist/
+api-upload-files.ts
 functional-test.ts
 node_modules/
 wwwroot/*.js

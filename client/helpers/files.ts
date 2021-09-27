@@ -13,8 +13,15 @@ export interface UploadFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  /** File data, use {@link Buffer} or {@link ReadStream} in Node. */
-  readonly fileData: unknown;
+  readonly file?: {
+    readonly data: Buffer;
+    readonly size: number;
+  };
+
+  /** File data, use {@link Buffer} in Node.
+   * @deprecated Use {@link file} instead.
+   */
+  readonly fileData?: unknown;
 }
 
 /**
@@ -54,6 +61,7 @@ export async function deleteAllFiles({
 export async function uploadFileIfNotExists({
   client,
   createFileReq,
+  file,
   fileData,
   onMsg = console.log,
   verbose,
@@ -91,7 +99,7 @@ export async function uploadFileIfNotExists({
     }
   }
 
-  return uploadFile({ client, createFileReq, fileData, onMsg, verbose });
+  return uploadFile({ client, createFileReq, file, fileData, onMsg, verbose });
 }
 
 /**
@@ -102,6 +110,7 @@ export async function uploadFileIfNotExists({
 export async function uploadFile({
   client,
   createFileReq,
+  file,
   fileData,
   onMsg = console.log,
   verbose,
@@ -113,7 +122,10 @@ export async function uploadFile({
   const fileId = createRes.data.data.id;
   if (verbose) onMsg(`Created file '${fileName}', ${fileId}`);
 
-  await client.files.uploadFile({ id: fileId, body: fileData });
+  await client.files.uploadFile(
+    { id: fileId, body: file?.data ?? fileData },
+    { headers: file?.size ? { 'Content-Length': file.size } : undefined }
+  );
   if (verbose) onMsg(`Uploaded file ${fileId}`);
 
   const updated = (await client.files.getFile({ id: fileId })).data.data;

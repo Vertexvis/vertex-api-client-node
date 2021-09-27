@@ -7459,6 +7459,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
         body,
         options
       );
+      // console.log("ROCKY:", localVarAxiosArgs)
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
