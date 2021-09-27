@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { request, RequestOptions } from 'https';
 import { promisify } from 'util';
 
 import {
@@ -25,6 +26,8 @@ export interface UploadFileReq extends BaseReq {
   readonly fileData?: unknown;
 
   readonly filePath?: string;
+
+  readonly bypassAxiosEXPERIMENTAL?: boolean;
 }
 
 /**
@@ -64,10 +67,9 @@ export async function deleteAllFiles({
 export async function uploadFileIfNotExists({
   client,
   createFileReq,
-  fileData,
-  filePath,
   onMsg = console.log,
   verbose,
+  ...rest
 }: UploadFileReq): Promise<FileMetadataData> {
   const suppliedId = createFileReq.data.attributes.suppliedId;
   const existingFile = suppliedId
@@ -102,14 +104,7 @@ export async function uploadFileIfNotExists({
     }
   }
 
-  return uploadFile({
-    client,
-    createFileReq,
-    fileData,
-    filePath,
-    onMsg,
-    verbose,
-  });
+  return uploadFile({ client, createFileReq, onMsg, verbose, ...rest });
 }
 
 /**
@@ -124,6 +119,7 @@ export async function uploadFile({
   filePath,
   onMsg = console.log,
   verbose,
+  bypassAxiosEXPERIMENTAL = false,
 }: UploadFileReq): Promise<FileMetadataData> {
   const fileName = createFileReq.data.attributes.name;
   const createRes = await client.files.createFile({
@@ -135,22 +131,42 @@ export async function uploadFile({
   const [body, { size }] = filePath
     ? await Promise.all([readFile(filePath), stat(filePath)])
     : [fileData, { size: -1 }];
-  await client.files.uploadFile(
-    { id: fileId, body },
-    { headers: size >= 0 ? { 'Content-Length': size } : undefined }
-  );
+
+  const uploadRes = await (bypassAxiosEXPERIMENTAL
+    ? upload(body as Buffer, {
+        headers: {
+          Authorization: `Bearer ${client.token.access_token}`,
+          'Content-Type': 'application/octet-stream',
+          'Content-Length': size,
+        },
+        hostname: new URL(client.config.basePath ?? '').hostname,
+        method: 'POST',
+        port: 443,
+        path: `/files/${fileId}`,
+      })
+    : client.files.uploadFile(
+        { id: fileId, body },
+        { headers: size >= 0 ? { 'Content-Length': size } : undefined }
+      ));
+
+  if (uploadRes.status !== 204) {
+    throw new Error(
+      `Uploading file ${fileId} failed with status code ${uploadRes.status}`
+    );
+  }
   if (verbose) onMsg(`Uploaded file ${fileId}`);
 
-  const updated = (await client.files.getFile({ id: fileId })).data.data;
-  if (size >= 0 && updated.attributes.size !== size) {
+  const getRes = (await client.files.getFile({ id: fileId })).data.data;
+  if (size >= 0 && getRes.attributes.size !== size) {
     onMsg(
-      `File ${fileId} size mismatch, expected ${size} got ${updated.attributes.size}`
+      `File ${fileId} size mismatch, expected ${size} got ${getRes.attributes.size}`
     );
   }
 
-  const status = updated.attributes.status;
-  if (status === 'error')
+  const status = getRes.attributes.status;
+  if (status === 'error') {
     throw new Error(`Uploading file ${fileId} failed with status ${status}`);
+  }
 
   // Sanity check
   if (status !== 'complete') {
@@ -158,5 +174,22 @@ export async function uploadFile({
     await delay(1000);
   }
 
-  return updated;
+  return getRes;
 }
+
+interface UploadRes {
+  readonly status: number;
+}
+
+export const upload = (
+  body: Buffer,
+  opts: RequestOptions
+): Promise<UploadRes> =>
+  new Promise((resolve, reject) => {
+    const req = request(opts, (r) => {
+      r.resume();
+      resolve({ status: r.statusCode ?? -1 });
+    });
+    req.on('error', (error) => (req.aborted ? null : reject(error)));
+    req.end(body);
+  });

@@ -50,6 +50,8 @@ export interface CreatePartFromFileReq extends BaseReq {
 
   /** Whether or not to return queued translation. */
   readonly returnQueued?: boolean;
+
+  readonly bypassAxiosEXPERIMENTAL?: boolean;
 }
 
 export interface CreatePartFromFileRes {
@@ -81,23 +83,14 @@ export interface GetPartRevisionBySuppliedIdReq extends BaseReq {
  */
 export async function createPartFromFile({
   client,
-  createFileReq,
   createPartReq,
-  fileData,
-  filePath,
   onMsg = console.log,
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   returnQueued = false,
   verbose,
+  ...rest
 }: CreatePartFromFileReq): Promise<CreatePartFromFileRes> {
-  const file = await uploadFileIfNotExists({
-    client,
-    verbose,
-    fileData,
-    filePath,
-    createFileReq,
-    onMsg,
-  });
+  const file = await uploadFileIfNotExists({ client, verbose, onMsg, ...rest });
   const createPartRequest = createPartReq(file.id);
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
   const suppliedRevisionId =

@@ -122,6 +122,7 @@ export class VertexClient {
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
   public hits: HitsApi;
+  public oAuth2: Oauth2Api;
   public partRevisions: PartRevisionsApi;
   public parts: PartsApi;
   public sceneAlterations: SceneAlterationsApi;
@@ -136,13 +137,12 @@ export class VertexClient {
 
   public axiosInstance: AxiosInstance;
   public config: Configuration;
+  public token: OAuth2Token;
 
-  private auth: Oauth2Api;
-  private token: OAuth2Token;
   private tokenFetchedEpochMs: number;
 
   private constructor({ auth, axiosInst, basePath, token }: CtorReq) {
-    this.auth = auth;
+    this.oAuth2 = auth;
     this.token = token;
     this.tokenFetchedEpochMs = nowEpochMs();
     this.config = new Configuration({
@@ -266,7 +266,7 @@ export class VertexClient {
     if (tokenValid) return this.token.access_token;
 
     console.log('Refreshing access token');
-    this.token = await createToken(this.auth);
+    this.token = await createToken(this.oAuth2);
     this.tokenFetchedEpochMs = nowEpochMs();
     return this.token.access_token;
   };
