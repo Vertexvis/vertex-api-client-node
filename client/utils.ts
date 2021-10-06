@@ -149,15 +149,23 @@ function getCursor(url?: string): string | undefined {
  *
  * @param error: The error.
  */
-export function getErrorMessage(error: VertexError | AxiosError): string {
+export function getErrorMessage(
+  error: VertexError | AxiosError | unknown
+): Error | string {
   if (hasVertexErrorMessage(error)) {
     const ve = error.vertexErrorMessage;
     return ve && !ve.startsWith(UnableToStringify) ? ve : error.message;
   }
 
-  return error.isAxiosError && error.response?.data
-    ? prettyJson(error.response?.data)
-    : error.message;
+  const ae = error as AxiosError;
+  if (ae.isAxiosError) {
+    return defined(ae.response?.data)
+      ? prettyJson(ae.response?.data)
+      : ae.message;
+  }
+
+  const e = error as Error;
+  return defined(e.message) ? e.message : e.toString();
 }
 
 /**
@@ -194,8 +202,7 @@ export async function getPage<
  * @param getKey - Function returning key to group the array by.
  * @returns A 2D array.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const groupBy = <T, K extends keyof any>(
+export const groupBy = <T, K extends keyof unknown>(
   items: T[],
   getKey: (item: T) => K
 ): Record<K, T[]> =>
@@ -240,22 +247,19 @@ export function isEncoded(s: string): boolean {
   return s !== decodeURIComponent(s);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function isApiError(error: any): error is ApiError {
+export function isApiError(error: unknown): error is ApiError {
   const ae = error as ApiError;
   return defined(ae.id) && defined(ae.status) && defined(ae.code);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function isFailure(obj: any): obj is Failure {
+export function isFailure(obj: unknown): obj is Failure {
   const f = obj as Failure;
   return !defined(f.errors) || f.errors.size === 0
     ? false
     : isApiError(head([...f.errors.values()]));
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function isQueuedJob(obj: any): obj is QueuedJob {
+export function isQueuedJob(obj: unknown): obj is QueuedJob {
   const qj = obj as QueuedJob;
   return (
     defined(qj.data) &&
@@ -265,14 +269,12 @@ export function isQueuedJob(obj: any): obj is QueuedJob {
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function hasVertexError(error: any): error is VertexError {
+export function hasVertexError(error: unknown): error is VertexError {
   const ve = error as VertexError;
   return defined(ve.vertexError);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
-export function hasVertexErrorMessage(error: any): error is VertexError {
+export function hasVertexErrorMessage(error: unknown): error is VertexError {
   const ve = error as VertexError;
   return defined(ve.vertexErrorMessage);
 }
@@ -284,7 +286,7 @@ export function hasVertexErrorMessage(error: any): error is VertexError {
  * @param logger: The logger to use.
  */
 export function logError(
-  error: VertexError | AxiosError,
+  error: VertexError | AxiosError | unknown,
   logger: (input: Error | string) => void = console.error
 ): void {
   logger(getErrorMessage(error));
