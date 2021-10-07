@@ -437,7 +437,8 @@ export async function tryStream<T>(fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } catch (error) {
-    const ae = error as AxiosError;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const ae = error as AxiosError<any>;
     // eslint-disable-next-line promise/param-names
     return new Promise((_resolve, reject) => {
       let res = '';
