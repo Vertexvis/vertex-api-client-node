@@ -113,7 +113,7 @@ export interface QueuedBatchOps {
   readonly res?: Failure | QueuedJob;
 }
 
-interface SceneItemError {
+export interface SceneItemError {
   readonly req: CreateSceneItemRequestData;
   readonly res?: ApiError;
 }
