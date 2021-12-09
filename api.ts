@@ -13,7 +13,11 @@
  */
 
 import { Configuration } from './configuration';
-import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
+import globalAxios, {
+  AxiosPromise,
+  AxiosInstance,
+  AxiosRequestConfig,
+} from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
@@ -443,7 +447,7 @@ export interface Batch {
    * @type {Array<RelationshipData | ApiError>}
    * @memberof Batch
    */
-  vertexvis_batchresults: Array<RelationshipData | ApiError>;
+  'vertexvis/batch:results': Array<RelationshipData | ApiError>;
 }
 /**
  *
@@ -882,7 +886,7 @@ export interface CreateBatchRequest {
    * @type {Array<BatchOperation>}
    * @memberof CreateBatchRequest
    */
-  vertexvis_batchoperations: Array<BatchOperation>;
+  'vertexvis/batch:operations': Array<BatchOperation>;
 }
 /**
  *
@@ -5232,7 +5236,7 @@ export const AccountsApiAxiosParamCreator = function (
      */
     createAccount: async (
       createAccountRequest: CreateAccountRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createAccountRequest' is not null or undefined
       assertParamExists(
@@ -5267,7 +5271,7 @@ export const AccountsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5296,7 +5300,7 @@ export const AccountsApiAxiosParamCreator = function (
     createApplicationForAccount: async (
       id: string,
       adminCreateApplicationRequest: AdminCreateApplicationRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createApplicationForAccount', 'id', id);
@@ -5336,7 +5340,7 @@ export const AccountsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5363,7 +5367,7 @@ export const AccountsApiAxiosParamCreator = function (
      */
     deleteAccount: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteAccount', 'id', id);
@@ -5395,7 +5399,7 @@ export const AccountsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5415,7 +5419,10 @@ export const AccountsApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getAccount: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    getAccount: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getAccount', 'id', id);
       const localVarPath = `/accounts/{id}`.replace(
@@ -5446,7 +5453,7 @@ export const AccountsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5470,7 +5477,7 @@ export const AccountsApiAxiosParamCreator = function (
     updateAccount: async (
       id: string,
       updateAccountRequest: UpdateAccountRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateAccount', 'id', id);
@@ -5510,7 +5517,7 @@ export const AccountsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -5547,7 +5554,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
      */
     async createAccount(
       createAccountRequest: CreateAccountRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
     > {
@@ -5572,7 +5579,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
     async createApplicationForAccount(
       id: string,
       adminCreateApplicationRequest: AdminCreateApplicationRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -5600,7 +5607,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
      */
     async deleteAccount(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -5623,7 +5630,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
      */
     async getAccount(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
     > {
@@ -5648,7 +5655,7 @@ export const AccountsApiFp = function (configuration?: Configuration) {
     async updateAccount(
       id: string,
       updateAccountRequest: UpdateAccountRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Account>
     > {
@@ -5849,7 +5856,7 @@ export class AccountsApi extends BaseAPI {
    */
   public createAccount(
     requestParameters: AccountsApiCreateAccountRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return AccountsApiFp(this.configuration)
       .createAccount(requestParameters.createAccountRequest, options)
@@ -5865,7 +5872,7 @@ export class AccountsApi extends BaseAPI {
    */
   public createApplicationForAccount(
     requestParameters: AccountsApiCreateApplicationForAccountRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return AccountsApiFp(this.configuration)
       .createApplicationForAccount(
@@ -5885,7 +5892,7 @@ export class AccountsApi extends BaseAPI {
    */
   public deleteAccount(
     requestParameters: AccountsApiDeleteAccountRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return AccountsApiFp(this.configuration)
       .deleteAccount(requestParameters.id, options)
@@ -5901,7 +5908,7 @@ export class AccountsApi extends BaseAPI {
    */
   public getAccount(
     requestParameters: AccountsApiGetAccountRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return AccountsApiFp(this.configuration)
       .getAccount(requestParameters.id, options)
@@ -5917,7 +5924,7 @@ export class AccountsApi extends BaseAPI {
    */
   public updateAccount(
     requestParameters: AccountsApiUpdateAccountRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return AccountsApiFp(this.configuration)
       .updateAccount(
@@ -5945,7 +5952,7 @@ export const ApplicationsApiAxiosParamCreator = function (
      */
     createApplication: async (
       createApplicationRequest: CreateApplicationRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createApplicationRequest' is not null or undefined
       assertParamExists(
@@ -5980,7 +5987,7 @@ export const ApplicationsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6007,7 +6014,7 @@ export const ApplicationsApiAxiosParamCreator = function (
      */
     deleteApplication: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteApplication', 'id', id);
@@ -6039,7 +6046,7 @@ export const ApplicationsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6061,7 +6068,7 @@ export const ApplicationsApiAxiosParamCreator = function (
      */
     getApplication: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getApplication', 'id', id);
@@ -6093,7 +6100,7 @@ export const ApplicationsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6117,7 +6124,7 @@ export const ApplicationsApiAxiosParamCreator = function (
     getApplications: async (
       pageCursor?: string,
       pageSize?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/applications`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -6152,7 +6159,7 @@ export const ApplicationsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6176,7 +6183,7 @@ export const ApplicationsApiAxiosParamCreator = function (
     updateApplication: async (
       id: string,
       updateApplicationRequest: UpdateApplicationRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateApplication', 'id', id);
@@ -6216,7 +6223,7 @@ export const ApplicationsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6254,7 +6261,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
      */
     async createApplication(
       createApplicationRequest: CreateApplicationRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -6281,7 +6288,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
      */
     async deleteApplication(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -6302,7 +6309,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
      */
     async getApplication(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Application>
     > {
@@ -6327,7 +6334,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
     async getApplications(
       pageCursor?: string,
       pageSize?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -6356,7 +6363,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
     async updateApplication(
       id: string,
       updateApplicationRequest: UpdateApplicationRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Application>
     > {
@@ -6558,7 +6565,7 @@ export class ApplicationsApi extends BaseAPI {
    */
   public createApplication(
     requestParameters: ApplicationsApiCreateApplicationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ApplicationsApiFp(this.configuration)
       .createApplication(requestParameters.createApplicationRequest, options)
@@ -6574,7 +6581,7 @@ export class ApplicationsApi extends BaseAPI {
    */
   public deleteApplication(
     requestParameters: ApplicationsApiDeleteApplicationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ApplicationsApiFp(this.configuration)
       .deleteApplication(requestParameters.id, options)
@@ -6590,7 +6597,7 @@ export class ApplicationsApi extends BaseAPI {
    */
   public getApplication(
     requestParameters: ApplicationsApiGetApplicationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ApplicationsApiFp(this.configuration)
       .getApplication(requestParameters.id, options)
@@ -6606,7 +6613,7 @@ export class ApplicationsApi extends BaseAPI {
    */
   public getApplications(
     requestParameters: ApplicationsApiGetApplicationsRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ApplicationsApiFp(this.configuration)
       .getApplications(
@@ -6626,7 +6633,7 @@ export class ApplicationsApi extends BaseAPI {
    */
   public updateApplication(
     requestParameters: ApplicationsApiUpdateApplicationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ApplicationsApiFp(this.configuration)
       .updateApplication(
@@ -6654,7 +6661,7 @@ export const BatchesApiAxiosParamCreator = function (
      */
     createBatch: async (
       createBatchRequest: CreateBatchRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createBatchRequest' is not null or undefined
       assertParamExists(
@@ -6689,7 +6696,7 @@ export const BatchesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6714,7 +6721,10 @@ export const BatchesApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getBatch: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    getBatch: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getBatch', 'id', id);
       const localVarPath = `/batches/{id}`.replace(
@@ -6745,7 +6755,7 @@ export const BatchesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6767,7 +6777,7 @@ export const BatchesApiAxiosParamCreator = function (
      */
     getQueuedBatch: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedBatch', 'id', id);
@@ -6799,7 +6809,7 @@ export const BatchesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -6831,7 +6841,7 @@ export const BatchesApiFp = function (configuration?: Configuration) {
      */
     async createBatch(
       createBatchRequest: CreateBatchRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -6854,7 +6864,7 @@ export const BatchesApiFp = function (configuration?: Configuration) {
      */
     async getBatch(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Batch>
     > {
@@ -6877,7 +6887,7 @@ export const BatchesApiFp = function (configuration?: Configuration) {
      */
     async getQueuedBatch(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -7003,7 +7013,7 @@ export class BatchesApi extends BaseAPI {
    */
   public createBatch(
     requestParameters: BatchesApiCreateBatchRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return BatchesApiFp(this.configuration)
       .createBatch(requestParameters.createBatchRequest, options)
@@ -7017,7 +7027,10 @@ export class BatchesApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof BatchesApi
    */
-  public getBatch(requestParameters: BatchesApiGetBatchRequest, options?: any) {
+  public getBatch(
+    requestParameters: BatchesApiGetBatchRequest,
+    options?: AxiosRequestConfig
+  ) {
     return BatchesApiFp(this.configuration)
       .getBatch(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7032,7 +7045,7 @@ export class BatchesApi extends BaseAPI {
    */
   public getQueuedBatch(
     requestParameters: BatchesApiGetQueuedBatchRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
@@ -7056,7 +7069,7 @@ export const FilesApiAxiosParamCreator = function (
      */
     createFile: async (
       createFileRequest: CreateFileRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createFileRequest' is not null or undefined
       assertParamExists('createFile', 'createFileRequest', createFileRequest);
@@ -7087,7 +7100,7 @@ export const FilesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7112,7 +7125,10 @@ export const FilesApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deleteFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    deleteFile: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteFile', 'id', id);
       const localVarPath = `/files/{id}`.replace(
@@ -7143,7 +7159,7 @@ export const FilesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7163,7 +7179,10 @@ export const FilesApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getFile: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    getFile: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getFile', 'id', id);
       const localVarPath = `/files/{id}`.replace(
@@ -7194,7 +7213,7 @@ export const FilesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7220,7 +7239,7 @@ export const FilesApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/files`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7259,7 +7278,7 @@ export const FilesApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7283,7 +7302,7 @@ export const FilesApiAxiosParamCreator = function (
     uploadFile: async (
       id: string,
       body: any,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('uploadFile', 'id', id);
@@ -7319,7 +7338,7 @@ export const FilesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7356,7 +7375,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
      */
     async createFile(
       createFileRequest: CreateFileRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
     > {
@@ -7379,7 +7398,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
      */
     async deleteFile(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
     > {
@@ -7402,7 +7421,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
      */
     async getFile(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
     > {
@@ -7429,7 +7448,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>
     > {
@@ -7456,7 +7475,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
     async uploadFile(
       id: string,
       body: any,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -7662,7 +7681,7 @@ export class FilesApi extends BaseAPI {
    */
   public createFile(
     requestParameters: FilesApiCreateFileRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return FilesApiFp(this.configuration)
       .createFile(requestParameters.createFileRequest, options)
@@ -7678,7 +7697,7 @@ export class FilesApi extends BaseAPI {
    */
   public deleteFile(
     requestParameters: FilesApiDeleteFileRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return FilesApiFp(this.configuration)
       .deleteFile(requestParameters.id, options)
@@ -7692,7 +7711,10 @@ export class FilesApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof FilesApi
    */
-  public getFile(requestParameters: FilesApiGetFileRequest, options?: any) {
+  public getFile(
+    requestParameters: FilesApiGetFileRequest,
+    options?: AxiosRequestConfig
+  ) {
     return FilesApiFp(this.configuration)
       .getFile(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
@@ -7707,7 +7729,7 @@ export class FilesApi extends BaseAPI {
    */
   public getFiles(
     requestParameters: FilesApiGetFilesRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return FilesApiFp(this.configuration)
       .getFiles(
@@ -7728,7 +7750,7 @@ export class FilesApi extends BaseAPI {
    */
   public uploadFile(
     requestParameters: FilesApiUploadFileRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return FilesApiFp(this.configuration)
       .uploadFile(requestParameters.id, requestParameters.body, options)
@@ -7752,7 +7774,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
      */
     createGeometrySet: async (
       createGeometrySetRequest: CreateGeometrySetRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createGeometrySetRequest' is not null or undefined
       assertParamExists(
@@ -7787,7 +7809,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7814,7 +7836,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
      */
     getGeometrySet: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getGeometrySet', 'id', id);
@@ -7846,7 +7868,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7870,7 +7892,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
     getGeometrySets: async (
       pageCursor?: string,
       pageSize?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/geometry-sets`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -7905,7 +7927,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -7938,7 +7960,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
      */
     async createGeometrySet(
       createGeometrySetRequest: CreateGeometrySetRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -7962,7 +7984,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
      */
     async getGeometrySet(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<GeometrySet>
     > {
@@ -7987,7 +8009,7 @@ export const GeometrySetsApiFp = function (configuration?: Configuration) {
     async getGeometrySets(
       pageCursor?: string,
       pageSize?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -8129,7 +8151,7 @@ export class GeometrySetsApi extends BaseAPI {
    */
   public createGeometrySet(
     requestParameters: GeometrySetsApiCreateGeometrySetRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return GeometrySetsApiFp(this.configuration)
       .createGeometrySet(requestParameters.createGeometrySetRequest, options)
@@ -8145,7 +8167,7 @@ export class GeometrySetsApi extends BaseAPI {
    */
   public getGeometrySet(
     requestParameters: GeometrySetsApiGetGeometrySetRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return GeometrySetsApiFp(this.configuration)
       .getGeometrySet(requestParameters.id, options)
@@ -8161,7 +8183,7 @@ export class GeometrySetsApi extends BaseAPI {
    */
   public getGeometrySets(
     requestParameters: GeometrySetsApiGetGeometrySetsRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return GeometrySetsApiFp(this.configuration)
       .getGeometrySets(
@@ -8195,7 +8217,7 @@ export const HitsApiAxiosParamCreator = function (
       createHitRequest: CreateHitRequest,
       include?: string,
       fieldsPartRevision?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneHit', 'id', id);
@@ -8239,7 +8261,7 @@ export const HitsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8272,7 +8294,7 @@ export const HitsApiAxiosParamCreator = function (
       createHitRequest: CreateHitRequest,
       include?: string,
       fieldsPartRevision?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneViewHit', 'id', id);
@@ -8320,7 +8342,7 @@ export const HitsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8363,7 +8385,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
       createHitRequest: CreateHitRequest,
       include?: string,
       fieldsPartRevision?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
@@ -8395,7 +8417,7 @@ export const HitsApiFp = function (configuration?: Configuration) {
       createHitRequest: CreateHitRequest,
       include?: string,
       fieldsPartRevision?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Hit>
     > {
@@ -8569,7 +8591,7 @@ export class HitsApi extends BaseAPI {
    */
   public createSceneHit(
     requestParameters: HitsApiCreateSceneHitRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return HitsApiFp(this.configuration)
       .createSceneHit(
@@ -8591,7 +8613,7 @@ export class HitsApi extends BaseAPI {
    */
   public createSceneViewHit(
     requestParameters: HitsApiCreateSceneViewHitRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return HitsApiFp(this.configuration)
       .createSceneViewHit(
@@ -8623,7 +8645,7 @@ export const Oauth2ApiAxiosParamCreator = function (
     adminAcceptConsent: async (
       challenge: string,
       adminConsentAcceptRequest?: AdminConsentAcceptRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'challenge' is not null or undefined
       assertParamExists('adminAcceptConsent', 'challenge', challenge);
@@ -8658,7 +8680,7 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8687,7 +8709,7 @@ export const Oauth2ApiAxiosParamCreator = function (
     adminAcceptLogin: async (
       loginChallenge: string,
       adminLoginAcceptRequest: AdminLoginAcceptRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'loginChallenge' is not null or undefined
       assertParamExists('adminAcceptLogin', 'loginChallenge', loginChallenge);
@@ -8728,7 +8750,7 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8763,7 +8785,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       code?: string,
       redirectUri?: string,
       refreshToken?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'grantType' is not null or undefined
       assertParamExists('createToken', 'grantType', grantType);
@@ -8811,7 +8833,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] =
         'application/x-www-form-urlencoded';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8834,7 +8856,7 @@ export const Oauth2ApiAxiosParamCreator = function (
      */
     revokeToken: async (
       revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'revokeOAuth2TokenRequest' is not null or undefined
       assertParamExists(
@@ -8864,7 +8886,7 @@ export const Oauth2ApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -8903,7 +8925,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
     async adminAcceptConsent(
       challenge: string,
       adminConsentAcceptRequest?: AdminConsentAcceptRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -8933,7 +8955,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
     async adminAcceptLogin(
       loginChallenge: string,
       adminLoginAcceptRequest: AdminLoginAcceptRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -8969,7 +8991,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       code?: string,
       redirectUri?: string,
       refreshToken?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>
     > {
@@ -8996,7 +9018,7 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
      */
     async revokeToken(
       revokeOAuth2TokenRequest: RevokeOAuth2TokenRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -9210,7 +9232,7 @@ export class Oauth2Api extends BaseAPI {
    */
   public adminAcceptConsent(
     requestParameters: Oauth2ApiAdminAcceptConsentRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return Oauth2ApiFp(this.configuration)
       .adminAcceptConsent(
@@ -9230,7 +9252,7 @@ export class Oauth2Api extends BaseAPI {
    */
   public adminAcceptLogin(
     requestParameters: Oauth2ApiAdminAcceptLoginRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return Oauth2ApiFp(this.configuration)
       .adminAcceptLogin(
@@ -9250,7 +9272,7 @@ export class Oauth2Api extends BaseAPI {
    */
   public createToken(
     requestParameters: Oauth2ApiCreateTokenRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return Oauth2ApiFp(this.configuration)
       .createToken(
@@ -9273,7 +9295,7 @@ export class Oauth2Api extends BaseAPI {
    */
   public revokeToken(
     requestParameters: Oauth2ApiRevokeTokenRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return Oauth2ApiFp(this.configuration)
       .revokeToken(requestParameters.revokeOAuth2TokenRequest, options)
@@ -9297,7 +9319,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
      */
     deletePartRevision: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deletePartRevision', 'id', id);
@@ -9329,7 +9351,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9353,7 +9375,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
     getPartRevision: async (
       id: string,
       fieldsPartRevision?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getPartRevision', 'id', id);
@@ -9389,7 +9411,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['fields[part-revision]'] = fieldsPartRevision;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9417,7 +9439,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getPartRevisions', 'id', id);
@@ -9461,7 +9483,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9483,7 +9505,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
      */
     getQueuedPartRevisionDeletion: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedPartRevisionDeletion', 'id', id);
@@ -9515,7 +9537,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9547,7 +9569,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       cameraPosition?: Vector3,
       cameraUp?: Vector3,
       cameraLookAt?: Vector3,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('renderPartRevision', 'id', id);
@@ -9599,7 +9621,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
         localVarQueryParameter['camera[lookAt]'] = cameraLookAt;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9623,7 +9645,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
     updatePartRevision: async (
       id: string,
       updatePartRevisionRequest: UpdatePartRevisionRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updatePartRevision', 'id', id);
@@ -9663,7 +9685,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -9701,7 +9723,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
      */
     async deletePartRevision(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -9724,7 +9746,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     async getPartRevision(
       id: string,
       fieldsPartRevision?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
     > {
@@ -9754,7 +9776,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -9784,7 +9806,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
      */
     async getQueuedPartRevisionDeletion(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -9818,7 +9840,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       cameraPosition?: Vector3,
       cameraUp?: Vector3,
       cameraLookAt?: Vector3,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
     > {
@@ -9849,7 +9871,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
     async updatePartRevision(
       id: string,
       updatePartRevisionRequest: UpdatePartRevisionRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRevision>
     > {
@@ -10162,7 +10184,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public deletePartRevision(
     requestParameters: PartRevisionsApiDeletePartRevisionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .deletePartRevision(requestParameters.id, options)
@@ -10178,7 +10200,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public getPartRevision(
     requestParameters: PartRevisionsApiGetPartRevisionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .getPartRevision(
@@ -10198,7 +10220,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public getPartRevisions(
     requestParameters: PartRevisionsApiGetPartRevisionsRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .getPartRevisions(
@@ -10220,7 +10242,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public getQueuedPartRevisionDeletion(
     requestParameters: PartRevisionsApiGetQueuedPartRevisionDeletionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .getQueuedPartRevisionDeletion(requestParameters.id, options)
@@ -10236,7 +10258,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public renderPartRevision(
     requestParameters: PartRevisionsApiRenderPartRevisionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .renderPartRevision(
@@ -10260,7 +10282,7 @@ export class PartRevisionsApi extends BaseAPI {
    */
   public updatePartRevision(
     requestParameters: PartRevisionsApiUpdatePartRevisionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartRevisionsApiFp(this.configuration)
       .updatePartRevision(
@@ -10288,7 +10310,7 @@ export const PartsApiAxiosParamCreator = function (
      */
     createPart: async (
       createPartRequest: CreatePartRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createPartRequest' is not null or undefined
       assertParamExists('createPart', 'createPartRequest', createPartRequest);
@@ -10319,7 +10341,7 @@ export const PartsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10344,7 +10366,10 @@ export const PartsApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePart: async (id: string, options: any = {}): Promise<RequestArgs> => {
+    deletePart: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deletePart', 'id', id);
       const localVarPath = `/parts/{id}`.replace(
@@ -10375,7 +10400,7 @@ export const PartsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10399,7 +10424,7 @@ export const PartsApiAxiosParamCreator = function (
     getPart: async (
       id: string,
       include?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getPart', 'id', id);
@@ -10435,7 +10460,7 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10461,7 +10486,7 @@ export const PartsApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/parts`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -10500,7 +10525,7 @@ export const PartsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10522,7 +10547,7 @@ export const PartsApiAxiosParamCreator = function (
      */
     getQueuedPartDeletion: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedPartDeletion', 'id', id);
@@ -10554,7 +10579,7 @@ export const PartsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -10586,7 +10611,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
      */
     async createPart(
       createPartRequest: CreatePartRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -10609,7 +10634,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
      */
     async deletePart(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -10634,7 +10659,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
     async getPart(
       id: string,
       include?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Part>
     > {
@@ -10662,7 +10687,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>
     > {
@@ -10687,7 +10712,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
      */
     async getQueuedPartDeletion(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -10890,7 +10915,7 @@ export class PartsApi extends BaseAPI {
    */
   public createPart(
     requestParameters: PartsApiCreatePartRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartsApiFp(this.configuration)
       .createPart(requestParameters.createPartRequest, options)
@@ -10906,7 +10931,7 @@ export class PartsApi extends BaseAPI {
    */
   public deletePart(
     requestParameters: PartsApiDeletePartRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartsApiFp(this.configuration)
       .deletePart(requestParameters.id, options)
@@ -10920,7 +10945,10 @@ export class PartsApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof PartsApi
    */
-  public getPart(requestParameters: PartsApiGetPartRequest, options?: any) {
+  public getPart(
+    requestParameters: PartsApiGetPartRequest,
+    options?: AxiosRequestConfig
+  ) {
     return PartsApiFp(this.configuration)
       .getPart(requestParameters.id, requestParameters.include, options)
       .then((request) => request(this.axios, this.basePath));
@@ -10935,7 +10963,7 @@ export class PartsApi extends BaseAPI {
    */
   public getParts(
     requestParameters: PartsApiGetPartsRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartsApiFp(this.configuration)
       .getParts(
@@ -10956,7 +10984,7 @@ export class PartsApi extends BaseAPI {
    */
   public getQueuedPartDeletion(
     requestParameters: PartsApiGetQueuedPartDeletionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return PartsApiFp(this.configuration)
       .getQueuedPartDeletion(requestParameters.id, options)
@@ -10982,7 +11010,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
     createSceneAlteration: async (
       id: string,
       createSceneAlterationRequest: CreateSceneAlterationRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneAlteration', 'id', id);
@@ -11022,7 +11050,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11049,7 +11077,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
      */
     getQueuedSceneAlteration: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedSceneAlteration', 'id', id);
@@ -11081,7 +11109,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11103,7 +11131,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
      */
     getSceneAlteration: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneAlteration', 'id', id);
@@ -11135,7 +11163,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11157,7 +11185,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
      */
     getSceneAlterations: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneAlterations', 'id', id);
@@ -11189,7 +11217,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11224,7 +11252,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
     async createSceneAlteration(
       id: string,
       createSceneAlterationRequest: CreateSceneAlterationRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -11249,7 +11277,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
      */
     async getQueuedSceneAlteration(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -11270,7 +11298,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
      */
     async getSceneAlteration(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -11294,7 +11322,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
      */
     async getSceneAlterations(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -11464,7 +11492,7 @@ export class SceneAlterationsApi extends BaseAPI {
    */
   public createSceneAlteration(
     requestParameters: SceneAlterationsApiCreateSceneAlterationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneAlterationsApiFp(this.configuration)
       .createSceneAlteration(
@@ -11484,7 +11512,7 @@ export class SceneAlterationsApi extends BaseAPI {
    */
   public getQueuedSceneAlteration(
     requestParameters: SceneAlterationsApiGetQueuedSceneAlterationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneAlterationsApiFp(this.configuration)
       .getQueuedSceneAlteration(requestParameters.id, options)
@@ -11500,7 +11528,7 @@ export class SceneAlterationsApi extends BaseAPI {
    */
   public getSceneAlteration(
     requestParameters: SceneAlterationsApiGetSceneAlterationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneAlterationsApiFp(this.configuration)
       .getSceneAlteration(requestParameters.id, options)
@@ -11516,7 +11544,7 @@ export class SceneAlterationsApi extends BaseAPI {
    */
   public getSceneAlterations(
     requestParameters: SceneAlterationsApiGetSceneAlterationsRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneAlterationsApiFp(this.configuration)
       .getSceneAlterations(requestParameters.id, options)
@@ -11542,7 +11570,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
     createSceneItemOverride: async (
       id: string,
       createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneItemOverride', 'id', id);
@@ -11582,7 +11610,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11609,7 +11637,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
      */
     deleteSceneItemOverride: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteSceneItemOverride', 'id', id);
@@ -11641,7 +11669,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11663,7 +11691,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
      */
     getSceneItemOverrides: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneItemOverrides', 'id', id);
@@ -11695,7 +11723,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11719,7 +11747,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
     updateSceneItemOverride: async (
       id: string,
       updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateSceneItemOverride', 'id', id);
@@ -11759,7 +11787,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -11801,7 +11829,7 @@ export const SceneItemOverridesApiFp = function (
     async createSceneItemOverride(
       id: string,
       createSceneItemOverrideRequest: CreateSceneItemOverrideRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -11829,7 +11857,7 @@ export const SceneItemOverridesApiFp = function (
      */
     async deleteSceneItemOverride(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -11850,7 +11878,7 @@ export const SceneItemOverridesApiFp = function (
      */
     async getSceneItemOverrides(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -11876,7 +11904,7 @@ export const SceneItemOverridesApiFp = function (
     async updateSceneItemOverride(
       id: string,
       updateSceneItemOverrideRequest: UpdateSceneItemOverrideRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -12056,7 +12084,7 @@ export class SceneItemOverridesApi extends BaseAPI {
    */
   public createSceneItemOverride(
     requestParameters: SceneItemOverridesApiCreateSceneItemOverrideRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemOverridesApiFp(this.configuration)
       .createSceneItemOverride(
@@ -12076,7 +12104,7 @@ export class SceneItemOverridesApi extends BaseAPI {
    */
   public deleteSceneItemOverride(
     requestParameters: SceneItemOverridesApiDeleteSceneItemOverrideRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemOverridesApiFp(this.configuration)
       .deleteSceneItemOverride(requestParameters.id, options)
@@ -12092,7 +12120,7 @@ export class SceneItemOverridesApi extends BaseAPI {
    */
   public getSceneItemOverrides(
     requestParameters: SceneItemOverridesApiGetSceneItemOverridesRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemOverridesApiFp(this.configuration)
       .getSceneItemOverrides(requestParameters.id, options)
@@ -12108,7 +12136,7 @@ export class SceneItemOverridesApi extends BaseAPI {
    */
   public updateSceneItemOverride(
     requestParameters: SceneItemOverridesApiUpdateSceneItemOverrideRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemOverridesApiFp(this.configuration)
       .updateSceneItemOverride(
@@ -12138,7 +12166,7 @@ export const SceneItemsApiAxiosParamCreator = function (
     createSceneItem: async (
       id: string,
       createSceneItemRequest: CreateSceneItemRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneItem', 'id', id);
@@ -12178,7 +12206,7 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12205,7 +12233,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      */
     deleteSceneItem: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteSceneItem', 'id', id);
@@ -12237,7 +12265,7 @@ export const SceneItemsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12259,7 +12287,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      */
     getQueuedSceneItem: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedSceneItem', 'id', id);
@@ -12291,7 +12319,7 @@ export const SceneItemsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12313,7 +12341,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      */
     getQueuedSceneItemDeletion: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedSceneItemDeletion', 'id', id);
@@ -12345,7 +12373,7 @@ export const SceneItemsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12369,7 +12397,7 @@ export const SceneItemsApiAxiosParamCreator = function (
     getSceneItem: async (
       id: string,
       fieldsSceneItem?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneItem', 'id', id);
@@ -12405,7 +12433,7 @@ export const SceneItemsApiAxiosParamCreator = function (
         localVarQueryParameter['fields[scene-item]'] = fieldsSceneItem;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12437,7 +12465,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneItems', 'id', id);
@@ -12489,7 +12517,7 @@ export const SceneItemsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[parent]'] = filterParent;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12513,7 +12541,7 @@ export const SceneItemsApiAxiosParamCreator = function (
     updateSceneItem: async (
       id: string,
       updateSceneItemRequest: UpdateSceneItemRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateSceneItem', 'id', id);
@@ -12553,7 +12581,7 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -12593,7 +12621,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     async createSceneItem(
       id: string,
       createSceneItemRequest: CreateSceneItemRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -12617,7 +12645,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      */
     async deleteSceneItem(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -12640,7 +12668,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      */
     async getQueuedSceneItem(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -12661,7 +12689,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      */
     async getQueuedSceneItemDeletion(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -12684,7 +12712,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     async getSceneItem(
       id: string,
       fieldsSceneItem?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItem>
     > {
@@ -12718,7 +12746,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>
     > {
@@ -12748,7 +12776,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     async updateSceneItem(
       id: string,
       updateSceneItemRequest: UpdateSceneItemRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -13067,7 +13095,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public createSceneItem(
     requestParameters: SceneItemsApiCreateSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .createSceneItem(
@@ -13087,7 +13115,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public deleteSceneItem(
     requestParameters: SceneItemsApiDeleteSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .deleteSceneItem(requestParameters.id, options)
@@ -13103,7 +13131,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public getQueuedSceneItem(
     requestParameters: SceneItemsApiGetQueuedSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .getQueuedSceneItem(requestParameters.id, options)
@@ -13119,7 +13147,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public getQueuedSceneItemDeletion(
     requestParameters: SceneItemsApiGetQueuedSceneItemDeletionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .getQueuedSceneItemDeletion(requestParameters.id, options)
@@ -13135,7 +13163,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public getSceneItem(
     requestParameters: SceneItemsApiGetSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .getSceneItem(
@@ -13155,7 +13183,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public getSceneItems(
     requestParameters: SceneItemsApiGetSceneItemsRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .getSceneItems(
@@ -13179,7 +13207,7 @@ export class SceneItemsApi extends BaseAPI {
    */
   public updateSceneItem(
     requestParameters: SceneItemsApiUpdateSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneItemsApiFp(this.configuration)
       .updateSceneItem(
@@ -13209,7 +13237,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
     createSceneViewState: async (
       id: string,
       createSceneViewStateRequest: CreateSceneViewStateRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneViewState', 'id', id);
@@ -13249,7 +13277,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -13276,7 +13304,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
      */
     deleteSceneViewState: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteSceneViewState', 'id', id);
@@ -13308,7 +13336,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -13332,7 +13360,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
     getSceneViewState: async (
       id: string,
       fieldsSceneViewState?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneViewState', 'id', id);
@@ -13369,7 +13397,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
           fieldsSceneViewState;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -13389,6 +13417,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13397,7 +13426,8 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       fieldsSceneViewState?: string,
-      options: any = {}
+      filterId?: string,
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneViewStates', 'id', id);
@@ -13442,7 +13472,11 @@ export const SceneViewStatesApiAxiosParamCreator = function (
           fieldsSceneViewState;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      if (filterId !== undefined) {
+        localVarQueryParameter['filter[id]'] = filterId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -13466,7 +13500,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
     updateSceneViewState: async (
       id: string,
       updateSceneViewStateRequest: UpdateSceneViewStateRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateSceneViewState', 'id', id);
@@ -13506,7 +13540,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -13546,7 +13580,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     async createSceneViewState(
       id: string,
       createSceneViewStateRequest: CreateSceneViewStateRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
@@ -13571,7 +13605,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
      */
     async deleteSceneViewState(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -13594,7 +13628,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     async getSceneViewState(
       id: string,
       fieldsSceneViewState?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
@@ -13617,6 +13651,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13625,7 +13660,8 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       fieldsSceneViewState?: string,
-      options?: any
+      filterId?: string,
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -13638,6 +13674,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
           pageCursor,
           pageSize,
           fieldsSceneViewState,
+          filterId,
           options
         );
       return createRequestFunction(
@@ -13657,7 +13694,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
     async updateSceneViewState(
       id: string,
       updateSceneViewStateRequest: UpdateSceneViewStateRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewState>
     > {
@@ -13737,6 +13774,7 @@ export const SceneViewStatesApiFactory = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13745,6 +13783,7 @@ export const SceneViewStatesApiFactory = function (
       pageCursor?: string,
       pageSize?: number,
       fieldsSceneViewState?: string,
+      filterId?: string,
       options?: any
     ): AxiosPromise<SceneViewStateList> {
       return localVarFp
@@ -13753,6 +13792,7 @@ export const SceneViewStatesApiFactory = function (
           pageCursor,
           pageSize,
           fieldsSceneViewState,
+          filterId,
           options
         )
         .then((request) => request(axios, basePath));
@@ -13865,6 +13905,13 @@ export interface SceneViewStatesApiGetSceneViewStatesRequest {
    * @memberof SceneViewStatesApiGetSceneViewStates
    */
   readonly fieldsSceneViewState?: string;
+
+  /**
+   * Comma-separated list of IDs to filter on.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly filterId?: string;
 }
 
 /**
@@ -13904,7 +13951,7 @@ export class SceneViewStatesApi extends BaseAPI {
    */
   public createSceneViewState(
     requestParameters: SceneViewStatesApiCreateSceneViewStateRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewStatesApiFp(this.configuration)
       .createSceneViewState(
@@ -13924,7 +13971,7 @@ export class SceneViewStatesApi extends BaseAPI {
    */
   public deleteSceneViewState(
     requestParameters: SceneViewStatesApiDeleteSceneViewStateRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewStatesApiFp(this.configuration)
       .deleteSceneViewState(requestParameters.id, options)
@@ -13940,7 +13987,7 @@ export class SceneViewStatesApi extends BaseAPI {
    */
   public getSceneViewState(
     requestParameters: SceneViewStatesApiGetSceneViewStateRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewStatesApiFp(this.configuration)
       .getSceneViewState(
@@ -13960,7 +14007,7 @@ export class SceneViewStatesApi extends BaseAPI {
    */
   public getSceneViewStates(
     requestParameters: SceneViewStatesApiGetSceneViewStatesRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewStatesApiFp(this.configuration)
       .getSceneViewStates(
@@ -13968,6 +14015,7 @@ export class SceneViewStatesApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.fieldsSceneViewState,
+        requestParameters.filterId,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -13982,7 +14030,7 @@ export class SceneViewStatesApi extends BaseAPI {
    */
   public updateSceneViewState(
     requestParameters: SceneViewStatesApiUpdateSceneViewStateRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewStatesApiFp(this.configuration)
       .updateSceneViewState(
@@ -14012,7 +14060,7 @@ export const SceneViewsApiAxiosParamCreator = function (
     createSceneView: async (
       id: string,
       createSceneViewRequest: CreateSceneViewRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneView', 'id', id);
@@ -14052,7 +14100,7 @@ export const SceneViewsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14079,7 +14127,7 @@ export const SceneViewsApiAxiosParamCreator = function (
      */
     deleteSceneView: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteSceneView', 'id', id);
@@ -14111,7 +14159,7 @@ export const SceneViewsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14133,7 +14181,7 @@ export const SceneViewsApiAxiosParamCreator = function (
      */
     getSceneView: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneView', 'id', id);
@@ -14165,7 +14213,7 @@ export const SceneViewsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14191,7 +14239,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getSceneViews', 'id', id);
@@ -14231,7 +14279,7 @@ export const SceneViewsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14259,7 +14307,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       itemId: string,
       fieldsSceneItem?: string,
       include?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getViewSceneItem', 'id', id);
@@ -14300,7 +14348,7 @@ export const SceneViewsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14326,7 +14374,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       id: string,
       height?: number,
       width?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('renderSceneView', 'id', id);
@@ -14366,7 +14414,7 @@ export const SceneViewsApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14390,7 +14438,7 @@ export const SceneViewsApiAxiosParamCreator = function (
     updateSceneView: async (
       id: string,
       updateSceneViewRequest: UpdateSceneViewRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateSceneView', 'id', id);
@@ -14430,7 +14478,7 @@ export const SceneViewsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -14470,7 +14518,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
     async createSceneView(
       id: string,
       createSceneViewRequest: CreateSceneViewRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
     > {
@@ -14494,7 +14542,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
      */
     async deleteSceneView(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -14517,7 +14565,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
      */
     async getSceneView(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
     > {
@@ -14544,7 +14592,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       id: string,
       pageCursor?: string,
       pageSize?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewList>
     > {
@@ -14575,7 +14623,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       itemId: string,
       fieldsSceneItem?: string,
       include?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneViewItem>
     > {
@@ -14606,7 +14654,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
       id: string,
       height?: number,
       width?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
     > {
@@ -14633,7 +14681,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
     async updateSceneView(
       id: string,
       updateSceneViewRequest: UpdateSceneViewRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneView>
     > {
@@ -14953,7 +15001,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public createSceneView(
     requestParameters: SceneViewsApiCreateSceneViewRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .createSceneView(
@@ -14973,7 +15021,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public deleteSceneView(
     requestParameters: SceneViewsApiDeleteSceneViewRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .deleteSceneView(requestParameters.id, options)
@@ -14989,7 +15037,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public getSceneView(
     requestParameters: SceneViewsApiGetSceneViewRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .getSceneView(requestParameters.id, options)
@@ -15005,7 +15053,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public getSceneViews(
     requestParameters: SceneViewsApiGetSceneViewsRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .getSceneViews(
@@ -15026,7 +15074,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public getViewSceneItem(
     requestParameters: SceneViewsApiGetViewSceneItemRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .getViewSceneItem(
@@ -15048,7 +15096,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public renderSceneView(
     requestParameters: SceneViewsApiRenderSceneViewRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .renderSceneView(
@@ -15069,7 +15117,7 @@ export class SceneViewsApi extends BaseAPI {
    */
   public updateSceneView(
     requestParameters: SceneViewsApiUpdateSceneViewRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return SceneViewsApiFp(this.configuration)
       .updateSceneView(
@@ -15097,7 +15145,7 @@ export const ScenesApiAxiosParamCreator = function (
      */
     createScene: async (
       createSceneRequest: CreateSceneRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createSceneRequest' is not null or undefined
       assertParamExists(
@@ -15132,7 +15180,7 @@ export const ScenesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15159,7 +15207,7 @@ export const ScenesApiAxiosParamCreator = function (
      */
     deleteScene: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteScene', 'id', id);
@@ -15191,7 +15239,7 @@ export const ScenesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15213,7 +15261,7 @@ export const ScenesApiAxiosParamCreator = function (
      */
     getQueuedScene: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedScene', 'id', id);
@@ -15245,7 +15293,7 @@ export const ScenesApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15269,7 +15317,7 @@ export const ScenesApiAxiosParamCreator = function (
     getScene: async (
       id: string,
       fieldsScene?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getScene', 'id', id);
@@ -15305,7 +15353,7 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['fields[scene]'] = fieldsScene;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15323,6 +15371,7 @@ export const ScenesApiAxiosParamCreator = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15330,8 +15379,9 @@ export const ScenesApiAxiosParamCreator = function (
     getScenes: async (
       pageCursor?: string,
       pageSize?: number,
+      filterName?: string,
       filterSuppliedId?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -15366,11 +15416,15 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
+      if (filterName !== undefined) {
+        localVarQueryParameter['filter[name]'] = filterName;
+      }
+
       if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15396,7 +15450,7 @@ export const ScenesApiAxiosParamCreator = function (
       id: string,
       height?: number,
       width?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('renderScene', 'id', id);
@@ -15436,7 +15490,7 @@ export const ScenesApiAxiosParamCreator = function (
         localVarQueryParameter['width'] = width;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15460,7 +15514,7 @@ export const ScenesApiAxiosParamCreator = function (
     updateScene: async (
       id: string,
       updateSceneRequest: UpdateSceneRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateScene', 'id', id);
@@ -15500,7 +15554,7 @@ export const ScenesApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -15537,7 +15591,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      */
     async createScene(
       createSceneRequest: CreateSceneRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
     > {
@@ -15560,7 +15614,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      */
     async deleteScene(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -15583,7 +15637,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      */
     async getQueuedScene(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -15608,7 +15662,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     async getScene(
       id: string,
       fieldsScene?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
     > {
@@ -15628,6 +15682,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15635,14 +15690,16 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     async getScenes(
       pageCursor?: string,
       pageSize?: number,
+      filterName?: string,
       filterSuppliedId?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getScenes(
         pageCursor,
         pageSize,
+        filterName,
         filterSuppliedId,
         options
       );
@@ -15665,7 +15722,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       id: string,
       height?: number,
       width?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
     > {
@@ -15692,7 +15749,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     async updateScene(
       id: string,
       updateSceneRequest: UpdateSceneRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Scene>
     > {
@@ -15778,6 +15835,7 @@ export const ScenesApiFactory = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15785,11 +15843,12 @@ export const ScenesApiFactory = function (
     getScenes(
       pageCursor?: string,
       pageSize?: number,
+      filterName?: string,
       filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<SceneList> {
       return localVarFp
-        .getScenes(pageCursor, pageSize, filterSuppliedId, options)
+        .getScenes(pageCursor, pageSize, filterName, filterSuppliedId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -15913,6 +15972,13 @@ export interface ScenesApiGetScenesRequest {
   readonly pageSize?: number;
 
   /**
+   * Comma-separated list of names to filter on.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterName?: string;
+
+  /**
    * Comma-separated list of supplied IDs to filter on.
    * @type {string}
    * @memberof ScenesApiGetScenes
@@ -15985,7 +16051,7 @@ export class ScenesApi extends BaseAPI {
    */
   public createScene(
     requestParameters: ScenesApiCreateSceneRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .createScene(requestParameters.createSceneRequest, options)
@@ -16001,7 +16067,7 @@ export class ScenesApi extends BaseAPI {
    */
   public deleteScene(
     requestParameters: ScenesApiDeleteSceneRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .deleteScene(requestParameters.id, options)
@@ -16017,7 +16083,7 @@ export class ScenesApi extends BaseAPI {
    */
   public getQueuedScene(
     requestParameters: ScenesApiGetQueuedSceneRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .getQueuedScene(requestParameters.id, options)
@@ -16031,7 +16097,10 @@ export class ScenesApi extends BaseAPI {
    * @throws {RequiredError}
    * @memberof ScenesApi
    */
-  public getScene(requestParameters: ScenesApiGetSceneRequest, options?: any) {
+  public getScene(
+    requestParameters: ScenesApiGetSceneRequest,
+    options?: AxiosRequestConfig
+  ) {
     return ScenesApiFp(this.configuration)
       .getScene(requestParameters.id, requestParameters.fieldsScene, options)
       .then((request) => request(this.axios, this.basePath));
@@ -16046,12 +16115,13 @@ export class ScenesApi extends BaseAPI {
    */
   public getScenes(
     requestParameters: ScenesApiGetScenesRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .getScenes(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterName,
         requestParameters.filterSuppliedId,
         options
       )
@@ -16067,7 +16137,7 @@ export class ScenesApi extends BaseAPI {
    */
   public renderScene(
     requestParameters: ScenesApiRenderSceneRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .renderScene(
@@ -16088,7 +16158,7 @@ export class ScenesApi extends BaseAPI {
    */
   public updateScene(
     requestParameters: ScenesApiUpdateSceneRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return ScenesApiFp(this.configuration)
       .updateScene(
@@ -16118,7 +16188,7 @@ export const StreamKeysApiAxiosParamCreator = function (
     createSceneStreamKey: async (
       id: string,
       createStreamKeyRequest: CreateStreamKeyRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneStreamKey', 'id', id);
@@ -16158,7 +16228,7 @@ export const StreamKeysApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16185,7 +16255,7 @@ export const StreamKeysApiAxiosParamCreator = function (
      */
     deleteStreamKey: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteStreamKey', 'id', id);
@@ -16217,7 +16287,7 @@ export const StreamKeysApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16243,7 +16313,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterKey?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/stream-keys`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -16282,7 +16352,7 @@ export const StreamKeysApiAxiosParamCreator = function (
         localVarQueryParameter['filter[key]'] = filterKey;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16317,7 +16387,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
     async createSceneStreamKey(
       id: string,
       createStreamKeyRequest: CreateStreamKeyRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKey>
     > {
@@ -16342,7 +16412,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
      */
     async deleteStreamKey(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -16369,7 +16439,7 @@ export const StreamKeysApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       filterKey?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<StreamKeyList>
     > {
@@ -16527,7 +16597,7 @@ export class StreamKeysApi extends BaseAPI {
    */
   public createSceneStreamKey(
     requestParameters: StreamKeysApiCreateSceneStreamKeyRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return StreamKeysApiFp(this.configuration)
       .createSceneStreamKey(
@@ -16547,7 +16617,7 @@ export class StreamKeysApi extends BaseAPI {
    */
   public deleteStreamKey(
     requestParameters: StreamKeysApiDeleteStreamKeyRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return StreamKeysApiFp(this.configuration)
       .deleteStreamKey(requestParameters.id, options)
@@ -16563,7 +16633,7 @@ export class StreamKeysApi extends BaseAPI {
    */
   public getStreamKeys(
     requestParameters: StreamKeysApiGetStreamKeysRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return StreamKeysApiFp(this.configuration)
       .getStreamKeys(
@@ -16592,7 +16662,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
      */
     createTranslationInspection: async (
       createTranslationInspectionRequest: CreateTranslationInspectionRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createTranslationInspectionRequest' is not null or undefined
       assertParamExists(
@@ -16627,7 +16697,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16654,7 +16724,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
      */
     getInspectionJob: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getInspectionJob', 'id', id);
@@ -16686,7 +16756,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16708,7 +16778,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
      */
     getQueuedTranslation: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getQueuedTranslation', 'id', id);
@@ -16740,7 +16810,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16766,7 +16836,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterStatus?: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/queued-translations`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -16805,7 +16875,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         localVarQueryParameter['filter[status]'] = filterStatus;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -16840,7 +16910,7 @@ export const TranslationInspectionsApiFp = function (
      */
     async createTranslationInspection(
       createTranslationInspectionRequest: CreateTranslationInspectionRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -16867,7 +16937,7 @@ export const TranslationInspectionsApiFp = function (
      */
     async getInspectionJob(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -16891,7 +16961,7 @@ export const TranslationInspectionsApiFp = function (
      */
     async getQueuedTranslation(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
     > {
@@ -16916,7 +16986,7 @@ export const TranslationInspectionsApiFp = function (
       pageCursor?: string,
       pageSize?: number,
       filterStatus?: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJobList>
     > {
@@ -17097,7 +17167,7 @@ export class TranslationInspectionsApi extends BaseAPI {
    */
   public createTranslationInspection(
     requestParameters: TranslationInspectionsApiCreateTranslationInspectionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .createTranslationInspection(
@@ -17116,7 +17186,7 @@ export class TranslationInspectionsApi extends BaseAPI {
    */
   public getInspectionJob(
     requestParameters: TranslationInspectionsApiGetInspectionJobRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getInspectionJob(requestParameters.id, options)
@@ -17132,7 +17202,7 @@ export class TranslationInspectionsApi extends BaseAPI {
    */
   public getQueuedTranslation(
     requestParameters: TranslationInspectionsApiGetQueuedTranslationRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getQueuedTranslation(requestParameters.id, options)
@@ -17148,7 +17218,7 @@ export class TranslationInspectionsApi extends BaseAPI {
    */
   public getQueuedTranslations(
     requestParameters: TranslationInspectionsApiGetQueuedTranslationsRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getQueuedTranslations(
@@ -17177,7 +17247,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
      */
     createWebhookSubscription: async (
       createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'createWebhookSubscriptionRequest' is not null or undefined
       assertParamExists(
@@ -17212,7 +17282,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -17239,7 +17309,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
      */
     deleteWebhookSubscription: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('deleteWebhookSubscription', 'id', id);
@@ -17271,7 +17341,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -17293,7 +17363,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
      */
     getWebhookSubscription: async (
       id: string,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('getWebhookSubscription', 'id', id);
@@ -17325,7 +17395,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
         configuration
       );
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -17349,7 +17419,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
     getWebhookSubscriptions: async (
       pageCursor?: string,
       pageSize?: number,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/webhook-subscriptions`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -17384,7 +17454,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -17408,7 +17478,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
     updateWebhookSubscription: async (
       id: string,
       updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest,
-      options: any = {}
+      options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('updateWebhookSubscription', 'id', id);
@@ -17448,7 +17518,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
 
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
-      setSearchParams(localVarUrlObj, localVarQueryParameter, options.query);
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
         baseOptions && baseOptions.headers ? baseOptions.headers : {};
       localVarRequestOptions.headers = {
@@ -17488,7 +17558,7 @@ export const WebhookSubscriptionsApiFp = function (
      */
     async createWebhookSubscription(
       createWebhookSubscriptionRequest: CreateWebhookSubscriptionRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -17515,7 +17585,7 @@ export const WebhookSubscriptionsApiFp = function (
      */
     async deleteWebhookSubscription(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
@@ -17536,7 +17606,7 @@ export const WebhookSubscriptionsApiFp = function (
      */
     async getWebhookSubscription(
       id: string,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -17562,7 +17632,7 @@ export const WebhookSubscriptionsApiFp = function (
     async getWebhookSubscriptions(
       pageCursor?: string,
       pageSize?: number,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -17592,7 +17662,7 @@ export const WebhookSubscriptionsApiFp = function (
     async updateWebhookSubscription(
       id: string,
       updateWebhookSubscriptionRequest: UpdateWebhookSubscriptionRequest,
-      options?: any
+      options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
@@ -17804,7 +17874,7 @@ export class WebhookSubscriptionsApi extends BaseAPI {
    */
   public createWebhookSubscription(
     requestParameters: WebhookSubscriptionsApiCreateWebhookSubscriptionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return WebhookSubscriptionsApiFp(this.configuration)
       .createWebhookSubscription(
@@ -17823,7 +17893,7 @@ export class WebhookSubscriptionsApi extends BaseAPI {
    */
   public deleteWebhookSubscription(
     requestParameters: WebhookSubscriptionsApiDeleteWebhookSubscriptionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return WebhookSubscriptionsApiFp(this.configuration)
       .deleteWebhookSubscription(requestParameters.id, options)
@@ -17839,7 +17909,7 @@ export class WebhookSubscriptionsApi extends BaseAPI {
    */
   public getWebhookSubscription(
     requestParameters: WebhookSubscriptionsApiGetWebhookSubscriptionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return WebhookSubscriptionsApiFp(this.configuration)
       .getWebhookSubscription(requestParameters.id, options)
@@ -17855,7 +17925,7 @@ export class WebhookSubscriptionsApi extends BaseAPI {
    */
   public getWebhookSubscriptions(
     requestParameters: WebhookSubscriptionsApiGetWebhookSubscriptionsRequest = {},
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return WebhookSubscriptionsApiFp(this.configuration)
       .getWebhookSubscriptions(
@@ -17875,7 +17945,7 @@ export class WebhookSubscriptionsApi extends BaseAPI {
    */
   public updateWebhookSubscription(
     requestParameters: WebhookSubscriptionsApiUpdateWebhookSubscriptionRequest,
-    options?: any
+    options?: AxiosRequestConfig
   ) {
     return WebhookSubscriptionsApiFp(this.configuration)
       .updateWebhookSubscription(

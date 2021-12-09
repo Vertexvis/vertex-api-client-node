@@ -7,25 +7,13 @@ import {
 } from '../../client/index';
 import { CreateFileRequest, FileList, FileMetadataData } from '../../index';
 
-export interface File {
-  /** File data. */
-  readonly data: Buffer;
-
-  /** File size. */
-  readonly size: number;
-}
-
 /** Upload file arguments. */
 export interface UploadFileReq extends BaseReq {
   /** A {@link CreateFileRequest}. */
   readonly createFileReq: CreateFileRequest;
 
-  /** File data.
-   * @deprecated Use {@link file} instead.
-   */
-  readonly fileData?: unknown;
-
-  readonly file?: File;
+  /** File data. */
+  readonly fileData: Buffer;
 }
 
 /**
@@ -114,7 +102,6 @@ export async function uploadFile({
   client,
   createFileReq,
   fileData,
-  file,
   onMsg = console.log,
   verbose,
 }: UploadFileReq): Promise<FileMetadataData> {
@@ -125,12 +112,10 @@ export async function uploadFile({
   const fileId = createRes.data.data.id;
   if (verbose) onMsg(`Created file '${fileName}', ${fileId}`);
 
-  const body = file?.data ?? fileData;
-  const size = file?.size ?? -1;
-  const uploadRes = await client.files.uploadFile(
-    { id: fileId, body },
-    { headers: size >= 0 ? { 'Content-Length': size } : undefined }
-  );
+  const uploadRes = await client.files.uploadFile({
+    id: fileId,
+    body: fileData,
+  });
 
   if (uploadRes.status !== 204) {
     throw new Error(
@@ -142,10 +127,6 @@ export async function uploadFile({
   const status = getRes.attributes.status;
   if (status === 'error') {
     throw new Error(`Uploading file ${fileId} failed with status ${status}`);
-  } else if (size >= 0 && getRes.attributes.size !== size) {
-    onMsg(
-      `File ${fileId} size mismatch, expected ${size} got ${getRes.attributes.size}`
-    );
   }
 
   if (verbose) onMsg(`Uploaded file ${fileId}, status ${status}`);

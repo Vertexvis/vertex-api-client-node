@@ -16,7 +16,6 @@ import {
   BaseReq,
   DeleteReq,
   encodeIfNotEncoded,
-  File,
   getBySuppliedId,
   getPage,
   head,
@@ -39,12 +38,8 @@ export interface CreatePartFromFileReq extends BaseReq {
   /** Function returning a {@link CreatePartRequest}. */
   readonly createPartReq: (fileId: string) => CreatePartRequest;
 
-  /** File data.
-   * @deprecated Use {@link file} instead.
-   */
-  readonly fileData?: unknown;
-
-  readonly file?: File;
+  /** File data. */
+  readonly fileData: Buffer;
 
   /** {@link Polling} */
   readonly polling?: Polling;
