@@ -151,7 +151,7 @@ export function isPollError<T>(r: PollRes<T>): r is QueuedJob | Failure {
 
 export function isBatch(obj: PollRes<Batch>): obj is Batch {
   const b = obj as Batch;
-  return defined(b) && defined(b.vertexvis_batchresults);
+  return defined(b) && defined(b['vertexvis/batch:results']);
 }
 
 export function throwOnError<T>(r: PollQueuedJobRes<T>): never {

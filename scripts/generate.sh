@@ -15,6 +15,7 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest gen
 sed -i "" "s/, COLLECTION_FORMATS, /, /" api.ts
 sed -i "" "s/, setApiKeyToObject, /, /" api.ts
 sed -i "" "s/, setBearerAuthToObject, /, /" api.ts
+sed -i "" "s/AxiosPromise,//" base.ts
 sed -i "" "s/name: \"RequiredError\" = \"RequiredError\";/override name: \"RequiredError\" = \"RequiredError\";/" base.ts
 
 yarn generate:docs

@@ -375,7 +375,7 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
     sceneItemErrors: batchRes
       .flatMap((b, i) =>
         isBatch(b.res)
-          ? b.res.vertexvis_batchresults.map((r, j) =>
+          ? b.res['vertexvis/batch:results'].map((r, j) =>
               isApiError(r)
                 ? { req: queuedOps[i].ops[j].data, res: r }
                 : undefined
@@ -421,17 +421,7 @@ export async function createSceneItemsEXPERIMENTAL({
           try {
             res = (
               await client.batches.createBatch({
-                createBatchRequest: {
-                  vertexvis_batchoperations: ops,
-                  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                  // @ts-ignore
-                  toJSON() {
-                    return {
-                      'vertexvis/batch:operations':
-                        this.vertexvis_batchoperations,
-                    };
-                  },
-                },
+                createBatchRequest: { 'vertexvis/batch:operations': ops },
               })
             ).data;
           } catch (error) {

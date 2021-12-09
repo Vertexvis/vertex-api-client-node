@@ -127,10 +127,7 @@ export async function uploadFile({
 
   const body = file?.data ?? fileData;
   const size = file?.size ?? -1;
-  const uploadRes = await client.files.uploadFile(
-    { id: fileId, body },
-    { headers: size >= 0 ? { 'Content-Length': size } : undefined }
-  );
+  const uploadRes = await client.files.uploadFile({ id: fileId, body });
 
   if (uploadRes.status !== 204) {
     throw new Error(

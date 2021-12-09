@@ -4144,6 +4144,16 @@ paths:
             minimum: 1
             type: integer
           style: form
+        - description: Comma-separated list of names to filter on.
+          explode: true
+          in: query
+          name: filter[name]
+          required: false
+          schema:
+            example: some-name-1,some-name-2
+            maxLength: 1024
+            type: string
+          style: form
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
@@ -4659,6 +4669,15 @@ paths:
           required: false
           schema:
             example: thumbnails
+            type: string
+          style: form
+        - description: Comma-separated list of IDs to filter on.
+          explode: true
+          in: query
+          name: filter[id]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
             type: string
           style: form
       responses:
@@ -5852,6 +5871,16 @@ components:
         minimum: 1
         type: integer
       style: form
+    IdFilter:
+      description: Comma-separated list of IDs to filter on.
+      explode: true
+      in: query
+      name: filter[id]
+      required: false
+      schema:
+        example: some-id-1,some-id-2
+        type: string
+      style: form
     IncludeSource:
       description: Comma-separated list of relationships to include in response.
       explode: true
@@ -5883,6 +5912,17 @@ components:
       schema:
         example: sceneItemOverride
         maxLength: 32
+        type: string
+      style: form
+    NameFilter:
+      description: Comma-separated list of names to filter on.
+      explode: true
+      in: query
+      name: filter[name]
+      required: false
+      schema:
+        example: some-name-1,some-name-2
+        maxLength: 1024
         type: string
       style: form
     PageCursor:
