@@ -475,13 +475,12 @@ export interface BatchOperation {
   ref: BatchOperationRef;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum BatchOperationOpEnum {
-  Add = 'add',
-}
+export const BatchOperationOpEnum = {
+  Add: 'add',
+} as const;
+
+export type BatchOperationOpEnum =
+  typeof BatchOperationOpEnum[keyof typeof BatchOperationOpEnum];
 
 /**
  * Target of batch operation.
@@ -503,13 +502,12 @@ export interface BatchOperationRef {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum BatchOperationRefTypeEnum {
-  Scene = 'scene',
-}
+export const BatchOperationRefTypeEnum = {
+  Scene: 'scene',
+} as const;
+
+export type BatchOperationRefTypeEnum =
+  typeof BatchOperationRefTypeEnum[keyof typeof BatchOperationRefTypeEnum];
 
 /**
  * 3D bounding-box
@@ -531,31 +529,6 @@ export interface BoundingBox {
   max: Vector3;
 }
 /**
- * Camera placement in 3D space.
- * @export
- * @interface Camera
- */
-export interface Camera {
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  position: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  lookAt: Vector3;
-  /**
-   *
-   * @type {Vector3}
-   * @memberof Camera
-   */
-  up: Vector3;
-}
-/**
  * Fit camera in 3D space based on items in scene.
  * @export
  * @interface CameraFit
@@ -569,14 +542,13 @@ export interface CameraFit {
   type: CameraFitTypeEnum;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum CameraFitTypeEnum {
-  FitVisibleSceneItems = 'fit-visible-scene-items',
-  Reset = 'reset',
-}
+export const CameraFitTypeEnum = {
+  FitVisibleSceneItems: 'fit-visible-scene-items',
+  Reset: 'reset',
+} as const;
+
+export type CameraFitTypeEnum =
+  typeof CameraFitTypeEnum[keyof typeof CameraFitTypeEnum];
 
 /**
  *
@@ -598,13 +570,12 @@ export interface ChangeMaterialOperation {
   material: ColorMaterial;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum ChangeMaterialOperationTypeEnum {
-  ChangeMaterial = 'change-material',
-}
+export const ChangeMaterialOperationTypeEnum = {
+  ChangeMaterial: 'change-material',
+} as const;
+
+export type ChangeMaterialOperationTypeEnum =
+  typeof ChangeMaterialOperationTypeEnum[keyof typeof ChangeMaterialOperationTypeEnum];
 
 /**
  *
@@ -626,13 +597,12 @@ export interface ChangeTransformOperation {
   transform: Matrix4;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum ChangeTransformOperationTypeEnum {
-  ChangeTransform = 'change-transform',
-}
+export const ChangeTransformOperationTypeEnum = {
+  ChangeTransform: 'change-transform',
+} as const;
+
+export type ChangeTransformOperationTypeEnum =
+  typeof ChangeTransformOperationTypeEnum[keyof typeof ChangeTransformOperationTypeEnum];
 
 /**
  *
@@ -654,13 +624,12 @@ export interface ChangeVisibilityOperation {
   visible: boolean;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum ChangeVisibilityOperationTypeEnum {
-  ChangeVisibility = 'change-visibility',
-}
+export const ChangeVisibilityOperationTypeEnum = {
+  ChangeVisibility: 'change-visibility',
+} as const;
+
+export type ChangeVisibilityOperationTypeEnum =
+  typeof ChangeVisibilityOperationTypeEnum[keyof typeof ChangeVisibilityOperationTypeEnum];
 
 /**
  *
@@ -676,13 +645,12 @@ export interface ClearMaterialOperation {
   type: ClearMaterialOperationTypeEnum;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum ClearMaterialOperationTypeEnum {
-  ClearMaterial = 'clear-material',
-}
+export const ClearMaterialOperationTypeEnum = {
+  ClearMaterial: 'clear-material',
+} as const;
+
+export type ClearMaterialOperationTypeEnum =
+  typeof ClearMaterialOperationTypeEnum[keyof typeof ClearMaterialOperationTypeEnum];
 
 /**
  *
@@ -698,13 +666,12 @@ export interface ClearTransformOperation {
   type: ClearTransformOperationTypeEnum;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum ClearTransformOperationTypeEnum {
-  ClearTransform = 'clear-transform',
-}
+export const ClearTransformOperationTypeEnum = {
+  ClearTransform: 'clear-transform',
+} as const;
+
+export type ClearTransformOperationTypeEnum =
+  typeof ClearTransformOperationTypeEnum[keyof typeof ClearTransformOperationTypeEnum];
 
 /**
  * RGB color.
@@ -1369,6 +1336,12 @@ export interface CreateSceneItemRequestDataRelationships {
     | GeometrySetRelationship
     | PartRevisionRelationship
     | SceneRelationship;
+  /**
+   *
+   * @type {SceneItemRelationship}
+   * @memberof CreateSceneItemRequestDataRelationships
+   */
+  referenceTree?: SceneItemRelationship;
 }
 /**
  *
@@ -1416,10 +1389,10 @@ export interface CreateSceneRequestData {
 export interface CreateSceneRequestDataAttributes {
   /**
    *
-   * @type {Camera}
+   * @type {PerspectiveCamera | OrthographicCamera}
    * @memberof CreateSceneRequestDataAttributes
    */
-  camera?: Camera;
+  camera?: PerspectiveCamera | OrthographicCamera;
   /**
    * ID provided for correlation. For example, an existing ID from a PLM system.
    * @type {string}
@@ -1504,10 +1477,10 @@ export interface CreateSceneViewRequestData {
 export interface CreateSceneViewRequestDataAttributes {
   /**
    *
-   * @type {Camera}
+   * @type {PerspectiveCamera | OrthographicCamera}
    * @memberof CreateSceneViewRequestDataAttributes
    */
-  camera?: Camera;
+  camera?: PerspectiveCamera | OrthographicCamera;
   /**
    *
    * @type {CrossSectioning}
@@ -1828,13 +1801,12 @@ export interface DeselectOperation {
   type: DeselectOperationTypeEnum;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum DeselectOperationTypeEnum {
-  Deselect = 'deselect',
-}
+export const DeselectOperationTypeEnum = {
+  Deselect: 'deselect',
+} as const;
+
+export type DeselectOperationTypeEnum =
+  typeof DeselectOperationTypeEnum[keyof typeof DeselectOperationTypeEnum];
 
 /**
  * An item\'s height and width.
@@ -2031,13 +2003,12 @@ export interface FileRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum FileRelationshipDataTypeEnum {
-  File = 'file',
-}
+export const FileRelationshipDataTypeEnum = {
+  File: 'file',
+} as const;
+
+export type FileRelationshipDataTypeEnum =
+  typeof FileRelationshipDataTypeEnum[keyof typeof FileRelationshipDataTypeEnum];
 
 /**
  *
@@ -2141,13 +2112,12 @@ export interface GeometrySetRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum GeometrySetRelationshipDataTypeEnum {
-  GeometrySet = 'geometry-set',
-}
+export const GeometrySetRelationshipDataTypeEnum = {
+  GeometrySet: 'geometry-set',
+} as const;
+
+export type GeometrySetRelationshipDataTypeEnum =
+  typeof GeometrySetRelationshipDataTypeEnum[keyof typeof GeometrySetRelationshipDataTypeEnum];
 
 /**
  *
@@ -2402,17 +2372,16 @@ export interface MetadataValue {
   type: MetadataValueTypeEnum;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum MetadataValueTypeEnum {
-  String = 'string',
-  Long = 'long',
-  Float = 'float',
-  Date = 'date',
-  Null = 'null',
-}
+export const MetadataValueTypeEnum = {
+  String: 'string',
+  Long: 'long',
+  Float: 'float',
+  Date: 'date',
+  Null: 'null',
+} as const;
+
+export type MetadataValueTypeEnum =
+  typeof MetadataValueTypeEnum[keyof typeof MetadataValueTypeEnum];
 
 /**
  *
@@ -2488,6 +2457,43 @@ export interface Orientation {
    * @memberof Orientation
    */
   front: Vector3;
+}
+/**
+ * A camera type where an object\'s size stays consistent regardless of its distance to the camera.
+ * @export
+ * @interface OrthographicCamera
+ */
+export interface OrthographicCamera {
+  /**
+   *
+   * @type {string}
+   * @memberof OrthographicCamera
+   */
+  type?: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof OrthographicCamera
+   */
+  viewVector: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof OrthographicCamera
+   */
+  lookAt: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof OrthographicCamera
+   */
+  up: Vector3;
+  /**
+   *
+   * @type {number}
+   * @memberof OrthographicCamera
+   */
+  fovHeight: number;
 }
 /**
  *
@@ -2609,13 +2615,12 @@ export interface PartDataRelationshipsPartRevisions {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum PartDataRelationshipsPartRevisionsTypeEnum {
-  PartRevision = 'part-revision',
-}
+export const PartDataRelationshipsPartRevisionsTypeEnum = {
+  PartRevision: 'part-revision',
+} as const;
+
+export type PartDataRelationshipsPartRevisionsTypeEnum =
+  typeof PartDataRelationshipsPartRevisionsTypeEnum[keyof typeof PartDataRelationshipsPartRevisionsTypeEnum];
 
 /**
  *
@@ -2656,13 +2661,12 @@ export interface PartRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum PartRelationshipDataTypeEnum {
-  Part = 'part',
-}
+export const PartRelationshipDataTypeEnum = {
+  Part: 'part',
+} as const;
+
+export type PartRelationshipDataTypeEnum =
+  typeof PartRelationshipDataTypeEnum[keyof typeof PartRelationshipDataTypeEnum];
 
 /**
  *
@@ -2816,6 +2820,37 @@ export interface PartRevisionSuppliedId {
   suppliedRevisionId: string;
 }
 /**
+ * A camera type that mimics the way the human eye sees.
+ * @export
+ * @interface PerspectiveCamera
+ */
+export interface PerspectiveCamera {
+  /**
+   *
+   * @type {string}
+   * @memberof PerspectiveCamera
+   */
+  type?: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof PerspectiveCamera
+   */
+  position: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof PerspectiveCamera
+   */
+  lookAt: Vector3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof PerspectiveCamera
+   */
+  up: Vector3;
+}
+/**
  * 2D point.
  * @export
  * @interface Point
@@ -2840,9 +2875,11 @@ export interface Point {
  * @enum {string}
  */
 
-export enum QueryAll {
-  All = 'all',
-}
+export const QueryAll = {
+  All: 'all',
+} as const;
+
+export type QueryAll = typeof QueryAll[keyof typeof QueryAll];
 
 /**
  *
@@ -2877,13 +2914,12 @@ export interface QueryByCollectionData {
   attributes: QueryByCollectionDataAttributes;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum QueryByCollectionDataTypeEnum {
-  QueryByCollection = 'query-by-collection',
-}
+export const QueryByCollectionDataTypeEnum = {
+  QueryByCollection: 'query-by-collection',
+} as const;
+
+export type QueryByCollectionDataTypeEnum =
+  typeof QueryByCollectionDataTypeEnum[keyof typeof QueryByCollectionDataTypeEnum];
 
 /**
  *
@@ -2905,14 +2941,13 @@ export interface QueryByCollectionDataAttributes {
   values: Array<QueryById>;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum QueryByCollectionDataAttributesTypeEnum {
-  And = 'and',
-  Or = 'or',
-}
+export const QueryByCollectionDataAttributesTypeEnum = {
+  And: 'and',
+  Or: 'or',
+} as const;
+
+export type QueryByCollectionDataAttributesTypeEnum =
+  typeof QueryByCollectionDataAttributesTypeEnum[keyof typeof QueryByCollectionDataAttributesTypeEnum];
 
 /**
  *
@@ -2947,13 +2982,12 @@ export interface QueryByIdData {
   attributes: QueryByIdDataAttributes;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum QueryByIdDataTypeEnum {
-  QueryById = 'query-by-id',
-}
+export const QueryByIdDataTypeEnum = {
+  QueryById: 'query-by-id',
+} as const;
+
+export type QueryByIdDataTypeEnum =
+  typeof QueryByIdDataTypeEnum[keyof typeof QueryByIdDataTypeEnum];
 
 /**
  *
@@ -2975,14 +3009,13 @@ export interface QueryByIdDataAttributes {
   value: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum QueryByIdDataAttributesTypeEnum {
-  Id = 'id',
-  SuppliedId = 'suppliedId',
-}
+export const QueryByIdDataAttributesTypeEnum = {
+  Id: 'id',
+  SuppliedId: 'suppliedId',
+} as const;
+
+export type QueryByIdDataAttributesTypeEnum =
+  typeof QueryByIdDataAttributesTypeEnum[keyof typeof QueryByIdDataAttributesTypeEnum];
 
 /**
  *
@@ -3301,10 +3334,10 @@ export interface SceneData {
 export interface SceneDataAttributes {
   /**
    *
-   * @type {Camera}
+   * @type {PerspectiveCamera | OrthographicCamera}
    * @memberof SceneDataAttributes
    */
-  camera?: Camera;
+  camera?: PerspectiveCamera | OrthographicCamera;
   /**
    *
    * @type {string}
@@ -3676,13 +3709,12 @@ export interface SceneItemRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum SceneItemRelationshipDataTypeEnum {
-  SceneItem = 'scene-item',
-}
+export const SceneItemRelationshipDataTypeEnum = {
+  SceneItem: 'scene-item',
+} as const;
+
+export type SceneItemRelationshipDataTypeEnum =
+  typeof SceneItemRelationshipDataTypeEnum[keyof typeof SceneItemRelationshipDataTypeEnum];
 
 /**
  *
@@ -3763,13 +3795,12 @@ export interface SceneRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum SceneRelationshipDataTypeEnum {
-  Scene = 'scene',
-}
+export const SceneRelationshipDataTypeEnum = {
+  Scene: 'scene',
+} as const;
+
+export type SceneRelationshipDataTypeEnum =
+  typeof SceneRelationshipDataTypeEnum[keyof typeof SceneRelationshipDataTypeEnum];
 
 /**
  *
@@ -3829,10 +3860,10 @@ export interface SceneViewData {
 export interface SceneViewDataAttributes {
   /**
    *
-   * @type {Camera}
+   * @type {PerspectiveCamera | OrthographicCamera}
    * @memberof SceneViewDataAttributes
    */
-  camera: Camera;
+  camera: PerspectiveCamera | OrthographicCamera;
   /**
    *
    * @type {string}
@@ -3942,13 +3973,12 @@ export interface SceneViewRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum SceneViewRelationshipDataTypeEnum {
-  SceneView = 'scene-view',
-}
+export const SceneViewRelationshipDataTypeEnum = {
+  SceneView: 'scene-view',
+} as const;
+
+export type SceneViewRelationshipDataTypeEnum =
+  typeof SceneViewRelationshipDataTypeEnum[keyof typeof SceneViewRelationshipDataTypeEnum];
 
 /**
  *
@@ -4008,10 +4038,10 @@ export interface SceneViewStateData {
 export interface SceneViewStateDataAttributes {
   /**
    *
-   * @type {Camera}
+   * @type {PerspectiveCamera | OrthographicCamera}
    * @memberof SceneViewStateDataAttributes
    */
-  camera?: Camera;
+  camera?: PerspectiveCamera | OrthographicCamera;
   /**
    *
    * @type {string}
@@ -4083,13 +4113,12 @@ export interface SceneViewStateRelationshipData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum SceneViewStateRelationshipDataTypeEnum {
-  SceneViewState = 'scene-view-state',
-}
+export const SceneViewStateRelationshipDataTypeEnum = {
+  SceneViewState: 'scene-view-state',
+} as const;
+
+export type SceneViewStateRelationshipDataTypeEnum =
+  typeof SceneViewStateRelationshipDataTypeEnum[keyof typeof SceneViewStateRelationshipDataTypeEnum];
 
 /**
  *
@@ -4130,13 +4159,12 @@ export interface SelectOperation {
   material: ColorMaterial;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum SelectOperationTypeEnum {
-  Select = 'select',
-}
+export const SelectOperationTypeEnum = {
+  Select: 'select',
+} as const;
+
+export type SelectOperationTypeEnum =
+  typeof SelectOperationTypeEnum[keyof typeof SelectOperationTypeEnum];
 
 /**
  *
@@ -4384,14 +4412,13 @@ export interface UpdateAccountRequestDataAttributes {
   owner?: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateAccountRequestDataAttributesStatusEnum {
-  Active = 'active',
-  Disabled = 'disabled',
-}
+export const UpdateAccountRequestDataAttributesStatusEnum = {
+  Active: 'active',
+  Disabled: 'disabled',
+} as const;
+
+export type UpdateAccountRequestDataAttributesStatusEnum =
+  typeof UpdateAccountRequestDataAttributesStatusEnum[keyof typeof UpdateAccountRequestDataAttributesStatusEnum];
 
 /**
  *
@@ -4673,10 +4700,10 @@ export interface UpdateSceneRequestData {
 export interface UpdateSceneRequestDataAttributes {
   /**
    *
-   * @type {Camera | CameraFit}
+   * @type {PerspectiveCamera | OrthographicCamera | CameraFit}
    * @memberof UpdateSceneRequestDataAttributes
    */
-  camera?: Camera | CameraFit;
+  camera?: PerspectiveCamera | OrthographicCamera | CameraFit;
   /**
    * State of the scene.
    * @type {string}
@@ -4709,14 +4736,13 @@ export interface UpdateSceneRequestDataAttributes {
   worldOrientation?: Orientation;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateSceneRequestDataAttributesStateEnum {
-  Draft = 'draft',
-  Commit = 'commit',
-}
+export const UpdateSceneRequestDataAttributesStateEnum = {
+  Draft: 'draft',
+  Commit: 'commit',
+} as const;
+
+export type UpdateSceneRequestDataAttributesStateEnum =
+  typeof UpdateSceneRequestDataAttributesStateEnum[keyof typeof UpdateSceneRequestDataAttributesStateEnum];
 
 /**
  *
@@ -4758,10 +4784,10 @@ export interface UpdateSceneViewRequestData {
 export interface UpdateSceneViewRequestDataAttributes {
   /**
    *
-   * @type {Camera | CameraFit}
+   * @type {PerspectiveCamera | OrthographicCamera | CameraFit}
    * @memberof UpdateSceneViewRequestDataAttributes
    */
-  camera?: Camera | CameraFit;
+  camera?: PerspectiveCamera | OrthographicCamera | CameraFit;
   /**
    *
    * @type {CrossSectioning}
@@ -4859,14 +4885,13 @@ export interface UpdateWebhookSubscriptionRequestDataAttributes {
   url?: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum UpdateWebhookSubscriptionRequestDataAttributesStatusEnum {
-  Active = 'active',
-  Paused = 'paused',
-}
+export const UpdateWebhookSubscriptionRequestDataAttributesStatusEnum = {
+  Active: 'active',
+  Paused: 'paused',
+} as const;
+
+export type UpdateWebhookSubscriptionRequestDataAttributesStatusEnum =
+  typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
 
 /**
  * 3D vector.
@@ -5057,13 +5082,12 @@ export interface WebhookEventDataRelationshipsOwnerData {
   id: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum WebhookEventDataRelationshipsOwnerDataTypeEnum {
-  Account = 'account',
-}
+export const WebhookEventDataRelationshipsOwnerDataTypeEnum = {
+  Account: 'account',
+} as const;
+
+export type WebhookEventDataRelationshipsOwnerDataTypeEnum =
+  typeof WebhookEventDataRelationshipsOwnerDataTypeEnum[keyof typeof WebhookEventDataRelationshipsOwnerDataTypeEnum];
 
 /**
  * Relationship to a `resource`.
@@ -5191,14 +5215,13 @@ export interface WebhookSubscriptionDataAttributes {
   created: string;
 }
 
-/**
- * @export
- * @enum {string}
- */
-export enum WebhookSubscriptionDataAttributesStatusEnum {
-  Active = 'active',
-  Paused = 'paused',
-}
+export const WebhookSubscriptionDataAttributesStatusEnum = {
+  Active: 'active',
+  Paused: 'paused',
+} as const;
+
+export type WebhookSubscriptionDataAttributesStatusEnum =
+  typeof WebhookSubscriptionDataAttributesStatusEnum[keyof typeof WebhookSubscriptionDataAttributesStatusEnum];
 
 /**
  *
@@ -9559,6 +9582,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
      * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
      * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
      * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
+     * @param {Vector3} [cameraPerspectivePosition] The perspective camera position.
+     * @param {Vector3} [cameraPerspectiveLookAt] The perspective camera look at position.
+     * @param {Vector3} [cameraPerspectiveUp] The perspective camera up vector.
+     * @param {Vector3} [cameraOrthographicViewVector] The orthographic camera view vector.
+     * @param {Vector3} [cameraOrthographicLookAt] The orthographic camera look at position.
+     * @param {Vector3} [cameraOrthographicUp] The orthographic camera up vector.
+     * @param {number} [cameraOrthographicFovHeight] The orthographic field-of-view height.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9569,6 +9599,13 @@ export const PartRevisionsApiAxiosParamCreator = function (
       cameraPosition?: Vector3,
       cameraUp?: Vector3,
       cameraLookAt?: Vector3,
+      cameraPerspectivePosition?: Vector3,
+      cameraPerspectiveLookAt?: Vector3,
+      cameraPerspectiveUp?: Vector3,
+      cameraOrthographicViewVector?: Vector3,
+      cameraOrthographicLookAt?: Vector3,
+      cameraOrthographicUp?: Vector3,
+      cameraOrthographicFovHeight?: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -9619,6 +9656,40 @@ export const PartRevisionsApiAxiosParamCreator = function (
 
       if (cameraLookAt !== undefined) {
         localVarQueryParameter['camera[lookAt]'] = cameraLookAt;
+      }
+
+      if (cameraPerspectivePosition !== undefined) {
+        localVarQueryParameter['camera[perspective][position]'] =
+          cameraPerspectivePosition;
+      }
+
+      if (cameraPerspectiveLookAt !== undefined) {
+        localVarQueryParameter['camera[perspective][lookAt]'] =
+          cameraPerspectiveLookAt;
+      }
+
+      if (cameraPerspectiveUp !== undefined) {
+        localVarQueryParameter['camera[perspective][up]'] = cameraPerspectiveUp;
+      }
+
+      if (cameraOrthographicViewVector !== undefined) {
+        localVarQueryParameter['camera[orthographic][viewVector]'] =
+          cameraOrthographicViewVector;
+      }
+
+      if (cameraOrthographicLookAt !== undefined) {
+        localVarQueryParameter['camera[orthographic][lookAt]'] =
+          cameraOrthographicLookAt;
+      }
+
+      if (cameraOrthographicUp !== undefined) {
+        localVarQueryParameter['camera[orthographic][up]'] =
+          cameraOrthographicUp;
+      }
+
+      if (cameraOrthographicFovHeight !== undefined) {
+        localVarQueryParameter['camera[orthographic][fovHeight]'] =
+          cameraOrthographicFovHeight;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -9830,6 +9901,13 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
      * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
      * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
      * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
+     * @param {Vector3} [cameraPerspectivePosition] The perspective camera position.
+     * @param {Vector3} [cameraPerspectiveLookAt] The perspective camera look at position.
+     * @param {Vector3} [cameraPerspectiveUp] The perspective camera up vector.
+     * @param {Vector3} [cameraOrthographicViewVector] The orthographic camera view vector.
+     * @param {Vector3} [cameraOrthographicLookAt] The orthographic camera look at position.
+     * @param {Vector3} [cameraOrthographicUp] The orthographic camera up vector.
+     * @param {number} [cameraOrthographicFovHeight] The orthographic field-of-view height.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9840,6 +9918,13 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       cameraPosition?: Vector3,
       cameraUp?: Vector3,
       cameraLookAt?: Vector3,
+      cameraPerspectivePosition?: Vector3,
+      cameraPerspectiveLookAt?: Vector3,
+      cameraPerspectiveUp?: Vector3,
+      cameraOrthographicViewVector?: Vector3,
+      cameraOrthographicLookAt?: Vector3,
+      cameraOrthographicUp?: Vector3,
+      cameraOrthographicFovHeight?: number,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<any>
@@ -9852,6 +9937,13 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
           cameraPosition,
           cameraUp,
           cameraLookAt,
+          cameraPerspectivePosition,
+          cameraPerspectiveLookAt,
+          cameraPerspectiveUp,
+          cameraOrthographicViewVector,
+          cameraOrthographicLookAt,
+          cameraOrthographicUp,
+          cameraOrthographicFovHeight,
           options
         );
       return createRequestFunction(
@@ -9971,6 +10063,13 @@ export const PartRevisionsApiFactory = function (
      * @param {Vector3} [cameraPosition] The &#x60;camera&#x60; position vector.
      * @param {Vector3} [cameraUp] The &#x60;camera&#x60; up vector.
      * @param {Vector3} [cameraLookAt] The &#x60;camera&#x60; lookAt vector.
+     * @param {Vector3} [cameraPerspectivePosition] The perspective camera position.
+     * @param {Vector3} [cameraPerspectiveLookAt] The perspective camera look at position.
+     * @param {Vector3} [cameraPerspectiveUp] The perspective camera up vector.
+     * @param {Vector3} [cameraOrthographicViewVector] The orthographic camera view vector.
+     * @param {Vector3} [cameraOrthographicLookAt] The orthographic camera look at position.
+     * @param {Vector3} [cameraOrthographicUp] The orthographic camera up vector.
+     * @param {number} [cameraOrthographicFovHeight] The orthographic field-of-view height.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -9981,6 +10080,13 @@ export const PartRevisionsApiFactory = function (
       cameraPosition?: Vector3,
       cameraUp?: Vector3,
       cameraLookAt?: Vector3,
+      cameraPerspectivePosition?: Vector3,
+      cameraPerspectiveLookAt?: Vector3,
+      cameraPerspectiveUp?: Vector3,
+      cameraOrthographicViewVector?: Vector3,
+      cameraOrthographicLookAt?: Vector3,
+      cameraOrthographicUp?: Vector3,
+      cameraOrthographicFovHeight?: number,
       options?: any
     ): AxiosPromise<any> {
       return localVarFp
@@ -9991,6 +10097,13 @@ export const PartRevisionsApiFactory = function (
           cameraPosition,
           cameraUp,
           cameraLookAt,
+          cameraPerspectivePosition,
+          cameraPerspectiveLookAt,
+          cameraPerspectiveUp,
+          cameraOrthographicViewVector,
+          cameraOrthographicLookAt,
+          cameraOrthographicUp,
+          cameraOrthographicFovHeight,
           options
         )
         .then((request) => request(axios, basePath));
@@ -10145,6 +10258,55 @@ export interface PartRevisionsApiRenderPartRevisionRequest {
    * @memberof PartRevisionsApiRenderPartRevision
    */
   readonly cameraLookAt?: Vector3;
+
+  /**
+   * The perspective camera position.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraPerspectivePosition?: Vector3;
+
+  /**
+   * The perspective camera look at position.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraPerspectiveLookAt?: Vector3;
+
+  /**
+   * The perspective camera up vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraPerspectiveUp?: Vector3;
+
+  /**
+   * The orthographic camera view vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraOrthographicViewVector?: Vector3;
+
+  /**
+   * The orthographic camera look at position.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraOrthographicLookAt?: Vector3;
+
+  /**
+   * The orthographic camera up vector.
+   * @type {Vector3}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraOrthographicUp?: Vector3;
+
+  /**
+   * The orthographic field-of-view height.
+   * @type {number}
+   * @memberof PartRevisionsApiRenderPartRevision
+   */
+  readonly cameraOrthographicFovHeight?: number;
 }
 
 /**
@@ -10268,6 +10430,13 @@ export class PartRevisionsApi extends BaseAPI {
         requestParameters.cameraPosition,
         requestParameters.cameraUp,
         requestParameters.cameraLookAt,
+        requestParameters.cameraPerspectivePosition,
+        requestParameters.cameraPerspectiveLookAt,
+        requestParameters.cameraPerspectiveUp,
+        requestParameters.cameraOrthographicViewVector,
+        requestParameters.cameraOrthographicLookAt,
+        requestParameters.cameraOrthographicUp,
+        requestParameters.cameraOrthographicFovHeight,
         options
       )
       .then((request) => request(this.axios, this.basePath));
