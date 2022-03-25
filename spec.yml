@@ -4,14 +4,16 @@ info:
     email: support@vertexvis.com
     name: Vertex API support
     url: https://developer.vertexvis.com/docs/support
-  description: |
-    The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.
-
-    See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.
-
-    Notes about the Postman collection and API Reference code samples,
-      - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.
-      - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
+  description:
+    "The Vertex distributed cloud rendering platform includes a set of\
+    \ APIs and SDKs, which together allow easily integrating 3D product data into\
+    \ your business application.\n\nSee our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene)\
+    \ to get started.\n\nNotes about the Postman collection and API Reference code\
+    \ samples,\n  - They include all required and optional body parameters for completeness.\
+    \ Remove any optional parameters as desired.\n  - They use auto-generated IDs\
+    \ and other values that may share the same value for ease of documentation only.\
+    \ In actual requests and responses, the IDs should uniquely identify their corresponding\
+    \ resource.\n"
   termsOfService: https://vertexvis.com/terms-of-use
   title: Vertex Platform API
   version: '1.0'
@@ -72,7 +74,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -255,7 +257,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -336,7 +338,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -390,7 +392,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -399,7 +401,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -469,7 +471,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -646,7 +648,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -692,8 +694,8 @@ paths:
   /batches:
     post:
       description:
-        Create a `batch`. This API is asynchronous, returning the location
-        of a `queued-batch`. Check the status via the getQueuedBatch API.
+        "Create a `batch`. This API is asynchronous, returning the location\
+        \ of a `queued-batch`. Check the status via the getQueuedBatch API."
       operationId: createBatch
       requestBody:
         content:
@@ -718,7 +720,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -812,8 +814,8 @@ paths:
   /queued-batches/{id}:
     get:
       description:
-        Get a `queued-batch`. The response is either the status if `running`
-        or `error` or, upon completion, redirects to the created `batch`.
+        "Get a `queued-batch`. The response is either the status if `running`\
+        \ or `error` or, upon completion, redirects to the created `batch`."
       operationId: getQueuedBatch
       parameters:
         - description: The `queued-batch` ID.
@@ -880,7 +882,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -889,7 +891,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -901,10 +903,10 @@ paths:
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
-          name: filter[suppliedId]
+          name: 'filter[suppliedId]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             maxLength: 1024
             type: string
           style: form
@@ -945,9 +947,9 @@ paths:
         - files
     post:
       description:
-        Create a `file`. Once created, upload file content via the uploadFile
-        API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
-        guide.
+        "Create a `file`. Once created, upload file content via the uploadFile\
+        \ API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)\
+        \ guide."
       operationId: createFile
       requestBody:
         content:
@@ -972,7 +974,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1123,8 +1125,8 @@ paths:
         - files
     post:
       description:
-        Upload a `file`. Once uploaded, create either parts or geometry
-        sets via the createPart or createGeometrySet APIs.
+        "Upload a `file`. Once uploaded, create either parts or geometry\
+        \ sets via the createPart or createGeometrySet APIs."
       operationId: uploadFile
       parameters:
         - description: The `file` ID.
@@ -1152,7 +1154,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1203,7 +1205,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -1212,7 +1214,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -1258,9 +1260,9 @@ paths:
         - geometry-sets
     post:
       description:
-        Create a `geometry-set`. Once created, create scenes via the createScene
-        API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
-        guide.
+        "Create a `geometry-set`. Once created, create scenes via the createScene\
+        \ API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)\
+        \ guide."
       operationId: createGeometrySet
       requestBody:
         content:
@@ -1285,7 +1287,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1400,15 +1402,15 @@ paths:
             $ref: '#/components/schemas/Uuid'
           style: simple
         - description:
-            Comma-separated list of fields to return in response. An empty
-            value returns no fields. Due to its potential size, metadata is only returned
-            if explicitly requested.
+            "Comma-separated list of fields to return in response. An empty\
+            \ value returns no fields. Due to its potential size, metadata is only returned\
+            \ if explicitly requested."
           explode: true
           in: query
-          name: fields[part-revision]
+          name: 'fields[part-revision]'
           required: false
           schema:
-            example: created,suppliedId
+            example: 'created,suppliedId'
             maxLength: 32
             type: string
           style: form
@@ -1435,7 +1437,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1502,15 +1504,15 @@ paths:
             $ref: '#/components/schemas/Uuid'
           style: simple
         - description:
-            Comma-separated list of fields to return in response. An empty
-            value returns no fields. Due to its potential size, metadata is only returned
-            if explicitly requested.
+            "Comma-separated list of fields to return in response. An empty\
+            \ value returns no fields. Due to its potential size, metadata is only returned\
+            \ if explicitly requested."
           explode: true
           in: query
-          name: fields[part-revision]
+          name: 'fields[part-revision]'
           required: false
           schema:
-            example: created,suppliedId
+            example: 'created,suppliedId'
             maxLength: 32
             type: string
           style: form
@@ -1537,7 +1539,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1583,8 +1585,8 @@ paths:
   /oauth2/token:
     post:
       description:
-        Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication)
-        guide.
+        "Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication)\
+        \ guide."
       operationId: createToken
       requestBody:
         content:
@@ -1659,7 +1661,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1712,7 +1714,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1807,15 +1809,15 @@ paths:
             $ref: '#/components/schemas/Uuid'
           style: simple
         - description:
-            Comma-separated list of fields to return in response. An empty
-            value returns no fields. Due to its potential size, metadata is only returned
-            if explicitly requested.
+            "Comma-separated list of fields to return in response. An empty\
+            \ value returns no fields. Due to its potential size, metadata is only returned\
+            \ if explicitly requested."
           explode: true
           in: query
-          name: fields[part-revision]
+          name: 'fields[part-revision]'
           required: false
           schema:
-            example: created,suppliedId
+            example: 'created,suppliedId'
             maxLength: 32
             type: string
           style: form
@@ -1900,7 +1902,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -1983,7 +1985,7 @@ paths:
         - description: The `camera` position vector.
           explode: true
           in: query
-          name: camera[position]
+          name: 'camera[position]'
           required: false
           schema:
             $ref: '#/components/schemas/Vector3'
@@ -1991,7 +1993,7 @@ paths:
         - description: The `camera` up vector.
           explode: true
           in: query
-          name: camera[up]
+          name: 'camera[up]'
           required: false
           schema:
             $ref: '#/components/schemas/Vector3'
@@ -1999,11 +2001,69 @@ paths:
         - description: The `camera` lookAt vector.
           explode: true
           in: query
-          name: camera[lookAt]
+          name: 'camera[lookAt]'
           required: false
           schema:
             $ref: '#/components/schemas/Vector3'
           style: deepObject
+        - description: The perspective camera position.
+          explode: true
+          in: query
+          name: 'camera[perspective][position]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The perspective camera look at position.
+          explode: true
+          in: query
+          name: 'camera[perspective][lookAt]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The perspective camera up vector.
+          explode: true
+          in: query
+          name: 'camera[perspective][up]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The orthographic camera view vector.
+          explode: true
+          in: query
+          name: 'camera[orthographic][viewVector]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The orthographic camera look at position.
+          explode: true
+          in: query
+          name: 'camera[orthographic][lookAt]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The orthographic camera up vector.
+          explode: true
+          in: query
+          name: 'camera[orthographic][up]'
+          required: false
+          schema:
+            $ref: '#/components/schemas/Vector3'
+          style: deepObject
+        - description: The orthographic field-of-view height.
+          explode: true
+          in: query
+          name: 'camera[orthographic][fovHeight]'
+          required: false
+          schema:
+            exclusiveMinimum: true
+            minimum: 0
+            type: number
+          style: form
       responses:
         '200':
           content:
@@ -2082,7 +2142,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -2091,7 +2151,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -2103,10 +2163,10 @@ paths:
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
-          name: filter[suppliedId]
+          name: 'filter[suppliedId]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             maxLength: 1024
             type: string
           style: form
@@ -2164,7 +2224,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -2173,7 +2233,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -2185,10 +2245,10 @@ paths:
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
-          name: filter[suppliedId]
+          name: 'filter[suppliedId]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             maxLength: 1024
             type: string
           style: form
@@ -2229,10 +2289,10 @@ paths:
         - parts
     post:
       description:
-        Create a `part`. This API is asynchronous, returning the location
-        of a `queued-translation`. Check the status via the getQueuedTranslation API.
-        For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
-        guide.
+        "Create a `part`. This API is asynchronous, returning the location\
+        \ of a `queued-translation`. Check the status via the getQueuedTranslation\
+        \ API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)\
+        \ guide."
       operationId: createPart
       requestBody:
         content:
@@ -2257,7 +2317,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -2690,7 +2750,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -2881,7 +2941,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -3018,7 +3078,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -3134,10 +3194,10 @@ paths:
             if explicitly requested.
           explode: true
           in: query
-          name: fields[scene-item]
+          name: 'fields[scene-item]'
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride
+            example: 'created,suppliedId,visible,transform,materialOverride'
             type: string
           style: form
       responses:
@@ -3221,7 +3281,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -3280,7 +3340,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -3289,7 +3349,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -3301,7 +3361,7 @@ paths:
         - description: Source ID to filter on.
           explode: true
           in: query
-          name: filter[source]
+          name: 'filter[source]'
           required: false
           schema:
             example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
@@ -3311,17 +3371,17 @@ paths:
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
-          name: filter[suppliedId]
+          name: 'filter[suppliedId]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             maxLength: 1024
             type: string
           style: form
         - description: Parent ID to filter on.
           explode: true
           in: query
-          name: filter[parent]
+          name: 'filter[parent]'
           required: false
           schema:
             example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
@@ -3376,11 +3436,19 @@ paths:
       tags:
         - scene-items
     post:
-      description: |-
-        Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`.
-        Provide an existing `scene` using `relationship.source` to clone it.
-        Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root.
-        This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+      description:
+        "Create a `scene-item` for a `scene`. Provide the source geometry\
+        \ either via `part-revision` or `geometry-set` UUID using `relationship.source`\
+        \ or by supplied IDs using `attributes.source`.\nProvide an existing `scene`\
+        \ using `relationship.source` to clone it.\nProvide the hierarchical parent\
+        \ either via `scene-item` UUID using `relationship.source` or by supplied\
+        \ ID using `attributes.parent`. To reduce the time taken creating many hierarchical\
+        \ `scene-items`, make a best effort to create parents before children. One\
+        \ way to do this is by sorting the items by depth and starting at the root.\n\
+        This API is asynchronous, returning the location of a `queued-scene-item`.\
+        \ Check the status via the getQueuedSceneItem API. For details, see our [Render\
+        \ static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)\
+        \ guide."
       operationId: createSceneItem
       parameters:
         - description: The `scene` ID.
@@ -3414,7 +3482,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -3471,11 +3539,11 @@ paths:
   /queued-scene-items/{id}:
     get:
       description:
-        Get a `queued-scene-item`. The response is either the status if
-        `running` or `error` or, upon completion, redirects to the created `scene-item`.
-        Once created, commit the scene via the updateScene API. For details, see our
-        [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
-        guide.
+        "Get a `queued-scene-item`. The response is either the status if\
+        \ `running` or `error` or, upon completion, redirects to the created `scene-item`.\
+        \ Once created, commit the scene via the updateScene API. For details, see\
+        \ our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)\
+        \ guide."
       operationId: getQueuedSceneItem
       parameters:
         - description: The `queued-scene-item` ID.
@@ -3738,7 +3806,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -3784,8 +3852,8 @@ paths:
   /scene-views/{id}/image:
     get:
       description:
-        Get a rendered image of a `scene-view`. If a single pixel is returned,
-        ensure the `scene` is in the `commit` state and contains scene items.
+        "Get a rendered image of a `scene-view`. If a single pixel is returned,\
+        \ ensure the `scene` is in the `commit` state and contains scene items."
       operationId: renderSceneView
       parameters:
         - description: The `scene-view` ID.
@@ -3909,10 +3977,10 @@ paths:
             if explicitly requested.
           explode: true
           in: query
-          name: fields[scene-item]
+          name: 'fields[scene-item]'
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride
+            example: 'created,suppliedId,visible,transform,materialOverride'
             type: string
           style: form
         - description: Comma-separated list of relationships to include in response.
@@ -3979,7 +4047,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -3988,7 +4056,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -4075,7 +4143,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -4126,7 +4194,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -4135,7 +4203,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -4147,20 +4215,20 @@ paths:
         - description: Comma-separated list of names to filter on.
           explode: true
           in: query
-          name: filter[name]
+          name: 'filter[name]'
           required: false
           schema:
-            example: some-name-1,some-name-2
+            example: 'some-name-1,some-name-2'
             maxLength: 1024
             type: string
           style: form
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
-          name: filter[suppliedId]
+          name: 'filter[suppliedId]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             maxLength: 1024
             type: string
           style: form
@@ -4201,9 +4269,9 @@ paths:
         - scenes
     post:
       description:
-        Create a `scene`. Once created, add scene items via the createSceneItem
-        API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
-        guide.
+        "Create a `scene`. Once created, add scene items via the createSceneItem\
+        \ API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)\
+        \ guide."
       operationId: createScene
       requestBody:
         content:
@@ -4228,7 +4296,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -4333,10 +4401,10 @@ paths:
             requested.
           explode: true
           in: query
-          name: fields[scene]
+          name: 'fields[scene]'
           required: false
           schema:
-            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+            example: 'camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount'
             type: string
           style: form
       responses:
@@ -4387,10 +4455,10 @@ paths:
         - scenes
     patch:
       description:
-        Update a `scene` camera and/or state. Once updated, view the scene
-        via the renderScene API or with the Viewer SDK. For details, see our [Render
-        static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
-        guide.
+        "Update a `scene` camera and/or state. Once updated, view the scene\
+        \ via the renderScene API or with the Viewer SDK. For details, see our [Render\
+        \ static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)\
+        \ guide."
       operationId: updateScene
       parameters:
         - description: The `scene` ID.
@@ -4421,7 +4489,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -4467,8 +4535,8 @@ paths:
   /scenes/{id}/image:
     get:
       description:
-        Get a rendered image of a `scene`. If only a single pixel is returned,
-        ensure the `scene` is in the `commit` state and contains scene items.
+        "Get a rendered image of a `scene`. If only a single pixel is returned,\
+        \ ensure the `scene` is in the `commit` state and contains scene items."
       operationId: renderScene
       parameters:
         - description: The `scene` ID.
@@ -4642,7 +4710,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -4651,7 +4719,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -4665,7 +4733,7 @@ paths:
             value returns no fields. `thumbnails` is only returned if explicitly requested.
           explode: true
           in: query
-          name: fields[scene-view-state]
+          name: 'fields[scene-view-state]'
           required: false
           schema:
             example: thumbnails
@@ -4674,10 +4742,10 @@ paths:
         - description: Comma-separated list of IDs to filter on.
           explode: true
           in: query
-          name: filter[id]
+          name: 'filter[id]'
           required: false
           schema:
-            example: some-id-1,some-id-2
+            example: 'some-id-1,some-id-2'
             type: string
           style: form
       responses:
@@ -4750,7 +4818,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -4865,7 +4933,7 @@ paths:
             value returns no fields. `thumbnails` is only returned if explicitly requested.
           explode: true
           in: query
-          name: fields[scene-view-state]
+          name: 'fields[scene-view-state]'
           required: false
           schema:
             example: thumbnails
@@ -4949,7 +5017,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -5068,7 +5136,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -5077,7 +5145,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -5089,7 +5157,7 @@ paths:
         - description: Stream key to filter on.
           explode: true
           in: query
-          name: filter[key]
+          name: 'filter[key]'
           required: false
           schema:
             example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
@@ -5212,7 +5280,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -5311,7 +5379,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -5320,7 +5388,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -5332,7 +5400,7 @@ paths:
         - description: Status to filter on.
           explode: true
           in: query
-          name: filter[status]
+          name: 'filter[status]'
           required: false
           schema:
             example: running
@@ -5388,11 +5456,11 @@ paths:
   /queued-translations/{id}:
     get:
       description:
-        Get a `queued-translation`. The response is either the status if
-        `running` or `error` or, upon completion, redirects to the created `part-revision`.
-        Once created, create scenes via the createScene API. For details, see our
-        [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
-        guide.
+        "Get a `queued-translation`. The response is either the status\
+        \ if `running` or `error` or, upon completion, redirects to the created `part-revision`.\
+        \ Once created, create scenes via the createScene API. For details, see our\
+        \ [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)\
+        \ guide."
       operationId: getQueuedTranslation
       parameters:
         - description: The `queued-translation` ID.
@@ -5459,7 +5527,7 @@ paths:
         - description: The cursor for the next page of items.
           explode: true
           in: query
-          name: page[cursor]
+          name: 'page[cursor]'
           required: false
           schema:
             example: cHJkMDVFR2RLag==
@@ -5468,7 +5536,7 @@ paths:
         - description: The number of items to return.
           explode: true
           in: query
-          name: page[size]
+          name: 'page[size]'
           required: false
           schema:
             example: 10
@@ -5744,7 +5812,7 @@ paths:
                 errors:
                   - status: '400'
                     code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
+                    title: 'Invalid, missing, or out-of-range request parameters.'
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
@@ -5822,11 +5890,85 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    PerspectiveCamera:
+      description: A perspective camera that mimics the way the human eye sees.
+      explode: true
+      in: query
+      name: 'camera[perspective]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/PerspectiveCamera'
+      style: deepObject
+    PerspectiveCameraPosition:
+      description: The perspective camera position.
+      explode: true
+      in: query
+      name: 'camera[perspective][position]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    PerspectiveCameraLookAt:
+      description: The perspective camera look at position.
+      explode: true
+      in: query
+      name: 'camera[perspective][lookAt]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    PerspectiveCameraUp:
+      description: The perspective camera up vector.
+      explode: true
+      in: query
+      name: 'camera[perspective][up]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    OrthographicCameraViewVector:
+      description: The orthographic camera view vector.
+      explode: true
+      in: query
+      name: 'camera[orthographic][viewVector]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    OrthographicCameraLookAt:
+      description: The orthographic camera look at position.
+      explode: true
+      in: query
+      name: 'camera[orthographic][lookAt]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    OrthographicCameraUp:
+      description: The orthographic camera up vector.
+      explode: true
+      in: query
+      name: 'camera[orthographic][up]'
+      required: false
+      schema:
+        $ref: '#/components/schemas/Vector3'
+      style: deepObject
+    OrthographicCameraFovHeight:
+      description: The orthographic field-of-view height.
+      explode: true
+      in: query
+      name: 'camera[orthographic][fovHeight]'
+      required: false
+      schema:
+        exclusiveMinimum: true
+        minimum: 0
+        type: number
+      style: form
     CameraUp:
       description: The `camera` up vector.
       explode: true
       in: query
-      name: camera[up]
+      name: 'camera[up]'
       required: false
       schema:
         $ref: '#/components/schemas/Vector3'
@@ -5835,7 +5977,7 @@ components:
       description: The `camera` position vector.
       explode: true
       in: query
-      name: camera[position]
+      name: 'camera[position]'
       required: false
       schema:
         $ref: '#/components/schemas/Vector3'
@@ -5844,7 +5986,7 @@ components:
       description: The `camera` lookAt vector.
       explode: true
       in: query
-      name: camera[lookAt]
+      name: 'camera[lookAt]'
       required: false
       schema:
         $ref: '#/components/schemas/Vector3'
@@ -5875,10 +6017,10 @@ components:
       description: Comma-separated list of IDs to filter on.
       explode: true
       in: query
-      name: filter[id]
+      name: 'filter[id]'
       required: false
       schema:
-        example: some-id-1,some-id-2
+        example: 'some-id-1,some-id-2'
         type: string
       style: form
     IncludeSource:
@@ -5918,10 +6060,10 @@ components:
       description: Comma-separated list of names to filter on.
       explode: true
       in: query
-      name: filter[name]
+      name: 'filter[name]'
       required: false
       schema:
-        example: some-name-1,some-name-2
+        example: 'some-name-1,some-name-2'
         maxLength: 1024
         type: string
       style: form
@@ -5929,7 +6071,7 @@ components:
       description: The cursor for the next page of items.
       explode: true
       in: query
-      name: page[cursor]
+      name: 'page[cursor]'
       required: false
       schema:
         example: cHJkMDVFR2RLag==
@@ -5939,7 +6081,7 @@ components:
       description: The number of items to return.
       explode: true
       in: query
-      name: page[size]
+      name: 'page[size]'
       required: false
       schema:
         example: 10
@@ -5959,15 +6101,15 @@ components:
       style: simple
     PartRevisionFields:
       description:
-        Comma-separated list of fields to return in response. An empty
-        value returns no fields. Due to its potential size, metadata is only returned
-        if explicitly requested.
+        "Comma-separated list of fields to return in response. An empty\
+        \ value returns no fields. Due to its potential size, metadata is only returned\
+        \ if explicitly requested."
       explode: true
       in: query
-      name: fields[part-revision]
+      name: 'fields[part-revision]'
       required: false
       schema:
-        example: created,suppliedId
+        example: 'created,suppliedId'
         maxLength: 32
         type: string
       style: form
@@ -5995,10 +6137,10 @@ components:
         value returns no fields. `sceneItemCount` is only returned if explicitly requested.
       explode: true
       in: query
-      name: fields[scene]
+      name: 'fields[scene]'
       required: false
       schema:
-        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+        example: 'camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount'
         type: string
       style: form
     SceneViewStateFields:
@@ -6007,7 +6149,7 @@ components:
         value returns no fields. `thumbnails` is only returned if explicitly requested.
       explode: true
       in: query
-      name: fields[scene-view-state]
+      name: 'fields[scene-view-state]'
       required: false
       schema:
         example: thumbnails
@@ -6029,10 +6171,10 @@ components:
         explicitly requested.
       explode: true
       in: query
-      name: fields[scene-item]
+      name: 'fields[scene-item]'
       required: false
       schema:
-        example: created,suppliedId,visible,transform,materialOverride
+        example: 'created,suppliedId,visible,transform,materialOverride'
         type: string
       style: form
     SceneItemOverrideId:
@@ -6075,7 +6217,7 @@ components:
       description: Source ID to filter on.
       explode: true
       in: query
-      name: filter[source]
+      name: 'filter[source]'
       required: false
       schema:
         example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
@@ -6086,7 +6228,7 @@ components:
       description: Status to filter on.
       explode: true
       in: query
-      name: filter[status]
+      name: 'filter[status]'
       required: false
       schema:
         example: running
@@ -6097,10 +6239,10 @@ components:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
       in: query
-      name: filter[suppliedId]
+      name: 'filter[suppliedId]'
       required: false
       schema:
-        example: some-id-1,some-id-2
+        example: 'some-id-1,some-id-2'
         maxLength: 1024
         type: string
       style: form
@@ -6108,7 +6250,7 @@ components:
       description: Parent ID to filter on.
       explode: true
       in: query
-      name: filter[parent]
+      name: 'filter[parent]'
       required: false
       schema:
         example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
@@ -6120,7 +6262,7 @@ components:
       description: Stream key to filter on.
       explode: true
       in: query
-      name: filter[key]
+      name: 'filter[key]'
       required: false
       schema:
         example: i3MFRDOmg1pxD36dGCTONRwOujkgV8m9LQ
@@ -6169,7 +6311,7 @@ components:
             errors:
               - status: '400'
                 code: BadRequest
-                title: Invalid, missing, or out-of-range request parameters.
+                title: 'Invalid, missing, or out-of-range request parameters.'
           schema:
             $ref: '#/components/schemas/Failure'
       description: Bad Request
@@ -6602,7 +6744,7 @@ components:
           description: x-axis coordinate.
           example: 1.0
           type: number
-        y:
+        'y':
           description: y-axis coordinate.
           example: 0.0
           type: number
@@ -7086,6 +7228,37 @@ components:
       required:
         - data
       type: object
+    PerspectiveCamera:
+      description: A camera type that mimics the way the human eye sees.
+      example:
+        type: perspective
+        position:
+          x: 0.0
+          'y': 0.0
+          z: -100.0
+        lookAt:
+          x: 0.0
+          'y': 0.0
+          z: 0.0
+        up:
+          x: 0.0
+          'y': 1.0
+          z: 0.0
+      properties:
+        type:
+          example: perspective
+          type: string
+        position:
+          $ref: '#/components/schemas/Vector3'
+        lookAt:
+          $ref: '#/components/schemas/Vector3'
+        up:
+          $ref: '#/components/schemas/Vector3'
+      required:
+        - lookAt
+        - position
+        - up
+      type: object
     NonEmptyString:
       example: some-string
       maxLength: 1024
@@ -7489,27 +7662,27 @@ components:
     Matrix4Nullable:
       additionalProperties: false
       description:
-        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
-        for details.
+        "4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)\
+        \ for details."
       example:
         r0:
           x: 1.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
           w: 0.0
         r1:
           x: 0.0
-          y: 1.0
+          'y': 1.0
           z: 0.0
           w: 0.0
         r2:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 1.0
           w: 0.0
         r3:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
           w: 1.0
       nullable: true
@@ -7592,27 +7765,27 @@ components:
     Matrix4:
       additionalProperties: false
       description:
-        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
-        for details.
+        "4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)\
+        \ for details."
       example:
         r0:
           x: 1.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
           w: 0.0
         r1:
           x: 0.0
-          y: 1.0
+          'y': 1.0
           z: 0.0
           w: 0.0
         r2:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 1.0
           w: 0.0
         r3:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
           w: 1.0
       properties:
@@ -7737,33 +7910,42 @@ components:
         - relationships
         - type
       type: object
-    Camera:
-      additionalProperties: false
-      description: Camera placement in 3D space.
+    OrthographicCamera:
+      description:
+        A camera type where an object's size stays consistent regardless
+        of its distance to the camera.
       example:
-        position:
+        type: orthographic
+        viewVector:
           x: 0.0
-          y: 0.0
-          z: -100.0
+          'y': 0.0
+          z: 1.0
         lookAt:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
         up:
           x: 0.0
-          y: 1.0
+          'y': 1.0
           z: 0.0
+        fovHeight: 1.0
       properties:
-        position:
+        type:
+          example: orthographic
+          type: string
+        viewVector:
           $ref: '#/components/schemas/Vector3'
         lookAt:
           $ref: '#/components/schemas/Vector3'
         up:
           $ref: '#/components/schemas/Vector3'
+        fovHeight:
+          type: number
       required:
+        - fovHeight
         - lookAt
-        - position
         - up
+        - viewVector
       type: object
     CameraFit:
       additionalProperties: false
@@ -7990,11 +8172,11 @@ components:
       example:
         min:
           x: 0.0
-          y: 0.0
+          'y': 0.0
           z: 0.0
         max:
           x: 100.0
-          y: 100.0
+          'y': 100.0
           z: 100.0
       properties:
         min:
@@ -8181,7 +8363,7 @@ components:
           description: x-axis coordinate.
           example: 1.0
           type: number
-        y:
+        'y':
           description: y-axis coordinate.
           example: 0.0
           type: number
@@ -8248,14 +8430,14 @@ components:
       properties:
         suppliedPartId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           maxLength: 1024
           type: string
         suppliedRevisionId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           maxLength: 1024
           type: string
       required:
@@ -8502,23 +8684,23 @@ components:
       properties:
         name:
           description:
-            Name matching that of the file you are uploading, including
-            file extension.
+            "Name matching that of the file you are uploading, including\
+            \ file extension."
           example: model.zip
           maxLength: 1024
           minLength: 1
           type: string
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
         rootFileName:
           description:
-            File name of the root part or assembly, including file extension.
-            Required if `name` references an archive file extension, ignored otherwise.
+            "File name of the root part or assembly, including file extension.\
+            \ Required if `name` references an archive file extension, ignored otherwise."
           example: root-assembly.prt.1
           maxLength: 1024
           type: string
@@ -8714,15 +8896,15 @@ components:
       properties:
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
         suppliedRevisionId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: RevA
           maxLength: 1024
           type: string
@@ -8880,8 +9062,8 @@ components:
           type: string
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
@@ -8913,7 +9095,8 @@ components:
       properties:
         camera:
           anyOf:
-            - $ref: '#/components/schemas/Camera'
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
             - $ref: '#/components/schemas/CameraFit'
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
@@ -8934,7 +9117,9 @@ components:
     CreateSceneViewRequest_data_attributes:
       properties:
         camera:
-          $ref: '#/components/schemas/Camera'
+          oneOf:
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
       type: object
@@ -8961,11 +9146,13 @@ components:
     CreateSceneRequest_data_attributes:
       properties:
         camera:
-          $ref: '#/components/schemas/Camera'
+          oneOf:
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
@@ -9006,7 +9193,8 @@ components:
       properties:
         camera:
           anyOf:
-            - $ref: '#/components/schemas/Camera'
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
             - $ref: '#/components/schemas/CameraFit'
         state:
           description: State of the scene.
@@ -9018,8 +9206,8 @@ components:
           type: string
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
@@ -9226,7 +9414,7 @@ components:
           example: /body/data/attributes
           type: string
         parameter:
-          example: page[cursor]
+          example: 'page[cursor]'
           type: string
       type: object
     ApplicationData_attributes:
@@ -9545,8 +9733,8 @@ components:
           type: string
         parent:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
@@ -9560,8 +9748,8 @@ components:
           $ref: '#/components/schemas/PartRevisionSuppliedId'
         suppliedId:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            "ID provided for correlation. For example, an existing ID from\
+            \ a PLM system."
           example: PN12345
           maxLength: 1024
           type: string
@@ -9581,12 +9769,16 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
-          description: Relationship to a `geometry-set`, `part-revision`, or `scene`.
+          description: 'Relationship to a `geometry-set`, `part-revision`, or `scene`.'
+        referenceTree:
+          $ref: '#/components/schemas/SceneItemRelationship'
       type: object
     SceneViewData_attributes:
       properties:
         camera:
-          $ref: '#/components/schemas/Camera'
+          oneOf:
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
         created:
           example: 2020-01-01T12:00:00Z
           format: date-time
@@ -9628,7 +9820,9 @@ components:
     SceneData_attributes:
       properties:
         camera:
-          $ref: '#/components/schemas/Camera'
+          oneOf:
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
         state:
           example: draft
           type: string
@@ -9683,7 +9877,9 @@ components:
     SceneViewStateData_attributes:
       properties:
         camera:
-          $ref: '#/components/schemas/Camera'
+          oneOf:
+            - $ref: '#/components/schemas/PerspectiveCamera'
+            - $ref: '#/components/schemas/OrthographicCamera'
         created:
           example: 2020-01-01T12:00:00Z
           format: date-time
