@@ -5519,6 +5519,189 @@ paths:
         - OAuth2: []
       tags:
         - translation-inspections
+  /exports:
+    post:
+      description:
+        "Create an `export`. This API is asynchronous, returning the location\
+        \ of a `queued-export`. Check the status via the getQueuedExport API."
+      operationId: createExport
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateExportRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: 'Invalid, missing, or out-of-range request parameters.'
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - exports
+  /exports/{id}:
+    get:
+      description: Get an `export` by ID.
+      operationId: getExport
+      parameters:
+        - description: The `export` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Export'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - exports
+  /queued-exports/{id}:
+    get:
+      description:
+        "Get a `queued-export`. The response is either the status if `running`\
+        \ or `error` or, upon completion, redirects to the created `export`."
+      operationId: getQueuedExport
+      parameters:
+        - description: The `queued-export` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '301':
+          description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - exports
   /webhook-subscriptions:
     get:
       description: Get `webhook-subscription`s.
@@ -5991,6 +6174,15 @@ components:
       schema:
         $ref: '#/components/schemas/Vector3'
       style: deepObject
+    ExportId:
+      description: The `export` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     FileId:
       description: The `file` ID.
       explode: false
@@ -7147,6 +7339,26 @@ components:
         - data
         - links
       type: object
+    CreateExportRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateExportRequest_data'
+      required:
+        - data
+      type: object
+    Export:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ExportData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     WebhookSubscriptionList:
       additionalProperties: false
       properties:
@@ -8084,6 +8296,44 @@ components:
         - relationships
         - type
       type: object
+    CADExportConfig:
+      allOf:
+        - $ref: '#/components/schemas/ExportConfig'
+      description: Describes the options for configuring a CAD file export.
+      example:
+        format: jt
+    ExportRelationship:
+      additionalProperties: false
+      description: Relationship to an `export`.
+      properties:
+        data:
+          $ref: '#/components/schemas/ExportRelationshipData'
+      required:
+        - data
+      type: object
+    ExportData:
+      additionalProperties: false
+      properties:
+        type:
+          example: export
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ExportData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     WebhookSubscriptionData:
       additionalProperties: false
       properties:
@@ -8470,6 +8720,39 @@ components:
         - height
         - uri
         - width
+      type: object
+    ExportConfig:
+      description: Describes the options for configuring a file export.
+      discriminator:
+        propertyName: format
+      example:
+        format: jt
+      properties:
+        format:
+          example: jt
+          type: string
+      required:
+        - format
+      type: object
+    ExportRelationshipData:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - scene
+          example: scene
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     RelationshipLinks:
       additionalProperties: false
@@ -9348,6 +9631,43 @@ components:
         - id
         - type
       type: object
+    CreateExportRequest_data_attributes:
+      properties:
+        config:
+          description: Specifies the export format and options to configure the export.
+          discriminator:
+            mapping:
+              jt: '#/components/schemas/CADExportConfig'
+              step: '#/components/schemas/CADExportConfig'
+            propertyName: format
+          oneOf:
+            - $ref: '#/components/schemas/CADExportConfig'
+      required:
+        - config
+      type: object
+    CreateExportRequest_data_relationships:
+      properties:
+        source:
+          $ref: '#/components/schemas/ExportRelationship'
+      required:
+        - source
+      type: object
+    CreateExportRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: export
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateExportRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateExportRequest_data_relationships'
+      required:
+        - attributes
+        - relationships
+        - type
+      type: object
     CreateWebhookSubscriptionRequest_data_attributes:
       properties:
         url:
@@ -9929,6 +10249,19 @@ components:
       required:
         - created
         - expiry
+      type: object
+    ExportData_attributes:
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        downloadUrl:
+          example: https://example.com/path/to/file.jt
+          type: string
+      required:
+        - created
+        - downloadUrl
       type: object
     WebhookSubscriptionData_attributes:
       properties:
