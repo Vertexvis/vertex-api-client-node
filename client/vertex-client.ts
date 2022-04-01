@@ -5,6 +5,7 @@ import {
   ApplicationsApi,
   BatchesApi,
   Configuration,
+  ExportsApi,
   FilesApi,
   GeometrySetsApi,
   HitsApi,
@@ -119,6 +120,7 @@ export class VertexClient {
   public accounts: AccountsApi;
   public applications: ApplicationsApi;
   public batches: BatchesApi;
+  public exports: ExportsApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
   public hits: HitsApi;
@@ -153,6 +155,7 @@ export class VertexClient {
     this.accounts = new AccountsApi(this.config, undefined, axiosInst);
     this.applications = new ApplicationsApi(this.config, undefined, axiosInst);
     this.batches = new BatchesApi(this.config, undefined, axiosInst);
+    this.exports = new ExportsApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
     this.hits = new HitsApi(this.config, undefined, axiosInst);

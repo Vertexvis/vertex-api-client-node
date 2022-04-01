@@ -529,6 +529,12 @@ export interface BoundingBox {
   max: Vector3;
 }
 /**
+ * Describes the options for configuring a CAD file export.
+ * @export
+ * @interface CADExportConfig
+ */
+export interface CADExportConfig extends ExportConfig {}
+/**
  * Fit camera in 3D space based on items in scene.
  * @export
  * @interface CameraFit
@@ -854,6 +860,70 @@ export interface CreateBatchRequest {
    * @memberof CreateBatchRequest
    */
   'vertexvis/batch:operations': Array<BatchOperation>;
+}
+/**
+ *
+ * @export
+ * @interface CreateExportRequest
+ */
+export interface CreateExportRequest {
+  /**
+   *
+   * @type {CreateExportRequestData}
+   * @memberof CreateExportRequest
+   */
+  data: CreateExportRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateExportRequestData
+ */
+export interface CreateExportRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateExportRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateExportRequestDataAttributes}
+   * @memberof CreateExportRequestData
+   */
+  attributes: CreateExportRequestDataAttributes;
+  /**
+   *
+   * @type {CreateExportRequestDataRelationships}
+   * @memberof CreateExportRequestData
+   */
+  relationships: CreateExportRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface CreateExportRequestDataAttributes
+ */
+export interface CreateExportRequestDataAttributes {
+  /**
+   * Specifies the export format and options to configure the export.
+   * @type {CADExportConfig}
+   * @memberof CreateExportRequestDataAttributes
+   */
+  config: CADExportConfig;
+}
+/**
+ *
+ * @export
+ * @interface CreateExportRequestDataRelationships
+ */
+export interface CreateExportRequestDataRelationships {
+  /**
+   *
+   * @type {ExportRelationship}
+   * @memberof CreateExportRequestDataRelationships
+   */
+  source: ExportRelationship;
 }
 /**
  *
@@ -1827,6 +1897,128 @@ export interface Dimensions {
    */
   width: number;
 }
+/**
+ *
+ * @export
+ * @interface Export
+ */
+export interface Export {
+  /**
+   *
+   * @type {ExportData}
+   * @memberof Export
+   */
+  data: ExportData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Export
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ * Describes the options for configuring a file export.
+ * @export
+ * @interface ExportConfig
+ */
+export interface ExportConfig {
+  /**
+   *
+   * @type {string}
+   * @memberof ExportConfig
+   */
+  format: string;
+}
+/**
+ *
+ * @export
+ * @interface ExportData
+ */
+export interface ExportData {
+  /**
+   *
+   * @type {string}
+   * @memberof ExportData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ExportData
+   */
+  id: string;
+  /**
+   *
+   * @type {ExportDataAttributes}
+   * @memberof ExportData
+   */
+  attributes: ExportDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ExportData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ExportDataAttributes
+ */
+export interface ExportDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof ExportDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ExportDataAttributes
+   */
+  downloadUrl: string;
+}
+/**
+ * Relationship to an `export`.
+ * @export
+ * @interface ExportRelationship
+ */
+export interface ExportRelationship {
+  /**
+   *
+   * @type {ExportRelationshipData}
+   * @memberof ExportRelationship
+   */
+  data: ExportRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface ExportRelationshipData
+ */
+export interface ExportRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ExportRelationshipData
+   */
+  type: ExportRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ExportRelationshipData
+   */
+  id: string;
+}
+
+export const ExportRelationshipDataTypeEnum = {
+  Scene: 'scene',
+} as const;
+
+export type ExportRelationshipDataTypeEnum =
+  typeof ExportRelationshipDataTypeEnum[keyof typeof ExportRelationshipDataTypeEnum];
+
 /**
  *
  * @export
@@ -7072,6 +7264,414 @@ export class BatchesApi extends BaseAPI {
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * ExportsApi - axios parameter creator
+ * @export
+ */
+export const ExportsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create an `export`. This API is asynchronous, returning the location of a `queued-export`. Check the status via the getQueuedExport API.
+     * @param {CreateExportRequest} createExportRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createExport: async (
+      createExportRequest: CreateExportRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createExportRequest' is not null or undefined
+      assertParamExists(
+        'createExport',
+        'createExportRequest',
+        createExportRequest
+      );
+      const localVarPath = `/exports`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createExportRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get an `export` by ID.
+     * @param {string} id The &#x60;export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getExport: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getExport', 'id', id);
+      const localVarPath = `/exports/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `queued-export`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `export`.
+     * @param {string} id The &#x60;queued-export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedExport: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getQueuedExport', 'id', id);
+      const localVarPath = `/queued-exports/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * ExportsApi - functional programming interface
+ * @export
+ */
+export const ExportsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = ExportsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create an `export`. This API is asynchronous, returning the location of a `queued-export`. Check the status via the getQueuedExport API.
+     * @param {CreateExportRequest} createExportRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createExport(
+      createExportRequest: CreateExportRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createExport(
+        createExportRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get an `export` by ID.
+     * @param {string} id The &#x60;export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getExport(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Export>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getExport(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `queued-export`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `export`.
+     * @param {string} id The &#x60;queued-export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedExport(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getQueuedExport(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * ExportsApi - factory interface
+ * @export
+ */
+export const ExportsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = ExportsApiFp(configuration);
+  return {
+    /**
+     * Create an `export`. This API is asynchronous, returning the location of a `queued-export`. Check the status via the getQueuedExport API.
+     * @param {CreateExportRequest} createExportRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createExport(
+      createExportRequest: CreateExportRequest,
+      options?: any
+    ): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .createExport(createExportRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get an `export` by ID.
+     * @param {string} id The &#x60;export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getExport(id: string, options?: any): AxiosPromise<Export> {
+      return localVarFp
+        .getExport(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `queued-export`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `export`.
+     * @param {string} id The &#x60;queued-export&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedExport(id: string, options?: any): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .getQueuedExport(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createExport operation in ExportsApi.
+ * @export
+ * @interface ExportsApiCreateExportRequest
+ */
+export interface ExportsApiCreateExportRequest {
+  /**
+   *
+   * @type {CreateExportRequest}
+   * @memberof ExportsApiCreateExport
+   */
+  readonly createExportRequest: CreateExportRequest;
+}
+
+/**
+ * Request parameters for getExport operation in ExportsApi.
+ * @export
+ * @interface ExportsApiGetExportRequest
+ */
+export interface ExportsApiGetExportRequest {
+  /**
+   * The &#x60;export&#x60; ID.
+   * @type {string}
+   * @memberof ExportsApiGetExport
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedExport operation in ExportsApi.
+ * @export
+ * @interface ExportsApiGetQueuedExportRequest
+ */
+export interface ExportsApiGetQueuedExportRequest {
+  /**
+   * The &#x60;queued-export&#x60; ID.
+   * @type {string}
+   * @memberof ExportsApiGetQueuedExport
+   */
+  readonly id: string;
+}
+
+/**
+ * ExportsApi - object-oriented interface
+ * @export
+ * @class ExportsApi
+ * @extends {BaseAPI}
+ */
+export class ExportsApi extends BaseAPI {
+  /**
+   * Create an `export`. This API is asynchronous, returning the location of a `queued-export`. Check the status via the getQueuedExport API.
+   * @param {ExportsApiCreateExportRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ExportsApi
+   */
+  public createExport(
+    requestParameters: ExportsApiCreateExportRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ExportsApiFp(this.configuration)
+      .createExport(requestParameters.createExportRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get an `export` by ID.
+   * @param {ExportsApiGetExportRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ExportsApi
+   */
+  public getExport(
+    requestParameters: ExportsApiGetExportRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ExportsApiFp(this.configuration)
+      .getExport(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `queued-export`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `export`.
+   * @param {ExportsApiGetQueuedExportRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ExportsApi
+   */
+  public getQueuedExport(
+    requestParameters: ExportsApiGetQueuedExportRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ExportsApiFp(this.configuration)
+      .getQueuedExport(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
