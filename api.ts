@@ -2047,6 +2047,25 @@ export interface Failure {
 /**
  *
  * @export
+ * @interface FeatureLines
+ */
+export interface FeatureLines {
+  /**
+   *
+   * @type {Color3}
+   * @memberof FeatureLines
+   */
+  color: Color3;
+  /**
+   *
+   * @type {number}
+   * @memberof FeatureLines
+   */
+  width: number;
+}
+/**
+ *
+ * @export
  * @interface FileList
  */
 export interface FileList {
@@ -4252,6 +4271,12 @@ export interface SceneViewStateDataAttributes {
    * @memberof SceneViewStateDataAttributes
    */
   thumbnails?: Array<ThumbnailData>;
+  /**
+   *
+   * @type {FeatureLines}
+   * @memberof SceneViewStateDataAttributes
+   */
+  featureLines?: FeatureLines;
 }
 /**
  *
