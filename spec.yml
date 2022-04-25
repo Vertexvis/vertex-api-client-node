@@ -8721,6 +8721,17 @@ components:
         - uri
         - width
       type: object
+    FeatureLines:
+      additionalProperties: false
+      properties:
+        color:
+          $ref: '#/components/schemas/Color3'
+        width:
+          type: number
+      required:
+        - color
+        - width
+      type: object
     ExportConfig:
       description: Describes the options for configuring a file export.
       discriminator:
@@ -10213,6 +10224,8 @@ components:
           items:
             $ref: '#/components/schemas/ThumbnailData'
           type: array
+        featureLines:
+          $ref: '#/components/schemas/FeatureLines'
       type: object
     SceneViewRelationship_data:
       properties:
