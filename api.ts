@@ -924,6 +924,12 @@ export interface CreateExportRequestDataRelationships {
    * @memberof CreateExportRequestDataRelationships
    */
   source: ExportRelationship;
+  /**
+   *
+   * @type {ExportStateRelationship}
+   * @memberof CreateExportRequestDataRelationships
+   */
+  state?: ExportStateRelationship;
 }
 /**
  *
@@ -2018,6 +2024,46 @@ export const ExportRelationshipDataTypeEnum = {
 
 export type ExportRelationshipDataTypeEnum =
   typeof ExportRelationshipDataTypeEnum[keyof typeof ExportRelationshipDataTypeEnum];
+
+/**
+ * Relationship to an `export`.
+ * @export
+ * @interface ExportStateRelationship
+ */
+export interface ExportStateRelationship {
+  /**
+   *
+   * @type {ExportStateRelationshipData}
+   * @memberof ExportStateRelationship
+   */
+  data: ExportStateRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface ExportStateRelationshipData
+ */
+export interface ExportStateRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ExportStateRelationshipData
+   */
+  type: ExportStateRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ExportStateRelationshipData
+   */
+  id: string;
+}
+
+export const ExportStateRelationshipDataTypeEnum = {
+  SceneViewState: 'scene-view-state',
+} as const;
+
+export type ExportStateRelationshipDataTypeEnum =
+  typeof ExportStateRelationshipDataTypeEnum[keyof typeof ExportStateRelationshipDataTypeEnum];
 
 /**
  *

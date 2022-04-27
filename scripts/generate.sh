@@ -6,7 +6,7 @@ yarn clean
 curl -s https://platform.vertexvis.com/spec > ./spec.yml
 # cp ../vertex-api/src/universal/api-public.yml ./spec.yml
 
-docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:latest generate \
+docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:v5.4.0 generate \
     --input-spec /local/spec.yml \
     --generator-name typescript-axios \
     --config /local/config.yml \
