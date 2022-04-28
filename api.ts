@@ -911,6 +911,12 @@ export interface CreateExportRequestDataAttributes {
    * @memberof CreateExportRequestDataAttributes
    */
   config: CADExportConfig;
+  /**
+   * Optional file name to use for the resulting export
+   * @type {string}
+   * @memberof CreateExportRequestDataAttributes
+   */
+  fileName?: string;
 }
 /**
  *

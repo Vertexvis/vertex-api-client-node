@@ -9672,6 +9672,11 @@ components:
             propertyName: format
           oneOf:
             - $ref: '#/components/schemas/CADExportConfig'
+        fileName:
+          description: Optional file name to use for the resulting export
+          example: exportedScene
+          maxLength: 1024
+          type: string
       required:
         - config
       type: object
