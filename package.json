@@ -33,7 +33,7 @@
     "typescript"
   ],
   "dependencies": {
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "p-limit": "^3"
   },
   "devDependencies": {
