@@ -4329,6 +4329,12 @@ export interface SceneViewStateDataAttributes {
    * @memberof SceneViewStateDataAttributes
    */
   featureLines?: FeatureLines;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SceneViewStateDataAttributes
+   */
+  noDefaultLights?: boolean;
 }
 /**
  *
@@ -10384,7 +10390,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
+     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -10631,7 +10637,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
+     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -10786,7 +10792,7 @@ export const PartRevisionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent.
+     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -11120,7 +11126,7 @@ export class PartRevisionsApi extends BaseAPI {
   }
 
   /**
-   * Update a `part-revision`. Note that metadata updates are eventually consistent.
+   * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
    * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}

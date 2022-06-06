@@ -1869,7 +1869,9 @@ paths:
     patch:
       description:
         Update a `part-revision`. Note that metadata updates are eventually
-        consistent.
+        consistent and will not update existing scenes.  To view updated metadata
+        within a scene, a new scene must be created or the updated part-revision must
+        be removed and re-added to an existing scene.
       operationId: updatePartRevision
       parameters:
         - description: The `part-revision` ID.
@@ -10252,6 +10254,8 @@ components:
           type: array
         featureLines:
           $ref: '#/components/schemas/FeatureLines'
+        noDefaultLights:
+          type: boolean
       type: object
     SceneViewRelationship_data:
       properties:
