@@ -60,7 +60,7 @@ export interface CreatePartFromFileRes {
 
 export interface QueuedTranslation {
   readonly req: CreatePartRequest | CreateGeometrySetRequest;
-  readonly res?: Failure | QueuedJob;
+  readonly res?: Failure | QueuedJob | Part;
 }
 
 /** Get part revision by supplied ID arguments. */
