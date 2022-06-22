@@ -1868,10 +1868,21 @@ paths:
       x-scala-package: translations
     patch:
       description:
-        Update a `part-revision`. Note that metadata updates are eventually
-        consistent and will not update existing scenes.  To view updated metadata
-        within a scene, a new scene must be created or the updated part-revision must
-        be removed and re-added to an existing scene.
+        "Update a `part-revision`. When given a `file` relationship as\
+        \ a payload, this will invoke a translation job, similar to the POST /parts\
+        \ endpoint. The response code will be a 202 and will respond with an async\
+        \ workflow, and return an Accepted[QueuedJob]. The geometry of the part and\
+        \ all of its children will be replaced with the geometry specified within\
+        \ the translated file given from this relationship. Some of the properties\
+        \ given here are only used for the translation of the file. Namely, `indexMetadata`,\
+        \ `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`.\
+        \ Note that geometry updates are eventually consistent and will not update\
+        \ existing scenes.  \nFor updates to the revision when the file relationship\
+        \ is not present will respond with a standard 200 ok code when successful.\
+        \ Note that metadata updates are eventually consistent and will not update\
+        \ existing scenes.   To view updated metadata within a scene, a new scene\
+        \ must be created or the updated part-revision must be removed and re-added\
+        \ to an existing scene.\n"
       operationId: updatePartRevision
       parameters:
         - description: The `part-revision` ID.
@@ -1895,6 +1906,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/PartRevision'
           description: OK
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
         '400':
           content:
             application/vnd.api+json:
@@ -2289,10 +2309,21 @@ paths:
         - parts
     post:
       description:
-        Create a `part`. This API is asynchronous, returning the location
-        of a `queued-translation`. Check the status via the getQueuedTranslation API.
-        For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
-        guide.
+        "Create a `part`.\n\nThis endpoint includes multiple successful\
+        \ response codes: [`201`, `202`].\n\nWhen not given a relationship, this endpoint\
+        \ will create a part with an empty part revision and return a `201` \nstatus\
+        \ code of the part.\n\nWhen given a relationship to translate, this endpoint\
+        \ will return a `202` status code with the location of a\n`queued-translation`.\
+        \ The status of the translation can be queried via `getQueuedTranslation`.\
+        \ After the\ntranslation is complete, a `part` and `part-revision` that references\
+        \ the translated geometry.\n\nA unique suppliedId/suppliedRevisionId combination\
+        \ will create a new part and new part revision. For instance, sending\nmy-part-id/my-revision-id\
+        \ will create a new part and new revision with those corresponding supplied\
+        \ ids. To create a new revision for `my-part-id`,\nlikewise you can invoke\
+        \ this endpoint with a new revision id: `my-part-id/my-new-revision-id` and\
+        \ a new revision will be created for the\nexisting part.\n\nSee our [Import\
+        \ Data](https://developer.vertexvis.com/docs/guides/import-data-with-api)\
+        \ guides for more\ninformation.\n"
       operationId: createPart
       requestBody:
         content:
@@ -2301,6 +2332,12 @@ paths:
               $ref: '#/components/schemas/CreatePartRequest'
         required: true
       responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Part'
+          description: Created Part
         '202':
           content:
             application/vnd.api+json:
@@ -2997,6 +3034,27 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
       responses:
         '200':
           content:
@@ -9186,8 +9244,45 @@ components:
             $ref: '#/components/schemas/MetadataValue'
           description: Metadata about the `part` and/or `part-revision`.
           type: object
+        indexMetadata:
+          description:
+            Whether or not to index metadata in the part file when sending
+            a file relationship - not used otherwise.
+          example: false
+          type: boolean
+        name:
+          description:
+            Name to be used for the root part. This will be used when given
+            a file relationship - not used otherwise.
+          example: 1/2in. Flat Washer
+          maxLength: 255
+          type: string
+        suppliedIdKey:
+          description:
+            Metadata key used to extract an ID used for correlation. This
+            will be used when given a file relationship - not used otherwise.
+          example: ProductNumber
+          maxLength: 255
+          type: string
+        suppliedRevisionIdKey:
+          description:
+            Metadata key used to extract an ID used for correlation. This
+            will be used when given a file relationship - not used otherwise.
+          example: RevisionId
+          maxLength: 255
+          type: string
+        suppliedInstanceIdKey:
+          description:
+            Metadata key used to extract an ID used for correlation. This
+            will be used when given a file relationship - not used otherwise.
+          example: InstanceId
+          maxLength: 255
+          type: string
       type: object
     UpdatePartRevisionRequest_data:
+      description: |
+        Modify existing part revisions using this endpoint. When specifying a `relationship`, the generated output from that relationship will be used to replace any relationship that is present on the revision prior to the update.
+        For example, sending a file relationship that has geometry will replace the existing geometry on the revision with the new geometry in the given file.
       properties:
         type:
           description: Resource object type.
@@ -9202,6 +9297,8 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdatePartRevisionRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
       required:
         - attributes
         - id
@@ -9210,16 +9307,16 @@ components:
     CreatePartRequest_data_attributes:
       properties:
         suppliedId:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+          description: |
+            ID provided for correlation. For example, an existing ID from a PLM system.
           example: PN12345
           maxLength: 1024
           type: string
         suppliedRevisionId:
-          description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+          description: |
+            ID provided for correlation. For example, an existing ID from a PLM system.
+            Sending a new suppliedRevisionId combined with an existing suppliedId will create a new
+            part revision for an existing part.
           example: RevA
           maxLength: 1024
           type: string
@@ -9263,7 +9360,6 @@ components:
           $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
       required:
         - attributes
-        - relationships
         - type
       type: object
     CreateSceneAlterationRequest_data_attributes:

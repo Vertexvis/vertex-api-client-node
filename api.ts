@@ -1126,7 +1126,7 @@ export interface CreatePartRequestData {
    * @type {CreateGeometrySetRequestDataRelationships}
    * @memberof CreatePartRequestData
    */
-  relationships: CreateGeometrySetRequestDataRelationships;
+  relationships?: CreateGeometrySetRequestDataRelationships;
 }
 /**
  *
@@ -1141,7 +1141,7 @@ export interface CreatePartRequestDataAttributes {
    */
   suppliedId?: string;
   /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * ID provided for correlation. For example, an existing ID from a PLM system. Sending a new suppliedRevisionId combined with an existing suppliedId will create a new part revision for an existing part.
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
    */
@@ -4741,7 +4741,7 @@ export interface UpdatePartRevisionRequest {
   data: UpdatePartRevisionRequestData;
 }
 /**
- *
+ * Modify existing part revisions using this endpoint. When specifying a `relationship`, the generated output from that relationship will be used to replace any relationship that is present on the revision prior to the update. For example, sending a file relationship that has geometry will replace the existing geometry on the revision with the new geometry in the given file.
  * @export
  * @interface UpdatePartRevisionRequestData
  */
@@ -4764,6 +4764,12 @@ export interface UpdatePartRevisionRequestData {
    * @memberof UpdatePartRevisionRequestData
    */
   attributes: UpdatePartRevisionRequestDataAttributes;
+  /**
+   *
+   * @type {CreateGeometrySetRequestDataRelationships}
+   * @memberof UpdatePartRevisionRequestData
+   */
+  relationships?: CreateGeometrySetRequestDataRelationships;
 }
 /**
  *
@@ -4777,6 +4783,36 @@ export interface UpdatePartRevisionRequestDataAttributes {
    * @memberof UpdatePartRevisionRequestDataAttributes
    */
   metadata?: { [key: string]: MetadataValue };
+  /**
+   * Whether or not to index metadata in the part file when sending a file relationship - not used otherwise.
+   * @type {boolean}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  indexMetadata?: boolean;
+  /**
+   * Name to be used for the root part. This will be used when given a file relationship - not used otherwise.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  name?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation. This will be used when given a file relationship - not used otherwise.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  suppliedIdKey?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation. This will be used when given a file relationship - not used otherwise.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  suppliedRevisionIdKey?: string;
+  /**
+   * Metadata key used to extract an ID used for correlation. This will be used when given a file relationship - not used otherwise.
+   * @type {string}
+   * @memberof UpdatePartRevisionRequestDataAttributes
+   */
+  suppliedInstanceIdKey?: string;
 }
 /**
  *
@@ -10390,7 +10426,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -10637,7 +10673,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -10792,7 +10828,7 @@ export const PartRevisionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -11126,7 +11162,7 @@ export class PartRevisionsApi extends BaseAPI {
   }
 
   /**
-   * Update a `part-revision`. Note that metadata updates are eventually consistent and will not update existing scenes.  To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+   * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
    * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -11155,7 +11191,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11456,7 +11492,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = PartsApiAxiosParamCreator(configuration);
   return {
     /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11465,7 +11501,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       createPartRequest: CreatePartRequest,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Part>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createPart(
         createPartRequest,
@@ -11592,7 +11628,7 @@ export const PartsApiFactory = function (
   const localVarFp = PartsApiFp(configuration);
   return {
     /**
-     * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -11600,7 +11636,7 @@ export const PartsApiFactory = function (
     createPart(
       createPartRequest: CreatePartRequest,
       options?: any
-    ): AxiosPromise<QueuedJob> {
+    ): AxiosPromise<Part> {
       return localVarFp
         .createPart(createPartRequest, options)
         .then((request) => request(axios, basePath));
@@ -11759,7 +11795,7 @@ export interface PartsApiGetQueuedPartDeletionRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   * Create a `part`. This API is asynchronous, returning the location of a `queued-translation`. Check the status via the getQueuedTranslation API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
+   * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -12538,11 +12574,15 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
     /**
      * Get `scene-item-overrides` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneItemOverrides: async (
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -12574,6 +12614,14 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
         [],
         configuration
       );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions =
@@ -12725,11 +12773,15 @@ export const SceneItemOverridesApiFp = function (
     /**
      * Get `scene-item-overrides` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getSceneItemOverrides(
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -12738,7 +12790,12 @@ export const SceneItemOverridesApiFp = function (
       ) => AxiosPromise<SceneItemOverrideList>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneItemOverrides(id, options);
+        await localVarAxiosParamCreator.getSceneItemOverrides(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -12820,15 +12877,19 @@ export const SceneItemOverridesApiFactory = function (
     /**
      * Get `scene-item-overrides` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneItemOverrides(
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options?: any
     ): AxiosPromise<SceneItemOverrideList> {
       return localVarFp
-        .getSceneItemOverrides(id, options)
+        .getSceneItemOverrides(id, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -12897,6 +12958,20 @@ export interface SceneItemOverridesApiGetSceneItemOverridesRequest {
    * @memberof SceneItemOverridesApiGetSceneItemOverrides
    */
   readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneItemOverridesApiGetSceneItemOverrides
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneItemOverridesApiGetSceneItemOverrides
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -12975,7 +13050,12 @@ export class SceneItemOverridesApi extends BaseAPI {
     options?: AxiosRequestConfig
   ) {
     return SceneItemOverridesApiFp(this.configuration)
-      .getSceneItemOverrides(requestParameters.id, options)
+      .getSceneItemOverrides(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
