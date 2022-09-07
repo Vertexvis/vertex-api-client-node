@@ -127,6 +127,7 @@ export async function pollQueuedJob<T>({
   let pollRes = await poll(attempts);
   /* eslint-disable no-await-in-loop */
   while (
+    !completeJob(pollRes.res) &&
     (allowed404(allow404, pollRes.status) ||
       validJob(pollRes.res) ||
       isClientError(pollRes.res)) &&
@@ -140,7 +141,7 @@ export async function pollQueuedJob<T>({
 
   // At this point, the result is one of the following,
   //  - An item of type `T` after being redirected to it
-  //  - A QueuedJob (after either exceeding `maxAttempts` or with `error` status)
+  //  - A QueuedJob (after either exceeding `maxAttempts` or with `complete` or `error` status)
   //  - A Failure
   return { ...pollRes, attempts, id };
 }
@@ -176,9 +177,17 @@ function validJob<TI>(r: PollRes<TI>): boolean {
   return isQueuedJob(r) && !isStatusError(r);
 }
 
+function completeJob<TI>(r: PollRes<TI>): boolean {
+  return isQueuedJob(r) && isStatusComplete(r);
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
 function isQueuedJobError(obj: any): obj is QueuedJob {
   return isQueuedJob(obj) && isStatusError(obj);
+}
+
+function isStatusComplete(job: QueuedJob): boolean {
+  return job.data.attributes.status === 'complete';
 }
 
 function isStatusError(job: QueuedJob): boolean {
