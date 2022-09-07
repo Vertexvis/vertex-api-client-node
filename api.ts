@@ -711,7 +711,7 @@ export interface Color3 {
  */
 export interface ColorMaterial {
   /**
-   * Opacity from 0 to 100.
+   * An opacity value from 0 to 255.
    * @type {number}
    * @memberof ColorMaterial
    */
@@ -754,7 +754,7 @@ export interface ColorMaterial {
  */
 export interface ColorMaterialNullable {
   /**
-   * Opacity from 0 to 100.
+   * An opacity value from 0 to 255.
    * @type {number}
    * @memberof ColorMaterialNullable
    */
@@ -1147,11 +1147,19 @@ export interface CreatePartRequestDataAttributes {
    */
   suppliedRevisionId?: string;
   /**
-   * Whether or not to index metadata in the part file.
+   * Whether or not to index metadata in the part file. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
    * @type {boolean}
    * @memberof CreatePartRequestDataAttributes
    */
   indexMetadata?: boolean;
+  /**
+   * Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
   /**
    * Name to be used for the root part.
    * @type {string}
@@ -2618,34 +2626,54 @@ export interface Matrix4Nullable {
 /**
  *
  * @export
- * @interface MetadataValue
+ * @interface MetadataFloatType
  */
-export interface MetadataValue {
-  /**
-   * Metadata value.
-   * @type {string}
-   * @memberof MetadataValue
-   */
-  value?: string;
+export interface MetadataFloatType {
   /**
    * Type of metadata value.
    * @type {string}
-   * @memberof MetadataValue
+   * @memberof MetadataFloatType
    */
-  type: MetadataValueTypeEnum;
+  type: string;
+  /**
+   * A numerical floating-point value.
+   * @type {number}
+   * @memberof MetadataFloatType
+   */
+  value: number;
 }
-
-export const MetadataValueTypeEnum = {
-  String: 'string',
-  Long: 'long',
-  Float: 'float',
-  Date: 'date',
-  Null: 'null',
-} as const;
-
-export type MetadataValueTypeEnum =
-  typeof MetadataValueTypeEnum[keyof typeof MetadataValueTypeEnum];
-
+/**
+ *
+ * @export
+ * @interface MetadataNullType
+ */
+export interface MetadataNullType {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof MetadataNullType
+   */
+  type: string;
+}
+/**
+ *
+ * @export
+ * @interface MetadataStringType
+ */
+export interface MetadataStringType {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof MetadataStringType
+   */
+  type: string;
+  /**
+   * A string value.
+   * @type {string}
+   * @memberof MetadataStringType
+   */
+  value: string;
+}
 /**
  *
  * @export
@@ -3001,10 +3029,12 @@ export interface PartRevisionDataAttributes {
   created?: string;
   /**
    *
-   * @type {{ [key: string]: MetadataValue; }}
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
    * @memberof PartRevisionDataAttributes
    */
-  metadata?: { [key: string]: MetadataValue };
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
   /**
    *
    * @type {string}
@@ -3732,10 +3762,12 @@ export interface SceneItemDataAttributes {
   materialOverride?: ColorMaterial;
   /**
    *
-   * @type {{ [key: string]: MetadataValue; }}
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
    * @memberof SceneItemDataAttributes
    */
-  metadata?: { [key: string]: MetadataValue };
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
   /**
    *
    * @type {string}
@@ -4778,13 +4810,15 @@ export interface UpdatePartRevisionRequestData {
  */
 export interface UpdatePartRevisionRequestDataAttributes {
   /**
-   * Metadata about the `part` and/or `part-revision`.
-   * @type {{ [key: string]: MetadataValue; }}
+   * Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
    * @memberof UpdatePartRevisionRequestDataAttributes
    */
-  metadata?: { [key: string]: MetadataValue };
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
   /**
-   * Whether or not to index metadata in the part file when sending a file relationship - not used otherwise.
+   * Whether or not to index metadata in the part file when sending a file relationship - not used otherwise. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
    * @type {boolean}
    * @memberof UpdatePartRevisionRequestDataAttributes
    */

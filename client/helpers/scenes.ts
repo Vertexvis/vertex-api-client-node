@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
+import { hrtime } from 'process';
 
 import {
   ApiError,
@@ -47,6 +48,29 @@ import {
 export interface CreateSceneAndSceneItemsReq extends BaseReq {
   /** A list of {@link CreateSceneItemRequest}. */
   readonly createSceneItemReqs: CreateSceneItemRequest[];
+
+  /** Function returning a {@link CreateSceneRequest}. */
+  readonly createSceneReq: () => CreateSceneRequest;
+
+  /** Whether or not to fail if any scene item fails initial validation. */
+  readonly failFast?: boolean;
+
+  /** How many requests to run in parallel. */
+  readonly parallelism: number;
+
+  /** {@link Polling} */
+  readonly polling?: Polling;
+
+  /** Callback with total number of requests and number complete. */
+  onProgress?: (complete: number, total: number) => void;
+
+  /** Whether or not to return queued scene items. */
+  readonly returnQueued?: boolean;
+}
+
+export interface CreateSceneAndSceneItemsReqEXPERIMENTAL extends BaseReq {
+  /** A list of {@link CreateSceneItemRequest}. */
+  readonly createSceneItemReqs: Array<Array<CreateSceneItemRequest>>;
 
   /** Function returning a {@link CreateSceneRequest}. */
   readonly createSceneReq: () => CreateSceneRequest;
@@ -287,7 +311,7 @@ export async function createSceneItems({
 }
 
 /**
- * Create a scene with scene items.
+ * Create a scene with scene items using experimental strategy.
  */
 export async function createSceneAndSceneItemsEXPERIMENTAL({
   client,
@@ -300,54 +324,118 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   returnQueued = false,
   verbose,
-}: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
+}: CreateSceneAndSceneItemsReqEXPERIMENTAL): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
+  const startTime = hrtime.bigint();
+  if (verbose) onMsg(`Creating scene...`);
   const scene = (
     await client.scenes.createScene({ createSceneRequest: createSceneReq() })
   ).data;
   const sceneId = scene.data.id;
-  const createRes = await createSceneItemsEXPERIMENTAL({
-    client,
-    createSceneItemReqs,
-    failFast,
-    onProgress,
-    parallelism,
-    sceneId,
-  });
-  const { a: queuedOps, b: errors } = partition(createRes.queuedBatchOps, (i) =>
-    isQueuedJob(i.res)
-  );
 
-  const queued = returnQueued ? createRes.queuedBatchOps : [];
-  // Nothing succeeded, return early as something is likely wrong
-  if (queuedOps.length === 0 || errors.length === createRes.chunks) {
-    return { errors, queued, scene, sceneItemErrors: [] };
-  }
+  if (verbose) onMsg(`Creating scene items...`);
+  let itemCount = 0;
+  let batchQueuedOps: QueuedBatchOps[] = [];
+  let batchErrors: QueuedBatchOps[] = [];
+  let sceneItemErrors: SceneItemError[] = [];
+  for (let depth = 0; depth < createSceneItemReqs.length; depth++) {
+    const createItemReqs: CreateSceneItemRequest[] = createSceneItemReqs[depth];
+    itemCount += createItemReqs.length;
+    if (verbose)
+      onMsg(
+        `Creating ${createItemReqs.length} scene items at depth ${depth}...`
+      );
 
-  if (verbose) onMsg(`Polling for completed scene-item batches...`);
+    // Await is used intentionally to defer loop iteration
+    // until all scene items have been created at each depth.
 
-  const limit = pLimit(Math.min(parallelism, 20));
-  async function poll({
-    ops,
-    res,
-  }: QueuedBatchOps): Promise<PollQueuedJobRes<Batch>> {
-    const r = await pollQueuedJob<Batch>({
-      id: (res as QueuedJob).data.id,
-      getQueuedJob: (id, cancelToken) =>
-        client.batches.getQueuedBatch({ id }, { cancelToken }),
-      allow404: true,
-      limit,
-      polling,
+    // eslint-disable-next-line no-await-in-loop
+    const createRes = await createSceneItemsEXPERIMENTAL({
+      client,
+      createSceneItemReqs: createItemReqs,
+      failFast,
+      onProgress,
+      parallelism,
+      sceneId,
     });
-    if (isPollError(r.res)) {
-      failFast ? throwOnError(r) : errors.push({ ops, res: r.res });
+    const { a: queuedOps, b: errors } = partition(
+      createRes.queuedBatchOps,
+      (i) => isQueuedJob(i.res)
+    );
+    batchQueuedOps = batchQueuedOps.concat(queuedOps);
+    if (errors.length) {
+      batchErrors = batchErrors.concat(errors);
+      if (verbose)
+        onMsg(
+          `WARNING: ${errors.length} scene item batch errors at depth ${depth}.`
+        );
     }
-    return r;
+    // Nothing succeeded, return early as something is likely wrong
+    if (queuedOps.length === 0 || errors.length === createRes.chunks) {
+      return {
+        errors,
+        queued: returnQueued ? createRes.queuedBatchOps : [],
+        scene,
+        sceneItemErrors: [],
+      };
+    }
+
+    const limit = pLimit(Math.min(parallelism, 20));
+    async function poll({
+      ops,
+      res,
+    }: QueuedBatchOps): Promise<PollQueuedJobRes<Batch>> {
+      const r = await pollQueuedJob<Batch>({
+        id: (res as QueuedJob).data.id,
+        getQueuedJob: (id, cancelToken) =>
+          client.batches.getQueuedBatch({ id }, { cancelToken }),
+        allow404: true,
+        limit,
+        polling,
+      });
+      if (isPollError(r.res)) {
+        failFast ? throwOnError(r) : errors.push({ ops, res: r.res });
+      }
+      return r;
+    }
+    // eslint-disable-next-line no-await-in-loop
+    const batchRes = await Promise.all(
+      queuedOps.map((is) =>
+        limit<QueuedBatchOps[], PollQueuedJobRes<Batch>>(poll, is)
+      )
+    );
+    const batchItemErrors = batchRes
+      .flatMap((b, i) =>
+        isBatch(b.res)
+          ? b.res['vertexvis/batch:results'].map((r, j) =>
+              isApiError(r)
+                ? { req: queuedOps[i].ops[j].data, res: r }
+                : undefined
+            )
+          : []
+      )
+      .filter(defined);
+    if (batchItemErrors.length) {
+      sceneItemErrors = sceneItemErrors.concat(batchItemErrors);
+      if (verbose)
+        onMsg(
+          `WARNING: ${batchItemErrors.length} scene item creation errors at depth ${depth}.`
+        );
+    }
   }
-  const batchRes = await Promise.all(
-    queuedOps.map((is) =>
-      limit<QueuedBatchOps[], PollQueuedJobRes<Batch>>(poll, is)
-    )
-  );
+
+  if (verbose) {
+    onMsg(
+      `Scene item creation complete for ${itemCount} scene items with max depth of ${
+        createSceneItemReqs.length - 1
+      }.`
+    );
+    if (batchErrors.length) {
+      onMsg(`  Batch errors: ${batchErrors.length}`);
+    }
+    if (sceneItemErrors.length) {
+      onMsg(`  Scene item errors: ${sceneItemErrors.length}`);
+    }
+  }
 
   if (verbose) onMsg(`Committing scene and polling until ready...`);
 
@@ -358,31 +446,37 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   });
   await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
 
-  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
+  if (verbose) onMsg(`Fitting scene's camera to scene items...`);
+  const sceneResult = (
+    await updateScene({
+      attributes: {
+        camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+      },
+      client,
+      sceneId,
+    })
+  ).scene;
 
+  if (verbose) {
+    const formatTime = (seconds: number): string => {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.round(seconds % 60);
+      return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
+        .filter(Boolean)
+        .join(':');
+    };
+    onMsg(
+      `Scene creation completed in ${formatTime(
+        Number(hrtime.bigint() - startTime) / 1000000000
+      )}.`
+    );
+  }
   return {
-    errors,
-    queued,
-    scene: (
-      await updateScene({
-        attributes: {
-          camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
-        },
-        client,
-        sceneId,
-      })
-    ).scene,
-    sceneItemErrors: batchRes
-      .flatMap((b, i) =>
-        isBatch(b.res)
-          ? b.res['vertexvis/batch:results'].map((r, j) =>
-              isApiError(r)
-                ? { req: queuedOps[i].ops[j].data, res: r }
-                : undefined
-            )
-          : []
-      )
-      .filter(defined),
+    errors: batchErrors,
+    queued: batchQueuedOps,
+    scene: sceneResult,
+    sceneItemErrors,
   };
 }
 
@@ -393,13 +487,11 @@ export async function createSceneItemsEXPERIMENTAL({
   client,
   createSceneItemReqs,
   failFast,
-  onProgress,
   parallelism,
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsResEXPERIMENTAL> {
   const limit = pLimit(parallelism);
   const batchSize = 500;
-  let complete = 0;
 
   const opChunks = arrayChunked(
     createSceneItemReqs.map((req) => ({
@@ -428,11 +520,6 @@ export async function createSceneItemsEXPERIMENTAL({
             if (!failFast && hasVertexError(error)) {
               res = error.vertexError?.res;
             } else throw error;
-          }
-
-          if (onProgress != null) {
-            complete += opChunk.length;
-            onProgress(complete, createSceneItemReqs.length);
           }
 
           return { ops, res };

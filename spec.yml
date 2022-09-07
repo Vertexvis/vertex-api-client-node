@@ -1408,7 +1408,7 @@ paths:
           name: fields[part-revision]
           required: false
           schema:
-            example: created,suppliedId
+            example: created,suppliedId,metadata
             maxLength: 32
             type: string
           style: form
@@ -1510,7 +1510,7 @@ paths:
           name: fields[part-revision]
           required: false
           schema:
-            example: created,suppliedId
+            example: created,suppliedId,metadata
             maxLength: 32
             type: string
           style: form
@@ -1815,7 +1815,7 @@ paths:
           name: fields[part-revision]
           required: false
           schema:
-            example: created,suppliedId
+            example: created,suppliedId,metadata
             maxLength: 32
             type: string
           style: form
@@ -3255,7 +3255,7 @@ paths:
           name: fields[scene-item]
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride
+            example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
             type: string
           style: form
       responses:
@@ -4030,7 +4030,7 @@ paths:
           name: fields[scene-item]
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride
+            example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
             type: string
           style: form
         - description: Comma-separated list of relationships to include in response.
@@ -6351,7 +6351,7 @@ components:
       name: fields[part-revision]
       required: false
       schema:
-        example: created,suppliedId
+        example: created,suppliedId,metadata
         maxLength: 32
         type: string
       style: form
@@ -6416,7 +6416,7 @@ components:
       name: fields[scene-item]
       required: false
       schema:
-        example: created,suppliedId,visible,transform,materialOverride
+        example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
         type: string
       style: form
     SceneItemOverrideId:
@@ -7819,22 +7819,41 @@ components:
         - relationships
         - type
       type: object
-    MetadataValue:
+    MetadataStringType:
       properties:
-        value:
-          description: Metadata value.
-          example: Rev A
-          maxLength: 1024
-          type: string
         type:
           description: Type of metadata value.
-          enum:
-            - string
-            - long
-            - float
-            - date
-            - 'null'
           example: string
+          maxLength: 32
+          type: string
+        value:
+          description: A string value.
+          example: Some value
+          type: string
+      required:
+        - type
+        - value
+      type: object
+    MetadataFloatType:
+      properties:
+        type:
+          description: Type of metadata value.
+          example: float
+          maxLength: 32
+          type: string
+        value:
+          description: A numerical floating-point value.
+          format: float
+          type: number
+      required:
+        - type
+        - value
+      type: object
+    MetadataNullType:
+      properties:
+        type:
+          description: Type of metadata value.
+          example: 'null'
           maxLength: 32
           type: string
       required:
@@ -7969,10 +7988,10 @@ components:
       nullable: true
       properties:
         opacity:
-          description: Opacity from 0 to 100.
-          example: 0
+          description: An opacity value from 0 to 255.
+          example: 255
           format: int32
-          maximum: 100
+          maximum: 255
           minimum: 0
           type: integer
         glossiness:
@@ -8070,10 +8089,10 @@ components:
       description: Color properties describing how a material looks.
       properties:
         opacity:
-          description: Opacity from 0 to 100.
-          example: 0
+          description: An opacity value from 0 to 255.
+          example: 255
           format: int32
-          maximum: 100
+          maximum: 255
           minimum: 0
           type: integer
         glossiness:
@@ -8690,11 +8709,11 @@ components:
         - 'y'
         - z
       type: object
-    Opacity:
-      description: Opacity from 0 to 100.
-      example: 0
+    ColorMaterialOpacity:
+      description: An opacity value from 0 to 255.
+      example: 255
       format: int32
-      maximum: 100
+      maximum: 255
       minimum: 0
       type: integer
     Glossiness:
@@ -9241,13 +9260,16 @@ components:
       properties:
         metadata:
           additionalProperties:
-            $ref: '#/components/schemas/MetadataValue'
-          description: Metadata about the `part` and/or `part-revision`.
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
+          description: |
+            Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
           type: object
         indexMetadata:
-          description:
-            Whether or not to index metadata in the part file when sending
-            a file relationship - not used otherwise.
+          description: |
+            Whether or not to index metadata in the part file when sending a file relationship - not used otherwise. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
           example: false
           type: boolean
         name:
@@ -9321,9 +9343,19 @@ components:
           maxLength: 1024
           type: string
         indexMetadata:
-          description: Whether or not to index metadata in the part file.
+          description: |
+            Whether or not to index metadata in the part file. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
           example: false
           type: boolean
+        metadata:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
+          description: |
+            Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+          type: object
         name:
           description: Name to be used for the root part.
           example: 1/2in. Flat Washer
@@ -10021,7 +10053,10 @@ components:
           $ref: '#/components/schemas/ColorMaterial'
         metadata:
           additionalProperties:
-            $ref: '#/components/schemas/MetadataValue'
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
           type: object
         name:
           example: some-string
@@ -10059,7 +10094,10 @@ components:
           type: string
         metadata:
           additionalProperties:
-            $ref: '#/components/schemas/MetadataValue'
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
           type: object
         suppliedId:
           example: some-string
