@@ -1404,6 +1404,14 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   visible?: boolean;
+  /**
+   * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
 }
 /**
  *
@@ -1641,6 +1649,12 @@ export interface CreateSceneViewStateRequestDataAttributes {
    * @memberof CreateSceneViewStateRequestDataAttributes
    */
   name?: string;
+  /**
+   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * @type {string}
+   * @memberof CreateSceneViewStateRequestDataAttributes
+   */
+  suppliedId?: string;
 }
 /**
  *
@@ -4367,6 +4381,12 @@ export interface SceneViewStateDataAttributes {
    * @memberof SceneViewStateDataAttributes
    */
   noDefaultLights?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneViewStateDataAttributes
+   */
+  suppliedId?: string;
 }
 /**
  *
@@ -4991,6 +5011,14 @@ export interface UpdateSceneItemRequestDataAttributes {
    * @memberof UpdateSceneItemRequestDataAttributes
    */
   suppliedId?: string;
+  /**
+   * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @memberof UpdateSceneItemRequestDataAttributes
+   */
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
 }
 /**
  *
@@ -14384,6 +14412,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14393,6 +14422,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       pageSize?: number,
       fieldsSceneViewState?: string,
       filterId?: string,
+      filterSuppliedId?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -14440,6 +14470,10 @@ export const SceneViewStatesApiAxiosParamCreator = function (
 
       if (filterId !== undefined) {
         localVarQueryParameter['filter[id]'] = filterId;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -14618,6 +14652,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14627,6 +14662,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
       pageSize?: number,
       fieldsSceneViewState?: string,
       filterId?: string,
+      filterSuppliedId?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -14641,6 +14677,7 @@ export const SceneViewStatesApiFp = function (configuration?: Configuration) {
           pageSize,
           fieldsSceneViewState,
           filterId,
+          filterSuppliedId,
           options
         );
       return createRequestFunction(
@@ -14741,6 +14778,7 @@ export const SceneViewStatesApiFactory = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [fieldsSceneViewState] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;thumbnails&#x60; is only returned if explicitly requested.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14750,6 +14788,7 @@ export const SceneViewStatesApiFactory = function (
       pageSize?: number,
       fieldsSceneViewState?: string,
       filterId?: string,
+      filterSuppliedId?: string,
       options?: any
     ): AxiosPromise<SceneViewStateList> {
       return localVarFp
@@ -14759,6 +14798,7 @@ export const SceneViewStatesApiFactory = function (
           pageSize,
           fieldsSceneViewState,
           filterId,
+          filterSuppliedId,
           options
         )
         .then((request) => request(axios, basePath));
@@ -14878,6 +14918,13 @@ export interface SceneViewStatesApiGetSceneViewStatesRequest {
    * @memberof SceneViewStatesApiGetSceneViewStates
    */
   readonly filterId?: string;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof SceneViewStatesApiGetSceneViewStates
+   */
+  readonly filterSuppliedId?: string;
 }
 
 /**
@@ -14982,6 +15029,7 @@ export class SceneViewStatesApi extends BaseAPI {
         requestParameters.pageSize,
         requestParameters.fieldsSceneViewState,
         requestParameters.filterId,
+        requestParameters.filterSuppliedId,
         options
       )
       .then((request) => request(this.axios, this.basePath));

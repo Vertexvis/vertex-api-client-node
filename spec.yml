@@ -4798,6 +4798,16 @@ paths:
             example: some-id-1,some-id-2
             type: string
           style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -9510,6 +9520,15 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
+        metadata:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
+          description: |
+            Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+          type: object
       type: object
     UpdateSceneItemRequest_data_relationships:
       properties:
@@ -9684,6 +9703,13 @@ components:
           example: some-string
           maxLength: 1024
           minLength: 1
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 1024
           type: string
       type: object
     CreateSceneViewStateRequest_data_relationships:
@@ -10252,6 +10278,15 @@ components:
           description: Item visibility.
           example: true
           type: boolean
+        metadata:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
+          description: |
+            Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+          type: object
       type: object
     CreateSceneItemRequestData_relationships:
       properties:
@@ -10390,6 +10425,11 @@ components:
           $ref: '#/components/schemas/FeatureLines'
         noDefaultLights:
           type: boolean
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
       type: object
     SceneViewRelationship_data:
       properties:
