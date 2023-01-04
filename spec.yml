@@ -7894,6 +7894,15 @@ components:
         - id
         - type
       type: object
+    PartAssemblyRelationship:
+      additionalProperties: false
+      description: Create Part Assembly
+      properties:
+        data:
+          $ref: '#/components/schemas/PartAssemblyRelationship_data'
+      required:
+        - data
+      type: object
     SceneAlterationData:
       additionalProperties: false
       properties:
@@ -8564,6 +8573,34 @@ components:
       required:
         - id
         - type
+      type: object
+    PartRevisionInstance:
+      additionalProperties: false
+      description: PartRevisionInstance
+      properties:
+        ordinal:
+          minimum: 0
+          type: integer
+        referenceId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        suppliedReferenceId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+        instanceId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - referenceId
       type: object
     QueryById:
       additionalProperties: false
@@ -9387,6 +9424,20 @@ components:
           maxLength: 255
           type: string
       type: object
+    CreatePartRequest_data_relationships:
+      properties:
+        source:
+          anyOf:
+            - $ref: '#/components/schemas/FileRelationship'
+            - $ref: '#/components/schemas/PartAssemblyRelationship'
+          discriminator:
+            mapping:
+              file: '#/components/schemas/FileRelationship.yml'
+              assembly: '#/components/schemas/PartAssemblyRelationship.yaml'
+            propertyName: type
+      required:
+        - source
+      type: object
     CreatePartRequest_data:
       properties:
         type:
@@ -9399,7 +9450,7 @@ components:
         attributes:
           $ref: '#/components/schemas/CreatePartRequest_data_attributes'
         relationships:
-          $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
+          $ref: '#/components/schemas/CreatePartRequest_data_relationships'
       required:
         - attributes
         - type
@@ -10186,6 +10237,23 @@ components:
           type: array
       required:
         - partRevisions
+      type: object
+    PartAssemblyRelationship_data:
+      properties:
+        children:
+          items:
+            $ref: '#/components/schemas/PartRevisionInstance'
+          type: array
+        metadata:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataNullType'
+          type: array
+      required:
+        - children
+        - metadata
       type: object
     SceneAlterationData_relationships:
       properties:

@@ -1123,10 +1123,10 @@ export interface CreatePartRequestData {
   attributes: CreatePartRequestDataAttributes;
   /**
    *
-   * @type {CreateGeometrySetRequestDataRelationships}
+   * @type {CreatePartRequestDataRelationships}
    * @memberof CreatePartRequestData
    */
-  relationships?: CreateGeometrySetRequestDataRelationships;
+  relationships?: CreatePartRequestDataRelationships;
 }
 /**
  *
@@ -1184,6 +1184,19 @@ export interface CreatePartRequestDataAttributes {
    * @memberof CreatePartRequestDataAttributes
    */
   suppliedInstanceIdKey?: string;
+}
+/**
+ *
+ * @export
+ * @interface CreatePartRequestDataRelationships
+ */
+export interface CreatePartRequestDataRelationships {
+  /**
+   *
+   * @type {FileRelationship | PartAssemblyRelationship}
+   * @memberof CreatePartRequestDataRelationships
+   */
+  source: FileRelationship | PartAssemblyRelationship;
 }
 /**
  *
@@ -2826,6 +2839,38 @@ export interface Part {
   links?: { [key: string]: Link };
 }
 /**
+ * Create Part Assembly
+ * @export
+ * @interface PartAssemblyRelationship
+ */
+export interface PartAssemblyRelationship {
+  /**
+   *
+   * @type {PartAssemblyRelationshipData}
+   * @memberof PartAssemblyRelationship
+   */
+  data: PartAssemblyRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PartAssemblyRelationshipData
+ */
+export interface PartAssemblyRelationshipData {
+  /**
+   *
+   * @type {Array<PartRevisionInstance>}
+   * @memberof PartAssemblyRelationshipData
+   */
+  children: Array<PartRevisionInstance>;
+  /**
+   *
+   * @type {Array<MetadataStringType | MetadataFloatType | MetadataNullType>}
+   * @memberof PartAssemblyRelationshipData
+   */
+  metadata: Array<MetadataStringType | MetadataFloatType | MetadataNullType>;
+}
+/**
  *
  * @export
  * @interface PartData
@@ -3074,6 +3119,43 @@ export interface PartRevisionDataRelationships {
    * @memberof PartRevisionDataRelationships
    */
   part?: PartRelationshipData;
+}
+/**
+ * PartRevisionInstance
+ * @export
+ * @interface PartRevisionInstance
+ */
+export interface PartRevisionInstance {
+  /**
+   *
+   * @type {number}
+   * @memberof PartRevisionInstance
+   */
+  ordinal?: number;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartRevisionInstance
+   */
+  referenceId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionInstance
+   */
+  suppliedReferenceId?: string;
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof PartRevisionInstance
+   */
+  transform?: Matrix4;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionInstance
+   */
+  instanceId?: string;
 }
 /**
  *
