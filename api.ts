@@ -1123,10 +1123,10 @@ export interface CreatePartRequestData {
   attributes: CreatePartRequestDataAttributes;
   /**
    *
-   * @type {CreateGeometrySetRequestDataRelationships}
+   * @type {CreatePartRequestDataRelationships}
    * @memberof CreatePartRequestData
    */
-  relationships?: CreateGeometrySetRequestDataRelationships;
+  relationships?: CreatePartRequestDataRelationships;
 }
 /**
  *
@@ -1184,6 +1184,19 @@ export interface CreatePartRequestDataAttributes {
    * @memberof CreatePartRequestDataAttributes
    */
   suppliedInstanceIdKey?: string;
+}
+/**
+ *
+ * @export
+ * @interface CreatePartRequestDataRelationships
+ */
+export interface CreatePartRequestDataRelationships {
+  /**
+   *
+   * @type {FileRelationship | PartAssemblyRelationship}
+   * @memberof CreatePartRequestDataRelationships
+   */
+  source: FileRelationship | PartAssemblyRelationship;
 }
 /**
  *
@@ -2826,6 +2839,40 @@ export interface Part {
   links?: { [key: string]: Link };
 }
 /**
+ * Create Part Assembly
+ * @export
+ * @interface PartAssemblyRelationship
+ */
+export interface PartAssemblyRelationship {
+  /**
+   *
+   * @type {PartAssemblyRelationshipData}
+   * @memberof PartAssemblyRelationship
+   */
+  data: PartAssemblyRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PartAssemblyRelationshipData
+ */
+export interface PartAssemblyRelationshipData {
+  /**
+   *
+   * @type {Array<PartRevisionInstance>}
+   * @memberof PartAssemblyRelationshipData
+   */
+  children: Array<PartRevisionInstance>;
+  /**
+   * Additional metadata about the `part` and/or `part-revision`.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @memberof PartAssemblyRelationshipData
+   */
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
+}
+/**
  *
  * @export
  * @interface PartData
@@ -3074,6 +3121,37 @@ export interface PartRevisionDataRelationships {
    * @memberof PartRevisionDataRelationships
    */
   part?: PartRelationshipData;
+}
+/**
+ * A reference to an existing PartRevision. Specify one and only one of referenceId or suppliedReferenceId to refer to a revision.
+ * @export
+ * @interface PartRevisionInstance
+ */
+export interface PartRevisionInstance {
+  /**
+   * A 0-based index used for defining a consistent ordering for children of an assembly
+   * @type {number}
+   * @memberof PartRevisionInstance
+   */
+  ordinal: number;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartRevisionInstance
+   */
+  revisionId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionInstance
+   */
+  suppliedRevisionId?: string;
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof PartRevisionInstance
+   */
+  transform?: Matrix4;
 }
 /**
  *
