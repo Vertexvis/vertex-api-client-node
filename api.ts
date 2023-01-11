@@ -2864,11 +2864,13 @@ export interface PartAssemblyRelationshipData {
    */
   children: Array<PartRevisionInstance>;
   /**
-   *
-   * @type {Array<MetadataStringType | MetadataFloatType | MetadataNullType>}
+   * Additional metadata about the `part` and/or `part-revision`.
+   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
    * @memberof PartAssemblyRelationshipData
    */
-  metadata: Array<MetadataStringType | MetadataFloatType | MetadataNullType>;
+  metadata?: {
+    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+  };
 }
 /**
  *
@@ -3121,41 +3123,35 @@ export interface PartRevisionDataRelationships {
   part?: PartRelationshipData;
 }
 /**
- * PartRevisionInstance
+ * A reference to an existing PartRevision. Specify one and only one of referenceId or suppliedReferenceId to refer to a revision.
  * @export
  * @interface PartRevisionInstance
  */
 export interface PartRevisionInstance {
   /**
-   *
+   * A 0-based index used for defining a consistent ordering for children of an assembly
    * @type {number}
    * @memberof PartRevisionInstance
    */
-  ordinal?: number;
+  ordinal: number;
   /**
    * ID of the resource.
    * @type {string}
    * @memberof PartRevisionInstance
    */
-  referenceId: string;
+  revisionId?: string;
   /**
    *
    * @type {string}
    * @memberof PartRevisionInstance
    */
-  suppliedReferenceId?: string;
+  suppliedRevisionId?: string;
   /**
    *
    * @type {Matrix4}
    * @memberof PartRevisionInstance
    */
   transform?: Matrix4;
-  /**
-   *
-   * @type {string}
-   * @memberof PartRevisionInstance
-   */
-  instanceId?: string;
 }
 /**
  *
