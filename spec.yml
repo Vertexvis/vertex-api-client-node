@@ -7516,6 +7516,7 @@ components:
           x: 0.0
           y: 1.0
           z: 0.0
+        fovY: 45.0
       properties:
         type:
           example: perspective
@@ -7526,6 +7527,14 @@ components:
           $ref: '#/components/schemas/Vector3'
         up:
           $ref: '#/components/schemas/Vector3'
+        fovY:
+          description:
+            A numerical floating-point value representing the field of
+            view
+          format: float
+          maximum: 179
+          minimum: 1
+          type: number
       required:
         - lookAt
         - position

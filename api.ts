@@ -3234,6 +3234,12 @@ export interface PerspectiveCamera {
    * @memberof PerspectiveCamera
    */
   up: Vector3;
+  /**
+   * A numerical floating-point value representing the field of view
+   * @type {number}
+   * @memberof PerspectiveCamera
+   */
+  fovY?: number;
 }
 /**
  * 2D point.
