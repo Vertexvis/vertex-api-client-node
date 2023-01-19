@@ -7532,7 +7532,7 @@ components:
             A numerical floating-point value representing the field of
             view
           format: float
-          maximum: 180
+          maximum: 179
           minimum: 1
           type: number
       required:
