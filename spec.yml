@@ -7838,17 +7838,17 @@ components:
         - relationships
         - type
       type: object
-    MetadataStringType:
+    MetadataLongType:
       properties:
         type:
           description: Type of metadata value.
-          example: string
+          example: long
           maxLength: 32
           type: string
         value:
-          description: A string value.
-          example: Some value
-          type: string
+          description: A numerical long value.
+          format: int64
+          type: integer
       required:
         - type
         - value
@@ -7864,6 +7864,37 @@ components:
           description: A numerical floating-point value.
           format: float
           type: number
+      required:
+        - type
+        - value
+      type: object
+    MetadataDateType:
+      properties:
+        type:
+          description: Type of metadata value.
+          example: date
+          maxLength: 32
+          type: string
+        value:
+          description: A date value.
+          example: 2022-02-22T10:11:12Z
+          format: date-time
+          type: string
+      required:
+        - type
+        - value
+      type: object
+    MetadataStringType:
+      properties:
+        type:
+          description: Type of metadata value.
+          example: string
+          maxLength: 32
+          type: string
+        value:
+          description: A string value.
+          example: Some value
+          type: string
       required:
         - type
         - value
@@ -8720,10 +8751,7 @@ components:
           example: select
           maxLength: 32
           type: string
-        material:
-          $ref: '#/components/schemas/ColorMaterial'
       required:
-        - material
         - type
       type: object
     DeselectOperation:
@@ -9317,8 +9345,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           description: |
             Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
@@ -9406,8 +9436,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           description: |
             Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
@@ -9578,8 +9610,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           description: |
             Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
@@ -9617,6 +9651,10 @@ components:
             - $ref: '#/components/schemas/CameraFit'
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
+        noDefaultLights:
+          description: Whether or not to turn off default lighting
+          example: true
+          type: boolean
       type: object
     UpdateSceneViewRequest_data:
       properties:
@@ -9639,6 +9677,10 @@ components:
             - $ref: '#/components/schemas/OrthographicCamera'
         crossSectioning:
           $ref: '#/components/schemas/CrossSectioning'
+        excludePrunedItems:
+          description: Whether to exclude non-visible items in the view
+          example: true
+          type: boolean
       type: object
     CreateSceneViewRequest_data_relationships:
       properties:
@@ -9814,6 +9856,10 @@ components:
           maximum: 31557600
           minimum: 1
           type: integer
+        excludePrunedItems:
+          description: Whether to exclude non-visible items in the view
+          example: true
+          type: boolean
       type: object
     CreateStreamKeyRequest_data:
       properties:
@@ -10135,8 +10181,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           type: object
         name:
@@ -10176,8 +10224,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           type: object
         suppliedId:
@@ -10251,8 +10301,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           description: |
             Additional metadata about the `part` and/or `part-revision`.
@@ -10354,8 +10406,10 @@ components:
         metadata:
           additionalProperties:
             anyOf:
-              - $ref: '#/components/schemas/MetadataStringType'
+              - $ref: '#/components/schemas/MetadataLongType'
               - $ref: '#/components/schemas/MetadataFloatType'
+              - $ref: '#/components/schemas/MetadataDateType'
+              - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
           description: |
             Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
@@ -10388,6 +10442,10 @@ components:
           $ref: '#/components/schemas/CrossSectioning'
         worldOrientation:
           $ref: '#/components/schemas/Orientation'
+        excludePrunedItems:
+          description: Whether to exclude non-visible items in the view
+          example: true
+          type: boolean
       required:
         - camera
         - created
@@ -10536,6 +10594,9 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        excludePrunedItems:
+          example: true
+          type: boolean
       required:
         - created
         - expiry
