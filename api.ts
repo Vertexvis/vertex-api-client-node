@@ -1154,11 +1154,16 @@ export interface CreatePartRequestDataAttributes {
   indexMetadata?: boolean;
   /**
    * Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof CreatePartRequestDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
   /**
    * Name to be used for the root part.
@@ -1419,11 +1424,16 @@ export interface CreateSceneItemRequestDataAttributes {
   visible?: boolean;
   /**
    * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof CreateSceneItemRequestDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
 }
 /**
@@ -1598,6 +1608,12 @@ export interface CreateSceneViewRequestDataAttributes {
    * @memberof CreateSceneViewRequestDataAttributes
    */
   crossSectioning?: CrossSectioning | null;
+  /**
+   * Whether to exclude non-visible items in the view
+   * @type {boolean}
+   * @memberof CreateSceneViewRequestDataAttributes
+   */
+  excludePrunedItems?: boolean;
 }
 /**
  *
@@ -1726,6 +1742,12 @@ export interface CreateStreamKeyRequestDataAttributes {
    * @memberof CreateStreamKeyRequestDataAttributes
    */
   expiry?: number;
+  /**
+   * Whether to exclude non-visible items in the view
+   * @type {boolean}
+   * @memberof CreateStreamKeyRequestDataAttributes
+   */
+  excludePrunedItems?: boolean;
 }
 /**
  *
@@ -2653,6 +2675,25 @@ export interface Matrix4Nullable {
 /**
  *
  * @export
+ * @interface MetadataDateType
+ */
+export interface MetadataDateType {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof MetadataDateType
+   */
+  type: string;
+  /**
+   * A date value.
+   * @type {string}
+   * @memberof MetadataDateType
+   */
+  value: string;
+}
+/**
+ *
+ * @export
  * @interface MetadataFloatType
  */
 export interface MetadataFloatType {
@@ -2666,6 +2707,25 @@ export interface MetadataFloatType {
    * A numerical floating-point value.
    * @type {number}
    * @memberof MetadataFloatType
+   */
+  value: number;
+}
+/**
+ *
+ * @export
+ * @interface MetadataLongType
+ */
+export interface MetadataLongType {
+  /**
+   * Type of metadata value.
+   * @type {string}
+   * @memberof MetadataLongType
+   */
+  type: string;
+  /**
+   * A numerical long value.
+   * @type {number}
+   * @memberof MetadataLongType
    */
   value: number;
 }
@@ -2865,11 +2925,16 @@ export interface PartAssemblyRelationshipData {
   children: Array<PartRevisionInstance>;
   /**
    * Additional metadata about the `part` and/or `part-revision`.
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof PartAssemblyRelationshipData
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
 }
 /**
@@ -3090,11 +3155,16 @@ export interface PartRevisionDataAttributes {
   created?: string;
   /**
    *
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof PartRevisionDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
   /**
    *
@@ -3860,11 +3930,16 @@ export interface SceneItemDataAttributes {
   materialOverride?: ColorMaterial;
   /**
    *
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof SceneItemDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
   /**
    *
@@ -4275,6 +4350,12 @@ export interface SceneViewDataAttributes {
    * @memberof SceneViewDataAttributes
    */
   worldOrientation?: Orientation;
+  /**
+   * Whether to exclude non-visible items in the view
+   * @type {boolean}
+   * @memberof SceneViewDataAttributes
+   */
+  excludePrunedItems?: boolean;
 }
 /**
  *
@@ -4562,12 +4643,6 @@ export interface SelectOperation {
    * @memberof SelectOperation
    */
   type: SelectOperationTypeEnum;
-  /**
-   *
-   * @type {ColorMaterial}
-   * @memberof SelectOperation
-   */
-  material: ColorMaterial;
 }
 
 export const SelectOperationTypeEnum = {
@@ -4657,6 +4732,12 @@ export interface StreamKeyDataAttributes {
    * @memberof StreamKeyDataAttributes
    */
   created: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof StreamKeyDataAttributes
+   */
+  excludePrunedItems?: boolean;
 }
 /**
  *
@@ -4915,11 +4996,16 @@ export interface UpdatePartRevisionRequestData {
 export interface UpdatePartRevisionRequestDataAttributes {
   /**
    * Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof UpdatePartRevisionRequestDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
   /**
    * Whether or not to index metadata in the part file when sending a file relationship - not used otherwise. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
@@ -5097,11 +5183,16 @@ export interface UpdateSceneItemRequestDataAttributes {
   suppliedId?: string;
   /**
    * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
-   * @type {{ [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType; }}
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof UpdateSceneItemRequestDataAttributes
    */
   metadata?: {
-    [key: string]: MetadataStringType | MetadataFloatType | MetadataNullType;
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
   };
 }
 /**
@@ -5251,6 +5342,12 @@ export interface UpdateSceneViewRequestDataAttributes {
    * @memberof UpdateSceneViewRequestDataAttributes
    */
   crossSectioning?: CrossSectioning | null;
+  /**
+   * Whether or not to turn off default lighting
+   * @type {boolean}
+   * @memberof UpdateSceneViewRequestDataAttributes
+   */
+  noDefaultLights?: boolean;
 }
 /**
  *
