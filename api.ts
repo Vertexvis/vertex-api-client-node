@@ -1172,6 +1172,12 @@ export interface CreatePartRequestDataAttributes {
    */
   name?: string;
   /**
+   * Optional name to be used for the part revision.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  revisionName?: string;
+  /**
    * Metadata key used to extract an ID used for correlation.
    * @type {string}
    * @memberof CreatePartRequestDataAttributes
@@ -3172,6 +3178,12 @@ export interface PartRevisionDataAttributes {
    * @memberof PartRevisionDataAttributes
    */
   suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionDataAttributes
+   */
+  name?: string;
 }
 /**
  *
@@ -3571,6 +3583,118 @@ export interface QueuedJobList {
    * @memberof QueuedJobList
    */
   links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface QueuedTranslationJob
+ */
+export interface QueuedTranslationJob {
+  /**
+   *
+   * @type {QueuedTranslationJobData}
+   * @memberof QueuedTranslationJob
+   */
+  data: QueuedTranslationJobData;
+  /**
+   *
+   * @type {Array<GeometrySetData | PartRevisionData>}
+   * @memberof QueuedTranslationJob
+   */
+  included?: Array<GeometrySetData | PartRevisionData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof QueuedTranslationJob
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface QueuedTranslationJobData
+ */
+export interface QueuedTranslationJobData {
+  /**
+   *
+   * @type {string}
+   * @memberof QueuedTranslationJobData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof QueuedTranslationJobData
+   */
+  id: string;
+  /**
+   *
+   * @type {QueuedTranslationJobDataAttributes}
+   * @memberof QueuedTranslationJobData
+   */
+  attributes: QueuedTranslationJobDataAttributes;
+  /**
+   *
+   * @type {QueuedTranslationJobDataRelationships}
+   * @memberof QueuedTranslationJobData
+   */
+  relationships?: QueuedTranslationJobDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof QueuedTranslationJobData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface QueuedTranslationJobDataAttributes
+ */
+export interface QueuedTranslationJobDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof QueuedTranslationJobDataAttributes
+   */
+  status: string;
+  /**
+   *
+   * @type {string}
+   * @memberof QueuedTranslationJobDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof QueuedTranslationJobDataAttributes
+   */
+  completed?: string;
+  /**
+   *
+   * @type {Set<ApiError>}
+   * @memberof QueuedTranslationJobDataAttributes
+   */
+  errors?: Set<ApiError>;
+}
+/**
+ *
+ * @export
+ * @interface QueuedTranslationJobDataRelationships
+ */
+export interface QueuedTranslationJobDataRelationships {
+  /**
+   *
+   * @type {GeometrySetRelationship}
+   * @memberof QueuedTranslationJobDataRelationships
+   */
+  geometrySet?: GeometrySetRelationship;
+  /**
+   *
+   * @type {PartRevisionRelationship}
+   * @memberof QueuedTranslationJobDataRelationships
+   */
+  partRevision?: PartRevisionRelationship;
 }
 /**
  *
@@ -13565,7 +13689,7 @@ export const SceneItemsApiAxiosParamCreator = function (
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -13880,7 +14004,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14036,7 +14160,7 @@ export const SceneItemsApiFactory = function (
     /**
      * Get a `scene-item` by ID.
      * @param {string} id The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -14177,7 +14301,7 @@ export interface SceneItemsApiGetSceneItemRequest {
   readonly id: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
    * @type {string}
    * @memberof SceneItemsApiGetSceneItem
    */
@@ -15492,7 +15616,7 @@ export const SceneViewsApiAxiosParamCreator = function (
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15808,7 +15932,7 @@ export const SceneViewsApiFp = function (configuration?: Configuration) {
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -15966,7 +16090,7 @@ export const SceneViewsApiFactory = function (
      * Get a `scene-item` within a view by ID.
      * @param {string} id The &#x60;scene-view&#x60; ID.
      * @param {string} itemId The &#x60;scene-item&#x60; ID.
-     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsSceneItem] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16117,7 +16241,7 @@ export interface SceneViewsApiGetViewSceneItemRequest {
   readonly itemId: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;boundingBox&#x60;, &#x60;worldTransform&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
    * @type {string}
    * @memberof SceneViewsApiGetViewSceneItem
    */
@@ -18020,6 +18144,60 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Get a `queued-translation-job`. The response is either the status if `running` or `error` or, upon completion, the `part-revision` that was created. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {string} id The &#x60;queued-translation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslationJob: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getQueuedTranslationJob', 'id', id);
+      const localVarPath = `/queued-translation-jobs/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get `queued-translation`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -18170,6 +18348,30 @@ export const TranslationInspectionsApiFp = function (
       );
     },
     /**
+     * Get a `queued-translation-job`. The response is either the status if `running` or `error` or, upon completion, the `part-revision` that was created. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {string} id The &#x60;queued-translation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedTranslationJob(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<QueuedTranslationJob>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedTranslationJob(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get `queued-translation`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -18256,6 +18458,20 @@ export const TranslationInspectionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Get a `queued-translation-job`. The response is either the status if `running` or `error` or, upon completion, the `part-revision` that was created. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * @param {string} id The &#x60;queued-translation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslationJob(
+      id: string,
+      options?: any
+    ): AxiosPromise<QueuedTranslationJob> {
+      return localVarFp
+        .getQueuedTranslationJob(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get `queued-translation`s.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -18314,6 +18530,20 @@ export interface TranslationInspectionsApiGetQueuedTranslationRequest {
    * The &#x60;queued-translation&#x60; ID.
    * @type {string}
    * @memberof TranslationInspectionsApiGetQueuedTranslation
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedTranslationJob operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiGetQueuedTranslationJobRequest
+ */
+export interface TranslationInspectionsApiGetQueuedTranslationJobRequest {
+  /**
+   * The &#x60;queued-translation&#x60; ID.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJob
    */
   readonly id: string;
 }
@@ -18401,6 +18631,22 @@ export class TranslationInspectionsApi extends BaseAPI {
   ) {
     return TranslationInspectionsApiFp(this.configuration)
       .getQueuedTranslation(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `queued-translation-job`. The response is either the status if `running` or `error` or, upon completion, the `part-revision` that was created. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+   * @param {TranslationInspectionsApiGetQueuedTranslationJobRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TranslationInspectionsApi
+   */
+  public getQueuedTranslationJob(
+    requestParameters: TranslationInspectionsApiGetQueuedTranslationJobRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return TranslationInspectionsApiFp(this.configuration)
+      .getQueuedTranslationJob(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
