@@ -1544,6 +1544,12 @@ export interface CreateSceneRequestDataAttributes {
    * @memberof CreateSceneRequestDataAttributes
    */
   worldOrientation?: Orientation;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof CreateSceneRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  *
@@ -3971,6 +3977,12 @@ export interface SceneDataAttributes {
    * @memberof SceneDataAttributes
    */
   sceneItemCount?: number;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof SceneDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  *
@@ -5406,6 +5418,12 @@ export interface UpdateSceneRequestDataAttributes {
    * @memberof UpdateSceneRequestDataAttributes
    */
   worldOrientation?: Orientation;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof UpdateSceneRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 
 export const UpdateSceneRequestDataAttributesStateEnum = {
@@ -16629,7 +16647,7 @@ export const ScenesApiAxiosParamCreator = function (
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -16692,6 +16710,7 @@ export const ScenesApiAxiosParamCreator = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -16700,6 +16719,7 @@ export const ScenesApiAxiosParamCreator = function (
       pageSize?: number,
       filterName?: string,
       filterSuppliedId?: string,
+      fieldsScene?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
@@ -16741,6 +16761,10 @@ export const ScenesApiAxiosParamCreator = function (
 
       if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      if (fieldsScene !== undefined) {
+        localVarQueryParameter['fields[scene]'] = fieldsScene;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -16974,7 +16998,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17003,6 +17027,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17011,6 +17036,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       pageSize?: number,
       filterName?: string,
       filterSuppliedId?: string,
+      fieldsScene?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
@@ -17020,6 +17046,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
         pageSize,
         filterName,
         filterSuppliedId,
+        fieldsScene,
         options
       );
       return createRequestFunction(
@@ -17137,7 +17164,7 @@ export const ScenesApiFactory = function (
     /**
      * Get a `scene` by ID.
      * @param {string} id The &#x60;scene&#x60; ID.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17156,6 +17183,7 @@ export const ScenesApiFactory = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17164,10 +17192,18 @@ export const ScenesApiFactory = function (
       pageSize?: number,
       filterName?: string,
       filterSuppliedId?: string,
+      fieldsScene?: string,
       options?: any
     ): AxiosPromise<SceneList> {
       return localVarFp
-        .getScenes(pageCursor, pageSize, filterName, filterSuppliedId, options)
+        .getScenes(
+          pageCursor,
+          pageSize,
+          filterName,
+          filterSuppliedId,
+          fieldsScene,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -17263,7 +17299,7 @@ export interface ScenesApiGetSceneRequest {
   readonly id: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; is only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
    * @type {string}
    * @memberof ScenesApiGetScene
    */
@@ -17303,6 +17339,13 @@ export interface ScenesApiGetScenesRequest {
    * @memberof ScenesApiGetScenes
    */
   readonly filterSuppliedId?: string;
+
+  /**
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly fieldsScene?: string;
 }
 
 /**
@@ -17442,6 +17485,7 @@ export class ScenesApi extends BaseAPI {
         requestParameters.pageSize,
         requestParameters.filterName,
         requestParameters.filterSuppliedId,
+        requestParameters.fieldsScene,
         options
       )
       .then((request) => request(this.axios, this.basePath));
