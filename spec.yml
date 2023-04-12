@@ -3248,14 +3248,14 @@ paths:
           style: simple
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `boundingBox` and `metadata` are only returned
-            if explicitly requested.
+            value returns no fields. `boundingBox`, `worldTransform` and `metadata`
+            are only returned if explicitly requested.
           explode: true
           in: query
           name: fields[scene-item]
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
+            example: created,suppliedId,visible,transform,worldTransform,materialOverride,boundingBox,metadata
             type: string
           style: form
       responses:
@@ -4023,14 +4023,14 @@ paths:
           style: simple
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `boundingBox` and `metadata` are only returned
-            if explicitly requested.
+            value returns no fields. `boundingBox`, `worldTransform` and `metadata`
+            are only returned if explicitly requested.
           explode: true
           in: query
           name: fields[scene-item]
           required: false
           schema:
-            example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
+            example: created,suppliedId,visible,transform,worldTransform,materialOverride,boundingBox,metadata
             type: string
           style: form
         - description: Comma-separated list of relationships to include in response.
@@ -4282,6 +4282,18 @@ paths:
             maxLength: 1024
             type: string
           style: form
+        - description:
+            Comma-separated list of fields to return in response. An empty
+            value returns no fields. `sceneItemCount` and `metadata` are only returned
+            if explicitly requested.
+          explode: true
+          in: query
+          name: fields[scene]
+          required: false
+          schema:
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -4447,14 +4459,14 @@ paths:
           style: simple
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `sceneItemCount` is only returned if explicitly
-            requested.
+            value returns no fields. `sceneItemCount` and `metadata` are only returned
+            if explicitly requested.
           explode: true
           in: query
           name: fields[scene]
           required: false
           schema:
-            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
             type: string
           style: form
       responses:
@@ -5392,6 +5404,72 @@ paths:
               schema:
                 $ref: '#/components/schemas/TranslationInspectionJob'
           description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - translation-inspections
+  /queued-translation-jobs/{id}:
+    get:
+      description:
+        Get a `queued-translation-job`. The response is either the status
+        if `running` or `error` or, upon completion, the `part-revision` that was
+        created. Once created, create scenes via the createScene API. For details,
+        see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        guide.
+      operationId: getQueuedTranslationJob
+      parameters:
+        - description: The `queued-translation` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedTranslationJob'
+          description: OK
+        '301':
+          description: Moved Permanently
         '401':
           content:
             application/vnd.api+json:
@@ -6386,13 +6464,14 @@ components:
     SceneFields:
       description:
         Comma-separated list of fields to return in response. An empty
-        value returns no fields. `sceneItemCount` is only returned if explicitly requested.
+        value returns no fields. `sceneItemCount` and `metadata` are only returned
+        if explicitly requested.
       explode: true
       in: query
       name: fields[scene]
       required: false
       schema:
-        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount
+        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
         type: string
       style: form
     SceneViewStateFields:
@@ -6419,14 +6498,14 @@ components:
     SceneItemFields:
       description:
         Comma-separated list of fields to return in response. An empty
-        value returns no fields. `boundingBox` and `metadata` are only returned if
-        explicitly requested.
+        value returns no fields. `boundingBox`, `worldTransform` and `metadata` are
+        only returned if explicitly requested.
       explode: true
       in: query
       name: fields[scene-item]
       required: false
       schema:
-        example: created,suppliedId,visible,transform,materialOverride,boundingBox,metadata
+        example: created,suppliedId,visible,transform,worldTransform,materialOverride,boundingBox,metadata
         type: string
       style: form
     SceneItemOverrideId:
@@ -7377,6 +7456,24 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/TranslationInspectionJob_data'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    QueuedTranslationJob:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/QueuedTranslationJobData'
+        included:
+          items:
+            anyOf:
+              - $ref: '#/components/schemas/GeometrySetData'
+              - $ref: '#/components/schemas/PartRevisionData'
+          type: array
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -8424,6 +8521,33 @@ components:
         - relationships
         - type
       type: object
+    QueuedTranslationJobData:
+      additionalProperties: false
+      properties:
+        type:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/QueuedTranslationJobData_attributes'
+        relationships:
+          $ref: '#/components/schemas/QueuedTranslationJobData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     CADExportConfig:
       allOf:
         - $ref: '#/components/schemas/ExportConfig'
@@ -9449,6 +9573,11 @@ components:
           example: 1/2in. Flat Washer
           maxLength: 255
           type: string
+        revisionName:
+          description: Optional name to be used for the part revision.
+          example: 1/2in. Flat Washer - A
+          maxLength: 255
+          type: string
         suppliedIdKey:
           description: Metadata key used to extract an ID used for correlation.
           example: ProductNumber
@@ -9725,6 +9854,12 @@ components:
           type: boolean
         worldOrientation:
           $ref: '#/components/schemas/Orientation'
+        metadata:
+          additionalProperties:
+            maxLength: 256
+            minLength: 0
+            type: string
+          type: object
       type: object
     CreateSceneRequest_data_relationships:
       properties:
@@ -9780,6 +9915,12 @@ components:
           type: boolean
         worldOrientation:
           $ref: '#/components/schemas/Orientation'
+        metadata:
+          additionalProperties:
+            maxLength: 256
+            minLength: 0
+            type: string
+          type: object
       type: object
     UpdateSceneRequest_data:
       properties:
@@ -10235,6 +10376,11 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
       type: object
     PartRevisionData_relationships:
       properties:
@@ -10513,6 +10659,10 @@ components:
             to be explicitly requested)
           example: 100
           type: integer
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
       type: object
     SceneRelationship_data:
       properties:
@@ -10600,6 +10750,36 @@ components:
       required:
         - created
         - expiry
+      type: object
+    QueuedTranslationJobData_attributes:
+      properties:
+        status:
+          example: running
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        completed:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        errors:
+          items:
+            $ref: '#/components/schemas/ApiError'
+          maxItems: 20
+          type: array
+          uniqueItems: true
+      required:
+        - created
+        - status
+      type: object
+    QueuedTranslationJobData_relationships:
+      properties:
+        geometrySet:
+          $ref: '#/components/schemas/GeometrySetRelationship'
+        partRevision:
+          $ref: '#/components/schemas/PartRevisionRelationship'
       type: object
     ExportData_attributes:
       properties:

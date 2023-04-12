@@ -62,6 +62,12 @@ yarn build
 
 # Format code
 yarn format
+```
+
+## Publishing
+```bash
+# Generate latest 
+yarn generate
 
 # Generate using latest OpenAPI spec, version, and open GitHub PR
 yarn push:version [patch|minor|major (default: patch)]
