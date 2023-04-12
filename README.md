@@ -65,8 +65,9 @@ yarn format
 ```
 
 ## Publishing
+
 ```bash
-# Generate latest 
+# Generate latest
 yarn generate
 
 # Generate using latest OpenAPI spec, version, and open GitHub PR
