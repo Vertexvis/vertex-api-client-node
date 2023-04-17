@@ -4294,6 +4294,17 @@ paths:
             example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
             type: string
           style: form
+        - description: |
+            Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: `filter[metadata][key1]=value1&filter[metadata][key]=value2`.
+          explode: true
+          in: query
+          name: filter[metadata]
+          required: false
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+          style: form
       responses:
         '200':
           content:
@@ -6473,6 +6484,18 @@ components:
       schema:
         example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
         type: string
+      style: form
+    MetadataFilter:
+      description: |
+        Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: `filter[metadata][key1]=value1&filter[metadata][key]=value2`.
+      explode: true
+      in: query
+      name: filter[metadata]
+      required: false
+      schema:
+        additionalProperties:
+          type: string
+        type: object
       style: form
     SceneViewStateFields:
       description:
