@@ -16711,6 +16711,7 @@ export const ScenesApiAxiosParamCreator = function (
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -16720,6 +16721,7 @@ export const ScenesApiAxiosParamCreator = function (
       filterName?: string,
       filterSuppliedId?: string,
       fieldsScene?: string,
+      filterMetadata?: { [key: string]: string },
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
@@ -16765,6 +16767,10 @@ export const ScenesApiAxiosParamCreator = function (
 
       if (fieldsScene !== undefined) {
         localVarQueryParameter['fields[scene]'] = fieldsScene;
+      }
+
+      if (filterMetadata !== undefined) {
+        localVarQueryParameter['filter[metadata]'] = filterMetadata;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -17028,6 +17034,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17037,6 +17044,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       filterName?: string,
       filterSuppliedId?: string,
       fieldsScene?: string,
+      filterMetadata?: { [key: string]: string },
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
@@ -17047,6 +17055,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
         filterName,
         filterSuppliedId,
         fieldsScene,
+        filterMetadata,
         options
       );
       return createRequestFunction(
@@ -17184,6 +17193,7 @@ export const ScenesApiFactory = function (
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17193,6 +17203,7 @@ export const ScenesApiFactory = function (
       filterName?: string,
       filterSuppliedId?: string,
       fieldsScene?: string,
+      filterMetadata?: { [key: string]: string },
       options?: any
     ): AxiosPromise<SceneList> {
       return localVarFp
@@ -17202,6 +17213,7 @@ export const ScenesApiFactory = function (
           filterName,
           filterSuppliedId,
           fieldsScene,
+          filterMetadata,
           options
         )
         .then((request) => request(axios, basePath));
@@ -17346,6 +17358,13 @@ export interface ScenesApiGetScenesRequest {
    * @memberof ScenesApiGetScenes
    */
   readonly fieldsScene?: string;
+
+  /**
+   * Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
+   * @type {{ [key: string]: string; }}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterMetadata?: { [key: string]: string };
 }
 
 /**
@@ -17486,6 +17505,7 @@ export class ScenesApi extends BaseAPI {
         requestParameters.filterName,
         requestParameters.filterSuppliedId,
         requestParameters.fieldsScene,
+        requestParameters.filterMetadata,
         options
       )
       .then((request) => request(this.axios, this.basePath));
