@@ -68,29 +68,6 @@ export interface CreateSceneAndSceneItemsReq extends BaseReq {
   readonly returnQueued?: boolean;
 }
 
-export interface CreateSceneAndSceneItemsReqEXPERIMENTAL extends BaseReq {
-  /** A list of {@link CreateSceneItemRequest}. */
-  readonly createSceneItemReqs: Array<Array<CreateSceneItemRequest>>;
-
-  /** Function returning a {@link CreateSceneRequest}. */
-  readonly createSceneReq: () => CreateSceneRequest;
-
-  /** Whether or not to fail if any scene item fails initial validation. */
-  readonly failFast?: boolean;
-
-  /** How many requests to run in parallel. */
-  readonly parallelism: number;
-
-  /** {@link Polling} */
-  readonly polling?: Polling;
-
-  /** Callback with total number of requests and number complete. */
-  onProgress?: (complete: number, total: number) => void;
-
-  /** Whether or not to return queued scene items. */
-  readonly returnQueued?: boolean;
-}
-
 export interface CreateSceneAndSceneItemsRes {
   readonly errors: QueuedSceneItem[];
   readonly scene: Scene;
@@ -268,6 +245,25 @@ export async function createSceneItems({
   parallelism,
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
+  // set ordinals based on request order
+  const ROOT_PARENT = '';
+  const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
+  reqMap.set(ROOT_PARENT, []);
+  createSceneItemReqs.forEach((req) => {
+    const reqParent =
+      req.data.attributes.parent ??
+      req.data.relationships.parent?.data.id ??
+      ROOT_PARENT;
+    if (!reqMap.has(reqParent)) {
+      reqMap.set(reqParent, []);
+    }
+    const siblings = reqMap.get(reqParent);
+    if (!req.data.attributes.ordinal) {
+      req.data.attributes.ordinal = siblings?.length;
+    }
+    siblings?.push(req);
+  });
+
   const limit = pLimit(parallelism);
   let complete = 0;
   let leaves = 0;
@@ -324,7 +320,7 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
   returnQueued = false,
   verbose,
-}: CreateSceneAndSceneItemsReqEXPERIMENTAL): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
+}: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
   const startTime = hrtime.bigint();
   if (verbose) onMsg(`Creating scene...`);
   const scene = (
@@ -337,8 +333,47 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   let batchQueuedOps: QueuedBatchOps[] = [];
   let batchErrors: QueuedBatchOps[] = [];
   let sceneItemErrors: SceneItemError[] = [];
-  for (let depth = 0; depth < createSceneItemReqs.length; depth++) {
-    const createItemReqs: CreateSceneItemRequest[] = createSceneItemReqs[depth];
+
+  const ROOT_PARENT = '';
+  const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
+  let nextChildren: CreateSceneItemRequest[] = [];
+  reqMap.set(ROOT_PARENT, nextChildren);
+
+  // create parent map and set ordinals based on request order
+  createSceneItemReqs.forEach((req) => {
+    const reqParent =
+      req.data.attributes.parent ??
+      req.data.relationships.parent?.data.id ??
+      ROOT_PARENT;
+    if (!reqMap.has(reqParent)) {
+      reqMap.set(reqParent, []);
+    }
+    const siblings = reqMap.get(reqParent);
+    if (!req.data.attributes.ordinal) {
+      req.data.attributes.ordinal = siblings?.length;
+    }
+    siblings?.push(req);
+  });
+
+  // sort all scene item requests into depth sorted array of arrays
+  const depthSortedItems: CreateSceneItemRequest[][] = [];
+  while (nextChildren.length) {
+    depthSortedItems.push(nextChildren);
+    nextChildren = nextChildren.flatMap((req) => {
+      if (
+        req.data.attributes.suppliedId &&
+        reqMap.has(req.data.attributes.suppliedId)
+      ) {
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        return reqMap.get(req.data.attributes.suppliedId)!;
+      } else {
+        return [];
+      }
+    });
+  }
+
+  for (let depth = 0; depth < depthSortedItems.length; depth++) {
+    const createItemReqs: CreateSceneItemRequest[] = depthSortedItems[depth];
     itemCount += createItemReqs.length;
     if (verbose)
       onMsg(
@@ -426,7 +461,7 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   if (verbose) {
     onMsg(
       `Scene item creation complete for ${itemCount} scene items with max depth of ${
-        createSceneItemReqs.length - 1
+        depthSortedItems.length - 1
       }.`
     );
     if (batchErrors.length) {

@@ -10544,10 +10544,14 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
-        parent:
+        ordinal:
           description:
-            ID provided for correlation. For example, an existing ID from
-            a PLM system.
+            A 0-based index used for defining a consistent ordering amongst
+            sibling scene items.
+          type: integer
+        parent:
+          description: |
+            Optional ability to specify a parent scene item by scene item supplied ID. For example, an  existing ID from a PLM system. This approach is an alternative to providing a specific scene  item ID with the relationship parent property.
           example: PN12345
           maxLength: 1024
           type: string

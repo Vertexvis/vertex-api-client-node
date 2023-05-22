@@ -1393,7 +1393,13 @@ export interface CreateSceneItemRequestDataAttributes {
    */
   name?: string;
   /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * A 0-based index used for defining a consistent ordering amongst sibling scene items.
+   * @type {number}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  ordinal?: number;
+  /**
+   * Optional ability to specify a parent scene item by scene item supplied ID. For example, an  existing ID from a PLM system. This approach is an alternative to providing a specific scene  item ID with the relationship parent property.
    * @type {string}
    * @memberof CreateSceneItemRequestDataAttributes
    */
