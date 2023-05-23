@@ -5997,8 +5997,7 @@ export const AccountsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6066,8 +6065,7 @@ export const AccountsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6125,8 +6123,7 @@ export const AccountsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6179,8 +6176,7 @@ export const AccountsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6243,8 +6239,7 @@ export const AccountsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6713,8 +6708,7 @@ export const ApplicationsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6772,8 +6766,7 @@ export const ApplicationsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6826,8 +6819,7 @@ export const ApplicationsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6885,8 +6877,7 @@ export const ApplicationsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -6949,8 +6940,7 @@ export const ApplicationsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7422,8 +7412,7 @@ export const BatchesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7481,8 +7470,7 @@ export const BatchesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7535,8 +7523,7 @@ export const BatchesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7830,8 +7817,7 @@ export const ExportsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7889,8 +7875,7 @@ export const ExportsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -7943,8 +7928,7 @@ export const ExportsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8234,8 +8218,7 @@ export const FilesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8293,8 +8276,7 @@ export const FilesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8347,8 +8329,7 @@ export const FilesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8412,8 +8393,7 @@ export const FilesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8472,8 +8452,7 @@ export const FilesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/octet-stream';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -8943,8 +8922,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9002,8 +8980,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9061,8 +9038,7 @@ export const GeometrySetsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9395,8 +9371,7 @@ export const HitsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9476,8 +9451,7 @@ export const HitsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9814,8 +9788,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9884,8 +9857,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -9967,8 +9939,7 @@ export const Oauth2ApiAxiosParamCreator = function (
         'application/x-www-form-urlencoded';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10020,8 +9991,7 @@ export const Oauth2ApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10485,8 +10455,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10545,8 +10514,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10617,8 +10585,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10671,8 +10638,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10803,8 +10769,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -10867,8 +10832,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -11621,8 +11585,7 @@ export const PartsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -11680,8 +11643,7 @@ export const PartsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -11740,8 +11702,7 @@ export const PartsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -11805,8 +11766,7 @@ export const PartsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -11859,8 +11819,7 @@ export const PartsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12330,8 +12289,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12389,8 +12347,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12443,8 +12400,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12497,8 +12453,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12890,8 +12845,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -12949,8 +12903,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13015,8 +12968,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13079,8 +13031,7 @@ export const SceneItemOverridesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13530,8 +13481,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13589,8 +13539,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13643,8 +13592,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13697,8 +13645,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13757,8 +13704,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13841,8 +13787,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -13905,8 +13850,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -14601,8 +14545,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -14660,8 +14603,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -14721,8 +14663,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -14806,8 +14747,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -14870,8 +14810,7 @@ export const SceneViewStatesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15444,8 +15383,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15503,8 +15441,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15557,8 +15494,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15623,8 +15559,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15692,8 +15627,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15758,8 +15692,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -15822,8 +15755,7 @@ export const SceneViewsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16524,8 +16456,7 @@ export const ScenesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16583,8 +16514,7 @@ export const ScenesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16637,8 +16567,7 @@ export const ScenesApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16697,8 +16626,7 @@ export const ScenesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16780,8 +16708,7 @@ export const ScenesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16846,8 +16773,7 @@ export const ScenesApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -16910,8 +16836,7 @@ export const ScenesApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -17618,8 +17543,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -17677,8 +17601,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -17742,8 +17665,7 @@ export const StreamKeysApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18087,8 +18009,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18146,8 +18067,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18200,8 +18120,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18254,8 +18173,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18319,8 +18237,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18794,8 +18711,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18853,8 +18769,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18907,8 +18822,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       );
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -18966,8 +18880,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
@@ -19030,8 +18943,7 @@ export const WebhookSubscriptionsApiAxiosParamCreator = function (
       localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions =
-        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      let headersFromBaseOptions = baseOptions.headers ?? {};
       localVarRequestOptions.headers = {
         ...localVarHeaderParameter,
         ...headersFromBaseOptions,
