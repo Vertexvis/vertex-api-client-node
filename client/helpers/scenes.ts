@@ -246,19 +246,18 @@ export async function createSceneItems({
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
   // set ordinals based on request order
-  const ROOT_PARENT = '';
   const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
-  reqMap.set(ROOT_PARENT, []);
+  reqMap.set('', []);
   createSceneItemReqs.forEach((req) => {
     const reqParent =
       req.data.attributes.parent ??
       req.data.relationships.parent?.data.id ??
-      ROOT_PARENT;
+      '';
     if (!reqMap.has(reqParent)) {
       reqMap.set(reqParent, []);
     }
     const siblings = reqMap.get(reqParent);
-    if (!req.data.attributes.ordinal) {
+    if (req.data.attributes.ordinal === undefined) {
       req.data.attributes.ordinal = siblings?.length;
     }
     siblings?.push(req);
@@ -334,22 +333,21 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
   let batchErrors: QueuedBatchOps[] = [];
   let sceneItemErrors: SceneItemError[] = [];
 
-  const ROOT_PARENT = '';
   const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
   let nextChildren: CreateSceneItemRequest[] = [];
-  reqMap.set(ROOT_PARENT, nextChildren);
+  reqMap.set('', nextChildren);
 
   // create parent map and set ordinals based on request order
   createSceneItemReqs.forEach((req) => {
     const reqParent =
       req.data.attributes.parent ??
       req.data.relationships.parent?.data.id ??
-      ROOT_PARENT;
+      '';
     if (!reqMap.has(reqParent)) {
       reqMap.set(reqParent, []);
     }
     const siblings = reqMap.get(reqParent);
-    if (!req.data.attributes.ordinal) {
+    if (req.data.attributes.ordinal === undefined) {
       req.data.attributes.ordinal = siblings?.length;
     }
     siblings?.push(req);
