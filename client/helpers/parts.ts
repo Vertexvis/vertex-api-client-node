@@ -52,7 +52,7 @@ export interface CreatePartFromFileReq extends BaseReq {
 
 export interface CreatePartFromFileRes {
   /** A {@link PartRevisionData}. */
-  readonly partRevision: PartRevisionData;
+  readonly partRevision?: PartRevisionData;
 
   /** Only populated if `returnQueued` is true in request. */
   readonly queued?: QueuedTranslation;
@@ -122,28 +122,30 @@ export async function createPartFromFile({
   const queued = returnQueued
     ? { req: createPartRequest, res: createPartRes.data }
     : undefined;
-  const pollRes = await pollQueuedJob<Part>({
-    id: queuedId,
-    getQueuedJob: (id) =>
-      client.translationInspections.getQueuedTranslation({ id }),
-    polling,
-  });
-  if (isPollError(pollRes.res)) throwOnError(pollRes);
-
-  const partRevision = head(
-    pollRes.res.included?.filter(
-      (pr) => pr.attributes.suppliedId === suppliedRevisionId
-    )
-  );
-  if (!partRevision)
-    throw new Error(
-      `Error creating part revision.\nRes: ${prettyJson(pollRes)}`
+  let partRevision;
+  if (polling.maxAttempts > 0) {
+    const pollRes = await pollQueuedJob<Part>({
+      id: queuedId,
+      getQueuedJob: (id) =>
+        client.translationInspections.getQueuedTranslation({ id }),
+      polling,
+    });
+    if (isPollError(pollRes.res)) throwOnError(pollRes);
+    partRevision = head(
+      pollRes.res.included?.filter(
+        (pr) => pr.attributes.suppliedId === suppliedRevisionId
+      )
     );
+    if (!partRevision)
+      throw new Error(
+        `Error creating part revision.\nRes: ${prettyJson(pollRes)}`
+      );
 
-  if (verbose) {
-    onMsg(
-      `Created part ${pollRes.res?.data.id}, part-revision ${partRevision.id}`
-    );
+    if (verbose) {
+      onMsg(
+        `Created part ${pollRes.res?.data.id}, part-revision ${partRevision.id}`
+      );
+    }
   }
 
   return { partRevision, queued };
@@ -159,7 +161,8 @@ export async function createPartFromFile({
 export async function createPartFromFileIfNotExists(
   req: CreatePartFromFileReq
 ): Promise<PartRevisionData> {
-  return (await createPartFromFile(req)).partRevision;
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+  return (await createPartFromFile(req)).partRevision!;
 }
 
 /**
