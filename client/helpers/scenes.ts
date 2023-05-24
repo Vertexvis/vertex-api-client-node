@@ -16,7 +16,6 @@ import {
   QueuedJob,
   Scene,
   SceneData,
-  SceneItem,
   SceneRelationshipDataTypeEnum,
   UpdateSceneRequestDataAttributes,
   UpdateSceneRequestDataAttributesStateEnum,
@@ -69,14 +68,6 @@ export interface CreateSceneAndSceneItemsReq extends BaseReq {
 }
 
 export interface CreateSceneAndSceneItemsRes {
-  readonly errors: QueuedSceneItem[];
-  readonly scene: Scene;
-
-  /** Only populated if `returnQueued` is true in request. */
-  readonly queued: QueuedSceneItem[];
-}
-
-export interface CreateSceneAndSceneItemsResEXPERIMENTAL {
   readonly errors: QueuedBatchOps[];
   readonly scene: Scene;
   readonly sceneItemErrors: SceneItemError[];
@@ -100,11 +91,6 @@ export interface CreateSceneItemsReq extends Base {
 }
 
 export interface CreateSceneItemsRes {
-  readonly leaves: number;
-  readonly queuedSceneItems: QueuedSceneItem[];
-}
-
-export interface CreateSceneItemsResEXPERIMENTAL {
   readonly chunks: number;
   readonly queuedBatchOps: QueuedBatchOps[];
 }
@@ -151,8 +137,6 @@ export interface QueuedSceneItem {
   readonly res?: Failure | QueuedJob;
 }
 
-const PollPercentage = 10;
-
 /**
  * Create a scene with scene items.
  */
@@ -168,158 +152,6 @@ export async function createSceneAndSceneItems({
   returnQueued = false,
   verbose,
 }: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsRes> {
-  const scene = (
-    await client.scenes.createScene({ createSceneRequest: createSceneReq() })
-  ).data;
-  const sceneId = scene.data.id;
-  const createRes = await createSceneItems({
-    client,
-    createSceneItemReqs,
-    failFast,
-    onProgress,
-    parallelism,
-    sceneId,
-  });
-  const { a: queuedItems, b: errors } = partition(
-    createRes.queuedSceneItems,
-    (i) => isQueuedJob(i.res)
-  );
-  const queued = returnQueued ? createRes.queuedSceneItems : [];
-  if (queuedItems.length === 0 || errors.length === createRes.leaves) {
-    return { errors, queued, scene };
-  }
-
-  if (verbose) onMsg(`Polling for completed scene-items...`);
-
-  const limit = pLimit(Math.min(parallelism, 20));
-  const cnt = queuedItems.length;
-  const step = Math.floor(cnt / ((PollPercentage / 100) * cnt));
-  const qis = [];
-  // Poll for percentage of items starting at end of `queuedItems` array
-  for (let i = 0; i < cnt; i += step) qis.push(queuedItems[cnt - i - 1]);
-
-  async function poll({ req, res }: QueuedSceneItem): Promise<void> {
-    const r = await pollQueuedJob<SceneItem>({
-      id: (res as QueuedJob).data.id,
-      getQueuedJob: (id, cancelToken) =>
-        client.sceneItems.getQueuedSceneItem({ id }, { cancelToken }),
-      allow404: true,
-      limit,
-      polling,
-    });
-    if (isPollError(r.res)) {
-      failFast ? throwOnError(r) : errors.push({ req, res: r.res });
-    }
-  }
-  await Promise.all(qis.map((is) => limit<QueuedSceneItem[], void>(poll, is)));
-
-  if (verbose) onMsg(`Committing scene and polling until ready...`);
-
-  await updateScene({
-    attributes: { state: UpdateSceneRequestDataAttributesStateEnum.Commit },
-    client,
-    sceneId,
-  });
-  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
-
-  if (verbose) onMsg(`Fitting scene's camera to scene-items...`);
-
-  const updated = (
-    await updateScene({
-      attributes: { camera: { type: CameraFitTypeEnum.FitVisibleSceneItems } },
-      client,
-      sceneId,
-    })
-  ).scene;
-  return { errors, queued, scene: updated };
-}
-
-/**
- * Create scene items within a scene.
- */
-export async function createSceneItems({
-  client,
-  createSceneItemReqs,
-  failFast,
-  onProgress,
-  parallelism,
-  sceneId,
-}: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
-  // set ordinals based on request order
-  const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
-  reqMap.set('', []);
-  createSceneItemReqs.forEach((req) => {
-    const reqParent =
-      req.data.attributes.parent ??
-      req.data.relationships.parent?.data.id ??
-      '';
-    if (!reqMap.has(reqParent)) {
-      reqMap.set(reqParent, []);
-    }
-    const siblings = reqMap.get(reqParent);
-    if (req.data.attributes.ordinal === undefined) {
-      req.data.attributes.ordinal = siblings?.length;
-    }
-    siblings?.push(req);
-  });
-
-  const limit = pLimit(parallelism);
-  let complete = 0;
-  let leaves = 0;
-  const queuedSceneItems = await Promise.all(
-    createSceneItemReqs.map((r) =>
-      limit<CreateSceneItemRequest[], QueuedSceneItem>(
-        async (req: CreateSceneItemRequest) => {
-          let res: Failure | QueuedJob | undefined;
-          try {
-            if (
-              defined(req.data.attributes.source) ||
-              defined(req.data.relationships.source)
-            ) {
-              leaves++;
-            }
-            res = (
-              await client.sceneItems.createSceneItem({
-                id: sceneId,
-                createSceneItemRequest: req,
-              })
-            ).data;
-          } catch (error) {
-            if (!failFast && hasVertexError(error)) {
-              res = error.vertexError?.res;
-            } else throw error;
-          }
-
-          if (onProgress != null) {
-            complete += 1;
-            onProgress(complete, createSceneItemReqs.length);
-          }
-
-          return { req, res };
-        },
-        r
-      )
-    )
-  );
-
-  return { leaves, queuedSceneItems };
-}
-
-/**
- * Create a scene with scene items using experimental strategy.
- */
-export async function createSceneAndSceneItemsEXPERIMENTAL({
-  client,
-  createSceneItemReqs,
-  createSceneReq,
-  failFast = false,
-  onMsg = console.log,
-  onProgress,
-  parallelism,
-  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
-  returnQueued = false,
-  verbose,
-}: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsResEXPERIMENTAL> {
   const startTime = hrtime.bigint();
   if (verbose) onMsg(`Creating scene...`);
   const scene = (
@@ -380,9 +212,8 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
 
     // Await is used intentionally to defer loop iteration
     // until all scene items have been created at each depth.
-
     // eslint-disable-next-line no-await-in-loop
-    const createRes = await createSceneItemsEXPERIMENTAL({
+    const createRes = await createSceneItems({
       client,
       createSceneItemReqs: createItemReqs,
       failFast,
@@ -516,13 +347,13 @@ export async function createSceneAndSceneItemsEXPERIMENTAL({
 /**
  * Create scene items within a scene.
  */
-export async function createSceneItemsEXPERIMENTAL({
+export async function createSceneItems({
   client,
   createSceneItemReqs,
   failFast,
   parallelism,
   sceneId,
-}: CreateSceneItemsReq): Promise<CreateSceneItemsResEXPERIMENTAL> {
+}: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
   const limit = pLimit(parallelism);
   const batchSize = 500;
 
