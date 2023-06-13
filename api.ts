@@ -1322,6 +1322,12 @@ export interface CreateSceneItemOverrideRequestDataAttributes {
    * @memberof CreateSceneItemOverrideRequestDataAttributes
    */
   selected?: ColorMaterial;
+  /**
+   * Phantom state of the item.
+   * @type {boolean}
+   * @memberof CreateSceneItemOverrideRequestDataAttributes
+   */
+  phantom?: boolean;
 }
 /**
  *
@@ -1393,7 +1399,13 @@ export interface CreateSceneItemRequestDataAttributes {
    */
   name?: string;
   /**
-   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * A 0-based index used for defining a consistent ordering amongst sibling scene items.
+   * @type {number}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  ordinal?: number;
+  /**
+   * Optional ability to specify a parent scene item by scene item supplied ID. For example, an  existing ID from a PLM system. This approach is an alternative to providing a specific scene  item ID with the relationship parent property.
    * @type {string}
    * @memberof CreateSceneItemRequestDataAttributes
    */
@@ -1428,6 +1440,12 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   visible?: boolean;
+  /**
+   * Phantom state of the item.
+   * @type {boolean}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  phantom?: boolean;
   /**
    * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
@@ -4085,6 +4103,12 @@ export interface SceneItemDataAttributes {
   name?: string;
   /**
    *
+   * @type {boolean}
+   * @memberof SceneItemDataAttributes
+   */
+  phantom?: boolean;
+  /**
+   *
    * @type {string}
    * @memberof SceneItemDataAttributes
    */
@@ -4241,6 +4265,12 @@ export interface SceneItemOverrideDataAttributes {
    * @memberof SceneItemOverrideDataAttributes
    */
   selected?: ColorMaterial;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SceneItemOverrideDataAttributes
+   */
+  phantom?: boolean;
 }
 /**
  *
@@ -5242,6 +5272,12 @@ export interface UpdateSceneItemOverrideRequestDataAttributes {
    * @memberof UpdateSceneItemOverrideRequestDataAttributes
    */
   selected?: ColorMaterialNullable | null;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UpdateSceneItemOverrideRequestDataAttributes
+   */
+  phantom?: boolean | null;
 }
 /**
  *
@@ -5330,6 +5366,12 @@ export interface UpdateSceneItemRequestDataAttributes {
       | MetadataStringType
       | MetadataNullType;
   };
+  /**
+   * Phantom state of the item.
+   * @type {boolean}
+   * @memberof UpdateSceneItemRequestDataAttributes
+   */
+  phantom?: boolean;
 }
 /**
  *
