@@ -1,3 +1,7 @@
+import {
+  MetadataValue,
+  MetadataValueTypeEnum,
+} from '@vertexvis/api-client-node';
 import { AxiosResponse } from 'axios';
 import pLimit from 'p-limit';
 import { hrtime } from 'process';
@@ -26,12 +30,14 @@ import {
   DeleteReq,
   getPage,
   hasVertexError,
+  isPartNotFoundError,
   isQueuedJob,
   MaxAttempts,
   partition,
   Polling,
   PollIntervalMs,
   RenderImageReq,
+  SceneItemSystemMetadata,
   tryStream,
   VertexClient,
 } from '../index';
@@ -69,11 +75,22 @@ export interface CreateSceneAndSceneItemsReq extends BaseReq {
 
 export interface CreateSceneAndSceneItemsRes {
   readonly errors: QueuedBatchOps[];
-  readonly scene: Scene;
+  readonly scene?: Scene;
   readonly sceneItemErrors: SceneItemError[];
 
   /** Only populated if `returnQueued` is true in request. */
   readonly queued: QueuedBatchOps[];
+}
+
+export interface CreateSceneItemBatchReq extends CreateSceneItemsReq {
+  /** {@link Polling} */
+  readonly polling?: Polling;
+}
+
+export interface CreateSceneItemBatchRes {
+  batchOps: QueuedBatchOps[];
+  batchErrors: QueuedBatchOps[];
+  itemErrors: SceneItemError[];
 }
 
 export interface CreateSceneItemsReq extends Base {
@@ -161,14 +178,10 @@ export async function createSceneAndSceneItems({
 
   if (verbose) onMsg(`Creating scene items...`);
   let itemCount = 0;
-  let batchQueuedOps: QueuedBatchOps[] = [];
-  let batchErrors: QueuedBatchOps[] = [];
-  let sceneItemErrors: SceneItemError[] = [];
+  let createFailed = false;
+  let sceneResult;
 
   const reqMap: Map<string, CreateSceneItemRequest[]> = new Map();
-  let nextChildren: CreateSceneItemRequest[] = [];
-  reqMap.set('', nextChildren);
-
   // create parent map and set ordinals based on request order
   createSceneItemReqs.forEach((req) => {
     const reqParent =
@@ -187,6 +200,9 @@ export async function createSceneAndSceneItems({
 
   // sort all scene item requests into depth sorted array of arrays
   const depthSortedItems: CreateSceneItemRequest[][] = [];
+  // fetch list of scene items with no parent (root items)
+  let nextChildren: CreateSceneItemRequest[] = reqMap.get('') || [];
+  reqMap.delete('');
   while (nextChildren.length) {
     depthSortedItems.push(nextChildren);
     nextChildren = nextChildren.flatMap((req) => {
@@ -195,54 +211,248 @@ export async function createSceneAndSceneItems({
         reqMap.has(req.data.attributes.suppliedId)
       ) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return reqMap.get(req.data.attributes.suppliedId)!;
+        const children = reqMap.get(req.data.attributes.suppliedId)!;
+        reqMap.delete(req.data.attributes.suppliedId);
+        return children;
       } else {
         return [];
       }
     });
   }
 
-  for (let depth = 0; depth < depthSortedItems.length; depth++) {
+  let resultQueuedOps: QueuedBatchOps[] = [];
+  let resultBatchErrors: QueuedBatchOps[] = [];
+  let resultItemErrors: SceneItemError[] = [];
+
+  // if we had any scene item requests with invalid parents,
+  // add error entries indicating so.
+  reqMap.forEach((children: CreateSceneItemRequest[]) => {
+    children.forEach((childItem) => {
+      resultItemErrors.push({
+        req: childItem.data,
+        res: {
+          status: '404',
+          code: 'NotFound',
+          title: 'The requested resource was not found.',
+          source: { pointer: '/body/data/attributes/parent' },
+        },
+      });
+    });
+  });
+
+  let depth = 0;
+  for (depth; depth < depthSortedItems.length; depth++) {
     const createItemReqs: CreateSceneItemRequest[] = depthSortedItems[depth];
     itemCount += createItemReqs.length;
     if (verbose)
       onMsg(
         `Creating ${createItemReqs.length} scene items at depth ${depth}...`
       );
-
     // Await is used intentionally to defer loop iteration
     // until all scene items have been created at each depth.
-    // eslint-disable-next-line no-await-in-loop
-    const createRes = await createSceneItems({
-      client,
-      createSceneItemReqs: createItemReqs,
-      failFast,
-      onProgress,
-      parallelism,
-      sceneId,
-    });
-    const { a: queuedOps, b: errors } = partition(
-      createRes.queuedBatchOps,
-      (i) => isQueuedJob(i.res)
-    );
-    batchQueuedOps = batchQueuedOps.concat(queuedOps);
-    if (errors.length) {
-      batchErrors = batchErrors.concat(errors);
+    const {
+      batchOps: queuedBatchOps,
+      batchErrors: queuedBatchErrors,
+      itemErrors: batchItemErrors,
+    } =
+      // eslint-disable-next-line no-await-in-loop
+      await createSceneItemBatch({
+        client,
+        createSceneItemReqs: createItemReqs,
+        failFast,
+        onProgress,
+        parallelism,
+        sceneId,
+        polling,
+      });
+
+    resultQueuedOps = resultQueuedOps.concat(queuedBatchOps);
+    resultBatchErrors = resultBatchErrors.concat(queuedBatchErrors);
+
+    if (batchItemErrors.length) {
       if (verbose)
         onMsg(
-          `WARNING: ${errors.length} scene item batch errors at depth ${depth}.`
+          `WARNING: ${batchItemErrors.length} scene item creation errors at depth ${depth}.`
         );
+      resultItemErrors = resultItemErrors.concat(batchItemErrors);
+      if (failFast) {
+        createFailed = true;
+        break;
+      } else {
+        // evaluate item errors and generate retry list
+        const retries: CreateSceneItemRequest[] = batchItemErrors
+          .filter((v) => isPartNotFoundError(v.res))
+          .map<CreateSceneItemRequest>((itemError) => {
+            const item = itemError.req;
+            return {
+              data: {
+                type: 'scene-item',
+                attributes: {
+                  ...item.attributes,
+                  metadata: {
+                    ...item.attributes.metadata,
+                    [SceneItemSystemMetadata.IsMissingGeometry]:
+                      toMetadataOrUndefined('1'),
+                    [SceneItemSystemMetadata.MissingGeometrySetId]:
+                      toMetadataOrUndefined(
+                        item.relationships.source?.data.id,
+                        item.relationships.source?.data.type === 'geometry-set'
+                      ),
+                    [SceneItemSystemMetadata.MissingPartRevisionId]:
+                      toMetadataOrUndefined(
+                        item.relationships.source?.data.id,
+                        item.relationships.source?.data.type === 'part-revision'
+                      ),
+                    [SceneItemSystemMetadata.MissingSuppliedPartId]:
+                      toMetadataOrUndefined(
+                        item.attributes.source?.suppliedPartId
+                      ),
+                    [SceneItemSystemMetadata.MissingSuppliedPartRevisionId]:
+                      toMetadataOrUndefined(
+                        item.attributes.source?.suppliedRevisionId
+                      ),
+                  },
+                  source: undefined,
+                },
+                relationships: {
+                  ...item.relationships,
+                  source: undefined,
+                },
+              },
+            };
+          });
+
+        if (retries.length > 0) {
+          onMsg(
+            `Creating ${retries.length} placeholder scene items at depth ${depth}.`
+          );
+          // console.log(JSON.stringify(retries, null, 2)); //TODO: remove log statement
+          // wait for placeholders to be created
+          // eslint-disable-next-line no-await-in-loop
+          await createSceneItemBatch({
+            client,
+            createSceneItemReqs: retries,
+            failFast,
+            onProgress,
+            parallelism,
+            sceneId,
+            polling,
+          });
+          // TODO: Decide if we should do anything with any errors or positive results here
+          // Should we provide an indication somehow for previous error items that got placeholders created?
+        }
+      }
     }
-    // Nothing succeeded, return early as something is likely wrong
-    if (queuedOps.length === 0 || errors.length === createRes.chunks) {
-      return {
-        errors,
-        queued: returnQueued ? createRes.queuedBatchOps : [],
-        scene,
-        sceneItemErrors: [],
-      };
+  }
+
+  if (createFailed) {
+    if (verbose) {
+      onMsg(`Scene item creation failed at depth ${depth}.`);
+    }
+  } else {
+    if (verbose) {
+      onMsg(
+        `Scene item creation complete for ${itemCount} scene items with max depth of ${
+          depthSortedItems.length - 1
+        }.`
+      );
+
+      if (resultBatchErrors.length) {
+        onMsg(`Batch errors: ${resultBatchErrors.length}`);
+      }
+      if (resultItemErrors.length) {
+        onMsg(`Scene item errors: ${resultItemErrors.length}`);
+      }
     }
 
+    if (verbose) onMsg(`Committing scene and polling until ready...`);
+
+    await updateScene({
+      attributes: { state: UpdateSceneRequestDataAttributesStateEnum.Commit },
+      client,
+      sceneId,
+    });
+    await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
+
+    if (verbose) onMsg(`Fitting scene's camera to scene items...`);
+    sceneResult = (
+      await updateScene({
+        attributes: {
+          camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
+        },
+        client,
+        sceneId,
+      })
+    ).scene;
+  }
+
+  if (verbose) {
+    const formatTime = (seconds: number): string => {
+      const h = Math.floor(seconds / 3600);
+      const m = Math.floor((seconds % 3600) / 60);
+      const s = Math.round(seconds % 60);
+      return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
+        .filter(Boolean)
+        .join(':');
+    };
+    onMsg(
+      `Scene creation completed in ${formatTime(
+        Number(hrtime.bigint() - startTime) / 1000000000
+      )}.`
+    );
+  }
+  return {
+    errors: resultBatchErrors,
+    queued: returnQueued ? resultQueuedOps : [],
+    scene: sceneResult,
+    sceneItemErrors: resultItemErrors,
+  };
+}
+
+function toMetadataOrUndefined(
+  value: string | undefined,
+  condition = true
+): MetadataValue {
+  return condition && defined(value)
+    ? {
+        type: MetadataValueTypeEnum.String,
+        value,
+      }
+    : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      undefined!;
+}
+
+const createSceneItemBatch = async ({
+  client,
+  createSceneItemReqs: createItemReqs,
+  failFast,
+  onProgress,
+  parallelism,
+  sceneId,
+  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+}: CreateSceneItemBatchReq): Promise<CreateSceneItemBatchRes> => {
+  let batchErrors: QueuedBatchOps[] = [];
+  let itemErrors: SceneItemError[] = [];
+
+  const createRes = await createSceneItems({
+    client,
+    createSceneItemReqs: createItemReqs,
+    failFast,
+    onProgress,
+    parallelism,
+    sceneId,
+  });
+
+  const { a: batchOps, b: errors } = partition(createRes.queuedBatchOps, (i) =>
+    isQueuedJob(i.res)
+  );
+  if (errors.length) {
+    batchErrors = batchErrors.concat(errors);
+  }
+  // Nothing succeeded, return early as something is likely wrong
+  if (batchOps.length === 0 || errors.length === createRes.chunks) {
+    return { batchOps, batchErrors, itemErrors };
+  } else {
     const limit = pLimit(Math.min(parallelism, 20));
     async function poll({
       ops,
@@ -261,88 +471,40 @@ export async function createSceneAndSceneItems({
       }
       return r;
     }
+
     // eslint-disable-next-line no-await-in-loop
     const batchRes = await Promise.all(
-      queuedOps.map((is) =>
+      batchOps.map((is) =>
         limit<QueuedBatchOps[], PollQueuedJobRes<Batch>>(poll, is)
       )
     );
-    const batchItemErrors = batchRes
-      .flatMap((b, i) =>
+    itemErrors = itemErrors.concat(
+      batchRes.flatMap((b, i) =>
         isBatch(b.res)
-          ? b.res['vertexvis/batch:results'].map((r, j) =>
-              isApiError(r)
-                ? { req: queuedOps[i].ops[j].data, res: r }
-                : undefined
-            )
+          ? b.res['vertexvis/batch:results']
+              .map((r, j) => {
+                return isApiError(r)
+                  ? { req: batchOps[i].ops[j].data, res: r }
+                  : undefined;
+              })
+              .filter(defined)
           : []
       )
-      .filter(defined);
-    if (batchItemErrors.length) {
-      sceneItemErrors = sceneItemErrors.concat(batchItemErrors);
-      if (verbose)
-        onMsg(
-          `WARNING: ${batchItemErrors.length} scene item creation errors at depth ${depth}.`
-        );
-    }
-  }
-
-  if (verbose) {
-    onMsg(
-      `Scene item creation complete for ${itemCount} scene items with max depth of ${
-        depthSortedItems.length - 1
-      }.`
     );
-    if (batchErrors.length) {
-      onMsg(`  Batch errors: ${batchErrors.length}`);
-    }
-    if (sceneItemErrors.length) {
-      onMsg(`  Scene item errors: ${sceneItemErrors.length}`);
-    }
   }
 
-  if (verbose) onMsg(`Committing scene and polling until ready...`);
-
-  await updateScene({
-    attributes: { state: UpdateSceneRequestDataAttributesStateEnum.Commit },
-    client,
-    sceneId,
+  // if the full batch failed add batch item error for each item
+  errors.forEach((error) => {
+    console.log(error);
+    error.ops.forEach((op) => {
+      // `error.res` guaranteed to be non-null due to `isApiError()` condition above
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      itemErrors.push({ req: op.data, res: error.res! });
+    });
   });
-  await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
 
-  if (verbose) onMsg(`Fitting scene's camera to scene items...`);
-  const sceneResult = (
-    await updateScene({
-      attributes: {
-        camera: { type: CameraFitTypeEnum.FitVisibleSceneItems },
-      },
-      client,
-      sceneId,
-    })
-  ).scene;
-
-  if (verbose) {
-    const formatTime = (seconds: number): string => {
-      const h = Math.floor(seconds / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
-      const s = Math.round(seconds % 60);
-      return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
-        .filter(Boolean)
-        .join(':');
-    };
-    onMsg(
-      `Scene creation completed in ${formatTime(
-        Number(hrtime.bigint() - startTime) / 1000000000
-      )}.`
-    );
-  }
-  return {
-    errors: batchErrors,
-    queued: batchQueuedOps,
-    scene: sceneResult,
-    sceneItemErrors,
-  };
-}
+  return { batchOps, batchErrors, itemErrors };
+};
 
 /**
  * Create scene items within a scene.

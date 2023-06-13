@@ -249,7 +249,7 @@ export function isEncoded(s: string): boolean {
 
 export function isApiError(error: unknown): error is ApiError {
   const ae = error as ApiError;
-  return defined(ae.id) && defined(ae.status) && defined(ae.code);
+  return defined(ae.status) && defined(ae.code);
 }
 
 export function isFailure(obj: unknown): obj is Failure {
