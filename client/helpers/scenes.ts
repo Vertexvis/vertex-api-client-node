@@ -1,12 +1,8 @@
-import {
-  MetadataValue,
-  MetadataValueTypeEnum,
-  RelationshipData,
-} from '@vertexvis/api-client-node';
 import { AxiosResponse } from 'axios';
 import pLimit, { Limit } from 'p-limit';
 import { hrtime } from 'process';
 
+import { MetadataStringType, RelationshipData } from '../../index';
 import {
   ApiError,
   Batch,
@@ -449,10 +445,10 @@ export async function createSceneAndSceneItems({
 function toMetadataOrUndefined(
   value: string | undefined,
   condition = true
-): MetadataValue {
+): MetadataStringType {
   return condition && defined(value)
     ? {
-        type: MetadataValueTypeEnum.String,
+        type: 'string',
         value,
       }
     : // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
