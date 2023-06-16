@@ -211,7 +211,7 @@ export async function createSceneAndSceneItems({
       reqMap.set(reqParent, []);
     }
     const siblings = reqMap.get(reqParent);
-    if (req.data.attributes.ordinal === undefined) {
+    if (req.data.attributes.ordinal == null) {
       req.data.attributes.ordinal = siblings?.length;
     }
     siblings?.push(req);
@@ -222,7 +222,7 @@ export async function createSceneAndSceneItems({
   // fetch list of scene items with no parent (root items)
   let nextChildren: CreateSceneItemRequest[] = reqMap.get('') || [];
   reqMap.delete('');
-  while (nextChildren.length) {
+  while (nextChildren.length > 0) {
     depthSortedItems.push(nextChildren);
     nextChildren = nextChildren.flatMap((req) => {
       if (
