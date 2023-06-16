@@ -1,9 +1,10 @@
 import {
   MetadataValue,
   MetadataValueTypeEnum,
+  RelationshipData,
 } from '@vertexvis/api-client-node';
 import { AxiosResponse } from 'axios';
-import pLimit from 'p-limit';
+import pLimit, { Limit } from 'p-limit';
 import { hrtime } from 'process';
 
 import {
@@ -41,7 +42,14 @@ import {
   tryStream,
   VertexClient,
 } from '../index';
-import { arrayChunked, delay, isApiError, toAccept } from '../utils';
+import {
+  arrayChunked,
+  delay,
+  formatTime,
+  isApiError,
+  isSceneItemRelationship,
+  toAccept,
+} from '../utils';
 import {
   isBatch,
   isPollError,
@@ -91,6 +99,7 @@ export interface CreateSceneItemBatchRes {
   batchOps: QueuedBatchOps[];
   batchErrors: QueuedBatchOps[];
   itemErrors: SceneItemError[];
+  itemResults: SceneItemResult[];
 }
 
 export interface CreateSceneItemsReq extends Base {
@@ -103,8 +112,8 @@ export interface CreateSceneItemsReq extends Base {
   /** Callback with total number of requests and number complete. */
   readonly onProgress?: (complete: number, total: number) => void;
 
-  /** How many requests to run in parallel. */
-  readonly parallelism: number;
+  /** Limit for requests to run in parallel. */
+  readonly limit: Limit;
 }
 
 export interface CreateSceneItemsRes {
@@ -120,6 +129,12 @@ export interface QueuedBatchOps {
 export interface SceneItemError {
   readonly req: CreateSceneItemRequestData;
   readonly res?: ApiError;
+  placeholderItem?: RelationshipData;
+}
+
+export interface SceneItemResult {
+  readonly req: CreateSceneItemRequestData;
+  readonly res: RelationshipData | ApiError;
 }
 
 /**
@@ -154,6 +169,9 @@ export interface QueuedSceneItem {
   readonly res?: Failure | QueuedJob;
 }
 
+const defaultPolling: Polling = { intervalMs: 200, maxAttempts: 4500 }; // 15 minute timeout for batch completions
+const sceneReadyPolling: Polling = { intervalMs: 1000, maxAttempts: 3600 }; // one hour timeout for scene state ready
+
 /**
  * Create a scene with scene items.
  */
@@ -165,17 +183,18 @@ export async function createSceneAndSceneItems({
   onMsg = console.log,
   onProgress,
   parallelism,
-  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  polling = defaultPolling,
   returnQueued = false,
   verbose,
 }: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsRes> {
+  const limit = pLimit(Math.min(parallelism, 100));
   const startTime = hrtime.bigint();
   if (verbose) onMsg(`Creating scene...`);
   const scene = (
     await client.scenes.createScene({ createSceneRequest: createSceneReq() })
   ).data;
   const sceneId = scene.data.id;
-
+  if (verbose) onMsg(`Scene ID: ${sceneId}`);
   if (verbose) onMsg(`Creating scene items...`);
   let itemCount = 0;
   let createFailed = false;
@@ -261,7 +280,7 @@ export async function createSceneAndSceneItems({
         createSceneItemReqs: createItemReqs,
         failFast,
         onProgress,
-        parallelism,
+        limit,
         sceneId,
         polling,
       });
@@ -280,9 +299,11 @@ export async function createSceneAndSceneItems({
         break;
       } else {
         // evaluate item errors and generate retry list
-        const retries: CreateSceneItemRequest[] = batchItemErrors
-          .filter((v) => isPartNotFoundError(v.res))
-          .map<CreateSceneItemRequest>((itemError) => {
+        const retryErrors: SceneItemError[] = batchItemErrors.filter((v) =>
+          isPartNotFoundError(v.res)
+        );
+        const retries: CreateSceneItemRequest[] =
+          retryErrors.map<CreateSceneItemRequest>((itemError) => {
             const item = itemError.req;
             return {
               data: {
@@ -326,20 +347,25 @@ export async function createSceneAndSceneItems({
           onMsg(
             `Creating ${retries.length} placeholder scene items at depth ${depth}.`
           );
-          // console.log(JSON.stringify(retries, null, 2)); //TODO: remove log statement
           // wait for placeholders to be created
-          // eslint-disable-next-line no-await-in-loop
-          await createSceneItemBatch({
-            client,
-            createSceneItemReqs: retries,
-            failFast,
-            onProgress,
-            parallelism,
-            sceneId,
-            polling,
+          const { itemResults: placeholderItemResults } =
+            // eslint-disable-next-line no-await-in-loop
+            await createSceneItemBatch({
+              client,
+              createSceneItemReqs: retries,
+              failFast,
+              onProgress,
+              limit,
+              sceneId,
+              polling,
+            });
+
+          // attach placeholder references to item errors
+          placeholderItemResults.forEach((resultItem, i) => {
+            if (isSceneItemRelationship(resultItem.res)) {
+              retryErrors[i].placeholderItem = resultItem.res;
+            }
           });
-          // TODO: Decide if we should do anything with any errors or positive results here
-          // Should we provide an indication somehow for previous error items that got placeholders created?
         }
       }
     }
@@ -347,12 +373,18 @@ export async function createSceneAndSceneItems({
 
   if (createFailed) {
     if (verbose) {
-      onMsg(`Scene item creation failed at depth ${depth}.`);
+      onMsg(
+        `Scene item creation failed in ${formatTime(
+          Number(hrtime.bigint() - startTime) / 1000000000
+        )} at depth ${depth}.`
+      );
     }
   } else {
     if (verbose) {
       onMsg(
-        `Scene item creation complete for ${itemCount} scene items with max depth of ${
+        `Scene item creation completed in ${formatTime(
+          Number(hrtime.bigint() - startTime) / 1000000000
+        )} for ${itemCount} scene items with max depth of ${
           depthSortedItems.length - 1
         }.`
       );
@@ -372,7 +404,13 @@ export async function createSceneAndSceneItems({
       client,
       sceneId,
     });
-    await pollSceneReady({ client, id: sceneId, onMsg, polling, verbose });
+    await pollSceneReady({
+      client,
+      id: sceneId,
+      onMsg,
+      polling: sceneReadyPolling,
+      verbose,
+    });
 
     if (verbose) onMsg(`Fitting scene's camera to scene items...`);
     sceneResult = (
@@ -387,14 +425,6 @@ export async function createSceneAndSceneItems({
   }
 
   if (verbose) {
-    const formatTime = (seconds: number): string => {
-      const h = Math.floor(seconds / 3600);
-      const m = Math.floor((seconds % 3600) / 60);
-      const s = Math.round(seconds % 60);
-      return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
-        .filter(Boolean)
-        .join(':');
-    };
     onMsg(
       `Scene creation completed in ${formatTime(
         Number(hrtime.bigint() - startTime) / 1000000000
@@ -409,6 +439,13 @@ export async function createSceneAndSceneItems({
   };
 }
 
+/**
+ * Helper function for building a metadata string object.
+ *
+ * @param value Value to convert to metadata object
+ * @param condition Setting to `false` will cause result to be `undefined`
+ * @returns Instance of a `MetadataValue` object
+ */
 function toMetadataOrUndefined(
   value: string | undefined,
   condition = true
@@ -422,24 +459,30 @@ function toMetadataOrUndefined(
       undefined!;
 }
 
+/**
+ * This async function takes a long list of create scene item data and handles
+ * batch based scene item creation. Batch operation results and errors are
+ * returned to the caller.
+ */
 const createSceneItemBatch = async ({
   client,
   createSceneItemReqs: createItemReqs,
   failFast,
   onProgress,
-  parallelism,
+  limit,
   sceneId,
   polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
 }: CreateSceneItemBatchReq): Promise<CreateSceneItemBatchRes> => {
   let batchErrors: QueuedBatchOps[] = [];
   let itemErrors: SceneItemError[] = [];
+  let itemResults: SceneItemResult[] = [];
 
   const createRes = await createSceneItems({
     client,
     createSceneItemReqs: createItemReqs,
     failFast,
     onProgress,
-    parallelism,
+    limit,
     sceneId,
   });
 
@@ -451,9 +494,8 @@ const createSceneItemBatch = async ({
   }
   // Nothing succeeded, return early as something is likely wrong
   if (batchOps.length === 0 || errors.length === createRes.chunks) {
-    return { batchOps, batchErrors, itemErrors };
+    return { batchOps, batchErrors, itemErrors, itemResults };
   } else {
-    const limit = pLimit(Math.min(parallelism, 20));
     async function poll({
       ops,
       res,
@@ -478,18 +520,15 @@ const createSceneItemBatch = async ({
         limit<QueuedBatchOps[], PollQueuedJobRes<Batch>>(poll, is)
       )
     );
+    itemResults = batchRes.flatMap((b, i) =>
+      isBatch(b.res)
+        ? b.res['vertexvis/batch:results'].map((r, j) => {
+            return { req: batchOps[i].ops[j].data, res: r };
+          })
+        : []
+    );
     itemErrors = itemErrors.concat(
-      batchRes.flatMap((b, i) =>
-        isBatch(b.res)
-          ? b.res['vertexvis/batch:results']
-              .map((r, j) => {
-                return isApiError(r)
-                  ? { req: batchOps[i].ops[j].data, res: r }
-                  : undefined;
-              })
-              .filter(defined)
-          : []
-      )
+      itemResults.filter((resultItem) => isApiError(resultItem.res))
     );
   }
 
@@ -503,7 +542,7 @@ const createSceneItemBatch = async ({
     });
   });
 
-  return { batchOps, batchErrors, itemErrors };
+  return { batchOps, batchErrors, itemErrors, itemResults };
 };
 
 /**
@@ -513,10 +552,9 @@ export async function createSceneItems({
   client,
   createSceneItemReqs,
   failFast,
-  parallelism,
+  limit,
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
-  const limit = pLimit(parallelism);
   const batchSize = 500;
 
   const opChunks = arrayChunked(
