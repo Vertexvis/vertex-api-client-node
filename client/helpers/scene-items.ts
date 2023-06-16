@@ -1,6 +1,8 @@
 import { CreateSceneItemRequest, SceneItem } from '../../index';
 import {
   BaseReq,
+  defined,
+  isApiError,
   isPollError,
   MaxAttempts,
   Polling,
@@ -8,6 +10,29 @@ import {
   pollQueuedJob,
   throwOnError,
 } from '../index';
+
+export enum SceneItemErrorStatus {
+  NotFound = '404',
+  ServerError = '500',
+}
+
+export enum SceneItemErrorCode {
+  NotFound = 'NotFound',
+  ServerError = 'ServerError',
+}
+
+export enum SceneItemErrorSourcePointer {
+  Parent = '/body/data/attributes/parent',
+  SourcePart = '/body/data/relationships/source/data',
+}
+
+export enum SceneItemSystemMetadata {
+  IsMissingGeometry = 'VERTEX_IS_MISSING_GEOMETRY',
+  MissingGeometrySetId = 'VERTEX_MISSING_GEOMETRY_SET_ID',
+  MissingPartRevisionId = 'VERTEX_MISSING_PART_REVISION_ID',
+  MissingSuppliedPartId = 'VERTEX_MISSING_SUPPLIED_PART_ID',
+  MissingSuppliedPartRevisionId = 'VERTEX_MISSING_SUPPLIED_PART_REVISION_ID',
+}
 
 /**
  * Create scene item arguments.
@@ -52,4 +77,24 @@ export async function createSceneItem({
   if (verbose) onMsg(`Created scene-item ${pollRes.res.data.id}`);
 
   return pollRes.res;
+}
+
+export function isPartNotFoundError(e: unknown): boolean {
+  return (
+    defined(e) &&
+    isApiError(e) &&
+    e.code === SceneItemErrorCode.NotFound &&
+    e.source !== undefined &&
+    e.source.pointer === SceneItemErrorSourcePointer.SourcePart
+  );
+}
+
+export function isParentNotFoundError(e: unknown): boolean {
+  return (
+    defined(e) &&
+    isApiError(e) &&
+    e.code === SceneItemErrorCode.NotFound &&
+    e.source !== undefined &&
+    e.source.pointer === SceneItemErrorSourcePointer.Parent
+  );
 }

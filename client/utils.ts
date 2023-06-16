@@ -11,6 +11,7 @@ import {
   Oauth2Api,
   OAuth2Token,
   QueuedJob,
+  RelationshipData,
 } from '../index';
 
 export interface Cursors {
@@ -249,7 +250,14 @@ export function isEncoded(s: string): boolean {
 
 export function isApiError(error: unknown): error is ApiError {
   const ae = error as ApiError;
-  return defined(ae.id) && defined(ae.status) && defined(ae.code);
+  return defined(ae.status) && defined(ae.code);
+}
+
+export function isSceneItemRelationship(
+  data: unknown
+): data is RelationshipData {
+  const rd = data as RelationshipData;
+  return defined(rd.id) && defined(rd.type) && rd.type === 'scene-item';
 }
 
 export function isFailure(obj: unknown): obj is Failure {
@@ -478,4 +486,18 @@ function arrayLenEq(
   b: number[] | number[][]
 ): boolean {
   return Array.isArray(a) && Array.isArray(b) && a.length === b.length;
+}
+
+/**
+ * Formats a number in seconds as a time formatted string.
+ * @param seconds number of seconds to be formatted
+ * @returns `string` in the form of HH:MM:SS based on input
+ */
+export function formatTime(seconds: number): string {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = Math.round(seconds % 60);
+  return [h, m > 9 ? m : h ? '0' + m : m || '0', s > 9 ? s : '0' + s]
+    .filter(Boolean)
+    .join(':');
 }
