@@ -9679,7 +9679,8 @@ components:
         material:
           $ref: '#/components/schemas/ColorMaterialNullable'
         selected:
-          $ref: '#/components/schemas/ColorMaterialNullable'
+          nullable: true
+          type: boolean
         phantom:
           nullable: true
           type: boolean
@@ -9715,7 +9716,7 @@ components:
         material:
           $ref: '#/components/schemas/ColorMaterial'
         selected:
-          $ref: '#/components/schemas/ColorMaterial'
+          type: boolean
         phantom:
           description: Phantom state of the item.
           type: boolean
@@ -10513,7 +10514,7 @@ components:
         material:
           $ref: '#/components/schemas/ColorMaterial'
         selected:
-          $ref: '#/components/schemas/ColorMaterial'
+          type: boolean
         phantom:
           type: boolean
       required:

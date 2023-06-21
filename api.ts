@@ -1318,10 +1318,10 @@ export interface CreateSceneItemOverrideRequestDataAttributes {
   material?: ColorMaterial;
   /**
    *
-   * @type {ColorMaterial}
+   * @type {boolean}
    * @memberof CreateSceneItemOverrideRequestDataAttributes
    */
-  selected?: ColorMaterial;
+  selected?: boolean;
   /**
    * Phantom state of the item.
    * @type {boolean}
@@ -4261,10 +4261,10 @@ export interface SceneItemOverrideDataAttributes {
   material?: ColorMaterial;
   /**
    *
-   * @type {ColorMaterial}
+   * @type {boolean}
    * @memberof SceneItemOverrideDataAttributes
    */
-  selected?: ColorMaterial;
+  selected?: boolean;
   /**
    *
    * @type {boolean}
@@ -5268,10 +5268,10 @@ export interface UpdateSceneItemOverrideRequestDataAttributes {
   material?: ColorMaterialNullable | null;
   /**
    *
-   * @type {ColorMaterialNullable}
+   * @type {boolean}
    * @memberof UpdateSceneItemOverrideRequestDataAttributes
    */
-  selected?: ColorMaterialNullable | null;
+  selected?: boolean | null;
   /**
    *
    * @type {boolean}
