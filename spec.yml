@@ -9684,6 +9684,9 @@ components:
         phantom:
           nullable: true
           type: boolean
+        endItem:
+          nullable: true
+          type: boolean
       type: object
     UpdateSceneItemOverrideRequest_data:
       properties:
@@ -9719,6 +9722,9 @@ components:
           type: boolean
         phantom:
           description: Phantom state of the item.
+          type: boolean
+        endItem:
+          description: Whether this item is an end item.
           type: boolean
       type: object
     CreateSceneItemOverrideRequest_data_relationships:
@@ -9779,6 +9785,9 @@ components:
           type: object
         phantom:
           description: Phantom state of the item.
+          type: boolean
+        endItem:
+          description: Whether this item is an end item.
           type: boolean
       type: object
     UpdateSceneItemRequest_data_relationships:
@@ -10350,6 +10359,8 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        endItem:
+          type: boolean
         materialOverride:
           $ref: '#/components/schemas/ColorMaterial'
         metadata:
@@ -10517,6 +10528,8 @@ components:
           type: boolean
         phantom:
           type: boolean
+        endItem:
+          type: boolean
       required:
         - created
       type: object
@@ -10592,6 +10605,9 @@ components:
           type: boolean
         phantom:
           description: Phantom state of the item.
+          type: boolean
+        endItem:
+          description: Whether this item is an end item.
           type: boolean
         metadata:
           additionalProperties:
