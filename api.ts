@@ -1328,6 +1328,12 @@ export interface CreateSceneItemOverrideRequestDataAttributes {
    * @memberof CreateSceneItemOverrideRequestDataAttributes
    */
   phantom?: boolean;
+  /**
+   * Whether this item is an end item.
+   * @type {boolean}
+   * @memberof CreateSceneItemOverrideRequestDataAttributes
+   */
+  endItem?: boolean;
 }
 /**
  *
@@ -1446,6 +1452,12 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   phantom?: boolean;
+  /**
+   * Whether this item is an end item.
+   * @type {boolean}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  endItem?: boolean;
   /**
    * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
@@ -4078,6 +4090,12 @@ export interface SceneItemDataAttributes {
   created?: string;
   /**
    *
+   * @type {boolean}
+   * @memberof SceneItemDataAttributes
+   */
+  endItem?: boolean;
+  /**
+   *
    * @type {ColorMaterial}
    * @memberof SceneItemDataAttributes
    */
@@ -4271,6 +4289,12 @@ export interface SceneItemOverrideDataAttributes {
    * @memberof SceneItemOverrideDataAttributes
    */
   phantom?: boolean;
+  /**
+   *
+   * @type {boolean}
+   * @memberof SceneItemOverrideDataAttributes
+   */
+  endItem?: boolean;
 }
 /**
  *
@@ -5278,6 +5302,12 @@ export interface UpdateSceneItemOverrideRequestDataAttributes {
    * @memberof UpdateSceneItemOverrideRequestDataAttributes
    */
   phantom?: boolean | null;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UpdateSceneItemOverrideRequestDataAttributes
+   */
+  endItem?: boolean | null;
 }
 /**
  *
@@ -5372,6 +5402,12 @@ export interface UpdateSceneItemRequestDataAttributes {
    * @memberof UpdateSceneItemRequestDataAttributes
    */
   phantom?: boolean;
+  /**
+   * Whether this item is an end item.
+   * @type {boolean}
+   * @memberof UpdateSceneItemRequestDataAttributes
+   */
+  endItem?: boolean;
 }
 /**
  *
