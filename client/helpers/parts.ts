@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { ReadStream } from 'fs';
 
 import {
   CreateFileRequest,
@@ -39,7 +40,7 @@ export interface CreatePartFromFileReq extends BaseReq {
   readonly createPartReq: (fileId: string) => CreatePartRequest;
 
   /** File data. */
-  readonly fileData: Buffer;
+  readonly fileData: Buffer | ReadStream;
 
   /** {@link Polling} */
   readonly polling?: Polling;
