@@ -4284,14 +4284,13 @@ paths:
           style: form
         - description:
             Comma-separated list of fields to return in response. An empty
-            value returns no fields. `sceneItemCount` and `metadata` are only returned
-            if explicitly requested.
+            value returns no fields. `metadata` is only returned if explicitly requested.
           explode: true
           in: query
           name: fields[scene]
           required: false
           schema:
-            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,metadata
             type: string
           style: form
         - description: |
@@ -4303,6 +4302,7 @@ paths:
           schema:
             additionalProperties:
               type: string
+            example: filter[metadata][key1]=test
             type: object
           style: form
       responses:
@@ -5454,76 +5454,10 @@ paths:
         - OAuth2: []
       tags:
         - translation-inspections
-  /queued-translation-jobs/{id}:
+  /queued-translation-jobs:
     get:
-      description:
-        Get a `queued-translation-job`. The response is either the status
-        if `running` or `error` or, upon completion, the `part-revision` that was
-        created. Once created, create scenes via the createScene API. For details,
-        see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
-        guide.
-      operationId: getQueuedTranslationJob
-      parameters:
-        - description: The `queued-translation` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/QueuedTranslationJob'
-          description: OK
-        '301':
-          description: Moved Permanently
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '401'
-                    code: Unauthorized
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '404':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '404'
-                    code: NotFound
-                    title: The requested resource was not found.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Not Found
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '415'
-                    code: UnsupportedMediaType
-                    title:
-                      The provided media type is not supported. Update the Content-Type
-                      header to application/vnd.api+json and try again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - translation-inspections
-  /queued-translations:
-    get:
-      description: Get `queued-translation`s.
-      operationId: getQueuedTranslations
+      description: Get all current translation jobs in progress.
+      operationId: getQueuedTranslationJobs
       parameters:
         - description: The cursor for the next page of items.
           explode: true
@@ -5602,11 +5536,166 @@ paths:
         - OAuth2: []
       tags:
         - translation-inspections
-  /queued-translations/{id}:
+  /queued-translation-jobs/{id}:
     get:
       description:
-        Get a `queued-translation`. The response is either the status if
-        `running` or `error` or, upon completion, redirects to the created `part-revision`.
+        Get a `queued-translation-job`. The response is either the status
+        if `running` or `error` or, upon completion, the `part-revision` that was
+        created. Once created, create scenes via the createScene API. For details,
+        see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        guide.
+      operationId: getQueuedTranslationJob
+      parameters:
+        - description: The `queued-translation` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedTranslationJob'
+          description: OK
+        '301':
+          description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - translation-inspections
+  /queued-translations:
+    get:
+      deprecated: true
+      description:
+        This has been deprecated and replaced by **queued-translation-jobs**
+        - Get `queued-translation`s.
+      operationId: getQueuedTranslations
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Status to filter on.
+          explode: true
+          in: query
+          name: filter[status]
+          required: false
+          schema:
+            example: running
+            maxLength: 1024
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJobList'
+          description: OK
+        '301':
+          description: Moved Permanently
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - translation-inspections
+  /queued-translations/{id}:
+    get:
+      deprecated: true
+      description:
+        This has been deprecated and replaced by **queued-translation-jobs/{id}**
+        - Get a `queued-translation`. The response is either the status if `running`
+        or `error` or, upon completion, redirects to the created `part-revision`.
         Once created, create scenes via the createScene API. For details, see our
         [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
         guide.
@@ -6485,6 +6574,18 @@ components:
         example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
         type: string
       style: form
+    ListScenesFields:
+      description:
+        Comma-separated list of fields to return in response. An empty
+        value returns no fields. `metadata` is only returned if explicitly requested.
+      explode: true
+      in: query
+      name: fields[scene]
+      required: false
+      schema:
+        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,metadata
+        type: string
+      style: form
     MetadataFilter:
       description: |
         Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: `filter[metadata][key1]=value1&filter[metadata][key]=value2`.
@@ -6495,6 +6596,7 @@ components:
       schema:
         additionalProperties:
           type: string
+        example: filter[metadata][key1]=test
         type: object
       style: form
     SceneViewStateFields:
@@ -7486,6 +7588,21 @@ components:
       required:
         - data
       type: object
+    QueuedJobList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/QueuedJobData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     QueuedTranslationJob:
       additionalProperties: false
       properties:
@@ -7503,21 +7620,6 @@ components:
           type: object
       required:
         - data
-      type: object
-    QueuedJobList:
-      additionalProperties: false
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/QueuedJobData'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
       type: object
     CreateExportRequest:
       additionalProperties: false

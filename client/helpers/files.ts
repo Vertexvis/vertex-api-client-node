@@ -1,3 +1,5 @@
+import { ReadStream } from 'fs';
+
 import {
   BaseReq,
   DeleteReq,
@@ -13,7 +15,7 @@ export interface UploadFileReq extends BaseReq {
   readonly createFileReq: CreateFileRequest;
 
   /** File data. */
-  readonly fileData: Buffer;
+  readonly fileData: Buffer | ReadStream;
 }
 
 /**
