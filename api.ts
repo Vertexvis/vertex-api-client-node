@@ -16716,7 +16716,7 @@ export const ScenesApiAxiosParamCreator = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17036,7 +17036,7 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17195,7 +17195,7 @@ export const ScenesApiFactory = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterName] Comma-separated list of names to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+     * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17356,7 +17356,7 @@ export interface ScenesApiGetScenesRequest {
   readonly filterSuppliedId?: string;
 
   /**
-   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;sceneItemCount&#x60; and &#x60;metadata&#x60; are only returned if explicitly requested.
+   * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
    * @type {string}
    * @memberof ScenesApiGetScenes
    */
@@ -18152,9 +18152,10 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * This has been deprecated and replaced by **queued-translation-jobs/{id}** - Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;queued-translation&#x60; ID.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     getQueuedTranslation: async (
@@ -18258,11 +18259,76 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Get `queued-translation`s.
+     * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
      * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslationJobs: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/queued-translation-jobs`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterStatus !== undefined) {
+        localVarQueryParameter['filter[status]'] = filterStatus;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     getQueuedTranslations: async (
@@ -18386,9 +18452,10 @@ export const TranslationInspectionsApiFp = function (
       );
     },
     /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * This has been deprecated and replaced by **queued-translation-jobs/{id}** - Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;queued-translation&#x60; ID.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     async getQueuedTranslation(
@@ -18431,11 +18498,42 @@ export const TranslationInspectionsApiFp = function (
       );
     },
     /**
-     * Get `queued-translation`s.
+     * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
      * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedTranslationJobs(
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJobList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedTranslationJobs(
+          pageCursor,
+          pageSize,
+          filterStatus,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     async getQueuedTranslations(
@@ -18506,9 +18604,10 @@ export const TranslationInspectionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+     * This has been deprecated and replaced by **queued-translation-jobs/{id}** - Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;queued-translation&#x60; ID.
      * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     getQueuedTranslation(id: string, options?: any): AxiosPromise<QueuedJob> {
@@ -18531,11 +18630,30 @@ export const TranslationInspectionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Get `queued-translation`s.
+     * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
      * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedTranslationJobs(
+      pageCursor?: string,
+      pageSize?: number,
+      filterStatus?: string,
+      options?: any
+    ): AxiosPromise<QueuedJobList> {
+      return localVarFp
+        .getQueuedTranslationJobs(pageCursor, pageSize, filterStatus, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterStatus] Status to filter on.
+     * @param {*} [options] Override http request option.
+     * @deprecated
      * @throws {RequiredError}
      */
     getQueuedTranslations(
@@ -18605,6 +18723,34 @@ export interface TranslationInspectionsApiGetQueuedTranslationJobRequest {
    * @memberof TranslationInspectionsApiGetQueuedTranslationJob
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getQueuedTranslationJobs operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiGetQueuedTranslationJobsRequest
+ */
+export interface TranslationInspectionsApiGetQueuedTranslationJobsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Status to filter on.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
+   */
+  readonly filterStatus?: string;
 }
 
 /**
@@ -18678,9 +18824,10 @@ export class TranslationInspectionsApi extends BaseAPI {
   }
 
   /**
-   * Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+   * This has been deprecated and replaced by **queued-translation-jobs/{id}** - Get a `queued-translation`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `part-revision`. Once created, create scenes via the createScene API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
    * @param {TranslationInspectionsApiGetQueuedTranslationRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
+   * @deprecated
    * @throws {RequiredError}
    * @memberof TranslationInspectionsApi
    */
@@ -18710,9 +18857,31 @@ export class TranslationInspectionsApi extends BaseAPI {
   }
 
   /**
-   * Get `queued-translation`s.
+   * Get all current translation jobs in progress.
+   * @param {TranslationInspectionsApiGetQueuedTranslationJobsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TranslationInspectionsApi
+   */
+  public getQueuedTranslationJobs(
+    requestParameters: TranslationInspectionsApiGetQueuedTranslationJobsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return TranslationInspectionsApiFp(this.configuration)
+      .getQueuedTranslationJobs(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterStatus,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
    * @param {TranslationInspectionsApiGetQueuedTranslationsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
+   * @deprecated
    * @throws {RequiredError}
    * @memberof TranslationInspectionsApi
    */
