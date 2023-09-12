@@ -480,7 +480,7 @@ export const BatchOperationOpEnum = {
 } as const;
 
 export type BatchOperationOpEnum =
-  typeof BatchOperationOpEnum[keyof typeof BatchOperationOpEnum];
+  (typeof BatchOperationOpEnum)[keyof typeof BatchOperationOpEnum];
 
 /**
  * Target of batch operation.
@@ -507,7 +507,7 @@ export const BatchOperationRefTypeEnum = {
 } as const;
 
 export type BatchOperationRefTypeEnum =
-  typeof BatchOperationRefTypeEnum[keyof typeof BatchOperationRefTypeEnum];
+  (typeof BatchOperationRefTypeEnum)[keyof typeof BatchOperationRefTypeEnum];
 
 /**
  * 3D bounding-box
@@ -554,7 +554,7 @@ export const CameraFitTypeEnum = {
 } as const;
 
 export type CameraFitTypeEnum =
-  typeof CameraFitTypeEnum[keyof typeof CameraFitTypeEnum];
+  (typeof CameraFitTypeEnum)[keyof typeof CameraFitTypeEnum];
 
 /**
  *
@@ -581,7 +581,7 @@ export const ChangeMaterialOperationTypeEnum = {
 } as const;
 
 export type ChangeMaterialOperationTypeEnum =
-  typeof ChangeMaterialOperationTypeEnum[keyof typeof ChangeMaterialOperationTypeEnum];
+  (typeof ChangeMaterialOperationTypeEnum)[keyof typeof ChangeMaterialOperationTypeEnum];
 
 /**
  *
@@ -608,7 +608,7 @@ export const ChangeTransformOperationTypeEnum = {
 } as const;
 
 export type ChangeTransformOperationTypeEnum =
-  typeof ChangeTransformOperationTypeEnum[keyof typeof ChangeTransformOperationTypeEnum];
+  (typeof ChangeTransformOperationTypeEnum)[keyof typeof ChangeTransformOperationTypeEnum];
 
 /**
  *
@@ -635,7 +635,7 @@ export const ChangeVisibilityOperationTypeEnum = {
 } as const;
 
 export type ChangeVisibilityOperationTypeEnum =
-  typeof ChangeVisibilityOperationTypeEnum[keyof typeof ChangeVisibilityOperationTypeEnum];
+  (typeof ChangeVisibilityOperationTypeEnum)[keyof typeof ChangeVisibilityOperationTypeEnum];
 
 /**
  *
@@ -656,7 +656,7 @@ export const ClearMaterialOperationTypeEnum = {
 } as const;
 
 export type ClearMaterialOperationTypeEnum =
-  typeof ClearMaterialOperationTypeEnum[keyof typeof ClearMaterialOperationTypeEnum];
+  (typeof ClearMaterialOperationTypeEnum)[keyof typeof ClearMaterialOperationTypeEnum];
 
 /**
  *
@@ -677,7 +677,7 @@ export const ClearTransformOperationTypeEnum = {
 } as const;
 
 export type ClearTransformOperationTypeEnum =
-  typeof ClearTransformOperationTypeEnum[keyof typeof ClearTransformOperationTypeEnum];
+  (typeof ClearTransformOperationTypeEnum)[keyof typeof ClearTransformOperationTypeEnum];
 
 /**
  * RGB color.
@@ -1093,6 +1093,69 @@ export interface CreateHitRequestDataAttributes {
 /**
  *
  * @export
+ * @interface CreatePartRenditionRequest
+ */
+export interface CreatePartRenditionRequest {
+  /**
+   *
+   * @type {CreatePartRenditionRequestData}
+   * @memberof CreatePartRenditionRequest
+   */
+  data: CreatePartRenditionRequestData;
+}
+/**
+ * Create a new part rendition.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part rendition with an empty geometry and return a `201` status code.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, the returned value will include a `part-rendition` that references the translated geometry.
+ * @export
+ * @interface CreatePartRenditionRequestData
+ */
+export interface CreatePartRenditionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreatePartRenditionRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreatePartRenditionRequestDataAttributes}
+   * @memberof CreatePartRenditionRequestData
+   */
+  attributes: CreatePartRenditionRequestDataAttributes;
+  /**
+   *
+   * @type {CreateGeometrySetRequestDataRelationships}
+   * @memberof CreatePartRenditionRequestData
+   */
+  relationships?: CreateGeometrySetRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface CreatePartRenditionRequestDataAttributes
+ */
+export interface CreatePartRenditionRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePartRenditionRequestDataAttributes
+   */
+  name?: string;
+  /**
+   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * @type {string}
+   * @memberof CreatePartRenditionRequestDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   * Whether or not to replace the default rendition for the part revision with the newly created rendition.
+   * @type {boolean}
+   * @memberof CreatePartRenditionRequestDataAttributes
+   */
+  makeDefault?: boolean;
+}
+/**
+ *
+ * @export
  * @interface CreatePartRequest
  */
 export interface CreatePartRequest {
@@ -1485,14 +1548,15 @@ export interface CreateSceneItemRequestDataRelationships {
    */
   parent?: SceneItemRelationship;
   /**
-   * Relationship to a `geometry-set`, `part-revision`, or `scene`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
+   * Relationship to a `geometry-set`, `part-revision`, `part-rendition`, or `scene`.
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship}
    * @memberof CreateSceneItemRequestDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
-    | SceneRelationship;
+    | SceneRelationship
+    | PartRenditionRelationship;
   /**
    *
    * @type {SceneItemRelationship}
@@ -1987,7 +2051,7 @@ export const DeselectOperationTypeEnum = {
 } as const;
 
 export type DeselectOperationTypeEnum =
-  typeof DeselectOperationTypeEnum[keyof typeof DeselectOperationTypeEnum];
+  (typeof DeselectOperationTypeEnum)[keyof typeof DeselectOperationTypeEnum];
 
 /**
  * An item\'s height and width.
@@ -2128,7 +2192,7 @@ export const ExportRelationshipDataTypeEnum = {
 } as const;
 
 export type ExportRelationshipDataTypeEnum =
-  typeof ExportRelationshipDataTypeEnum[keyof typeof ExportRelationshipDataTypeEnum];
+  (typeof ExportRelationshipDataTypeEnum)[keyof typeof ExportRelationshipDataTypeEnum];
 
 /**
  * Relationship to an `export`.
@@ -2168,7 +2232,7 @@ export const ExportStateRelationshipDataTypeEnum = {
 } as const;
 
 export type ExportStateRelationshipDataTypeEnum =
-  typeof ExportStateRelationshipDataTypeEnum[keyof typeof ExportStateRelationshipDataTypeEnum];
+  (typeof ExportStateRelationshipDataTypeEnum)[keyof typeof ExportStateRelationshipDataTypeEnum];
 
 /**
  *
@@ -2370,7 +2434,7 @@ export const FileRelationshipDataTypeEnum = {
 } as const;
 
 export type FileRelationshipDataTypeEnum =
-  typeof FileRelationshipDataTypeEnum[keyof typeof FileRelationshipDataTypeEnum];
+  (typeof FileRelationshipDataTypeEnum)[keyof typeof FileRelationshipDataTypeEnum];
 
 /**
  *
@@ -2479,7 +2543,7 @@ export const GeometrySetRelationshipDataTypeEnum = {
 } as const;
 
 export type GeometrySetRelationshipDataTypeEnum =
-  typeof GeometrySetRelationshipDataTypeEnum[keyof typeof GeometrySetRelationshipDataTypeEnum];
+  (typeof GeometrySetRelationshipDataTypeEnum)[keyof typeof GeometrySetRelationshipDataTypeEnum];
 
 /**
  *
@@ -3079,7 +3143,7 @@ export const PartDataRelationshipsPartRevisionsTypeEnum = {
 } as const;
 
 export type PartDataRelationshipsPartRevisionsTypeEnum =
-  typeof PartDataRelationshipsPartRevisionsTypeEnum[keyof typeof PartDataRelationshipsPartRevisionsTypeEnum];
+  (typeof PartDataRelationshipsPartRevisionsTypeEnum)[keyof typeof PartDataRelationshipsPartRevisionsTypeEnum];
 
 /**
  *
@@ -3125,7 +3189,147 @@ export const PartRelationshipDataTypeEnum = {
 } as const;
 
 export type PartRelationshipDataTypeEnum =
-  typeof PartRelationshipDataTypeEnum[keyof typeof PartRelationshipDataTypeEnum];
+  (typeof PartRelationshipDataTypeEnum)[keyof typeof PartRelationshipDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PartRendition
+ */
+export interface PartRendition {
+  /**
+   *
+   * @type {PartRenditionData}
+   * @memberof PartRendition
+   */
+  data: PartRenditionData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartRendition
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PartRenditionData
+ */
+export interface PartRenditionData {
+  /**
+   *
+   * @type {string}
+   * @memberof PartRenditionData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartRenditionData
+   */
+  id: string;
+  /**
+   *
+   * @type {PartRenditionDataAttributes}
+   * @memberof PartRenditionData
+   */
+  attributes: PartRenditionDataAttributes;
+  /**
+   *
+   * @type {PartRenditionDataRelationships}
+   * @memberof PartRenditionData
+   */
+  relationships: PartRenditionDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartRenditionData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PartRenditionDataAttributes
+ */
+export interface PartRenditionDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof PartRenditionDataAttributes
+   */
+  created?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRenditionDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRenditionDataAttributes
+   */
+  name?: string;
+}
+/**
+ *
+ * @export
+ * @interface PartRenditionDataRelationships
+ */
+export interface PartRenditionDataRelationships {
+  /**
+   *
+   * @type {GeometrySetRelationshipData}
+   * @memberof PartRenditionDataRelationships
+   */
+  geometrySet?: GeometrySetRelationshipData;
+  /**
+   *
+   * @type {PartRevisionRelationship}
+   * @memberof PartRenditionDataRelationships
+   */
+  partRevision?: PartRevisionRelationship;
+}
+/**
+ * Relationship to a `part-rendition`.
+ * @export
+ * @interface PartRenditionRelationship
+ */
+export interface PartRenditionRelationship {
+  /**
+   *
+   * @type {PartRenditionRelationshipData}
+   * @memberof PartRenditionRelationship
+   */
+  data: PartRenditionRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PartRenditionRelationshipData
+ */
+export interface PartRenditionRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PartRenditionRelationshipData
+   */
+  type: PartRenditionRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartRenditionRelationshipData
+   */
+  id: string;
+}
+
+export const PartRenditionRelationshipDataTypeEnum = {
+  PartRendition: 'part-rendition',
+} as const;
+
+export type PartRenditionRelationshipDataTypeEnum =
+  (typeof PartRenditionRelationshipDataTypeEnum)[keyof typeof PartRenditionRelationshipDataTypeEnum];
 
 /**
  *
@@ -3239,6 +3443,12 @@ export interface PartRevisionDataRelationships {
    * @memberof PartRevisionDataRelationships
    */
   part?: PartRelationshipData;
+  /**
+   *
+   * @type {PartRenditionRelationship}
+   * @memberof PartRevisionDataRelationships
+   */
+  defaultPartRendition?: PartRenditionRelationship;
 }
 /**
  * A reference to an existing PartRevision. Specify one and only one of referenceId or suppliedReferenceId to refer to a revision.
@@ -3388,7 +3598,7 @@ export const QueryAll = {
   All: 'all',
 } as const;
 
-export type QueryAll = typeof QueryAll[keyof typeof QueryAll];
+export type QueryAll = (typeof QueryAll)[keyof typeof QueryAll];
 
 /**
  *
@@ -3428,7 +3638,7 @@ export const QueryByCollectionDataTypeEnum = {
 } as const;
 
 export type QueryByCollectionDataTypeEnum =
-  typeof QueryByCollectionDataTypeEnum[keyof typeof QueryByCollectionDataTypeEnum];
+  (typeof QueryByCollectionDataTypeEnum)[keyof typeof QueryByCollectionDataTypeEnum];
 
 /**
  *
@@ -3456,7 +3666,7 @@ export const QueryByCollectionDataAttributesTypeEnum = {
 } as const;
 
 export type QueryByCollectionDataAttributesTypeEnum =
-  typeof QueryByCollectionDataAttributesTypeEnum[keyof typeof QueryByCollectionDataAttributesTypeEnum];
+  (typeof QueryByCollectionDataAttributesTypeEnum)[keyof typeof QueryByCollectionDataAttributesTypeEnum];
 
 /**
  *
@@ -3496,7 +3706,7 @@ export const QueryByIdDataTypeEnum = {
 } as const;
 
 export type QueryByIdDataTypeEnum =
-  typeof QueryByIdDataTypeEnum[keyof typeof QueryByIdDataTypeEnum];
+  (typeof QueryByIdDataTypeEnum)[keyof typeof QueryByIdDataTypeEnum];
 
 /**
  *
@@ -3524,7 +3734,7 @@ export const QueryByIdDataAttributesTypeEnum = {
 } as const;
 
 export type QueryByIdDataAttributesTypeEnum =
-  typeof QueryByIdDataAttributesTypeEnum[keyof typeof QueryByIdDataAttributesTypeEnum];
+  (typeof QueryByIdDataAttributesTypeEnum)[keyof typeof QueryByIdDataAttributesTypeEnum];
 
 /**
  *
@@ -3634,10 +3844,10 @@ export interface QueuedTranslationJob {
   data: QueuedTranslationJobData;
   /**
    *
-   * @type {Array<GeometrySetData | PartRevisionData>}
+   * @type {Array<GeometrySetData | PartRevisionData | PartRenditionData>}
    * @memberof QueuedTranslationJob
    */
-  included?: Array<GeometrySetData | PartRevisionData>;
+  included?: Array<GeometrySetData | PartRevisionData | PartRenditionData>;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -3731,6 +3941,12 @@ export interface QueuedTranslationJobDataRelationships {
    * @memberof QueuedTranslationJobDataRelationships
    */
   partRevision?: PartRevisionRelationship;
+  /**
+   *
+   * @type {PartRenditionRelationship}
+   * @memberof QueuedTranslationJobDataRelationships
+   */
+  partRendition?: PartRenditionRelationship;
 }
 /**
  *
@@ -4158,19 +4374,26 @@ export interface SceneItemDataAttributes {
 export interface SceneItemDataRelationships {
   /**
    *
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship}
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship}
    * @memberof SceneItemDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
-    | SceneRelationship;
+    | SceneRelationship
+    | PartRenditionRelationship;
   /**
    *
    * @type {SceneItemRelationship}
    * @memberof SceneItemDataRelationships
    */
   parent?: SceneItemRelationship;
+  /**
+   *
+   * @type {PartRenditionRelationship}
+   * @memberof SceneItemDataRelationships
+   */
+  partRendition?: PartRenditionRelationship;
 }
 /**
  *
@@ -4372,7 +4595,7 @@ export const SceneItemRelationshipDataTypeEnum = {
 } as const;
 
 export type SceneItemRelationshipDataTypeEnum =
-  typeof SceneItemRelationshipDataTypeEnum[keyof typeof SceneItemRelationshipDataTypeEnum];
+  (typeof SceneItemRelationshipDataTypeEnum)[keyof typeof SceneItemRelationshipDataTypeEnum];
 
 /**
  *
@@ -4458,7 +4681,7 @@ export const SceneRelationshipDataTypeEnum = {
 } as const;
 
 export type SceneRelationshipDataTypeEnum =
-  typeof SceneRelationshipDataTypeEnum[keyof typeof SceneRelationshipDataTypeEnum];
+  (typeof SceneRelationshipDataTypeEnum)[keyof typeof SceneRelationshipDataTypeEnum];
 
 /**
  *
@@ -4642,7 +4865,7 @@ export const SceneViewRelationshipDataTypeEnum = {
 } as const;
 
 export type SceneViewRelationshipDataTypeEnum =
-  typeof SceneViewRelationshipDataTypeEnum[keyof typeof SceneViewRelationshipDataTypeEnum];
+  (typeof SceneViewRelationshipDataTypeEnum)[keyof typeof SceneViewRelationshipDataTypeEnum];
 
 /**
  *
@@ -4800,7 +5023,7 @@ export const SceneViewStateRelationshipDataTypeEnum = {
 } as const;
 
 export type SceneViewStateRelationshipDataTypeEnum =
-  typeof SceneViewStateRelationshipDataTypeEnum[keyof typeof SceneViewStateRelationshipDataTypeEnum];
+  (typeof SceneViewStateRelationshipDataTypeEnum)[keyof typeof SceneViewStateRelationshipDataTypeEnum];
 
 /**
  *
@@ -4840,7 +5063,7 @@ export const SelectOperationTypeEnum = {
 } as const;
 
 export type SelectOperationTypeEnum =
-  typeof SelectOperationTypeEnum[keyof typeof SelectOperationTypeEnum];
+  (typeof SelectOperationTypeEnum)[keyof typeof SelectOperationTypeEnum];
 
 /**
  *
@@ -5100,7 +5323,7 @@ export const UpdateAccountRequestDataAttributesStatusEnum = {
 } as const;
 
 export type UpdateAccountRequestDataAttributesStatusEnum =
-  typeof UpdateAccountRequestDataAttributesStatusEnum[keyof typeof UpdateAccountRequestDataAttributesStatusEnum];
+  (typeof UpdateAccountRequestDataAttributesStatusEnum)[keyof typeof UpdateAccountRequestDataAttributesStatusEnum];
 
 /**
  *
@@ -5510,7 +5733,7 @@ export const UpdateSceneRequestDataAttributesStateEnum = {
 } as const;
 
 export type UpdateSceneRequestDataAttributesStateEnum =
-  typeof UpdateSceneRequestDataAttributesStateEnum[keyof typeof UpdateSceneRequestDataAttributesStateEnum];
+  (typeof UpdateSceneRequestDataAttributesStateEnum)[keyof typeof UpdateSceneRequestDataAttributesStateEnum];
 
 /**
  *
@@ -5665,7 +5888,7 @@ export const UpdateWebhookSubscriptionRequestDataAttributesStatusEnum = {
 } as const;
 
 export type UpdateWebhookSubscriptionRequestDataAttributesStatusEnum =
-  typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
+  (typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum)[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
 
 /**
  * 3D vector.
@@ -5861,7 +6084,7 @@ export const WebhookEventDataRelationshipsOwnerDataTypeEnum = {
 } as const;
 
 export type WebhookEventDataRelationshipsOwnerDataTypeEnum =
-  typeof WebhookEventDataRelationshipsOwnerDataTypeEnum[keyof typeof WebhookEventDataRelationshipsOwnerDataTypeEnum];
+  (typeof WebhookEventDataRelationshipsOwnerDataTypeEnum)[keyof typeof WebhookEventDataRelationshipsOwnerDataTypeEnum];
 
 /**
  * Relationship to a `resource`.
@@ -5995,7 +6218,7 @@ export const WebhookSubscriptionDataAttributesStatusEnum = {
 } as const;
 
 export type WebhookSubscriptionDataAttributesStatusEnum =
-  typeof WebhookSubscriptionDataAttributesStatusEnum[keyof typeof WebhookSubscriptionDataAttributesStatusEnum];
+  (typeof WebhookSubscriptionDataAttributesStatusEnum)[keyof typeof WebhookSubscriptionDataAttributesStatusEnum];
 
 /**
  *
@@ -7833,6 +8056,201 @@ export class BatchesApi extends BaseAPI {
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * DefaultApi - axios parameter creator
+ * @export
+ */
+export const DefaultApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPartRendition: async (
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createPartRendition', 'id', id);
+      // verify required parameter 'createPartRenditionRequest' is not null or undefined
+      assertParamExists(
+        'createPartRendition',
+        'createPartRenditionRequest',
+        createPartRenditionRequest
+      );
+      const localVarPath = `/part-revisions/{id}/part-renditions`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createPartRenditionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * DefaultApi - functional programming interface
+ * @export
+ */
+export const DefaultApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration);
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createPartRendition(
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRendition>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createPartRendition(
+          id,
+          createPartRenditionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * DefaultApi - factory interface
+ * @export
+ */
+export const DefaultApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = DefaultApiFp(configuration);
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPartRendition(
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options?: any
+    ): AxiosPromise<PartRendition> {
+      return localVarFp
+        .createPartRendition(id, createPartRenditionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createPartRendition operation in DefaultApi.
+ * @export
+ * @interface DefaultApiCreatePartRenditionRequest
+ */
+export interface DefaultApiCreatePartRenditionRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof DefaultApiCreatePartRendition
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreatePartRenditionRequest}
+   * @memberof DefaultApiCreatePartRendition
+   */
+  readonly createPartRenditionRequest: CreatePartRenditionRequest;
+}
+
+/**
+ * DefaultApi - object-oriented interface
+ * @export
+ * @class DefaultApi
+ * @extends {BaseAPI}
+ */
+export class DefaultApi extends BaseAPI {
+  /**
+   *
+   * @param {DefaultApiCreatePartRenditionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DefaultApi
+   */
+  public createPartRendition(
+    requestParameters: DefaultApiCreatePartRenditionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return DefaultApiFp(this.configuration)
+      .createPartRendition(
+        requestParameters.id,
+        requestParameters.createPartRenditionRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
