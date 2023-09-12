@@ -10396,6 +10396,7 @@ components:
             mapping:
               jt: '#/components/schemas/CADExportConfig'
               step: '#/components/schemas/CADExportConfig'
+              x_t: '#/components/schemas/CADExportConfig'
             propertyName: format
           oneOf:
             - $ref: '#/components/schemas/CADExportConfig'
