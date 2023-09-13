@@ -124,7 +124,7 @@ export function envVar(key: string): string {
  */
 export async function getBySuppliedId<
   T extends { attributes: { suppliedId?: string } },
-  TRes extends { data: T[] }
+  TRes extends { data: T[] },
 >(
   getter: () => Promise<AxiosResponse<TRes>>,
   suppliedId?: string
@@ -179,7 +179,7 @@ export async function getPage<
   T extends {
     data: unknown[];
     links: { next?: { href: string }; self?: { href: string } };
-  }
+  },
 >(
   getListing: () => Promise<AxiosResponse<T>>
 ): Promise<{
@@ -207,11 +207,14 @@ export const groupBy = <T, K extends keyof unknown>(
   items: T[],
   getKey: (item: T) => K
 ): Record<K, T[]> =>
-  items.reduce((acc, cur) => {
-    const group = getKey(cur);
-    acc[group] = [...(acc[group] ?? []), cur];
-    return acc;
-  }, {} as Record<K, T[]>);
+  items.reduce(
+    (acc, cur) => {
+      const group = getKey(cur);
+      acc[group] = [...(acc[group] ?? []), cur];
+      return acc;
+    },
+    {} as Record<K, T[]>
+  );
 
 /**
  * Return the first item in an array.

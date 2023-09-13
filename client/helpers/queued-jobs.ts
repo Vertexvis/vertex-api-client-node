@@ -88,9 +88,8 @@ export async function pollQueuedJob<T>({
       const r = await getQueuedJob(id, cancelSrc.token);
       if (Debug) {
         console.log(
-          `[id=${id}, attempt=${attempt}, type=${
-            r.data.data?.type
-          }, durationMs=${durationMs(start)}]`
+          `[id=${id}, attempt=${attempt}, type=${r.data.data
+            ?.type}, durationMs=${durationMs(start)}]`
         );
       }
       clearTimeout(timerId);

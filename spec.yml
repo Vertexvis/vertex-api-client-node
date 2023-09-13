@@ -1965,6 +1965,88 @@ paths:
         - OAuth2: []
       tags:
         - part-revisions
+  /part-revisions/{id}/part-renditions:
+    post:
+      operationId: createPartRendition
+      parameters:
+        - description: The `part-revision` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreatePartRenditionRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PartRendition'
+          description: OK
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
   /part-revisions/{id}/image:
     get:
       description: Get a rendered image of a `part-revision`.
@@ -7192,6 +7274,26 @@ components:
       required:
         - data
       type: object
+    CreatePartRenditionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreatePartRenditionRequest_data'
+      required:
+        - data
+      type: object
+    PartRendition:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PartRenditionData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     Vector3:
       additionalProperties: false
       description: 3D vector.
@@ -7613,6 +7715,7 @@ components:
             anyOf:
               - $ref: '#/components/schemas/GeometrySetData'
               - $ref: '#/components/schemas/PartRevisionData'
+              - $ref: '#/components/schemas/PartRenditionData'
           type: array
         links:
           additionalProperties:
@@ -8129,6 +8232,32 @@ components:
           maxLength: 32
           type: string
       required:
+        - type
+      type: object
+    PartRenditionData:
+      additionalProperties: false
+      properties:
+        type:
+          example: part-rendition
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PartRenditionData_attributes'
+        relationships:
+          $ref: '#/components/schemas/PartRenditionData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
         - type
       type: object
     PartData:
@@ -8822,6 +8951,15 @@ components:
       required:
         - max
         - min
+      type: object
+    PartRenditionRelationship:
+      additionalProperties: false
+      description: Relationship to a `part-rendition`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartRenditionRelationship_data'
+      required:
+        - data
       type: object
     GeometrySetRelationshipData:
       additionalProperties: false
@@ -9661,6 +9799,53 @@ components:
         - id
         - type
       type: object
+    CreatePartRenditionRequest_data_attributes:
+      properties:
+        name:
+          example: 1/2in. Washer (flat)
+          maxLength: 255
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 255
+          type: string
+        makeDefault:
+          description:
+            Whether or not to replace the default rendition for the part
+            revision with the newly created rendition.
+          example: false
+          type: boolean
+      type: object
+    CreatePartRenditionRequest_data:
+      description: |
+        Create a new part rendition.
+
+        This endpoint includes multiple successful response codes: [`201`, `202`].
+
+        When not given a relationship, this endpoint will create a part rendition with an empty geometry and return a `201`
+        status code.
+
+        When given a relationship to translate, this endpoint will return a `202` status code with the location of a
+        `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the
+        translation is complete, the returned value will include a `part-rendition` that references
+        the translated geometry.
+      properties:
+        type:
+          description: Resource object type.
+          example: part-rendition
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreatePartRenditionRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
+      required:
+        - attributes
+        - type
+      type: object
     CreatePartRequest_data_attributes:
       properties:
         suppliedId:
@@ -10211,6 +10396,7 @@ components:
             mapping:
               jt: '#/components/schemas/CADExportConfig'
               step: '#/components/schemas/CADExportConfig'
+              x_t: '#/components/schemas/CADExportConfig'
             propertyName: format
           oneOf:
             - $ref: '#/components/schemas/CADExportConfig'
@@ -10501,8 +10687,11 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
+            - $ref: '#/components/schemas/PartRenditionRelationship'
         parent:
           $ref: '#/components/schemas/SceneItemRelationship'
+        partRendition:
+          $ref: '#/components/schemas/PartRenditionRelationship'
       type: object
     PartRevisionData_attributes:
       properties:
@@ -10536,6 +10725,32 @@ components:
           $ref: '#/components/schemas/GeometrySetRelationshipData'
         part:
           $ref: '#/components/schemas/PartRelationshipData'
+        defaultPartRendition:
+          $ref: '#/components/schemas/PartRenditionRelationship'
+      type: object
+    PartRenditionData_attributes:
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      type: object
+    PartRenditionData_relationships:
+      properties:
+        geometrySet:
+          $ref: '#/components/schemas/GeometrySetRelationshipData'
+        partRevision:
+          $ref: '#/components/schemas/PartRevisionRelationship'
       type: object
     PartData_attributes:
       properties:
@@ -10732,7 +10947,10 @@ components:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
-          description: Relationship to a `geometry-set`, `part-revision`, or `scene`.
+            - $ref: '#/components/schemas/PartRenditionRelationship'
+          description:
+            Relationship to a `geometry-set`, `part-revision`, `part-rendition`,
+            or `scene`.
         referenceTree:
           $ref: '#/components/schemas/SceneItemRelationship'
       type: object
@@ -10942,6 +11160,8 @@ components:
           $ref: '#/components/schemas/GeometrySetRelationship'
         partRevision:
           $ref: '#/components/schemas/PartRevisionRelationship'
+        partRendition:
+          $ref: '#/components/schemas/PartRenditionRelationship'
       type: object
     ExportData_attributes:
       properties:
@@ -11098,6 +11318,25 @@ components:
       required:
         - owner
         - resource
+      type: object
+    PartRenditionRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - part-rendition
+          example: part-rendition
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     QueryById_data_attributes:
       properties:
