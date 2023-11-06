@@ -460,7 +460,7 @@ function toMetadataOrUndefined(
  * batch based scene item creation. Batch operation results and errors are
  * returned to the caller.
  */
-const createSceneItemBatch = async ({
+export const createSceneItemBatch = async ({
   client,
   createSceneItemReqs: createItemReqs,
   failFast,
@@ -551,7 +551,7 @@ export async function createSceneItems({
   limit,
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
-  const batchSize = 500;
+  const batchSize = 200;
 
   const opChunks = arrayChunked(
     createSceneItemReqs.map((req) => ({

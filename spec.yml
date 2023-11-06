@@ -9,7 +9,7 @@ info:
 
     See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.
 
-    Notes about the Postman collection and API Reference code samples,
+    Notes about the Postman collection and API Reference code samples:
       - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.
       - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
   termsOfService: https://vertexvis.com/terms-of-use
@@ -33,6 +33,7 @@ tags:
   - name: geometry-sets
   - name: hits
   - name: oauth2
+  - name: part-renditions
   - name: part-revisions
   - name: parts
   - name: scene-alterations
@@ -1732,6 +1733,144 @@ paths:
             - admin-login
       tags:
         - oauth2
+  /part-renditions:
+    get:
+      description: Get `part-renditions` with an optional filter.
+      operationId: getPartRenditions
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          style: form
+        - description: A revision ID to filter on.
+          explode: true
+          in: query
+          name: filter[revisionId]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PartRenditionList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-renditions
+  /part-renditions/{id}:
+    get:
+      description: Get a `part-rendition` by ID.
+      operationId: getPartRendition
+      parameters:
+        - description: The `part-rendition` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PartRendition'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-renditions
   /part-revisions/{id}:
     delete:
       description: Delete a `part-revision`.
@@ -2047,6 +2186,8 @@ paths:
           description: Unsupported Media Type
       security:
         - OAuth2: []
+      tags:
+        - part-renditions
   /part-revisions/{id}/image:
     get:
       description: Get a rendered image of a `part-revision`.
@@ -6625,6 +6766,15 @@ components:
         maxLength: 32
         type: string
       style: form
+    PartRenditionId:
+      description: The `part-rendition` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     PartRevisionId:
       description: The `part-revision` ID.
       explode: false
@@ -6680,6 +6830,15 @@ components:
           type: string
         example: filter[metadata][key1]=test
         type: object
+      style: form
+    RevisionIdFilter:
+      description: A revision ID to filter on.
+      explode: true
+      in: query
+      name: filter[revisionId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Uuid'
       style: form
     SceneViewStateFields:
       description:
@@ -7254,6 +7413,33 @@ components:
       required:
         - data
       type: object
+    PartRenditionList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PartRenditionData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    PartRendition:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PartRenditionData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     PartRevision:
       additionalProperties: false
       properties:
@@ -7279,18 +7465,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/CreatePartRenditionRequest_data'
-      required:
-        - data
-      type: object
-    PartRendition:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/PartRenditionData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
       required:
         - data
       type: object
@@ -8163,6 +8337,32 @@ components:
         - relationships
         - type
       type: object
+    PartRenditionData:
+      additionalProperties: false
+      properties:
+        type:
+          example: part-rendition
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PartRenditionData_attributes'
+        relationships:
+          $ref: '#/components/schemas/PartRenditionData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
     MetadataLongType:
       properties:
         type:
@@ -8232,32 +8432,6 @@ components:
           maxLength: 32
           type: string
       required:
-        - type
-      type: object
-    PartRenditionData:
-      additionalProperties: false
-      properties:
-        type:
-          example: part-rendition
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/PartRenditionData_attributes'
-        relationships:
-          $ref: '#/components/schemas/PartRenditionData_relationships'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
-        - relationships
         - type
       type: object
     PartData:
@@ -8337,13 +8511,20 @@ components:
             query.
           items:
             anyOf:
-              - $ref: '#/components/schemas/ChangeVisibilityOperation'
-              - $ref: '#/components/schemas/ChangeMaterialOperation'
-              - $ref: '#/components/schemas/ClearMaterialOperation'
-              - $ref: '#/components/schemas/ChangeTransformOperation'
-              - $ref: '#/components/schemas/ClearTransformOperation'
-              - $ref: '#/components/schemas/SelectOperation'
+              - $ref: '#/components/schemas/ChangeVisibilityOp'
+              - $ref: '#/components/schemas/ChangeMaterialOp'
+              - $ref: '#/components/schemas/ClearMaterialOp'
+              - $ref: '#/components/schemas/ChangeTransformOp'
+              - $ref: '#/components/schemas/ClearTransformOp'
+              - $ref: '#/components/schemas/SelectOp'
               - $ref: '#/components/schemas/DeselectOperation'
+              - $ref: '#/components/schemas/ClearRenOp'
+              - $ref: '#/components/schemas/ViewDefaultRenOp'
+              - $ref: '#/components/schemas/ViewRenByIdOp'
+              - $ref: '#/components/schemas/ViewRenBySuppliedIdOp'
+              - $ref: '#/components/schemas/ViewRepByIdOp'
+              - $ref: '#/components/schemas/ViewRepByPredefinedIdOp'
+              - $ref: '#/components/schemas/ClearRepOp'
           maxItems: 1024
           type: array
       required:
@@ -9052,7 +9233,7 @@ components:
       example: all
       maxLength: 32
       type: string
-    ChangeVisibilityOperation:
+    ChangeVisibilityOp:
       additionalProperties: false
       properties:
         type:
@@ -9070,7 +9251,7 @@ components:
         - type
         - visible
       type: object
-    ChangeMaterialOperation:
+    ChangeMaterialOp:
       additionalProperties: false
       properties:
         type:
@@ -9086,7 +9267,7 @@ components:
         - material
         - type
       type: object
-    ClearMaterialOperation:
+    ClearMaterialOp:
       additionalProperties: false
       properties:
         type:
@@ -9099,7 +9280,7 @@ components:
       required:
         - type
       type: object
-    ChangeTransformOperation:
+    ChangeTransformOp:
       additionalProperties: false
       properties:
         type:
@@ -9115,7 +9296,7 @@ components:
         - transform
         - type
       type: object
-    ClearTransformOperation:
+    ClearTransformOp:
       additionalProperties: false
       properties:
         type:
@@ -9128,7 +9309,7 @@ components:
       required:
         - type
       type: object
-    SelectOperation:
+    SelectOp:
       additionalProperties: false
       properties:
         type:
@@ -9149,6 +9330,124 @@ components:
           enum:
             - deselect
           example: deselect
+          maxLength: 32
+          type: string
+      required:
+        - type
+      type: object
+    ClearRenOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - clear-rendition
+          example: clear-rendition
+          maxLength: 32
+          type: string
+      required:
+        - type
+      type: object
+    ViewDefaultRenOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - view-default-rendition
+          example: view-default-rendition
+          maxLength: 32
+          type: string
+      required:
+        - type
+      type: object
+    ViewRenByIdOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - view-rendition-by-id
+          example: view-rendition-by-id
+          maxLength: 32
+          type: string
+        renditionId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - renditionId
+        - type
+      type: object
+    ViewRenBySuppliedIdOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - view-rendition-by-supplied-id
+          example: view-rendition-by-supplied-id
+          maxLength: 32
+          type: string
+        renditionSuppliedId:
+          maxLength: 255
+          type: string
+      required:
+        - renditionSuppliedId
+        - type
+      type: object
+    ViewRepByIdOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - view-representation-by-id
+          example: view-representation-by-id
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    ViewRepByPredefinedIdOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - view-representation-by-predefined-id
+          example: view-representation-by-predefined-id
+          maxLength: 64
+          type: string
+        id:
+          description: A predefined representation identifier, such as `entire-part`.
+          enum:
+            - empty
+            - entire-part
+          example: entire-part
+          maxLength: 32
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    ClearRepOp:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - clear-representation
+          example: clear-representation
           maxLength: 32
           type: string
       required:

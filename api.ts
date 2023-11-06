@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * Vertex Platform API
- * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.  Notes about the Postman collection and API Reference code samples,   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
+ * The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.  See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.  Notes about the Postman collection and API Reference code samples:   - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.   - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
  *
  * The version of the OpenAPI document: 1.0
  * Contact: support@vertexvis.com
@@ -559,125 +559,167 @@ export type CameraFitTypeEnum =
 /**
  *
  * @export
- * @interface ChangeMaterialOperation
+ * @interface ChangeMaterialOp
  */
-export interface ChangeMaterialOperation {
+export interface ChangeMaterialOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof ChangeMaterialOperation
+   * @memberof ChangeMaterialOp
    */
-  type: ChangeMaterialOperationTypeEnum;
+  type: ChangeMaterialOpTypeEnum;
   /**
    *
    * @type {ColorMaterial}
-   * @memberof ChangeMaterialOperation
+   * @memberof ChangeMaterialOp
    */
   material: ColorMaterial;
 }
 
-export const ChangeMaterialOperationTypeEnum = {
+export const ChangeMaterialOpTypeEnum = {
   ChangeMaterial: 'change-material',
 } as const;
 
-export type ChangeMaterialOperationTypeEnum =
-  (typeof ChangeMaterialOperationTypeEnum)[keyof typeof ChangeMaterialOperationTypeEnum];
+export type ChangeMaterialOpTypeEnum =
+  (typeof ChangeMaterialOpTypeEnum)[keyof typeof ChangeMaterialOpTypeEnum];
 
 /**
  *
  * @export
- * @interface ChangeTransformOperation
+ * @interface ChangeTransformOp
  */
-export interface ChangeTransformOperation {
+export interface ChangeTransformOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof ChangeTransformOperation
+   * @memberof ChangeTransformOp
    */
-  type: ChangeTransformOperationTypeEnum;
+  type: ChangeTransformOpTypeEnum;
   /**
    *
    * @type {Matrix4}
-   * @memberof ChangeTransformOperation
+   * @memberof ChangeTransformOp
    */
   transform: Matrix4;
 }
 
-export const ChangeTransformOperationTypeEnum = {
+export const ChangeTransformOpTypeEnum = {
   ChangeTransform: 'change-transform',
 } as const;
 
-export type ChangeTransformOperationTypeEnum =
-  (typeof ChangeTransformOperationTypeEnum)[keyof typeof ChangeTransformOperationTypeEnum];
+export type ChangeTransformOpTypeEnum =
+  (typeof ChangeTransformOpTypeEnum)[keyof typeof ChangeTransformOpTypeEnum];
 
 /**
  *
  * @export
- * @interface ChangeVisibilityOperation
+ * @interface ChangeVisibilityOp
  */
-export interface ChangeVisibilityOperation {
+export interface ChangeVisibilityOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof ChangeVisibilityOperation
+   * @memberof ChangeVisibilityOp
    */
-  type: ChangeVisibilityOperationTypeEnum;
+  type: ChangeVisibilityOpTypeEnum;
   /**
    * Item visibility.
    * @type {boolean}
-   * @memberof ChangeVisibilityOperation
+   * @memberof ChangeVisibilityOp
    */
   visible: boolean;
 }
 
-export const ChangeVisibilityOperationTypeEnum = {
+export const ChangeVisibilityOpTypeEnum = {
   ChangeVisibility: 'change-visibility',
 } as const;
 
-export type ChangeVisibilityOperationTypeEnum =
-  (typeof ChangeVisibilityOperationTypeEnum)[keyof typeof ChangeVisibilityOperationTypeEnum];
+export type ChangeVisibilityOpTypeEnum =
+  (typeof ChangeVisibilityOpTypeEnum)[keyof typeof ChangeVisibilityOpTypeEnum];
 
 /**
  *
  * @export
- * @interface ClearMaterialOperation
+ * @interface ClearMaterialOp
  */
-export interface ClearMaterialOperation {
+export interface ClearMaterialOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof ClearMaterialOperation
+   * @memberof ClearMaterialOp
    */
-  type: ClearMaterialOperationTypeEnum;
+  type: ClearMaterialOpTypeEnum;
 }
 
-export const ClearMaterialOperationTypeEnum = {
+export const ClearMaterialOpTypeEnum = {
   ClearMaterial: 'clear-material',
 } as const;
 
-export type ClearMaterialOperationTypeEnum =
-  (typeof ClearMaterialOperationTypeEnum)[keyof typeof ClearMaterialOperationTypeEnum];
+export type ClearMaterialOpTypeEnum =
+  (typeof ClearMaterialOpTypeEnum)[keyof typeof ClearMaterialOpTypeEnum];
 
 /**
  *
  * @export
- * @interface ClearTransformOperation
+ * @interface ClearRenOp
  */
-export interface ClearTransformOperation {
+export interface ClearRenOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof ClearTransformOperation
+   * @memberof ClearRenOp
    */
-  type: ClearTransformOperationTypeEnum;
+  type: ClearRenOpTypeEnum;
 }
 
-export const ClearTransformOperationTypeEnum = {
+export const ClearRenOpTypeEnum = {
+  ClearRendition: 'clear-rendition',
+} as const;
+
+export type ClearRenOpTypeEnum =
+  (typeof ClearRenOpTypeEnum)[keyof typeof ClearRenOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ClearRepOp
+ */
+export interface ClearRepOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ClearRepOp
+   */
+  type: ClearRepOpTypeEnum;
+}
+
+export const ClearRepOpTypeEnum = {
+  ClearRepresentation: 'clear-representation',
+} as const;
+
+export type ClearRepOpTypeEnum =
+  (typeof ClearRepOpTypeEnum)[keyof typeof ClearRepOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ClearTransformOp
+ */
+export interface ClearTransformOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ClearTransformOp
+   */
+  type: ClearTransformOpTypeEnum;
+}
+
+export const ClearTransformOpTypeEnum = {
   ClearTransform: 'clear-transform',
 } as const;
 
-export type ClearTransformOperationTypeEnum =
-  (typeof ClearTransformOperationTypeEnum)[keyof typeof ClearTransformOperationTypeEnum];
+export type ClearTransformOpTypeEnum =
+  (typeof ClearTransformOpTypeEnum)[keyof typeof ClearTransformOpTypeEnum];
 
 /**
  * RGB color.
@@ -3292,6 +3334,25 @@ export interface PartRenditionDataRelationships {
   partRevision?: PartRevisionRelationship;
 }
 /**
+ *
+ * @export
+ * @interface PartRenditionList
+ */
+export interface PartRenditionList {
+  /**
+   *
+   * @type {Array<PartRenditionData>}
+   * @memberof PartRenditionList
+   */
+  data: Array<PartRenditionData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartRenditionList
+   */
+  links: { [key: string]: Link };
+}
+/**
  * Relationship to a `part-rendition`.
  * @export
  * @interface PartRenditionRelationship
@@ -4630,17 +4691,24 @@ export interface SceneOperation {
   query: QueryById | QueryByCollection | QueryAll;
   /**
    * List of operations to perform on `scene-items` matching the query.
-   * @type {Array<ChangeVisibilityOperation | ChangeMaterialOperation | ClearMaterialOperation | ChangeTransformOperation | ClearTransformOperation | SelectOperation | DeselectOperation>}
+   * @type {Array<ChangeVisibilityOp | ChangeMaterialOp | ClearMaterialOp | ChangeTransformOp | ClearTransformOp | SelectOp | DeselectOperation | ClearRenOp | ViewDefaultRenOp | ViewRenByIdOp | ViewRenBySuppliedIdOp | ViewRepByIdOp | ViewRepByPredefinedIdOp | ClearRepOp>}
    * @memberof SceneOperation
    */
   operations: Array<
-    | ChangeVisibilityOperation
-    | ChangeMaterialOperation
-    | ClearMaterialOperation
-    | ChangeTransformOperation
-    | ClearTransformOperation
-    | SelectOperation
+    | ChangeVisibilityOp
+    | ChangeMaterialOp
+    | ClearMaterialOp
+    | ChangeTransformOp
+    | ClearTransformOp
+    | SelectOp
     | DeselectOperation
+    | ClearRenOp
+    | ViewDefaultRenOp
+    | ViewRenByIdOp
+    | ViewRenBySuppliedIdOp
+    | ViewRepByIdOp
+    | ViewRepByPredefinedIdOp
+    | ClearRepOp
   >;
 }
 /**
@@ -5047,23 +5115,23 @@ export interface SectionPlane {
 /**
  *
  * @export
- * @interface SelectOperation
+ * @interface SelectOp
  */
-export interface SelectOperation {
+export interface SelectOp {
   /**
    * Resource object type.
    * @type {string}
-   * @memberof SelectOperation
+   * @memberof SelectOp
    */
-  type: SelectOperationTypeEnum;
+  type: SelectOpTypeEnum;
 }
 
-export const SelectOperationTypeEnum = {
+export const SelectOpTypeEnum = {
   Select: 'select',
 } as const;
 
-export type SelectOperationTypeEnum =
-  (typeof SelectOperationTypeEnum)[keyof typeof SelectOperationTypeEnum];
+export type SelectOpTypeEnum =
+  (typeof SelectOpTypeEnum)[keyof typeof SelectOpTypeEnum];
 
 /**
  *
@@ -5946,6 +6014,142 @@ export interface Vector4 {
    */
   w: number;
 }
+/**
+ *
+ * @export
+ * @interface ViewDefaultRenOp
+ */
+export interface ViewDefaultRenOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ViewDefaultRenOp
+   */
+  type: ViewDefaultRenOpTypeEnum;
+}
+
+export const ViewDefaultRenOpTypeEnum = {
+  ViewDefaultRendition: 'view-default-rendition',
+} as const;
+
+export type ViewDefaultRenOpTypeEnum =
+  (typeof ViewDefaultRenOpTypeEnum)[keyof typeof ViewDefaultRenOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ViewRenByIdOp
+ */
+export interface ViewRenByIdOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ViewRenByIdOp
+   */
+  type: ViewRenByIdOpTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ViewRenByIdOp
+   */
+  renditionId: string;
+}
+
+export const ViewRenByIdOpTypeEnum = {
+  ViewRenditionById: 'view-rendition-by-id',
+} as const;
+
+export type ViewRenByIdOpTypeEnum =
+  (typeof ViewRenByIdOpTypeEnum)[keyof typeof ViewRenByIdOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ViewRenBySuppliedIdOp
+ */
+export interface ViewRenBySuppliedIdOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ViewRenBySuppliedIdOp
+   */
+  type: ViewRenBySuppliedIdOpTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof ViewRenBySuppliedIdOp
+   */
+  renditionSuppliedId: string;
+}
+
+export const ViewRenBySuppliedIdOpTypeEnum = {
+  ViewRenditionBySuppliedId: 'view-rendition-by-supplied-id',
+} as const;
+
+export type ViewRenBySuppliedIdOpTypeEnum =
+  (typeof ViewRenBySuppliedIdOpTypeEnum)[keyof typeof ViewRenBySuppliedIdOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ViewRepByIdOp
+ */
+export interface ViewRepByIdOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ViewRepByIdOp
+   */
+  type: ViewRepByIdOpTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ViewRepByIdOp
+   */
+  id: string;
+}
+
+export const ViewRepByIdOpTypeEnum = {
+  ViewRepresentationById: 'view-representation-by-id',
+} as const;
+
+export type ViewRepByIdOpTypeEnum =
+  (typeof ViewRepByIdOpTypeEnum)[keyof typeof ViewRepByIdOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ViewRepByPredefinedIdOp
+ */
+export interface ViewRepByPredefinedIdOp {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof ViewRepByPredefinedIdOp
+   */
+  type: ViewRepByPredefinedIdOpTypeEnum;
+  /**
+   * A predefined representation identifier, such as `entire-part`.
+   * @type {string}
+   * @memberof ViewRepByPredefinedIdOp
+   */
+  id: ViewRepByPredefinedIdOpIdEnum;
+}
+
+export const ViewRepByPredefinedIdOpTypeEnum = {
+  ViewRepresentationByPredefinedId: 'view-representation-by-predefined-id',
+} as const;
+
+export type ViewRepByPredefinedIdOpTypeEnum =
+  (typeof ViewRepByPredefinedIdOpTypeEnum)[keyof typeof ViewRepByPredefinedIdOpTypeEnum];
+export const ViewRepByPredefinedIdOpIdEnum = {
+  Empty: 'empty',
+  EntirePart: 'entire-part',
+} as const;
+
+export type ViewRepByPredefinedIdOpIdEnum =
+  (typeof ViewRepByPredefinedIdOpIdEnum)[keyof typeof ViewRepByPredefinedIdOpIdEnum];
+
 /**
  *
  * @export
@@ -8056,201 +8260,6 @@ export class BatchesApi extends BaseAPI {
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-}
-
-/**
- * DefaultApi - axios parameter creator
- * @export
- */
-export const DefaultApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     *
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {CreatePartRenditionRequest} createPartRenditionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createPartRendition: async (
-      id: string,
-      createPartRenditionRequest: CreatePartRenditionRequest,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('createPartRendition', 'id', id);
-      // verify required parameter 'createPartRenditionRequest' is not null or undefined
-      assertParamExists(
-        'createPartRendition',
-        'createPartRenditionRequest',
-        createPartRenditionRequest
-      );
-      const localVarPath = `/part-revisions/{id}/part-renditions`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'POST',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions?.headers ?? {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-      localVarRequestOptions.data = serializeDataIfNeeded(
-        createPartRenditionRequest,
-        localVarRequestOptions,
-        configuration
-      );
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
-};
-
-/**
- * DefaultApi - functional programming interface
- * @export
- */
-export const DefaultApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = DefaultApiAxiosParamCreator(configuration);
-  return {
-    /**
-     *
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {CreatePartRenditionRequest} createPartRenditionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async createPartRendition(
-      id: string,
-      createPartRenditionRequest: CreatePartRenditionRequest,
-      options?: AxiosRequestConfig
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRendition>
-    > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.createPartRendition(
-          id,
-          createPartRenditionRequest,
-          options
-        );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
-};
-
-/**
- * DefaultApi - factory interface
- * @export
- */
-export const DefaultApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = DefaultApiFp(configuration);
-  return {
-    /**
-     *
-     * @param {string} id The &#x60;part-revision&#x60; ID.
-     * @param {CreatePartRenditionRequest} createPartRenditionRequest
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    createPartRendition(
-      id: string,
-      createPartRenditionRequest: CreatePartRenditionRequest,
-      options?: any
-    ): AxiosPromise<PartRendition> {
-      return localVarFp
-        .createPartRendition(id, createPartRenditionRequest, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
-};
-
-/**
- * Request parameters for createPartRendition operation in DefaultApi.
- * @export
- * @interface DefaultApiCreatePartRenditionRequest
- */
-export interface DefaultApiCreatePartRenditionRequest {
-  /**
-   * The &#x60;part-revision&#x60; ID.
-   * @type {string}
-   * @memberof DefaultApiCreatePartRendition
-   */
-  readonly id: string;
-
-  /**
-   *
-   * @type {CreatePartRenditionRequest}
-   * @memberof DefaultApiCreatePartRendition
-   */
-  readonly createPartRenditionRequest: CreatePartRenditionRequest;
-}
-
-/**
- * DefaultApi - object-oriented interface
- * @export
- * @class DefaultApi
- * @extends {BaseAPI}
- */
-export class DefaultApi extends BaseAPI {
-  /**
-   *
-   * @param {DefaultApiCreatePartRenditionRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof DefaultApi
-   */
-  public createPartRendition(
-    requestParameters: DefaultApiCreatePartRenditionRequest,
-    options?: AxiosRequestConfig
-  ) {
-    return DefaultApiFp(this.configuration)
-      .createPartRendition(
-        requestParameters.id,
-        requestParameters.createPartRenditionRequest,
-        options
-      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -10892,6 +10901,506 @@ export class Oauth2Api extends BaseAPI {
   ) {
     return Oauth2ApiFp(this.configuration)
       .revokeToken(requestParameters.revokeOAuth2TokenRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * PartRenditionsApi - axios parameter creator
+ * @export
+ */
+export const PartRenditionsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPartRendition: async (
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createPartRendition', 'id', id);
+      // verify required parameter 'createPartRenditionRequest' is not null or undefined
+      assertParamExists(
+        'createPartRendition',
+        'createPartRenditionRequest',
+        createPartRenditionRequest
+      );
+      const localVarPath = `/part-revisions/{id}/part-renditions`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createPartRenditionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `part-rendition` by ID.
+     * @param {string} id The &#x60;part-rendition&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRendition: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getPartRendition', 'id', id);
+      const localVarPath = `/part-renditions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `part-renditions` with an optional filter.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterRevisionId] A revision ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRenditions: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      filterRevisionId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/part-renditions`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      if (filterRevisionId !== undefined) {
+        localVarQueryParameter['filter[revisionId]'] = filterRevisionId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PartRenditionsApi - functional programming interface
+ * @export
+ */
+export const PartRenditionsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    PartRenditionsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createPartRendition(
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRendition>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createPartRendition(
+          id,
+          createPartRenditionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `part-rendition` by ID.
+     * @param {string} id The &#x60;part-rendition&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPartRendition(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartRendition>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPartRendition(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `part-renditions` with an optional filter.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterRevisionId] A revision ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPartRenditions(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      filterRevisionId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PartRenditionList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPartRenditions(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          filterRevisionId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PartRenditionsApi - factory interface
+ * @export
+ */
+export const PartRenditionsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PartRenditionsApiFp(configuration);
+  return {
+    /**
+     *
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {CreatePartRenditionRequest} createPartRenditionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPartRendition(
+      id: string,
+      createPartRenditionRequest: CreatePartRenditionRequest,
+      options?: any
+    ): AxiosPromise<PartRendition> {
+      return localVarFp
+        .createPartRendition(id, createPartRenditionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `part-rendition` by ID.
+     * @param {string} id The &#x60;part-rendition&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRendition(id: string, options?: any): AxiosPromise<PartRendition> {
+      return localVarFp
+        .getPartRendition(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `part-renditions` with an optional filter.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterRevisionId] A revision ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRenditions(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      filterRevisionId?: string,
+      options?: any
+    ): AxiosPromise<PartRenditionList> {
+      return localVarFp
+        .getPartRenditions(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          filterRevisionId,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createPartRendition operation in PartRenditionsApi.
+ * @export
+ * @interface PartRenditionsApiCreatePartRenditionRequest
+ */
+export interface PartRenditionsApiCreatePartRenditionRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof PartRenditionsApiCreatePartRendition
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreatePartRenditionRequest}
+   * @memberof PartRenditionsApiCreatePartRendition
+   */
+  readonly createPartRenditionRequest: CreatePartRenditionRequest;
+}
+
+/**
+ * Request parameters for getPartRendition operation in PartRenditionsApi.
+ * @export
+ * @interface PartRenditionsApiGetPartRenditionRequest
+ */
+export interface PartRenditionsApiGetPartRenditionRequest {
+  /**
+   * The &#x60;part-rendition&#x60; ID.
+   * @type {string}
+   * @memberof PartRenditionsApiGetPartRendition
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getPartRenditions operation in PartRenditionsApi.
+ * @export
+ * @interface PartRenditionsApiGetPartRenditionsRequest
+ */
+export interface PartRenditionsApiGetPartRenditionsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PartRenditionsApiGetPartRenditions
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PartRenditionsApiGetPartRenditions
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof PartRenditionsApiGetPartRenditions
+   */
+  readonly filterSuppliedId?: string;
+
+  /**
+   * A revision ID to filter on.
+   * @type {string}
+   * @memberof PartRenditionsApiGetPartRenditions
+   */
+  readonly filterRevisionId?: string;
+}
+
+/**
+ * PartRenditionsApi - object-oriented interface
+ * @export
+ * @class PartRenditionsApi
+ * @extends {BaseAPI}
+ */
+export class PartRenditionsApi extends BaseAPI {
+  /**
+   *
+   * @param {PartRenditionsApiCreatePartRenditionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRenditionsApi
+   */
+  public createPartRendition(
+    requestParameters: PartRenditionsApiCreatePartRenditionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PartRenditionsApiFp(this.configuration)
+      .createPartRendition(
+        requestParameters.id,
+        requestParameters.createPartRenditionRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `part-rendition` by ID.
+   * @param {PartRenditionsApiGetPartRenditionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRenditionsApi
+   */
+  public getPartRendition(
+    requestParameters: PartRenditionsApiGetPartRenditionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PartRenditionsApiFp(this.configuration)
+      .getPartRendition(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `part-renditions` with an optional filter.
+   * @param {PartRenditionsApiGetPartRenditionsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRenditionsApi
+   */
+  public getPartRenditions(
+    requestParameters: PartRenditionsApiGetPartRenditionsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PartRenditionsApiFp(this.configuration)
+      .getPartRenditions(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        requestParameters.filterRevisionId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
