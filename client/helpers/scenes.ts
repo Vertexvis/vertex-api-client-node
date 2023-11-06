@@ -460,7 +460,7 @@ function toMetadataOrUndefined(
  * batch based scene item creation. Batch operation results and errors are
  * returned to the caller.
  */
-const createSceneItemBatch = async ({
+export const createSceneItemBatch = async ({
   client,
   createSceneItemReqs: createItemReqs,
   failFast,
