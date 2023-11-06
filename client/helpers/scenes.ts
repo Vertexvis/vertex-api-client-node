@@ -551,7 +551,7 @@ export async function createSceneItems({
   limit,
   sceneId,
 }: CreateSceneItemsReq): Promise<CreateSceneItemsRes> {
-  const batchSize = 500;
+  const batchSize = 200;
 
   const opChunks = arrayChunked(
     createSceneItemReqs.map((req) => ({
