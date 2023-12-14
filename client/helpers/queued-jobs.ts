@@ -68,7 +68,7 @@ export async function pollQueuedJob<T>({
   getQueuedJob,
   allow404 = false,
   limit,
-  polling: { intervalMs, maxAttempts },
+  polling: { intervalMs, maxAttempts, backoff },
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
   async function poll(attempt: number): Promise<PollJobRes<T>> {
     const cancelSrc = axios.CancelToken.source();
@@ -123,7 +123,8 @@ export async function pollQueuedJob<T>({
   }
 
   let attempts = 1;
-  let pollRes = await poll(attempts);
+  let backoffMs = backoff?.[attempts] ?? 0;
+  const pollRes = await poll(attempts);
   /* eslint-disable no-await-in-loop */
   while (
     !completeJob(pollRes.res) &&
@@ -133,8 +134,9 @@ export async function pollQueuedJob<T>({
     attempts <= maxAttempts
   ) {
     attempts += 1;
-    await delay(intervalMs);
-    pollRes = await poll(attempts);
+    backoffMs = backoff?.[attempts] ?? backoffMs;
+    await delay(intervalMs + backoffMs);
+    await poll(attempts);
   }
   /* eslint-enable no-await-in-loop */
 

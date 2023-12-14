@@ -39,6 +39,12 @@ export interface Polling {
 
   /** Maximum number of polling attempts. */
   readonly maxAttempts: number;
+
+  /**
+   * A map of polling attempt numbers to a delay in milliseconds.
+   * Once the attempts are reach, the backoff will be added to `intervalMs`.
+   */
+  readonly backoff?: Record<number, number | undefined>;
 }
 
 /**
