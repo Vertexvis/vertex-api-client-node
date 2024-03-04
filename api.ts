@@ -416,6 +416,12 @@ export interface ApplicationDataAttributes {
    * @memberof ApplicationDataAttributes
    */
   scopes: Array<string>;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof ApplicationDataAttributes
+   */
+  redirectUris: Array<string>;
 }
 /**
  *
@@ -1681,7 +1687,7 @@ export interface CreateSceneRequestDataAttributes {
    */
   worldOrientation?: Orientation;
   /**
-   *
+   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
    * @type {{ [key: string]: string; }}
    * @memberof CreateSceneRequestDataAttributes
    */
@@ -1699,6 +1705,19 @@ export interface CreateSceneRequestDataRelationships {
    * @memberof CreateSceneRequestDataRelationships
    */
   source: SceneRelationship;
+}
+/**
+ * An operation to perform on a Scene.
+ * @export
+ * @interface CreateSceneSyncRequest
+ */
+export interface CreateSceneSyncRequest {
+  /**
+   *
+   * @type {UpdateItemToDefaultRenditionOperation}
+   * @memberof CreateSceneSyncRequest
+   */
+  operation: UpdateItemToDefaultRenditionOperation;
 }
 /**
  *
@@ -4285,7 +4304,7 @@ export interface SceneDataAttributes {
    */
   sceneItemCount?: number;
   /**
-   *
+   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
    * @type {{ [key: string]: string; }}
    * @memberof SceneDataAttributes
    */
@@ -4751,6 +4770,181 @@ export const SceneRelationshipDataTypeEnum = {
 export type SceneRelationshipDataTypeEnum =
   (typeof SceneRelationshipDataTypeEnum)[keyof typeof SceneRelationshipDataTypeEnum];
 
+/**
+ *
+ * @export
+ * @interface SceneSync
+ */
+export interface SceneSync {
+  /**
+   *
+   * @type {SceneSyncData}
+   * @memberof SceneSync
+   */
+  data: SceneSyncData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneSync
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncData
+ */
+export interface SceneSyncData {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneSyncData
+   */
+  id: string;
+  /**
+   *
+   * @type {SceneSyncDataAttributes}
+   * @memberof SceneSyncData
+   */
+  attributes: SceneSyncDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneSyncData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncDataAttributes
+ */
+export interface SceneSyncDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncDataAttributes
+   */
+  completedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncDataAttributes
+   */
+  status: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncItemResultData
+ */
+export interface SceneSyncItemResultData {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncItemResultData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneSyncItemResultData
+   */
+  id: string;
+  /**
+   *
+   * @type {SceneSyncItemResultDataAttributes}
+   * @memberof SceneSyncItemResultData
+   */
+  attributes: SceneSyncItemResultDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneSyncItemResultData
+   */
+  links?: { [key: string]: Link };
+  /**
+   *
+   * @type {SceneSyncItemResultDataRelationships}
+   * @memberof SceneSyncItemResultData
+   */
+  relationships: SceneSyncItemResultDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncItemResultDataAttributes
+ */
+export interface SceneSyncItemResultDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneSyncItemResultDataAttributes
+   */
+  status: string;
+  /**
+   *
+   * @type {ApiError}
+   * @memberof SceneSyncItemResultDataAttributes
+   */
+  error?: ApiError;
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncItemResultDataRelationships
+ */
+export interface SceneSyncItemResultDataRelationships {
+  /**
+   *
+   * @type {SceneRelationship}
+   * @memberof SceneSyncItemResultDataRelationships
+   */
+  scene: SceneRelationship;
+  /**
+   *
+   * @type {SceneItemRelationship}
+   * @memberof SceneSyncItemResultDataRelationships
+   */
+  sceneItem: SceneItemRelationship;
+}
+/**
+ *
+ * @export
+ * @interface SceneSyncItemResultsList
+ */
+export interface SceneSyncItemResultsList {
+  /**
+   *
+   * @type {Array<SceneSyncItemResultData>}
+   * @memberof SceneSyncItemResultsList
+   */
+  data: Array<SceneSyncItemResultData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneSyncItemResultsList
+   */
+  links: { [key: string]: Link };
+  /**
+   *
+   * @type {Array<SceneItemData>}
+   * @memberof SceneSyncItemResultsList
+   */
+  included: Array<SceneItemData>;
+}
 /**
  *
  * @export
@@ -5420,11 +5614,57 @@ export interface UpdateApplicationRequestData {
   type: string;
   /**
    *
-   * @type {CreateAccountRequestDataAttributes}
+   * @type {UpdateApplicationRequestDataAttributes}
    * @memberof UpdateApplicationRequestData
    */
-  attributes: CreateAccountRequestDataAttributes;
+  attributes: UpdateApplicationRequestDataAttributes;
 }
+/**
+ *
+ * @export
+ * @interface UpdateApplicationRequestDataAttributes
+ */
+export interface UpdateApplicationRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateApplicationRequestDataAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UpdateApplicationRequestDataAttributes
+   */
+  redirect_uris?: Array<string>;
+}
+/**
+ * An operation that updates items with the specified revision to the default rendition.
+ * @export
+ * @interface UpdateItemToDefaultRenditionOperation
+ */
+export interface UpdateItemToDefaultRenditionOperation {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateItemToDefaultRenditionOperation
+   */
+  type: UpdateItemToDefaultRenditionOperationTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UpdateItemToDefaultRenditionOperation
+   */
+  revisionId: string;
+}
+
+export const UpdateItemToDefaultRenditionOperationTypeEnum = {
+  UpdateToDefaultRendition: 'update-to-default-rendition',
+} as const;
+
+export type UpdateItemToDefaultRenditionOperationTypeEnum =
+  (typeof UpdateItemToDefaultRenditionOperationTypeEnum)[keyof typeof UpdateItemToDefaultRenditionOperationTypeEnum];
+
 /**
  *
  * @export
@@ -5464,10 +5704,10 @@ export interface UpdatePartRevisionRequestData {
   attributes: UpdatePartRevisionRequestDataAttributes;
   /**
    *
-   * @type {CreateGeometrySetRequestDataRelationships}
+   * @type {UpdatePartRevisionRequestDataRelationships}
    * @memberof UpdatePartRevisionRequestData
    */
-  relationships?: CreateGeometrySetRequestDataRelationships;
+  relationships?: UpdatePartRevisionRequestDataRelationships;
 }
 /**
  *
@@ -5518,6 +5758,25 @@ export interface UpdatePartRevisionRequestDataAttributes {
    * @memberof UpdatePartRevisionRequestDataAttributes
    */
   suppliedInstanceIdKey?: string;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRevisionRequestDataRelationships
+ */
+export interface UpdatePartRevisionRequestDataRelationships {
+  /**
+   *
+   * @type {FileRelationship}
+   * @memberof UpdatePartRevisionRequestDataRelationships
+   */
+  source?: FileRelationship;
+  /**
+   *
+   * @type {PartRenditionRelationship}
+   * @memberof UpdatePartRevisionRequestDataRelationships
+   */
+  defaultPartRendition?: PartRenditionRelationship;
 }
 /**
  *
@@ -5788,7 +6047,7 @@ export interface UpdateSceneRequestDataAttributes {
    */
   worldOrientation?: Orientation;
   /**
-   *
+   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
    * @type {{ [key: string]: string; }}
    * @memberof UpdateSceneRequestDataAttributes
    */
@@ -6164,6 +6423,14 @@ export interface WebhookEvent {
   data: WebhookEventData;
   /**
    *
+   * @type {Array<WebhookEventSceneIncludedData | WebhookEventPartRevisionIncludedData>}
+   * @memberof WebhookEvent
+   */
+  included: Array<
+    WebhookEventSceneIncludedData | WebhookEventPartRevisionIncludedData
+  >;
+  /**
+   *
    * @type {{ [key: string]: Link; }}
    * @memberof WebhookEvent
    */
@@ -6224,6 +6491,12 @@ export interface WebhookEventDataAttributes {
    * @memberof WebhookEventDataAttributes
    */
   topic: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof WebhookEventDataAttributes
+   */
+  changed?: Array<string>;
 }
 /**
  *
@@ -6327,6 +6600,112 @@ export interface WebhookEventDataRelationshipsResourceData {
    * @memberof WebhookEventDataRelationshipsResourceData
    */
   id: string;
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventPartRevisionIncludedAttributes
+ */
+export interface WebhookEventPartRevisionIncludedAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedAttributes
+   */
+  created?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedAttributes
+   */
+  partName?: string;
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventPartRevisionIncludedData
+ */
+export interface WebhookEventPartRevisionIncludedData {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookEventPartRevisionIncludedData
+   */
+  id: string;
+  /**
+   *
+   * @type {WebhookEventPartRevisionIncludedAttributes}
+   * @memberof WebhookEventPartRevisionIncludedData
+   */
+  attributes: WebhookEventPartRevisionIncludedAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookEventPartRevisionIncludedData
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventSceneIncludedAttributes
+ */
+export interface WebhookEventSceneIncludedAttributes {
+  /**
+   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+   * @type {{ [key: string]: string; }}
+   * @memberof WebhookEventSceneIncludedAttributes
+   */
+  metadata?: { [key: string]: string };
+}
+/**
+ *
+ * @export
+ * @interface WebhookEventSceneIncludedData
+ */
+export interface WebhookEventSceneIncludedData {
+  /**
+   *
+   * @type {string}
+   * @memberof WebhookEventSceneIncludedData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WebhookEventSceneIncludedData
+   */
+  id: string;
+  /**
+   *
+   * @type {WebhookEventSceneIncludedAttributes}
+   * @memberof WebhookEventSceneIncludedData
+   */
+  attributes: WebhookEventSceneIncludedAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof WebhookEventSceneIncludedData
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -7334,12 +7713,14 @@ export const ApplicationsApiAxiosParamCreator = function (
      * Get `applications`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getApplications: async (
       pageCursor?: string,
       pageSize?: number,
+      filterClientId?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/applications`;
@@ -7373,6 +7754,10 @@ export const ApplicationsApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterClientId !== undefined) {
+        localVarQueryParameter['filter[clientId]'] = filterClientId;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -7542,12 +7927,14 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
      * Get `applications`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getApplications(
       pageCursor?: string,
       pageSize?: number,
+      filterClientId?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -7558,6 +7945,7 @@ export const ApplicationsApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getApplications(
         pageCursor,
         pageSize,
+        filterClientId,
         options
       );
       return createRequestFunction(
@@ -7648,16 +8036,18 @@ export const ApplicationsApiFactory = function (
      * Get `applications`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getApplications(
       pageCursor?: string,
       pageSize?: number,
+      filterClientId?: string,
       options?: any
     ): AxiosPromise<ApplicationList> {
       return localVarFp
-        .getApplications(pageCursor, pageSize, options)
+        .getApplications(pageCursor, pageSize, filterClientId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -7740,6 +8130,13 @@ export interface ApplicationsApiGetApplicationsRequest {
    * @memberof ApplicationsApiGetApplications
    */
   readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of client IDs to filter on.
+   * @type {string}
+   * @memberof ApplicationsApiGetApplications
+   */
+  readonly filterClientId?: string;
 }
 
 /**
@@ -7833,6 +8230,7 @@ export class ApplicationsApi extends BaseAPI {
       .getApplications(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterClientId,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -15486,6 +15884,625 @@ export class SceneItemsApi extends BaseAPI {
 }
 
 /**
+ * SceneSynchronizationsApi - axios parameter creator
+ * @export
+ */
+export const SceneSynchronizationsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a scene item update job.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneSyncRequest} createSceneSyncRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneSync: async (
+      id: string,
+      createSceneSyncRequest: CreateSceneSyncRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createSceneSync', 'id', id);
+      // verify required parameter 'createSceneSyncRequest' is not null or undefined
+      assertParamExists(
+        'createSceneSync',
+        'createSceneSyncRequest',
+        createSceneSyncRequest
+      );
+      const localVarPath = `/scenes/{id}/scene-syncs`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createSceneSyncRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `queued-scene-sync-job`.
+     * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedSceneSync: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getQueuedSceneSync', 'id', id);
+      const localVarPath = `/queued-scene-syncs/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `scene-sync`.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneSync: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneSync', 'id', id);
+      const localVarPath = `/scene-syncs/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get the results of a scene synchronization.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSceneItemId] List of scene item IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneSyncItemResults: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSceneItemId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneSyncItemResults', 'id', id);
+      const localVarPath = `/scene-syncs/{id}/item-results`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSceneItemId !== undefined) {
+        localVarQueryParameter['filter[sceneItemId]'] = filterSceneItemId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * SceneSynchronizationsApi - functional programming interface
+ * @export
+ */
+export const SceneSynchronizationsApiFp = function (
+  configuration?: Configuration
+) {
+  const localVarAxiosParamCreator =
+    SceneSynchronizationsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a scene item update job.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneSyncRequest} createSceneSyncRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createSceneSync(
+      id: string,
+      createSceneSyncRequest: CreateSceneSyncRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createSceneSync(
+        id,
+        createSceneSyncRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `queued-scene-sync-job`.
+     * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getQueuedSceneSync(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getQueuedSceneSync(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `scene-sync`.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneSync(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneSync>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getSceneSync(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get the results of a scene synchronization.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSceneItemId] List of scene item IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneSyncItemResults(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSceneItemId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneSyncItemResultsList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneSyncItemResults(
+          id,
+          pageCursor,
+          pageSize,
+          filterSceneItemId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * SceneSynchronizationsApi - factory interface
+ * @export
+ */
+export const SceneSynchronizationsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = SceneSynchronizationsApiFp(configuration);
+  return {
+    /**
+     * Create a scene item update job.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneSyncRequest} createSceneSyncRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneSync(
+      id: string,
+      createSceneSyncRequest: CreateSceneSyncRequest,
+      options?: any
+    ): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .createSceneSync(id, createSceneSyncRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `queued-scene-sync-job`.
+     * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getQueuedSceneSync(id: string, options?: any): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .getQueuedSceneSync(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `scene-sync`.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneSync(id: string, options?: any): AxiosPromise<SceneSync> {
+      return localVarFp
+        .getSceneSync(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get the results of a scene synchronization.
+     * @param {string} id The &#x60;scene-sync&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSceneItemId] List of scene item IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneSyncItemResults(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterSceneItemId?: string,
+      options?: any
+    ): AxiosPromise<SceneSyncItemResultsList> {
+      return localVarFp
+        .getSceneSyncItemResults(
+          id,
+          pageCursor,
+          pageSize,
+          filterSceneItemId,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createSceneSync operation in SceneSynchronizationsApi.
+ * @export
+ * @interface SceneSynchronizationsApiCreateSceneSyncRequest
+ */
+export interface SceneSynchronizationsApiCreateSceneSyncRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiCreateSceneSync
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneSyncRequest}
+   * @memberof SceneSynchronizationsApiCreateSceneSync
+   */
+  readonly createSceneSyncRequest: CreateSceneSyncRequest;
+}
+
+/**
+ * Request parameters for getQueuedSceneSync operation in SceneSynchronizationsApi.
+ * @export
+ * @interface SceneSynchronizationsApiGetQueuedSceneSyncRequest
+ */
+export interface SceneSynchronizationsApiGetQueuedSceneSyncRequest {
+  /**
+   * The &#x60;queued-scene-sync&#x60; ID.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiGetQueuedSceneSync
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneSync operation in SceneSynchronizationsApi.
+ * @export
+ * @interface SceneSynchronizationsApiGetSceneSyncRequest
+ */
+export interface SceneSynchronizationsApiGetSceneSyncRequest {
+  /**
+   * The &#x60;scene-sync&#x60; ID.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiGetSceneSync
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneSyncItemResults operation in SceneSynchronizationsApi.
+ * @export
+ * @interface SceneSynchronizationsApiGetSceneSyncItemResultsRequest
+ */
+export interface SceneSynchronizationsApiGetSceneSyncItemResultsRequest {
+  /**
+   * The &#x60;scene-sync&#x60; ID.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiGetSceneSyncItemResults
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiGetSceneSyncItemResults
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneSynchronizationsApiGetSceneSyncItemResults
+   */
+  readonly pageSize?: number;
+
+  /**
+   * List of scene item IDs to filter on.
+   * @type {string}
+   * @memberof SceneSynchronizationsApiGetSceneSyncItemResults
+   */
+  readonly filterSceneItemId?: string;
+}
+
+/**
+ * SceneSynchronizationsApi - object-oriented interface
+ * @export
+ * @class SceneSynchronizationsApi
+ * @extends {BaseAPI}
+ */
+export class SceneSynchronizationsApi extends BaseAPI {
+  /**
+   * Create a scene item update job.
+   * @param {SceneSynchronizationsApiCreateSceneSyncRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneSynchronizationsApi
+   */
+  public createSceneSync(
+    requestParameters: SceneSynchronizationsApiCreateSceneSyncRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneSynchronizationsApiFp(this.configuration)
+      .createSceneSync(
+        requestParameters.id,
+        requestParameters.createSceneSyncRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `queued-scene-sync-job`.
+   * @param {SceneSynchronizationsApiGetQueuedSceneSyncRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneSynchronizationsApi
+   */
+  public getQueuedSceneSync(
+    requestParameters: SceneSynchronizationsApiGetQueuedSceneSyncRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneSynchronizationsApiFp(this.configuration)
+      .getQueuedSceneSync(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `scene-sync`.
+   * @param {SceneSynchronizationsApiGetSceneSyncRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneSynchronizationsApi
+   */
+  public getSceneSync(
+    requestParameters: SceneSynchronizationsApiGetSceneSyncRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneSynchronizationsApiFp(this.configuration)
+      .getSceneSync(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get the results of a scene synchronization.
+   * @param {SceneSynchronizationsApiGetSceneSyncItemResultsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneSynchronizationsApi
+   */
+  public getSceneSyncItemResults(
+    requestParameters: SceneSynchronizationsApiGetSceneSyncItemResultsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneSynchronizationsApiFp(this.configuration)
+      .getSceneSyncItemResults(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSceneItemId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * SceneViewStatesApi - axios parameter creator
  * @export
  */
@@ -17645,6 +18662,9 @@ export const ScenesApiAxiosParamCreator = function (
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
+     * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
+     * @param {string} [filterSceneItemsSourceGeometrySet] Comma-separated list of scene-item source geometry set IDs to filter on.
+     * @param {string} [filterSceneItemsSourceScene] Comma-separated list of scene-item source scene IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17655,6 +18675,9 @@ export const ScenesApiAxiosParamCreator = function (
       filterSuppliedId?: string,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
+      filterSceneItemsSourcePartRevision?: string,
+      filterSceneItemsSourceGeometrySet?: string,
+      filterSceneItemsSourceScene?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/scenes`;
@@ -17704,6 +18727,21 @@ export const ScenesApiAxiosParamCreator = function (
 
       if (filterMetadata !== undefined) {
         localVarQueryParameter['filter[metadata]'] = filterMetadata;
+      }
+
+      if (filterSceneItemsSourcePartRevision !== undefined) {
+        localVarQueryParameter['filter[sceneItems.source.partRevision]'] =
+          filterSceneItemsSourcePartRevision;
+      }
+
+      if (filterSceneItemsSourceGeometrySet !== undefined) {
+        localVarQueryParameter['filter[sceneItems.source.geometrySet]'] =
+          filterSceneItemsSourceGeometrySet;
+      }
+
+      if (filterSceneItemsSourceScene !== undefined) {
+        localVarQueryParameter['filter[sceneItems.source.scene]'] =
+          filterSceneItemsSourceScene;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -17965,6 +19003,9 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
+     * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
+     * @param {string} [filterSceneItemsSourceGeometrySet] Comma-separated list of scene-item source geometry set IDs to filter on.
+     * @param {string} [filterSceneItemsSourceScene] Comma-separated list of scene-item source scene IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17975,6 +19016,9 @@ export const ScenesApiFp = function (configuration?: Configuration) {
       filterSuppliedId?: string,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
+      filterSceneItemsSourcePartRevision?: string,
+      filterSceneItemsSourceGeometrySet?: string,
+      filterSceneItemsSourceScene?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneList>
@@ -17986,6 +19030,9 @@ export const ScenesApiFp = function (configuration?: Configuration) {
         filterSuppliedId,
         fieldsScene,
         filterMetadata,
+        filterSceneItemsSourcePartRevision,
+        filterSceneItemsSourceGeometrySet,
+        filterSceneItemsSourceScene,
         options
       );
       return createRequestFunction(
@@ -18124,6 +19171,9 @@ export const ScenesApiFactory = function (
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
+     * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
+     * @param {string} [filterSceneItemsSourceGeometrySet] Comma-separated list of scene-item source geometry set IDs to filter on.
+     * @param {string} [filterSceneItemsSourceScene] Comma-separated list of scene-item source scene IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -18134,6 +19184,9 @@ export const ScenesApiFactory = function (
       filterSuppliedId?: string,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
+      filterSceneItemsSourcePartRevision?: string,
+      filterSceneItemsSourceGeometrySet?: string,
+      filterSceneItemsSourceScene?: string,
       options?: any
     ): AxiosPromise<SceneList> {
       return localVarFp
@@ -18144,6 +19197,9 @@ export const ScenesApiFactory = function (
           filterSuppliedId,
           fieldsScene,
           filterMetadata,
+          filterSceneItemsSourcePartRevision,
+          filterSceneItemsSourceGeometrySet,
+          filterSceneItemsSourceScene,
           options
         )
         .then((request) => request(axios, basePath));
@@ -18295,6 +19351,27 @@ export interface ScenesApiGetScenesRequest {
    * @memberof ScenesApiGetScenes
    */
   readonly filterMetadata?: { [key: string]: string };
+
+  /**
+   * Comma-separated list of scene-item source part revision IDs to filter on.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterSceneItemsSourcePartRevision?: string;
+
+  /**
+   * Comma-separated list of scene-item source geometry set IDs to filter on.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterSceneItemsSourceGeometrySet?: string;
+
+  /**
+   * Comma-separated list of scene-item source scene IDs to filter on.
+   * @type {string}
+   * @memberof ScenesApiGetScenes
+   */
+  readonly filterSceneItemsSourceScene?: string;
 }
 
 /**
@@ -18436,6 +19513,9 @@ export class ScenesApi extends BaseAPI {
         requestParameters.filterSuppliedId,
         requestParameters.fieldsScene,
         requestParameters.filterMetadata,
+        requestParameters.filterSceneItemsSourcePartRevision,
+        requestParameters.filterSceneItemsSourceGeometrySet,
+        requestParameters.filterSceneItemsSourceScene,
         options
       )
       .then((request) => request(this.axios, this.basePath));
