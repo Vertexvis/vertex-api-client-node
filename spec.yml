@@ -39,6 +39,7 @@ tags:
   - name: scene-alterations
   - name: scene-item-overrides
   - name: scene-items
+  - name: scene-synchronizations
   - name: scene-views
   - name: scenes
   - name: scene-view-states
@@ -408,6 +409,16 @@ paths:
             maximum: 200
             minimum: 1
             type: integer
+          style: form
+        - description: Comma-separated list of client IDs to filter on.
+          explode: true
+          in: query
+          name: filter[clientId]
+          required: false
+          schema:
+            example: ?filter[clientId]=some-id-1&filter[clientId]=some-id-2
+            maxLength: 1024
+            type: string
           style: form
       responses:
         '200':
@@ -4528,6 +4539,42 @@ paths:
             example: filter[metadata][key1]=test
             type: object
           style: form
+        - description:
+            Comma-separated list of scene-item source part revision IDs to
+            filter on.
+          explode: true
+          in: query
+          name: filter[sceneItems.source.partRevision]
+          required: false
+          schema:
+            example: ?filter[sceneItems.source.partRevision]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+            maxLength: 1024
+            type: string
+          style: form
+        - description:
+            Comma-separated list of scene-item source geometry set IDs to
+            filter on.
+          explode: true
+          in: query
+          name: filter[sceneItems.source.geometrySet]
+          required: false
+          schema:
+            example: ?filter[sceneItems.source.geometrySet]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+            maxLength: 1024
+            type: string
+          style: form
+        - description:
+            Comma-separated list of scene-item source scene IDs to filter
+            on.
+          explode: true
+          in: query
+          name: filter[sceneItems.source.scene]
+          required: false
+          schema:
+            example: ?filter[sceneItems.source.scene]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+            maxLength: 1024
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -5434,6 +5481,259 @@ paths:
         - OAuth2: []
       tags:
         - stream-keys
+  /scenes/{id}/scene-syncs:
+    post:
+      description: Create a scene item update job.
+      operationId: createSceneSync
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateSceneSyncRequest'
+        required: true
+      responses:
+        '202':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: Accepted
+          headers:
+            content-location:
+              $ref: '#/components/headers/ContentLocation'
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - scene-synchronizations
+  /queued-scene-syncs/{id}:
+    get:
+      description: Get a `queued-scene-sync-job`.
+      operationId: getQueuedSceneSync
+      parameters:
+        - description: The `queued-scene-sync` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-synchronizations
+  /scene-syncs/{id}:
+    get:
+      description: Get a `scene-sync`.
+      operationId: getSceneSync
+      parameters:
+        - description: The `scene-sync` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneSync'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-synchronizations
+  /scene-syncs/{id}/item-results:
+    get:
+      description: Get the results of a scene synchronization.
+      operationId: getSceneSyncItemResults
+      parameters:
+        - description: The `scene-sync` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: List of scene item IDs to filter on.
+          explode: true
+          in: query
+          name: filter[sceneItemId]
+          required: false
+          schema:
+            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            format: uuid
+            maxLength: 36
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneSyncItemResultsList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-synchronizations
   /stream-keys:
     get:
       description: Get `stream-key`s.
@@ -6226,6 +6526,19 @@ paths:
         - webhook-subscriptions
     post:
       callbacks:
+        queued-export.completed:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: queued_export_completed_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
         queued-scene-item.completed:
           '{$request.body#/data/attributes/url}':
             post:
@@ -6243,6 +6556,32 @@ paths:
           '{$request.body#/data/attributes/url}':
             post:
               operationId: queued_translation_completed_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
+        scene.created:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: scene_created_Post
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/WebhookEvent'
+              responses:
+                '200':
+                  description: OK
+              x-callback-request: true
+        scene.deleted:
+          '{$request.body#/data/attributes/url}':
+            post:
+              operationId: scene_deleted_Post
               requestBody:
                 content:
                   application/json:
@@ -6831,6 +7170,15 @@ components:
         example: filter[metadata][key1]=test
         type: object
       style: form
+    QueuedSceneSyncId:
+      description: The `queued-scene-sync` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     RevisionIdFilter:
       description: A revision ID to filter on.
       explode: true
@@ -6876,6 +7224,15 @@ components:
       style: form
     SceneItemOverrideId:
       description: The `scene-item-override` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    SceneSyncId:
+      description: The `scene-sync` ID.
       explode: false
       in: path
       name: id
@@ -6932,6 +7289,18 @@ components:
         maxLength: 1024
         type: string
       style: form
+    SceneItemIdFilter:
+      description: List of scene item IDs to filter on.
+      explode: true
+      in: query
+      name: filter[sceneItemId]
+      required: false
+      schema:
+        example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        format: uuid
+        maxLength: 36
+        type: string
+      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -6940,6 +7309,54 @@ components:
       required: false
       schema:
         example: some-id-1,some-id-2
+        maxLength: 1024
+        type: string
+      style: form
+    SceneItemsPartRevisionSourceFilter:
+      description:
+        Comma-separated list of scene-item source part revision IDs to
+        filter on.
+      explode: true
+      in: query
+      name: filter[sceneItems.source.partRevision]
+      required: false
+      schema:
+        example: ?filter[sceneItems.source.partRevision]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+        maxLength: 1024
+        type: string
+      style: form
+    SceneItemsGeometrySetSourceFilter:
+      description:
+        Comma-separated list of scene-item source geometry set IDs to filter
+        on.
+      explode: true
+      in: query
+      name: filter[sceneItems.source.geometrySet]
+      required: false
+      schema:
+        example: ?filter[sceneItems.source.geometrySet]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+        maxLength: 1024
+        type: string
+      style: form
+    SceneItemsSceneSourceFilter:
+      description: Comma-separated list of scene-item source scene IDs to filter on.
+      explode: true
+      in: query
+      name: filter[sceneItems.source.scene]
+      required: false
+      schema:
+        example: ?filter[sceneItems.source.scene]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
+        maxLength: 1024
+        type: string
+      style: form
+    ClientIdFilter:
+      description: Comma-separated list of client IDs to filter on.
+      explode: true
+      in: query
+      name: filter[clientId]
+      required: false
+      schema:
+        example: ?filter[clientId]=some-id-1&filter[clientId]=some-id-2
         maxLength: 1024
         type: string
       style: form
@@ -7829,6 +8246,52 @@ components:
       required:
         - data
       type: object
+    CreateSceneSyncRequest:
+      additionalProperties: false
+      description: An operation to perform on a Scene.
+      properties:
+        operation:
+          discriminator:
+            mapping:
+              update-to-default-rendition: '#/components/schemas/UpdateItemToDefaultRenditionOperation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/UpdateItemToDefaultRenditionOperation'
+      required:
+        - operation
+      type: object
+    SceneSync:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneSyncData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    SceneSyncItemResultsList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SceneSyncItemResultData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        included:
+          items:
+            $ref: '#/components/schemas/SceneItemData'
+          type: array
+      required:
+        - data
+        - included
+        - links
+      type: object
     StreamKeyList:
       additionalProperties: false
       properties:
@@ -7973,6 +8436,9 @@ components:
           attributes:
             created: 2020-01-01T12:00:00Z
             topic: some-string
+            changed:
+              - some-string
+              - some-string
           links:
             key:
               href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
@@ -7981,15 +8447,30 @@ components:
         links:
           key:
             href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+        included:
+          - ''
+          - ''
       properties:
         data:
           $ref: '#/components/schemas/WebhookEventData'
+        included:
+          items:
+            discriminator:
+              mapping:
+                scene: '#/components/schemas/WebhookEventSceneIncludedData'
+                part-revision: '#/components/schemas/WebhookEventPartRevisionIncludedData'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/WebhookEventSceneIncludedData'
+              - $ref: '#/components/schemas/WebhookEventPartRevisionIncludedData'
+          type: array
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
       required:
         - data
+        - included
       type: object
     UpdateWebhookSubscriptionRequest:
       additionalProperties: false
@@ -8030,7 +8511,6 @@ components:
           description:
             A numerical floating-point value representing the field of
             view
-          format: float
           maximum: 179
           minimum: 1
           type: number
@@ -8433,6 +8913,15 @@ components:
           type: string
       required:
         - type
+      type: object
+    PartRenditionRelationship:
+      additionalProperties: false
+      description: Relationship to a `part-rendition`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartRenditionRelationship_data'
+      required:
+        - data
       type: object
     PartData:
       additionalProperties: false
@@ -8889,6 +9378,14 @@ components:
         - front
         - up
       type: object
+    SceneMetadata:
+      additionalProperties:
+        maxLength: 256
+        minLength: 0
+        type: string
+      description: |
+        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+      type: object
     SceneRelationship:
       additionalProperties: false
       description: Relationship to a `scene`.
@@ -8897,6 +9394,13 @@ components:
           $ref: '#/components/schemas/SceneRelationship_data'
       required:
         - data
+      type: object
+    UpdateSceneMetadata:
+      additionalProperties:
+        nullable: true
+        type: string
+      description: |
+        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
       type: object
     SceneViewStateData:
       additionalProperties: false
@@ -8950,6 +9454,78 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    UpdateItemToDefaultRenditionOperation:
+      additionalProperties: false
+      description:
+        An operation that updates items with the specified revision to
+        the default rendition.
+      properties:
+        type:
+          enum:
+            - update-to-default-rendition
+          example: update-to-default-rendition
+          type: string
+        revisionId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - revisionId
+        - type
+      type: object
+    SceneSyncData:
+      additionalProperties: false
+      properties:
+        type:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/SceneSyncData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SceneSyncItemResultData:
+      additionalProperties: false
+      properties:
+        type:
+          example: scene-sync-item-result
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/SceneSyncItemResultData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        relationships:
+          $ref: '#/components/schemas/SceneSyncItemResultData_relationships'
       required:
         - attributes
         - id
@@ -9073,6 +9649,9 @@ components:
         attributes:
           created: 2020-01-01T12:00:00Z
           topic: some-string
+          changed:
+            - some-string
+            - some-string
         links:
           key:
             href: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
@@ -9089,9 +9668,9 @@ components:
           maxLength: 36
           type: string
         attributes:
-          $ref: '#/components/schemas/WebhookEventData_attributes'
+          $ref: '#/components/schemas/WebhookEventDataAttributes'
         relationships:
-          $ref: '#/components/schemas/WebhookEventData_relationships'
+          $ref: '#/components/schemas/WebhookEventDataRelationships'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -9099,6 +9678,52 @@ components:
       required:
         - attributes
         - id
+        - type
+      type: object
+    WebhookEventSceneIncludedData:
+      properties:
+        type:
+          example: scene
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/WebhookEventSceneIncludedAttributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - links
+        - type
+      type: object
+    WebhookEventPartRevisionIncludedData:
+      properties:
+        type:
+          example: part-revision
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/WebhookEventPartRevisionIncludedAttributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - links
         - type
       type: object
     Link:
@@ -9132,15 +9757,6 @@ components:
       required:
         - max
         - min
-      type: object
-    PartRenditionRelationship:
-      additionalProperties: false
-      description: Relationship to a `part-rendition`.
-      properties:
-        data:
-          $ref: '#/components/schemas/PartRenditionRelationship_data'
-      required:
-        - data
       type: object
     GeometrySetRelationshipData:
       additionalProperties: false
@@ -9633,6 +10249,96 @@ components:
         - id
         - type
       type: object
+    WebhookEventDataAttributes:
+      additionalProperties: false
+      example:
+        created: 2020-01-01T12:00:00Z
+        topic: some-string
+        changed:
+          - some-string
+          - some-string
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        topic:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        changed:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      required:
+        - created
+        - topic
+      type: object
+    WebhookEventDataRelationships:
+      additionalProperties: false
+      example:
+        owner:
+          data:
+            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            type: account
+          links:
+            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+        resource:
+          data:
+            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            type: queued-scene-item
+          links:
+            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+      properties:
+        owner:
+          $ref: '#/components/schemas/WebhookEventDataRelationships_owner'
+        resource:
+          $ref: '#/components/schemas/WebhookEventDataRelationships_resource'
+      required:
+        - owner
+        - resource
+      type: object
+    WebhookEventSceneIncludedAttributes:
+      properties:
+        metadata:
+          additionalProperties:
+            maxLength: 256
+            minLength: 0
+            type: string
+          description: |
+            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+          type: object
+      type: object
+    WebhookEventPartRevisionIncludedAttributes:
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        partName:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      type: object
+    Color:
+      description: Color value from 0 to 255.
+      example: 255
+      format: int32
+      maximum: 255
+      minimum: 0
+      type: integer
     RelationshipLinks:
       additionalProperties: false
       example:
@@ -9644,13 +10350,6 @@ components:
       required:
         - related
       type: object
-    Color:
-      description: Color value from 0 to 255.
-      example: 255
-      format: int32
-      maximum: 255
-      minimum: 0
-      type: integer
     CreateAccountRequest_data_attributes:
       properties:
         name:
@@ -9829,6 +10528,18 @@ components:
         - id
         - type
       type: object
+    UpdateApplicationRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        redirect_uris:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
+      type: object
     UpdateApplicationRequest_data:
       properties:
         type:
@@ -9837,7 +10548,7 @@ components:
           maxLength: 32
           type: string
         attributes:
-          $ref: '#/components/schemas/CreateAccountRequest_data_attributes'
+          $ref: '#/components/schemas/UpdateApplicationRequest_data_attributes'
       required:
         - attributes
         - type
@@ -10073,6 +10784,13 @@ components:
           maxLength: 255
           type: string
       type: object
+    UpdatePartRevisionRequest_data_relationships:
+      properties:
+        source:
+          $ref: '#/components/schemas/FileRelationship'
+        defaultPartRendition:
+          $ref: '#/components/schemas/PartRenditionRelationship'
+      type: object
     UpdatePartRevisionRequest_data:
       description: |
         Modify existing part revisions using this endpoint. When specifying a `relationship`, the generated output from that relationship will be used to replace any relationship that is present on the revision prior to the update.
@@ -10092,7 +10810,7 @@ components:
         attributes:
           $ref: '#/components/schemas/UpdatePartRevisionRequest_data_attributes'
         relationships:
-          $ref: '#/components/schemas/CreateGeometrySetRequest_data_relationships'
+          $ref: '#/components/schemas/UpdatePartRevisionRequest_data_relationships'
       required:
         - attributes
         - id
@@ -10487,6 +11205,8 @@ components:
             maxLength: 256
             minLength: 0
             type: string
+          description: |
+            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
           type: object
       type: object
     CreateSceneRequest_data_relationships:
@@ -10545,9 +11265,10 @@ components:
           $ref: '#/components/schemas/Orientation'
         metadata:
           additionalProperties:
-            maxLength: 256
-            minLength: 0
+            nullable: true
             type: string
+          description: |
+            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
           type: object
       type: object
     UpdateSceneRequest_data:
@@ -10821,10 +11542,15 @@ components:
           items:
             $ref: '#/components/schemas/NonEmptyString'
           type: array
+        redirectUris:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
       required:
         - clientId
         - created
         - name
+        - redirectUris
         - scopes
       type: object
     BatchOperation_ref:
@@ -11050,6 +11776,25 @@ components:
           $ref: '#/components/schemas/GeometrySetRelationshipData'
         partRevision:
           $ref: '#/components/schemas/PartRevisionRelationship'
+      type: object
+    PartRenditionRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - part-rendition
+          example: part-rendition
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     PartData_attributes:
       properties:
@@ -11340,7 +12085,11 @@ components:
           type: integer
         metadata:
           additionalProperties:
+            maxLength: 256
+            minLength: 0
             type: string
+          description: |
+            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
           type: object
       type: object
     SceneRelationship_data:
@@ -11430,6 +12179,44 @@ components:
         - created
         - expiry
       type: object
+    SceneSyncData_attributes:
+      properties:
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        completedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        status:
+          example: completed
+          type: string
+      required:
+        - completedAt
+        - created
+        - status
+      type: object
+    SceneSyncItemResultData_attributes:
+      properties:
+        status:
+          example: running
+          type: string
+        error:
+          $ref: '#/components/schemas/ApiError'
+      required:
+        - status
+      type: object
+    SceneSyncItemResultData_relationships:
+      properties:
+        scene:
+          $ref: '#/components/schemas/SceneRelationship'
+        sceneItem:
+          $ref: '#/components/schemas/SceneItemRelationship'
+      required:
+        - scene
+        - sceneItem
+      type: object
     QueuedTranslationJobData_attributes:
       properties:
         status:
@@ -11503,140 +12290,6 @@ components:
         - topics
         - url
       type: object
-    WebhookEventData_attributes:
-      example:
-        created: 2020-01-01T12:00:00Z
-        topic: some-string
-      properties:
-        created:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        topic:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - created
-        - topic
-      type: object
-    WebhookEventData_relationships_owner_data:
-      example:
-        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-        type: account
-      properties:
-        type:
-          description: Resource object type.
-          enum:
-            - account
-          example: account
-          maxLength: 32
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
-      type: object
-    WebhookEventData_relationships_owner:
-      description: Relationship to an `owner`.
-      example:
-        data:
-          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          type: account
-        links:
-          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookEventData_relationships_owner_data'
-        links:
-          $ref: '#/components/schemas/RelationshipLinks'
-      required:
-        - data
-      type: object
-    WebhookEventData_relationships_resource_data:
-      example:
-        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-        type: queued-scene-item
-      properties:
-        type:
-          description: Resource object type.
-          example: queued-scene-item
-          maxLength: 32
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
-      type: object
-    WebhookEventData_relationships_resource:
-      description: Relationship to a `resource`.
-      example:
-        data:
-          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          type: queued-scene-item
-        links:
-          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-      properties:
-        data:
-          $ref: '#/components/schemas/WebhookEventData_relationships_resource_data'
-        links:
-          $ref: '#/components/schemas/RelationshipLinks'
-      required:
-        - data
-      type: object
-    WebhookEventData_relationships:
-      example:
-        owner:
-          data:
-            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-            type: account
-          links:
-            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-        resource:
-          data:
-            id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-            type: queued-scene-item
-          links:
-            related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
-      properties:
-        owner:
-          $ref: '#/components/schemas/WebhookEventData_relationships_owner'
-        resource:
-          $ref: '#/components/schemas/WebhookEventData_relationships_resource'
-      required:
-        - owner
-        - resource
-      type: object
-    PartRenditionRelationship_data:
-      properties:
-        type:
-          description: Resource object type.
-          enum:
-            - part-rendition
-          example: part-rendition
-          maxLength: 32
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
-      type: object
     QueryById_data_attributes:
       properties:
         type:
@@ -11704,6 +12357,80 @@ components:
       required:
         - attributes
         - type
+      type: object
+    WebhookEventDataRelationships_owner_data:
+      example:
+        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        type: account
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - account
+          example: account
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    WebhookEventDataRelationships_owner:
+      description: Relationship to an `owner`.
+      example:
+        data:
+          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          type: account
+        links:
+          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookEventDataRelationships_owner_data'
+        links:
+          $ref: '#/components/schemas/RelationshipLinks'
+      required:
+        - data
+      type: object
+    WebhookEventDataRelationships_resource_data:
+      example:
+        id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        type: queued-scene-item
+      properties:
+        type:
+          description: Resource object type.
+          example: queued-scene-item
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    WebhookEventDataRelationships_resource:
+      description: Relationship to a `resource`.
+      example:
+        data:
+          id: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          type: queued-scene-item
+        links:
+          related: /some-resource/d98d621a-23da-49fe-af96-6be709abb718
+      properties:
+        data:
+          $ref: '#/components/schemas/WebhookEventDataRelationships_resource_data'
+        links:
+          $ref: '#/components/schemas/RelationshipLinks'
+      required:
+        - data
       type: object
   securitySchemes:
     OAuth2:

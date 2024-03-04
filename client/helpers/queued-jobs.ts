@@ -124,7 +124,8 @@ export async function pollQueuedJob<T>({
 
   let attempts = 1;
   let backoffMs = backoff?.[attempts] ?? 0;
-  const pollRes = await poll(attempts);
+  // eslint-disable-next-line prefer-const
+  let pollRes = await poll(attempts);
   /* eslint-disable no-await-in-loop */
   while (
     !completeJob(pollRes.res) &&
@@ -136,7 +137,7 @@ export async function pollQueuedJob<T>({
     attempts += 1;
     backoffMs = backoff?.[attempts] ?? backoffMs;
     await delay(intervalMs + backoffMs);
-    await poll(attempts);
+    pollRes = await poll(attempts);
   }
   /* eslint-enable no-await-in-loop */
 

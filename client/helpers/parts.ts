@@ -126,7 +126,7 @@ export async function createPartFromFile({
   const pollRes = await pollQueuedJob<Part>({
     id: queuedId,
     getQueuedJob: (id) =>
-      client.translationInspections.getQueuedTranslation({ id }),
+      client.translationInspections.getQueuedTranslationJob({ id }),
     polling,
   });
   if (isPollError(pollRes.res)) throwOnError(pollRes);
