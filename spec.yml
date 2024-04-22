@@ -37,6 +37,7 @@ tags:
   - name: part-revisions
   - name: parts
   - name: scene-alterations
+  - name: scene-annotations
   - name: scene-item-overrides
   - name: scene-items
   - name: scene-synchronizations
@@ -5481,6 +5482,197 @@ paths:
         - OAuth2: []
       tags:
         - stream-keys
+  /scenes/{id}/scene-annotation-sets:
+    post:
+      description: |
+        Create an annotation set that is associated with a scene.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: createSceneAnnotationSet
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateSceneAnnotationSetRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneAnnotationSet'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - scene-annotations
+  /scene-annotation-sets/{id}/scene-annotations:
+    post:
+      description: |
+        Create an annotation belonging to an annotation set.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: createSceneAnnotation
+      parameters:
+        - description: The `scene-annotation-set` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateSceneAnnotationRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneAnnotation'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - scene-annotations
+  /scene-annotations/{id}:
+    delete:
+      description: |
+        Delete a scene annotation.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: deleteSceneAnnotation
+      parameters:
+        - description: The `scene-annotation` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-annotations
+    patch:
+      description: |
+        Update the attributes of an annotation.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: updateSceneAnnotation
+      parameters:
+        - description: The `scene-annotation` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateSceneAnnotationRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneAnnotation'
+          description: OK
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - scene-annotations
   /scenes/{id}/scene-syncs:
     post:
       description: Create a scene item update job.
@@ -7132,6 +7324,24 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    SceneAnnotationSetId:
+      description: The `scene-annotation-set` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    SceneAnnotationId:
+      description: The `scene-annotation` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     SceneFields:
       description:
         Comma-separated list of fields to return in response. An empty
@@ -8243,6 +8453,54 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - data
+      type: object
+    CreateSceneAnnotationSetRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateSceneAnnotationSetRequest_data'
+      required:
+        - data
+      type: object
+    SceneAnnotationSet:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneAnnotationSetData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    CreateSceneAnnotationRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateSceneAnnotationRequest_data'
+      required:
+        - data
+      type: object
+    SceneAnnotation:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneAnnotationData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    UpdateSceneAnnotationRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateSceneAnnotationRequest_data'
       required:
         - data
       type: object
@@ -9458,6 +9716,59 @@ components:
         - attributes
         - id
         - relationships
+        - type
+      type: object
+    SceneAnnotationSetData:
+      additionalProperties: false
+      properties:
+        type:
+          example: scene-annotation-set
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/SceneAnnotationSetData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SceneAnnotationJson:
+      description:
+        A JSON string that describes the annotation type and its data.
+        JSON data is limited to 16kb.
+      example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
+      maxLength: 16384
+      type: string
+    SceneAnnotationData:
+      additionalProperties: false
+      properties:
+        type:
+          example: scene-annotation
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/SceneAnnotationData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
         - type
       type: object
     UpdateItemToDefaultRenditionOperation:
@@ -11364,6 +11675,91 @@ components:
         - attributes
         - type
       type: object
+    CreateSceneAnnotationSetRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          description: A customer provided ID used for correlation.
+          example: PN12345
+          maxLength: 256
+          type: string
+      type: object
+    CreateSceneAnnotationSetRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: scene-annotation-set
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSceneAnnotationSetRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateSceneAnnotationRequest_data_attributes:
+      properties:
+        data:
+          description:
+            A JSON string that describes the annotation type and its data.
+            JSON data is limited to 16kb.
+          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
+          maxLength: 16384
+          type: string
+        suppliedId:
+          description: A customer provided ID used for correlation.
+          example: PN12345
+          maxLength: 256
+          type: string
+      required:
+        - data
+      type: object
+    CreateSceneAnnotationRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: scene-annotation
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSceneAnnotationRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdateSceneAnnotationRequest_data_attributes:
+      properties:
+        data:
+          description:
+            A JSON string that describes the annotation type and its data.
+            JSON data is limited to 16kb.
+          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
+          maxLength: 16384
+          type: string
+        suppliedId:
+          description: A customer provided ID used for correlation.
+          example: PN12345
+          maxLength: 256
+          nullable: true
+          type: string
+      type: object
+    UpdateSceneAnnotationRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: scene-annotation
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateSceneAnnotationRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateTranslationInspectionRequest_data:
       properties:
         type:
@@ -12178,6 +12574,57 @@ components:
       required:
         - created
         - expiry
+      type: object
+    SceneAnnotationSetData_attributes:
+      properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        modifiedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - modifiedAt
+      type: object
+    SceneAnnotationData_attributes:
+      properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        modifiedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        data:
+          description:
+            A JSON string that describes the annotation type and its data.
+            JSON data is limited to 16kb.
+          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
+          maxLength: 16384
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - data
+        - modifiedAt
       type: object
     SceneSyncData_attributes:
       properties:
