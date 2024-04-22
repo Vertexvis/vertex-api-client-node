@@ -1368,6 +1368,108 @@ export interface CreateSceneAlterationRequestDataAttributes {
 /**
  *
  * @export
+ * @interface CreateSceneAnnotationRequest
+ */
+export interface CreateSceneAnnotationRequest {
+  /**
+   *
+   * @type {CreateSceneAnnotationRequestData}
+   * @memberof CreateSceneAnnotationRequest
+   */
+  data: CreateSceneAnnotationRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneAnnotationRequestData
+ */
+export interface CreateSceneAnnotationRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateSceneAnnotationRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateSceneAnnotationRequestDataAttributes}
+   * @memberof CreateSceneAnnotationRequestData
+   */
+  attributes: CreateSceneAnnotationRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneAnnotationRequestDataAttributes
+ */
+export interface CreateSceneAnnotationRequestDataAttributes {
+  /**
+   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
+   * @type {string}
+   * @memberof CreateSceneAnnotationRequestDataAttributes
+   */
+  data: string;
+  /**
+   * A customer provided ID used for correlation.
+   * @type {string}
+   * @memberof CreateSceneAnnotationRequestDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneAnnotationSetRequest
+ */
+export interface CreateSceneAnnotationSetRequest {
+  /**
+   *
+   * @type {CreateSceneAnnotationSetRequestData}
+   * @memberof CreateSceneAnnotationSetRequest
+   */
+  data: CreateSceneAnnotationSetRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneAnnotationSetRequestData
+ */
+export interface CreateSceneAnnotationSetRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateSceneAnnotationSetRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateSceneAnnotationSetRequestDataAttributes}
+   * @memberof CreateSceneAnnotationSetRequestData
+   */
+  attributes: CreateSceneAnnotationSetRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneAnnotationSetRequestDataAttributes
+ */
+export interface CreateSceneAnnotationSetRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateSceneAnnotationSetRequestDataAttributes
+   */
+  name?: string;
+  /**
+   * A customer provided ID used for correlation.
+   * @type {string}
+   * @memberof CreateSceneAnnotationSetRequestDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
  * @interface CreateSceneItemOverrideRequest
  */
 export interface CreateSceneItemOverrideRequest {
@@ -4215,6 +4317,168 @@ export interface SceneAlterationList {
 /**
  *
  * @export
+ * @interface SceneAnnotation
+ */
+export interface SceneAnnotation {
+  /**
+   *
+   * @type {SceneAnnotationData}
+   * @memberof SceneAnnotation
+   */
+  data: SceneAnnotationData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAnnotation
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationData
+ */
+export interface SceneAnnotationData {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneAnnotationData
+   */
+  id: string;
+  /**
+   *
+   * @type {SceneAnnotationDataAttributes}
+   * @memberof SceneAnnotationData
+   */
+  attributes: SceneAnnotationDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAnnotationData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationDataAttributes
+ */
+export interface SceneAnnotationDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationDataAttributes
+   */
+  modifiedAt: string;
+  /**
+   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
+   * @type {string}
+   * @memberof SceneAnnotationDataAttributes
+   */
+  data: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationSet
+ */
+export interface SceneAnnotationSet {
+  /**
+   *
+   * @type {SceneAnnotationSetData}
+   * @memberof SceneAnnotationSet
+   */
+  data: SceneAnnotationSetData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAnnotationSet
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationSetData
+ */
+export interface SceneAnnotationSetData {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationSetData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneAnnotationSetData
+   */
+  id: string;
+  /**
+   *
+   * @type {SceneAnnotationSetDataAttributes}
+   * @memberof SceneAnnotationSetData
+   */
+  attributes: SceneAnnotationSetDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAnnotationSetData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationSetDataAttributes
+ */
+export interface SceneAnnotationSetDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationSetDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationSetDataAttributes
+   */
+  modifiedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationSetDataAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof SceneAnnotationSetDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
  * @interface SceneData
  */
 export interface SceneData {
@@ -5777,6 +6041,57 @@ export interface UpdatePartRevisionRequestDataRelationships {
    * @memberof UpdatePartRevisionRequestDataRelationships
    */
   defaultPartRendition?: PartRenditionRelationship;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneAnnotationRequest
+ */
+export interface UpdateSceneAnnotationRequest {
+  /**
+   *
+   * @type {UpdateSceneAnnotationRequestData}
+   * @memberof UpdateSceneAnnotationRequest
+   */
+  data: UpdateSceneAnnotationRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneAnnotationRequestData
+ */
+export interface UpdateSceneAnnotationRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateSceneAnnotationRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateSceneAnnotationRequestDataAttributes}
+   * @memberof UpdateSceneAnnotationRequestData
+   */
+  attributes: UpdateSceneAnnotationRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneAnnotationRequestDataAttributes
+ */
+export interface UpdateSceneAnnotationRequestDataAttributes {
+  /**
+   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
+   * @type {string}
+   * @memberof UpdateSceneAnnotationRequestDataAttributes
+   */
+  data?: string;
+  /**
+   * A customer provided ID used for correlation.
+   * @type {string}
+   * @memberof UpdateSceneAnnotationRequestDataAttributes
+   */
+  suppliedId?: string | null;
 }
 /**
  *
@@ -14179,6 +14494,631 @@ export class SceneAlterationsApi extends BaseAPI {
   ) {
     return SceneAlterationsApiFp(this.configuration)
       .getSceneAlterations(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * SceneAnnotationsApi - axios parameter creator
+ * @export
+ */
+export const SceneAnnotationsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create an annotation belonging to an annotation set. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation-set&#x60; ID.
+     * @param {CreateSceneAnnotationRequest} createSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneAnnotation: async (
+      id: string,
+      createSceneAnnotationRequest: CreateSceneAnnotationRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createSceneAnnotation', 'id', id);
+      // verify required parameter 'createSceneAnnotationRequest' is not null or undefined
+      assertParamExists(
+        'createSceneAnnotation',
+        'createSceneAnnotationRequest',
+        createSceneAnnotationRequest
+      );
+      const localVarPath =
+        `/scene-annotation-sets/{id}/scene-annotations`.replace(
+          `{${'id'}}`,
+          encodeURIComponent(String(id))
+        );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createSceneAnnotationRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Create an annotation set that is associated with a scene. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneAnnotationSetRequest} createSceneAnnotationSetRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneAnnotationSet: async (
+      id: string,
+      createSceneAnnotationSetRequest: CreateSceneAnnotationSetRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createSceneAnnotationSet', 'id', id);
+      // verify required parameter 'createSceneAnnotationSetRequest' is not null or undefined
+      assertParamExists(
+        'createSceneAnnotationSet',
+        'createSceneAnnotationSetRequest',
+        createSceneAnnotationSetRequest
+      );
+      const localVarPath = `/scenes/{id}/scene-annotation-sets`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createSceneAnnotationSetRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete a scene annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneAnnotation: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteSceneAnnotation', 'id', id);
+      const localVarPath = `/scene-annotations/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSceneAnnotation: async (
+      id: string,
+      updateSceneAnnotationRequest: UpdateSceneAnnotationRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateSceneAnnotation', 'id', id);
+      // verify required parameter 'updateSceneAnnotationRequest' is not null or undefined
+      assertParamExists(
+        'updateSceneAnnotation',
+        'updateSceneAnnotationRequest',
+        updateSceneAnnotationRequest
+      );
+      const localVarPath = `/scene-annotations/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateSceneAnnotationRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * SceneAnnotationsApi - functional programming interface
+ * @export
+ */
+export const SceneAnnotationsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    SceneAnnotationsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create an annotation belonging to an annotation set. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation-set&#x60; ID.
+     * @param {CreateSceneAnnotationRequest} createSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createSceneAnnotation(
+      id: string,
+      createSceneAnnotationRequest: CreateSceneAnnotationRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneAnnotation>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneAnnotation(
+          id,
+          createSceneAnnotationRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Create an annotation set that is associated with a scene. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneAnnotationSetRequest} createSceneAnnotationSetRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createSceneAnnotationSet(
+      id: string,
+      createSceneAnnotationSetRequest: CreateSceneAnnotationSetRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneAnnotationSet>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSceneAnnotationSet(
+          id,
+          createSceneAnnotationSetRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete a scene annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteSceneAnnotation(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteSceneAnnotation(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateSceneAnnotation(
+      id: string,
+      updateSceneAnnotationRequest: UpdateSceneAnnotationRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneAnnotation>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateSceneAnnotation(
+          id,
+          updateSceneAnnotationRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * SceneAnnotationsApi - factory interface
+ * @export
+ */
+export const SceneAnnotationsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = SceneAnnotationsApiFp(configuration);
+  return {
+    /**
+     * Create an annotation belonging to an annotation set. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation-set&#x60; ID.
+     * @param {CreateSceneAnnotationRequest} createSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneAnnotation(
+      id: string,
+      createSceneAnnotationRequest: CreateSceneAnnotationRequest,
+      options?: any
+    ): AxiosPromise<SceneAnnotation> {
+      return localVarFp
+        .createSceneAnnotation(id, createSceneAnnotationRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Create an annotation set that is associated with a scene. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {CreateSceneAnnotationSetRequest} createSceneAnnotationSetRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSceneAnnotationSet(
+      id: string,
+      createSceneAnnotationSetRequest: CreateSceneAnnotationSetRequest,
+      options?: any
+    ): AxiosPromise<SceneAnnotationSet> {
+      return localVarFp
+        .createSceneAnnotationSet(id, createSceneAnnotationSetRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete a scene annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteSceneAnnotation(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteSceneAnnotation(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;scene-annotation&#x60; ID.
+     * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateSceneAnnotation(
+      id: string,
+      updateSceneAnnotationRequest: UpdateSceneAnnotationRequest,
+      options?: any
+    ): AxiosPromise<SceneAnnotation> {
+      return localVarFp
+        .updateSceneAnnotation(id, updateSceneAnnotationRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createSceneAnnotation operation in SceneAnnotationsApi.
+ * @export
+ * @interface SceneAnnotationsApiCreateSceneAnnotationRequest
+ */
+export interface SceneAnnotationsApiCreateSceneAnnotationRequest {
+  /**
+   * The &#x60;scene-annotation-set&#x60; ID.
+   * @type {string}
+   * @memberof SceneAnnotationsApiCreateSceneAnnotation
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneAnnotationRequest}
+   * @memberof SceneAnnotationsApiCreateSceneAnnotation
+   */
+  readonly createSceneAnnotationRequest: CreateSceneAnnotationRequest;
+}
+
+/**
+ * Request parameters for createSceneAnnotationSet operation in SceneAnnotationsApi.
+ * @export
+ * @interface SceneAnnotationsApiCreateSceneAnnotationSetRequest
+ */
+export interface SceneAnnotationsApiCreateSceneAnnotationSetRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneAnnotationsApiCreateSceneAnnotationSet
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateSceneAnnotationSetRequest}
+   * @memberof SceneAnnotationsApiCreateSceneAnnotationSet
+   */
+  readonly createSceneAnnotationSetRequest: CreateSceneAnnotationSetRequest;
+}
+
+/**
+ * Request parameters for deleteSceneAnnotation operation in SceneAnnotationsApi.
+ * @export
+ * @interface SceneAnnotationsApiDeleteSceneAnnotationRequest
+ */
+export interface SceneAnnotationsApiDeleteSceneAnnotationRequest {
+  /**
+   * The &#x60;scene-annotation&#x60; ID.
+   * @type {string}
+   * @memberof SceneAnnotationsApiDeleteSceneAnnotation
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for updateSceneAnnotation operation in SceneAnnotationsApi.
+ * @export
+ * @interface SceneAnnotationsApiUpdateSceneAnnotationRequest
+ */
+export interface SceneAnnotationsApiUpdateSceneAnnotationRequest {
+  /**
+   * The &#x60;scene-annotation&#x60; ID.
+   * @type {string}
+   * @memberof SceneAnnotationsApiUpdateSceneAnnotation
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateSceneAnnotationRequest}
+   * @memberof SceneAnnotationsApiUpdateSceneAnnotation
+   */
+  readonly updateSceneAnnotationRequest: UpdateSceneAnnotationRequest;
+}
+
+/**
+ * SceneAnnotationsApi - object-oriented interface
+ * @export
+ * @class SceneAnnotationsApi
+ * @extends {BaseAPI}
+ */
+export class SceneAnnotationsApi extends BaseAPI {
+  /**
+   * Create an annotation belonging to an annotation set. **Preview:** This is a preview API and is subject to change.
+   * @param {SceneAnnotationsApiCreateSceneAnnotationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneAnnotationsApi
+   */
+  public createSceneAnnotation(
+    requestParameters: SceneAnnotationsApiCreateSceneAnnotationRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneAnnotationsApiFp(this.configuration)
+      .createSceneAnnotation(
+        requestParameters.id,
+        requestParameters.createSceneAnnotationRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create an annotation set that is associated with a scene. **Preview:** This is a preview API and is subject to change.
+   * @param {SceneAnnotationsApiCreateSceneAnnotationSetRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneAnnotationsApi
+   */
+  public createSceneAnnotationSet(
+    requestParameters: SceneAnnotationsApiCreateSceneAnnotationSetRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneAnnotationsApiFp(this.configuration)
+      .createSceneAnnotationSet(
+        requestParameters.id,
+        requestParameters.createSceneAnnotationSetRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete a scene annotation. **Preview:** This is a preview API and is subject to change.
+   * @param {SceneAnnotationsApiDeleteSceneAnnotationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneAnnotationsApi
+   */
+  public deleteSceneAnnotation(
+    requestParameters: SceneAnnotationsApiDeleteSceneAnnotationRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneAnnotationsApiFp(this.configuration)
+      .deleteSceneAnnotation(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
+   * @param {SceneAnnotationsApiUpdateSceneAnnotationRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneAnnotationsApi
+   */
+  public updateSceneAnnotation(
+    requestParameters: SceneAnnotationsApiUpdateSceneAnnotationRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneAnnotationsApiFp(this.configuration)
+      .updateSceneAnnotation(
+        requestParameters.id,
+        requestParameters.updateSceneAnnotationRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
