@@ -1404,11 +1404,11 @@ export interface CreateSceneAnnotationRequestData {
  */
 export interface CreateSceneAnnotationRequestDataAttributes {
   /**
-   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
-   * @type {string}
+   * The data describing how to render this annotation.
+   * @type {SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType}
    * @memberof CreateSceneAnnotationRequestDataAttributes
    */
-  data: string;
+  data: SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType;
   /**
    * A customer provided ID used for correlation.
    * @type {string}
@@ -4334,6 +4334,68 @@ export interface SceneAnnotation {
   links?: { [key: string]: Link };
 }
 /**
+ * A type that describes a callout annotation.
+ * @export
+ * @interface SceneAnnotationCalloutDataType
+ */
+export interface SceneAnnotationCalloutDataType {
+  /**
+   * The type of annotation.
+   * @type {string}
+   * @memberof SceneAnnotationCalloutDataType
+   */
+  type: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof SceneAnnotationCalloutDataType
+   */
+  position: Vector3;
+  /**
+   * An optional icon to display for this annotation. See [documentation](https://github.com/Vertexvis/vertex-web-sdk/tree/master/packages/viewer/src/components/viewer-icon#properties) for possible values.
+   * @type {string}
+   * @memberof SceneAnnotationCalloutDataType
+   */
+  icon?: string;
+  /**
+   * A hex color value.
+   * @type {string}
+   * @memberof SceneAnnotationCalloutDataType
+   */
+  primaryColor?: string;
+  /**
+   * A hex color value.
+   * @type {string}
+   * @memberof SceneAnnotationCalloutDataType
+   */
+  accentColor?: string;
+}
+/**
+ * A type that describes a custom user provided annotation.
+ * @export
+ * @interface SceneAnnotationCustomDataType
+ */
+export interface SceneAnnotationCustomDataType {
+  /**
+   * The type of annotation.
+   * @type {string}
+   * @memberof SceneAnnotationCustomDataType
+   */
+  type: string;
+  /**
+   * The type of annotation.
+   * @type {string}
+   * @memberof SceneAnnotationCustomDataType
+   */
+  jsonType: string;
+  /**
+   * An encoded JSON string associated with the custom annotation.
+   * @type {string}
+   * @memberof SceneAnnotationCustomDataType
+   */
+  json: string;
+}
+/**
  *
  * @export
  * @interface SceneAnnotationData
@@ -4383,11 +4445,11 @@ export interface SceneAnnotationDataAttributes {
    */
   modifiedAt: string;
   /**
-   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
-   * @type {string}
+   * The data describing how to render this annotation.
+   * @type {SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType}
    * @memberof SceneAnnotationDataAttributes
    */
-  data: string;
+  data: SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType;
   /**
    *
    * @type {string}
@@ -6081,11 +6143,11 @@ export interface UpdateSceneAnnotationRequestData {
  */
 export interface UpdateSceneAnnotationRequestDataAttributes {
   /**
-   * A JSON string that describes the annotation type and its data. JSON data is limited to 16kb.
-   * @type {string}
+   * The data describing how to render this annotation.
+   * @type {SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType}
    * @memberof UpdateSceneAnnotationRequestDataAttributes
    */
-  data?: string;
+  data?: SceneAnnotationCalloutDataType | SceneAnnotationCustomDataType;
   /**
    * A customer provided ID used for correlation.
    * @type {string}

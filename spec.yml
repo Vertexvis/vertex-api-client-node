@@ -9741,13 +9741,64 @@ components:
         - id
         - type
       type: object
-    SceneAnnotationJson:
-      description:
-        A JSON string that describes the annotation type and its data.
-        JSON data is limited to 16kb.
-      example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
-      maxLength: 16384
-      type: string
+    SceneAnnotationCalloutDataType:
+      description: A type that describes a callout annotation.
+      properties:
+        type:
+          description: The type of annotation.
+          example: callout
+          maxLength: 32
+          type: string
+        position:
+          $ref: '#/components/schemas/Vector3'
+        icon:
+          description: |
+            An optional icon to display for this annotation. See [documentation](https://github.com/Vertexvis/vertex-web-sdk/tree/master/packages/viewer/src/components/viewer-icon#properties) for possible values.
+          example: comment-show
+          maxLength: 64
+          type: string
+        primaryColor:
+          description: A hex color value.
+          example: '#FFFFFF'
+          maxLength: 7
+          minLength: 7
+          pattern: ^#[0-9a-fA-F]{6}$
+          type: string
+        accentColor:
+          description: A hex color value.
+          example: '#FFFFFF'
+          maxLength: 7
+          minLength: 7
+          pattern: ^#[0-9a-fA-F]{6}$
+          type: string
+      required:
+        - position
+        - type
+      type: object
+    SceneAnnotationCustomDataType:
+      additionalProperties: false
+      description: A type that describes a custom user provided annotation.
+      properties:
+        type:
+          description: The type of annotation.
+          example: custom
+          maxLength: 32
+          type: string
+        jsonType:
+          description: The type of annotation.
+          example: my-annotation-type
+          maxLength: 32
+          type: string
+        json:
+          description: An encoded JSON string associated with the custom annotation.
+          example: '{"label":"my annotation","anchor":{"x":0,"y":0,"z":0}}'
+          maxLength: 16384
+          type: string
+      required:
+        - json
+        - jsonType
+        - type
+      type: object
     SceneAnnotationData:
       additionalProperties: false
       properties:
@@ -10507,6 +10558,13 @@ components:
         - color
         - width
       type: object
+    HexColor:
+      description: A hex color value.
+      example: '#FFFFFF'
+      maxLength: 7
+      minLength: 7
+      pattern: ^#[0-9a-fA-F]{6}$
+      type: string
     ExportConfig:
       description: Describes the options for configuring a file export.
       discriminator:
@@ -11704,12 +11762,15 @@ components:
     CreateSceneAnnotationRequest_data_attributes:
       properties:
         data:
-          description:
-            A JSON string that describes the annotation type and its data.
-            JSON data is limited to 16kb.
-          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
-          maxLength: 16384
-          type: string
+          description: The data describing how to render this annotation.
+          discriminator:
+            mapping:
+              callout: '#/components/schemas/SceneAnnotationCalloutDataType'
+              custom: '#/components/schemas/SceneAnnotationCustomDataType'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SceneAnnotationCalloutDataType'
+            - $ref: '#/components/schemas/SceneAnnotationCustomDataType'
         suppliedId:
           description: A customer provided ID used for correlation.
           example: PN12345
@@ -11734,12 +11795,15 @@ components:
     UpdateSceneAnnotationRequest_data_attributes:
       properties:
         data:
-          description:
-            A JSON string that describes the annotation type and its data.
-            JSON data is limited to 16kb.
-          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
-          maxLength: 16384
-          type: string
+          description: The data describing how to render this annotation.
+          discriminator:
+            mapping:
+              callout: '#/components/schemas/SceneAnnotationCalloutDataType'
+              custom: '#/components/schemas/SceneAnnotationCustomDataType'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SceneAnnotationCalloutDataType'
+            - $ref: '#/components/schemas/SceneAnnotationCustomDataType'
         suppliedId:
           description: A customer provided ID used for correlation.
           example: PN12345
@@ -12610,12 +12674,15 @@ components:
           format: date-time
           type: string
         data:
-          description:
-            A JSON string that describes the annotation type and its data.
-            JSON data is limited to 16kb.
-          example: '{"type":"my-annotation","anchor":{"x":0,"y":0,"z":0}}'
-          maxLength: 16384
-          type: string
+          description: The data describing how to render this annotation.
+          discriminator:
+            mapping:
+              callout: '#/components/schemas/SceneAnnotationCalloutDataType'
+              custom: '#/components/schemas/SceneAnnotationCustomDataType'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SceneAnnotationCalloutDataType'
+            - $ref: '#/components/schemas/SceneAnnotationCustomDataType'
         suppliedId:
           example: some-string
           maxLength: 1024
