@@ -14,6 +14,7 @@ import {
   PartRevisionsApi,
   PartsApi,
   SceneAlterationsApi,
+  SceneAnnotationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
   ScenesApi,
@@ -128,6 +129,7 @@ export class VertexClient {
   public partRevisions: PartRevisionsApi;
   public parts: PartsApi;
   public sceneAlterations: SceneAlterationsApi;
+  public sceneAnnotations: SceneAnnotationsApi;
   public sceneItemOverrides: SceneItemOverridesApi;
   public sceneItems: SceneItemsApi;
   public scenes: ScenesApi;
@@ -166,6 +168,11 @@ export class VertexClient {
     );
     this.parts = new PartsApi(this.config, undefined, axiosInst);
     this.sceneAlterations = new SceneAlterationsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.sceneAnnotations = new SceneAnnotationsApi(
       this.config,
       undefined,
       axiosInst
