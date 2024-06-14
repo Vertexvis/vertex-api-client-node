@@ -5483,6 +5483,104 @@ paths:
       tags:
         - stream-keys
   /scenes/{id}/scene-annotation-sets:
+    get:
+      description: Get `scene-annotation-sets` for a `scene`.
+      operationId: getSceneAnnotationSets
+      parameters:
+        - description: The `scene` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of IDs to filter on.
+          explode: true
+          in: query
+          name: filter[id]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            type: string
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SceneAnnotationSetList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - scene-annotations
     post:
       description: |
         Create an annotation set that is associated with a scene.
@@ -6195,15 +6293,34 @@ paths:
             minimum: 1
             type: integer
           style: form
+        - description:
+            A sort to apply to the collection. A "minus" prefixed before
+            the field name is used to specify descending sort order.
+          explode: true
+          in: query
+          name: sort
+          required: false
+          schema:
+            example: -age,name
+            type: string
+          style: form
         - description: Status to filter on.
           explode: true
           in: query
           name: filter[status]
           required: false
           schema:
-            example: running
+            example: running,complete
             maxLength: 1024
             type: string
+          style: form
+        - description: The completion date and time to filter on.
+          explode: true
+          in: query
+          name: filter[completedAt]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
           style: form
       responses:
         '200':
@@ -6352,7 +6469,7 @@ paths:
           name: filter[status]
           required: false
           schema:
-            example: running
+            example: running,complete
             maxLength: 1024
             type: string
           style: form
@@ -7166,6 +7283,15 @@ components:
       schema:
         $ref: '#/components/schemas/Vector3'
       style: deepObject
+    CompletedAtFilter:
+      description: The completion date and time to filter on.
+      explode: true
+      in: query
+      name: filter[completedAt]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
     ExportId:
       description: The `export` ID.
       explode: false
@@ -7495,7 +7621,7 @@ components:
       name: filter[status]
       required: false
       schema:
-        example: running
+        example: running,complete
         maxLength: 1024
         type: string
       style: form
@@ -7557,6 +7683,18 @@ components:
       schema:
         example: ?filter[sceneItems.source.scene]=f79d4760-0b71-44e4-ad0b-22743fdd4ca3,f79d4760-0b71-44e4-ad0b-22743fdd4ca2
         maxLength: 1024
+        type: string
+      style: form
+    Sort:
+      description:
+        A sort to apply to the collection. A "minus" prefixed before the
+        field name is used to specify descending sort order.
+      explode: true
+      in: query
+      name: sort
+      required: false
+      schema:
+        example: -age,name
         type: string
       style: form
     ClientIdFilter:
@@ -8456,6 +8594,21 @@ components:
       required:
         - data
       type: object
+    SceneAnnotationSetList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/SceneAnnotationSetData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     CreateSceneAnnotationSetRequest:
       additionalProperties: false
       properties:
@@ -8584,6 +8737,29 @@ components:
           type: object
       required:
         - data
+      type: object
+    FilterExpression:
+      additionalProperties: false
+      description: Describes how an attribute should be filtered.
+      properties:
+        eq:
+          description: A value of a filter.
+          type: string
+        neq:
+          description: A value of a filter.
+          type: string
+        gt:
+          description: A value of a filter.
+          type: string
+        gte:
+          description: A value of a filter.
+          type: string
+        lt:
+          description: A value of a filter.
+          type: string
+        lte:
+          description: A value of a filter.
+          type: string
       type: object
     QueuedJobList:
       additionalProperties: false
@@ -9636,13 +9812,13 @@ components:
         - front
         - up
       type: object
-    SceneMetadata:
+    UpdateSceneMetadata:
       additionalProperties:
         maxLength: 256
-        minLength: 0
+        nullable: true
         type: string
       description: |
-        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
       type: object
     SceneRelationship:
       additionalProperties: false
@@ -9652,13 +9828,6 @@ components:
           $ref: '#/components/schemas/SceneRelationship_data'
       required:
         - data
-      type: object
-    UpdateSceneMetadata:
-      additionalProperties:
-        nullable: true
-        type: string
-      description: |
-        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
       type: object
     SceneViewStateData:
       additionalProperties: false
@@ -9894,6 +10063,9 @@ components:
         - relationships
         - type
       type: object
+    FilterLiteral:
+      description: A value of a filter.
+      type: string
     QueuedTranslationJobData:
       additionalProperties: false
       properties:
@@ -10532,6 +10704,14 @@ components:
       required:
         - normal
         - offset
+      type: object
+    SceneMetadata:
+      additionalProperties:
+        maxLength: 256
+        minLength: 0
+        type: string
+      description: |
+        User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
       type: object
     ThumbnailData:
       additionalProperties: false
@@ -11572,10 +11752,10 @@ components:
         metadata:
           additionalProperties:
             maxLength: 256
-            minLength: 0
+            nullable: true
             type: string
           description: |
-            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+            User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
           type: object
       type: object
     CreateSceneRequest_data_relationships:
@@ -11634,6 +11814,7 @@ components:
           $ref: '#/components/schemas/Orientation'
         metadata:
           additionalProperties:
+            maxLength: 256
             nullable: true
             type: string
           description: |

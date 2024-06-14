@@ -1789,7 +1789,7 @@ export interface CreateSceneRequestDataAttributes {
    */
   worldOrientation?: Orientation;
   /**
-   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+   * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
    * @type {{ [key: string]: string; }}
    * @memberof CreateSceneRequestDataAttributes
    */
@@ -2599,6 +2599,49 @@ export const FileRelationshipDataTypeEnum = {
 export type FileRelationshipDataTypeEnum =
   (typeof FileRelationshipDataTypeEnum)[keyof typeof FileRelationshipDataTypeEnum];
 
+/**
+ * Describes how an attribute should be filtered.
+ * @export
+ * @interface FilterExpression
+ */
+export interface FilterExpression {
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  eq?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  neq?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  gt?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  gte?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  lt?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  lte?: string;
+}
 /**
  *
  * @export
@@ -4537,6 +4580,25 @@ export interface SceneAnnotationSetDataAttributes {
    * @memberof SceneAnnotationSetDataAttributes
    */
   suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneAnnotationSetList
+ */
+export interface SceneAnnotationSetList {
+  /**
+   *
+   * @type {Array<SceneAnnotationSetData>}
+   * @memberof SceneAnnotationSetList
+   */
+  data: Array<SceneAnnotationSetData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SceneAnnotationSetList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -14759,6 +14821,83 @@ export const SceneAnnotationsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Get `scene-annotation-sets` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneAnnotationSets: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterId?: string,
+      filterSuppliedId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneAnnotationSets', 'id', id);
+      const localVarPath = `/scenes/{id}/scene-annotation-sets`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterId !== undefined) {
+        localVarQueryParameter['filter[id]'] = filterId;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
      * @param {string} id The &#x60;scene-annotation&#x60; ID.
      * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
@@ -14919,6 +15058,45 @@ export const SceneAnnotationsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Get `scene-annotation-sets` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneAnnotationSets(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterId?: string,
+      filterSuppliedId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<SceneAnnotationSetList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneAnnotationSets(
+          id,
+          pageCursor,
+          pageSize,
+          filterId,
+          filterSuppliedId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
      * @param {string} id The &#x60;scene-annotation&#x60; ID.
      * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
@@ -15006,6 +15184,35 @@ export const SceneAnnotationsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Get `scene-annotation-sets` for a `scene`.
+     * @param {string} id The &#x60;scene&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneAnnotationSets(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      filterId?: string,
+      filterSuppliedId?: string,
+      options?: any
+    ): AxiosPromise<SceneAnnotationSetList> {
+      return localVarFp
+        .getSceneAnnotationSets(
+          id,
+          pageCursor,
+          pageSize,
+          filterId,
+          filterSuppliedId,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Update the attributes of an annotation. **Preview:** This is a preview API and is subject to change.
      * @param {string} id The &#x60;scene-annotation&#x60; ID.
      * @param {UpdateSceneAnnotationRequest} updateSceneAnnotationRequest
@@ -15078,6 +15285,48 @@ export interface SceneAnnotationsApiDeleteSceneAnnotationRequest {
    * @memberof SceneAnnotationsApiDeleteSceneAnnotation
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getSceneAnnotationSets operation in SceneAnnotationsApi.
+ * @export
+ * @interface SceneAnnotationsApiGetSceneAnnotationSetsRequest
+ */
+export interface SceneAnnotationsApiGetSceneAnnotationSetsRequest {
+  /**
+   * The &#x60;scene&#x60; ID.
+   * @type {string}
+   * @memberof SceneAnnotationsApiGetSceneAnnotationSets
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneAnnotationsApiGetSceneAnnotationSets
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneAnnotationsApiGetSceneAnnotationSets
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of IDs to filter on.
+   * @type {string}
+   * @memberof SceneAnnotationsApiGetSceneAnnotationSets
+   */
+  readonly filterId?: string;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof SceneAnnotationsApiGetSceneAnnotationSets
+   */
+  readonly filterSuppliedId?: string;
 }
 
 /**
@@ -15161,6 +15410,29 @@ export class SceneAnnotationsApi extends BaseAPI {
   ) {
     return SceneAnnotationsApiFp(this.configuration)
       .deleteSceneAnnotation(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `scene-annotation-sets` for a `scene`.
+   * @param {SceneAnnotationsApiGetSceneAnnotationSetsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SceneAnnotationsApi
+   */
+  public getSceneAnnotationSets(
+    requestParameters: SceneAnnotationsApiGetSceneAnnotationSetsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SceneAnnotationsApiFp(this.configuration)
+      .getSceneAnnotationSets(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterId,
+        requestParameters.filterSuppliedId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -21271,14 +21543,18 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
      * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {string} [filterStatus] Status to filter on.
+     * @param {FilterExpression} [filterCompletedAt] The completion date and time to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getQueuedTranslationJobs: async (
       pageCursor?: string,
       pageSize?: number,
+      sort?: string,
       filterStatus?: string,
+      filterCompletedAt?: FilterExpression,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/queued-translation-jobs`;
@@ -21314,8 +21590,16 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
+      if (sort !== undefined) {
+        localVarQueryParameter['sort'] = sort;
+      }
+
       if (filterStatus !== undefined) {
         localVarQueryParameter['filter[status]'] = filterStatus;
+      }
+
+      if (filterCompletedAt !== undefined) {
+        localVarQueryParameter['filter[completedAt]'] = filterCompletedAt;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -21510,14 +21794,18 @@ export const TranslationInspectionsApiFp = function (
      * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {string} [filterStatus] Status to filter on.
+     * @param {FilterExpression} [filterCompletedAt] The completion date and time to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getQueuedTranslationJobs(
       pageCursor?: string,
       pageSize?: number,
+      sort?: string,
       filterStatus?: string,
+      filterCompletedAt?: FilterExpression,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJobList>
@@ -21526,7 +21814,9 @@ export const TranslationInspectionsApiFp = function (
         await localVarAxiosParamCreator.getQueuedTranslationJobs(
           pageCursor,
           pageSize,
+          sort,
           filterStatus,
+          filterCompletedAt,
           options
         );
       return createRequestFunction(
@@ -21642,18 +21932,29 @@ export const TranslationInspectionsApiFactory = function (
      * Get all current translation jobs in progress.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {string} [filterStatus] Status to filter on.
+     * @param {FilterExpression} [filterCompletedAt] The completion date and time to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getQueuedTranslationJobs(
       pageCursor?: string,
       pageSize?: number,
+      sort?: string,
       filterStatus?: string,
+      filterCompletedAt?: FilterExpression,
       options?: any
     ): AxiosPromise<QueuedJobList> {
       return localVarFp
-        .getQueuedTranslationJobs(pageCursor, pageSize, filterStatus, options)
+        .getQueuedTranslationJobs(
+          pageCursor,
+          pageSize,
+          sort,
+          filterStatus,
+          filterCompletedAt,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -21755,11 +22056,25 @@ export interface TranslationInspectionsApiGetQueuedTranslationJobsRequest {
   readonly pageSize?: number;
 
   /**
+   * A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
+   * @type {string}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
+   */
+  readonly sort?: string;
+
+  /**
    * Status to filter on.
    * @type {string}
    * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
    */
   readonly filterStatus?: string;
+
+  /**
+   * The completion date and time to filter on.
+   * @type {FilterExpression}
+   * @memberof TranslationInspectionsApiGetQueuedTranslationJobs
+   */
+  readonly filterCompletedAt?: FilterExpression;
 }
 
 /**
@@ -21880,7 +22195,9 @@ export class TranslationInspectionsApi extends BaseAPI {
       .getQueuedTranslationJobs(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.sort,
         requestParameters.filterStatus,
+        requestParameters.filterCompletedAt,
         options
       )
       .then((request) => request(this.axios, this.basePath));
