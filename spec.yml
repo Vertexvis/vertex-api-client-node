@@ -32,10 +32,12 @@ tags:
   - name: files
   - name: geometry-sets
   - name: hits
+  - name: model-views
   - name: oauth2
   - name: part-renditions
   - name: part-revisions
   - name: parts
+  - name: pmi
   - name: scene-alterations
   - name: scene-annotations
   - name: scene-item-overrides
@@ -1095,6 +1097,81 @@ paths:
               schema:
                 $ref: '#/components/schemas/FileMetadata'
           description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - files
+    patch:
+      description: Update a `file`.
+      operationId: updateFile
+      parameters:
+        - description: The `file` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateFileRequest'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileMetadata'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
         '401':
           content:
             application/vnd.api+json:
@@ -2869,6 +2946,325 @@ paths:
         - OAuth2: []
       tags:
         - part-revisions
+  /model-views/{id}:
+    get:
+      description: Get the details of a `model-view`.
+      operationId: getModelView
+      parameters:
+        - description: The `model-view` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ModelView'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - model-views
+  /part-revisions/{id}/model-views:
+    get:
+      description: Get a paged list of `model-views` for a part revision.
+      operationId: getPartRevisionModelViews
+      parameters:
+        - description: The `part-revision` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Filter model views that contain or do not contain annotations.
+          explode: true
+          in: query
+          name: filter[hasAnnotations]
+          required: false
+          schema:
+            example: true
+            maxLength: 1024
+            type: boolean
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ModelViewList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - model-views
+  /scene-items/{id}/model-views:
+    get:
+      description: Get a paged list of `model-views` for a scene item.
+      operationId: getSceneItemModelViews
+      parameters:
+        - description: The `scene-item` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Filter model views that contain or do not contain annotations.
+          explode: true
+          in: query
+          name: filter[hasAnnotations]
+          required: false
+          schema:
+            example: true
+            maxLength: 1024
+            type: boolean
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ModelViewList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - model-views
+  /pmi-annotations:
+    get:
+      description: List `pmi-annotation`s.
+      operationId: getPmiAnnotations
+      parameters:
+        - description: Filter annotations belonging to a model view.
+          explode: true
+          in: query
+          name: filter[modelViewId]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PmiAnnotationList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - pmi
   /scene-alterations/{id}:
     get:
       description: Get a `scene-alteration` by ID.
@@ -7310,6 +7706,17 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    HasAnnotationsFilter:
+      description: Filter model views that contain or do not contain annotations.
+      explode: true
+      in: query
+      name: filter[hasAnnotations]
+      required: false
+      schema:
+        example: true
+        maxLength: 1024
+        type: boolean
+      style: form
     Height:
       description: The height of the image to render.
       explode: true
@@ -7365,6 +7772,15 @@ components:
         example: sceneItemOverride
         maxLength: 32
         type: string
+      style: form
+    ModelViewIdFilter:
+      description: Filter annotations belonging to a model view.
+      explode: true
+      in: query
+      name: filter[modelViewId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Uuid'
       style: form
     NameFilter:
       description: Comma-separated list of names to filter on.
@@ -8020,6 +8436,14 @@ components:
       required:
         - data
       type: object
+    UpdateFileRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateFileRequest_data'
+      required:
+        - data
+      type: object
     GeometrySetList:
       additionalProperties: false
       properties:
@@ -8307,6 +8731,48 @@ components:
           type: object
       required:
         - data
+      type: object
+    ModelView:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ModelViewData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    ModelViewList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ModelViewData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    PmiAnnotationList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PmiAnnotationData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
       type: object
     SceneAlteration:
       additionalProperties: false
@@ -9390,6 +9856,55 @@ components:
           $ref: '#/components/schemas/PartAssemblyRelationship_data'
       required:
         - data
+      type: object
+    ModelViewData:
+      additionalProperties: false
+      properties:
+        type:
+          example: model-view
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateAccountRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/ModelViewData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    PmiAnnotationData:
+      additionalProperties: false
+      properties:
+        type:
+          example: pmi-annotation
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateAccountRequest_data_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
       type: object
     SceneAlterationData:
       additionalProperties: false
@@ -11126,6 +11641,12 @@ components:
           example: root-assembly.prt.1
           maxLength: 1024
           type: string
+        expiry:
+          description: Number of seconds before the file is deleted.
+          example: 600
+          format: int32
+          minimum: 1
+          type: integer
       required:
         - name
       type: object
@@ -11138,6 +11659,29 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/CreateFileRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdateFileRequest_data_attributes:
+      properties:
+        expiry:
+          description: Number of seconds before the file is deleted.
+          example: 600
+          format: int32
+          minimum: 1
+          nullable: true
+          type: integer
+      type: object
+    UpdateFileRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: file
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateFileRequest_data_attributes'
       required:
         - attributes
         - type
@@ -12506,6 +13050,13 @@ components:
       required:
         - children
       type: object
+    ModelViewData_relationships:
+      properties:
+        partRevision:
+          $ref: '#/components/schemas/PartRevisionRelationship'
+      required:
+        - partRevision
+      type: object
     SceneAlterationData_relationships:
       properties:
         sceneView:
@@ -12622,6 +13173,13 @@ components:
           description: |
             Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
           type: object
+        experimentalSourceMetadataKeys:
+          description: |
+            Specifies which metadata keys should be copied from the source item. Sending null will  default to all keys. Sending an empty string will copy none of the sources' metadata.  Sending an array of ["KEY1", "KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
+          items:
+            type: string
+          maxItems: 500
+          type: array
       type: object
     CreateSceneItemRequestData_relationships:
       properties:

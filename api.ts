@@ -1041,6 +1041,12 @@ export interface CreateFileRequestDataAttributes {
    * @memberof CreateFileRequestDataAttributes
    */
   rootFileName?: string;
+  /**
+   * Number of seconds before the file is deleted.
+   * @type {number}
+   * @memberof CreateFileRequestDataAttributes
+   */
+  expiry?: number;
 }
 /**
  *
@@ -1684,6 +1690,12 @@ export interface CreateSceneItemRequestDataAttributes {
       | MetadataStringType
       | MetadataNullType;
   };
+  /**
+   * Specifies which metadata keys should be copied from the source item. Sending null will  default to all keys. Sending an empty string will copy none of the sources\' metadata.  Sending an array of [\"KEY1\", \"KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
+   * @type {Array<string>}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  experimentalSourceMetadataKeys?: Array<string>;
 }
 /**
  *
@@ -3076,6 +3088,94 @@ export interface MetadataStringType {
 /**
  *
  * @export
+ * @interface ModelView
+ */
+export interface ModelView {
+  /**
+   *
+   * @type {ModelViewData}
+   * @memberof ModelView
+   */
+  data: ModelViewData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ModelView
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ModelViewData
+ */
+export interface ModelViewData {
+  /**
+   *
+   * @type {string}
+   * @memberof ModelViewData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ModelViewData
+   */
+  id: string;
+  /**
+   *
+   * @type {CreateAccountRequestDataAttributes}
+   * @memberof ModelViewData
+   */
+  attributes: CreateAccountRequestDataAttributes;
+  /**
+   *
+   * @type {ModelViewDataRelationships}
+   * @memberof ModelViewData
+   */
+  relationships: ModelViewDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ModelViewData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ModelViewDataRelationships
+ */
+export interface ModelViewDataRelationships {
+  /**
+   *
+   * @type {PartRevisionRelationship}
+   * @memberof ModelViewDataRelationships
+   */
+  partRevision: PartRevisionRelationship;
+}
+/**
+ *
+ * @export
+ * @interface ModelViewList
+ */
+export interface ModelViewList {
+  /**
+   *
+   * @type {Array<ModelViewData>}
+   * @memberof ModelViewList
+   */
+  data: Array<ModelViewData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ModelViewList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
  * @interface OAuth2BadRequest
  */
 export interface OAuth2BadRequest {
@@ -3793,6 +3893,56 @@ export interface PerspectiveCamera {
    * @memberof PerspectiveCamera
    */
   fovY?: number;
+}
+/**
+ *
+ * @export
+ * @interface PmiAnnotationData
+ */
+export interface PmiAnnotationData {
+  /**
+   *
+   * @type {string}
+   * @memberof PmiAnnotationData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PmiAnnotationData
+   */
+  id: string;
+  /**
+   *
+   * @type {CreateAccountRequestDataAttributes}
+   * @memberof PmiAnnotationData
+   */
+  attributes: CreateAccountRequestDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PmiAnnotationData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PmiAnnotationList
+ */
+export interface PmiAnnotationList {
+  /**
+   *
+   * @type {Array<PmiAnnotationData>}
+   * @memberof PmiAnnotationList
+   */
+  data: Array<PmiAnnotationData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PmiAnnotationList
+   */
+  links: { [key: string]: Link };
 }
 /**
  * 2D point.
@@ -6025,6 +6175,51 @@ export interface UpdateApplicationRequestDataAttributes {
    * @memberof UpdateApplicationRequestDataAttributes
    */
   redirect_uris?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface UpdateFileRequest
+ */
+export interface UpdateFileRequest {
+  /**
+   *
+   * @type {UpdateFileRequestData}
+   * @memberof UpdateFileRequest
+   */
+  data: UpdateFileRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateFileRequestData
+ */
+export interface UpdateFileRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateFileRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateFileRequestDataAttributes}
+   * @memberof UpdateFileRequestData
+   */
+  attributes: UpdateFileRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateFileRequestDataAttributes
+ */
+export interface UpdateFileRequestDataAttributes {
+  /**
+   * Number of seconds before the file is deleted.
+   * @type {number}
+   * @memberof UpdateFileRequestDataAttributes
+   */
+  expiry?: number | null;
 }
 /**
  * An operation that updates items with the specified revision to the default rendition.
@@ -9742,6 +9937,70 @@ export const FilesApiAxiosParamCreator = function (
       };
     },
     /**
+     * Update a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {UpdateFileRequest} updateFileRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFile: async (
+      id: string,
+      updateFileRequest: UpdateFileRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateFile', 'id', id);
+      // verify required parameter 'updateFileRequest' is not null or undefined
+      assertParamExists('updateFile', 'updateFileRequest', updateFileRequest);
+      const localVarPath = `/files/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateFileRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {any} body
@@ -9914,6 +10173,32 @@ export const FilesApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Update a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {UpdateFileRequest} updateFileRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateFile(
+      id: string,
+      updateFileRequest: UpdateFileRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileMetadata>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateFile(
+        id,
+        updateFileRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {any} body
@@ -10008,6 +10293,22 @@ export const FilesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Update a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {UpdateFileRequest} updateFileRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFile(
+      id: string,
+      updateFileRequest: UpdateFileRequest,
+      options?: any
+    ): AxiosPromise<FileMetadata> {
+      return localVarFp
+        .updateFile(id, updateFileRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Upload a `file`. Once uploaded, create either parts or geometry sets via the createPart or createGeometrySet APIs.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {any} body
@@ -10090,6 +10391,27 @@ export interface FilesApiGetFilesRequest {
    * @memberof FilesApiGetFiles
    */
   readonly filterSuppliedId?: string;
+}
+
+/**
+ * Request parameters for updateFile operation in FilesApi.
+ * @export
+ * @interface FilesApiUpdateFileRequest
+ */
+export interface FilesApiUpdateFileRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiUpdateFile
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateFileRequest}
+   * @memberof FilesApiUpdateFile
+   */
+  readonly updateFileRequest: UpdateFileRequest;
 }
 
 /**
@@ -10184,6 +10506,26 @@ export class FilesApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.filterSuppliedId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `file`.
+   * @param {FilesApiUpdateFileRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public updateFile(
+    requestParameters: FilesApiUpdateFileRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FilesApiFp(this.configuration)
+      .updateFile(
+        requestParameters.id,
+        requestParameters.updateFileRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -11064,6 +11406,541 @@ export class HitsApi extends BaseAPI {
         requestParameters.createHitRequest,
         requestParameters.include,
         requestParameters.fieldsPartRevision,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * ModelViewsApi - axios parameter creator
+ * @export
+ */
+export const ModelViewsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Get the details of a `model-view`.
+     * @param {string} id The &#x60;model-view&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getModelView: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getModelView', 'id', id);
+      const localVarPath = `/model-views/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a paged list of `model-views` for a part revision.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRevisionModelViews: async (
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getPartRevisionModelViews', 'id', id);
+      const localVarPath = `/part-revisions/{id}/model-views`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterHasAnnotations !== undefined) {
+        localVarQueryParameter['filter[hasAnnotations]'] = filterHasAnnotations;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a paged list of `model-views` for a scene item.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneItemModelViews: async (
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSceneItemModelViews', 'id', id);
+      const localVarPath = `/scene-items/{id}/model-views`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterHasAnnotations !== undefined) {
+        localVarQueryParameter['filter[hasAnnotations]'] = filterHasAnnotations;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * ModelViewsApi - functional programming interface
+ * @export
+ */
+export const ModelViewsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    ModelViewsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Get the details of a `model-view`.
+     * @param {string} id The &#x60;model-view&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getModelView(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelView>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getModelView(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a paged list of `model-views` for a part revision.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPartRevisionModelViews(
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelViewList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPartRevisionModelViews(
+          id,
+          filterHasAnnotations,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a paged list of `model-views` for a scene item.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSceneItemModelViews(
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ModelViewList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSceneItemModelViews(
+          id,
+          filterHasAnnotations,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * ModelViewsApi - factory interface
+ * @export
+ */
+export const ModelViewsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = ModelViewsApiFp(configuration);
+  return {
+    /**
+     * Get the details of a `model-view`.
+     * @param {string} id The &#x60;model-view&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getModelView(id: string, options?: any): AxiosPromise<ModelView> {
+      return localVarFp
+        .getModelView(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a paged list of `model-views` for a part revision.
+     * @param {string} id The &#x60;part-revision&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRevisionModelViews(
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<ModelViewList> {
+      return localVarFp
+        .getPartRevisionModelViews(
+          id,
+          filterHasAnnotations,
+          pageCursor,
+          pageSize,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a paged list of `model-views` for a scene item.
+     * @param {string} id The &#x60;scene-item&#x60; ID.
+     * @param {boolean} [filterHasAnnotations] Filter model views that contain or do not contain annotations.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSceneItemModelViews(
+      id: string,
+      filterHasAnnotations?: boolean,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<ModelViewList> {
+      return localVarFp
+        .getSceneItemModelViews(
+          id,
+          filterHasAnnotations,
+          pageCursor,
+          pageSize,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for getModelView operation in ModelViewsApi.
+ * @export
+ * @interface ModelViewsApiGetModelViewRequest
+ */
+export interface ModelViewsApiGetModelViewRequest {
+  /**
+   * The &#x60;model-view&#x60; ID.
+   * @type {string}
+   * @memberof ModelViewsApiGetModelView
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getPartRevisionModelViews operation in ModelViewsApi.
+ * @export
+ * @interface ModelViewsApiGetPartRevisionModelViewsRequest
+ */
+export interface ModelViewsApiGetPartRevisionModelViewsRequest {
+  /**
+   * The &#x60;part-revision&#x60; ID.
+   * @type {string}
+   * @memberof ModelViewsApiGetPartRevisionModelViews
+   */
+  readonly id: string;
+
+  /**
+   * Filter model views that contain or do not contain annotations.
+   * @type {boolean}
+   * @memberof ModelViewsApiGetPartRevisionModelViews
+   */
+  readonly filterHasAnnotations?: boolean;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ModelViewsApiGetPartRevisionModelViews
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ModelViewsApiGetPartRevisionModelViews
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for getSceneItemModelViews operation in ModelViewsApi.
+ * @export
+ * @interface ModelViewsApiGetSceneItemModelViewsRequest
+ */
+export interface ModelViewsApiGetSceneItemModelViewsRequest {
+  /**
+   * The &#x60;scene-item&#x60; ID.
+   * @type {string}
+   * @memberof ModelViewsApiGetSceneItemModelViews
+   */
+  readonly id: string;
+
+  /**
+   * Filter model views that contain or do not contain annotations.
+   * @type {boolean}
+   * @memberof ModelViewsApiGetSceneItemModelViews
+   */
+  readonly filterHasAnnotations?: boolean;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ModelViewsApiGetSceneItemModelViews
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ModelViewsApiGetSceneItemModelViews
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * ModelViewsApi - object-oriented interface
+ * @export
+ * @class ModelViewsApi
+ * @extends {BaseAPI}
+ */
+export class ModelViewsApi extends BaseAPI {
+  /**
+   * Get the details of a `model-view`.
+   * @param {ModelViewsApiGetModelViewRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ModelViewsApi
+   */
+  public getModelView(
+    requestParameters: ModelViewsApiGetModelViewRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ModelViewsApiFp(this.configuration)
+      .getModelView(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a paged list of `model-views` for a part revision.
+   * @param {ModelViewsApiGetPartRevisionModelViewsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ModelViewsApi
+   */
+  public getPartRevisionModelViews(
+    requestParameters: ModelViewsApiGetPartRevisionModelViewsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ModelViewsApiFp(this.configuration)
+      .getPartRevisionModelViews(
+        requestParameters.id,
+        requestParameters.filterHasAnnotations,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a paged list of `model-views` for a scene item.
+   * @param {ModelViewsApiGetSceneItemModelViewsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ModelViewsApi
+   */
+  public getSceneItemModelViews(
+    requestParameters: ModelViewsApiGetSceneItemModelViewsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ModelViewsApiFp(this.configuration)
+      .getSceneItemModelViews(
+        requestParameters.id,
+        requestParameters.filterHasAnnotations,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -14062,6 +14939,213 @@ export class PartsApi extends BaseAPI {
   ) {
     return PartsApiFp(this.configuration)
       .getQueuedPartDeletion(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * PmiApi - axios parameter creator
+ * @export
+ */
+export const PmiApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * List `pmi-annotation`s.
+     * @param {string} [filterModelViewId] Filter annotations belonging to a model view.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPmiAnnotations: async (
+      filterModelViewId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/pmi-annotations`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterModelViewId !== undefined) {
+        localVarQueryParameter['filter[modelViewId]'] = filterModelViewId;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PmiApi - functional programming interface
+ * @export
+ */
+export const PmiApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = PmiApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * List `pmi-annotation`s.
+     * @param {string} [filterModelViewId] Filter annotations belonging to a model view.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPmiAnnotations(
+      filterModelViewId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PmiAnnotationList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPmiAnnotations(
+          filterModelViewId,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PmiApi - factory interface
+ * @export
+ */
+export const PmiApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PmiApiFp(configuration);
+  return {
+    /**
+     * List `pmi-annotation`s.
+     * @param {string} [filterModelViewId] Filter annotations belonging to a model view.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPmiAnnotations(
+      filterModelViewId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<PmiAnnotationList> {
+      return localVarFp
+        .getPmiAnnotations(filterModelViewId, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for getPmiAnnotations operation in PmiApi.
+ * @export
+ * @interface PmiApiGetPmiAnnotationsRequest
+ */
+export interface PmiApiGetPmiAnnotationsRequest {
+  /**
+   * Filter annotations belonging to a model view.
+   * @type {string}
+   * @memberof PmiApiGetPmiAnnotations
+   */
+  readonly filterModelViewId?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PmiApiGetPmiAnnotations
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PmiApiGetPmiAnnotations
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * PmiApi - object-oriented interface
+ * @export
+ * @class PmiApi
+ * @extends {BaseAPI}
+ */
+export class PmiApi extends BaseAPI {
+  /**
+   * List `pmi-annotation`s.
+   * @param {PmiApiGetPmiAnnotationsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PmiApi
+   */
+  public getPmiAnnotations(
+    requestParameters: PmiApiGetPmiAnnotationsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PmiApiFp(this.configuration)
+      .getPmiAnnotations(
+        requestParameters.filterModelViewId,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
