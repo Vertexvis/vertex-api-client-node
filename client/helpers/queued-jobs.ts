@@ -149,7 +149,7 @@ export async function pollQueuedJob<T>({
 }
 
 export function isPollError<T>(r: PollRes<T>): r is QueuedJob | Failure {
-  return isQueuedJobError(r) || isFailure(r);
+  return isQueuedJobError(r) || isQueuedJobRunning(r) || isFailure(r);
 }
 
 export function isBatch(obj: PollRes<Batch>): obj is Batch {
@@ -188,12 +188,21 @@ function isQueuedJobError(obj: any): obj is QueuedJob {
   return isQueuedJob(obj) && isStatusError(obj);
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types, @typescript-eslint/no-explicit-any
+function isQueuedJobRunning(obj: any): obj is QueuedJob {
+  return isQueuedJob(obj) && isStatusRunning(obj);
+}
+
 function isStatusComplete(job: QueuedJob): boolean {
   return job.data.attributes.status === 'complete';
 }
 
 function isStatusError(job: QueuedJob): boolean {
   return job.data.attributes.status === 'error';
+}
+
+function isStatusRunning(job: QueuedJob): boolean {
+  return job.data.attributes.status === 'running';
 }
 
 function isClientError<T>(res: PollRes<T>): boolean {
