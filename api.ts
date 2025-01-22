@@ -4206,10 +4206,10 @@ export interface PropertyEntryDataAttributes {
     | PropertyDateType;
   /**
    *
-   * @type {string}
+   * @type {PropertyKeyType}
    * @memberof PropertyEntryDataAttributes
    */
-  key: string;
+  key: PropertyKeyType;
 }
 /**
  *
@@ -4230,6 +4230,35 @@ export interface PropertyEntryList {
    */
   links: { [key: string]: Link };
 }
+/**
+ *
+ * @export
+ * @interface PropertyKeyType
+ */
+export interface PropertyKeyType {
+  /**
+   * The key category
+   * @type {string}
+   * @memberof PropertyKeyType
+   */
+  category: PropertyKeyTypeCategoryEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyType
+   */
+  name: string;
+}
+
+export const PropertyKeyTypeCategoryEnum = {
+  Vendor: 'vendor',
+  Vertex: 'vertex',
+  User: 'user',
+} as const;
+
+export type PropertyKeyTypeCategoryEnum =
+  (typeof PropertyKeyTypeCategoryEnum)[keyof typeof PropertyKeyTypeCategoryEnum];
+
 /**
  *
  * @export
@@ -7022,7 +7051,7 @@ export interface UpdateSceneRequestDataAttributes {
    * @type {string}
    * @memberof UpdateSceneRequestDataAttributes
    */
-  suppliedId?: string;
+  suppliedId?: string | null;
   /**
    *
    * @type {string}

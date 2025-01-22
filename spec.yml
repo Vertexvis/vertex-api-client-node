@@ -8311,6 +8311,20 @@ components:
         maxLength: 36
         type: string
       style: form
+    PropertyEntriesCategoryFilter:
+      description: The key categories to filter by
+      explode: true
+      in: query
+      name: filter[key.category]
+      required: false
+      schema:
+        description: The key category
+        enum:
+          - vendor
+          - vertex
+          - user
+        type: string
+      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -11298,6 +11312,24 @@ components:
       required:
         - ordinal
       type: object
+    PropertyKeyType:
+      properties:
+        category:
+          description: The key category
+          enum:
+            - vendor
+            - vertex
+            - user
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - category
+        - name
+      type: object
     QueryById:
       additionalProperties: false
       properties:
@@ -12833,6 +12865,7 @@ components:
             a PLM system.
           example: PN12345
           maxLength: 1024
+          nullable: true
           type: string
         name:
           example: some-string
@@ -13578,10 +13611,7 @@ components:
             - $ref: '#/components/schemas/PropertyLongType'
             - $ref: '#/components/schemas/PropertyDateType'
         key:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
+          $ref: '#/components/schemas/PropertyKeyType'
       required:
         - key
         - value
