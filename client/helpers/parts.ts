@@ -71,6 +71,9 @@ export interface GetPartRevisionBySuppliedIdReq extends BaseReq {
 
   /** A supplied part revision ID. */
   readonly suppliedRevisionId: string;
+
+  /** An optional supplied part revision iteration ID. */
+  readonly suppliedIterationId?: string;
 }
 
 /**
@@ -92,21 +95,32 @@ export async function createPartFromFile({
   const suppliedPartId = createPartRequest.data.attributes.suppliedId;
   const suppliedRevisionId =
     createPartRequest.data.attributes.suppliedRevisionId;
+  const suppliedIterationId =
+    createPartRequest.data.attributes.suppliedIterationId;
 
   if (suppliedPartId && suppliedRevisionId) {
     const existingPartRev = await getPartRevisionBySuppliedId({
       client,
       suppliedPartId,
       suppliedRevisionId,
+      suppliedIterationId,
       verbose,
       onMsg,
     });
     if (existingPartRev) {
       if (verbose) {
-        onMsg(
-          `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
-            `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
-        );
+        if (suppliedIterationId) {
+          onMsg(
+            `part-revision with suppliedId '${suppliedPartId}', suppliedRevisionId ` +
+              `'${suppliedRevisionId}' and suppliedIterationId ` +
+              `'${suppliedIterationId}' already exists, using it, ${existingPartRev.id}`
+          );
+        } else {
+          onMsg(
+            `part-revision with suppliedId '${suppliedPartId}' and suppliedRevisionId ` +
+              `'${suppliedRevisionId}' already exists, using it, ${existingPartRev.id}`
+          );
+        }
       }
       return {
         partRevision: existingPartRev,
@@ -201,6 +215,7 @@ export async function getPartRevisionBySuppliedId({
   client,
   suppliedPartId,
   suppliedRevisionId,
+  suppliedIterationId,
 }: GetPartRevisionBySuppliedIdReq): Promise<PartRevisionData | undefined> {
   const existingPart = await getBySuppliedId<PartData, PartList>(
     () =>
@@ -221,7 +236,8 @@ export async function getPartRevisionBySuppliedId({
           pageSize: 1,
           filterSuppliedId: encodeIfNotEncoded(suppliedRevisionId),
         }),
-      suppliedRevisionId
+      suppliedRevisionId,
+      suppliedIterationId
     );
     if (existingPartRev) return existingPartRev;
   }

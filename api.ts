@@ -1264,6 +1264,12 @@ export interface CreatePartRequestDataAttributes {
    */
   suppliedRevisionId?: string;
   /**
+   * ID provided for correlation of the revision. This is an optional ID to be able to create a version of a revision. For example, if and existing revision in a PLM system is modified, the suppliedIterationId can be used to allow creating a new part revision having an already existing suppliedId and suppliedRevisionId. This can be used when modification to an existing revision is made in the PLM system before the revision is released.
+   * @type {string}
+   * @memberof CreatePartRequestDataAttributes
+   */
+  suppliedIterationId?: string;
+  /**
    * Whether or not to index metadata in the part file. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
    * @type {boolean}
    * @memberof CreatePartRequestDataAttributes
@@ -3452,6 +3458,46 @@ export type PartDataRelationshipsPartRevisionsTypeEnum =
   (typeof PartDataRelationshipsPartRevisionsTypeEnum)[keyof typeof PartDataRelationshipsPartRevisionsTypeEnum];
 
 /**
+ * Relationship to a `part-instance`.
+ * @export
+ * @interface PartInstanceRelationship
+ */
+export interface PartInstanceRelationship {
+  /**
+   *
+   * @type {PartInstanceRelationshipData}
+   * @memberof PartInstanceRelationship
+   */
+  data: PartInstanceRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PartInstanceRelationshipData
+ */
+export interface PartInstanceRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PartInstanceRelationshipData
+   */
+  type: PartInstanceRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartInstanceRelationshipData
+   */
+  id: string;
+}
+
+export const PartInstanceRelationshipDataTypeEnum = {
+  PartInstance: 'part-instance',
+} as const;
+
+export type PartInstanceRelationshipDataTypeEnum =
+  (typeof PartInstanceRelationshipDataTypeEnum)[keyof typeof PartInstanceRelationshipDataTypeEnum];
+
+/**
  *
  * @export
  * @interface PartList
@@ -3748,6 +3794,12 @@ export interface PartRevisionDataAttributes {
    * @type {string}
    * @memberof PartRevisionDataAttributes
    */
+  suppliedIterationId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionDataAttributes
+   */
   name?: string;
 }
 /**
@@ -3809,6 +3861,88 @@ export interface PartRevisionInstance {
 /**
  *
  * @export
+ * @interface PartRevisionInstanceData
+ */
+export interface PartRevisionInstanceData {
+  /**
+   *
+   * @type {string}
+   * @memberof PartRevisionInstanceData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartRevisionInstanceData
+   */
+  id: string;
+  /**
+   *
+   * @type {PartRevisionInstanceDataAttributes}
+   * @memberof PartRevisionInstanceData
+   */
+  attributes: PartRevisionInstanceDataAttributes;
+  /**
+   *
+   * @type {PartRevisionInstanceDataRelationships}
+   * @memberof PartRevisionInstanceData
+   */
+  relationships: PartRevisionInstanceDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface PartRevisionInstanceDataAttributes
+ */
+export interface PartRevisionInstanceDataAttributes {
+  /**
+   * A 0-based index used for defining a consistent ordering for children of an assembly
+   * @type {number}
+   * @memberof PartRevisionInstanceDataAttributes
+   */
+  ordinal?: number;
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof PartRevisionInstanceDataAttributes
+   */
+  transform?: Matrix4;
+}
+/**
+ * This is the relationship from the instance to the parent revision
+ * @export
+ * @interface PartRevisionInstanceDataRelationships
+ */
+export interface PartRevisionInstanceDataRelationships {
+  /**
+   *
+   * @type {PartRevisionRelationship}
+   * @memberof PartRevisionInstanceDataRelationships
+   */
+  partRevision: PartRevisionRelationship;
+}
+/**
+ *
+ * @export
+ * @interface PartRevisionInstanceList
+ */
+export interface PartRevisionInstanceList {
+  /**
+   *
+   * @type {Array<PartRevisionInstanceData>}
+   * @memberof PartRevisionInstanceList
+   */
+  data: Array<PartRevisionInstanceData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PartRevisionInstanceList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
  * @interface PartRevisionList
  */
 export interface PartRevisionList {
@@ -3856,6 +3990,12 @@ export interface PartRevisionSuppliedId {
    * @memberof PartRevisionSuppliedId
    */
   suppliedRevisionId: string;
+  /**
+   * Optional iteration ID for the revision. For example, a generated version id from a PLM system to a specific revision. Used when a existing revision is modified.
+   * @type {string}
+   * @memberof PartRevisionSuppliedId
+   */
+  suppliedIterationId?: string;
 }
 /**
  * A camera type that mimics the way the human eye sees.
@@ -3963,6 +4103,256 @@ export interface Point {
    */
   dy: number;
 }
+/**
+ *
+ * @export
+ * @interface PropertyDateType
+ */
+export interface PropertyDateType {
+  /**
+   * Type of property value.
+   * @type {string}
+   * @memberof PropertyDateType
+   */
+  type: PropertyDateTypeTypeEnum;
+  /**
+   * A date value.
+   * @type {string}
+   * @memberof PropertyDateType
+   */
+  value: string;
+}
+
+export const PropertyDateTypeTypeEnum = {
+  Date: 'date',
+} as const;
+
+export type PropertyDateTypeTypeEnum =
+  (typeof PropertyDateTypeTypeEnum)[keyof typeof PropertyDateTypeTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyDoubleType
+ */
+export interface PropertyDoubleType {
+  /**
+   * Type of property value.
+   * @type {string}
+   * @memberof PropertyDoubleType
+   */
+  type: PropertyDoubleTypeTypeEnum;
+  /**
+   *
+   * @type {number}
+   * @memberof PropertyDoubleType
+   */
+  value: number;
+}
+
+export const PropertyDoubleTypeTypeEnum = {
+  Double: 'double',
+} as const;
+
+export type PropertyDoubleTypeTypeEnum =
+  (typeof PropertyDoubleTypeTypeEnum)[keyof typeof PropertyDoubleTypeTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyEntryData
+ */
+export interface PropertyEntryData {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyEntryData
+   */
+  type: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyEntryData
+   */
+  id: string;
+  /**
+   *
+   * @type {PropertyEntryDataAttributes}
+   * @memberof PropertyEntryData
+   */
+  attributes: PropertyEntryDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyEntryData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PropertyEntryDataAttributes
+ */
+export interface PropertyEntryDataAttributes {
+  /**
+   *
+   * @type {PropertyStringType | PropertyDoubleType | PropertyLongType | PropertyDateType}
+   * @memberof PropertyEntryDataAttributes
+   */
+  value:
+    | PropertyStringType
+    | PropertyDoubleType
+    | PropertyLongType
+    | PropertyDateType;
+  /**
+   *
+   * @type {PropertyKeyType}
+   * @memberof PropertyEntryDataAttributes
+   */
+  key: PropertyKeyType;
+}
+/**
+ *
+ * @export
+ * @interface PropertyEntryList
+ */
+export interface PropertyEntryList {
+  /**
+   *
+   * @type {Array<PropertyEntryData>}
+   * @memberof PropertyEntryList
+   */
+  data: Array<PropertyEntryData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyEntryList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyType
+ */
+export interface PropertyKeyType {
+  /**
+   * The key category
+   * @type {string}
+   * @memberof PropertyKeyType
+   */
+  category: PropertyKeyTypeCategoryEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyType
+   */
+  name: string;
+}
+
+export const PropertyKeyTypeCategoryEnum = {
+  Vendor: 'vendor',
+  Vertex: 'vertex',
+  User: 'user',
+} as const;
+
+export type PropertyKeyTypeCategoryEnum =
+  (typeof PropertyKeyTypeCategoryEnum)[keyof typeof PropertyKeyTypeCategoryEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyLongType
+ */
+export interface PropertyLongType {
+  /**
+   * Type of property-entry value.
+   * @type {string}
+   * @memberof PropertyLongType
+   */
+  type: PropertyLongTypeTypeEnum;
+  /**
+   * A numerical long value.
+   * @type {number}
+   * @memberof PropertyLongType
+   */
+  value: number;
+}
+
+export const PropertyLongTypeTypeEnum = {
+  Long: 'long',
+} as const;
+
+export type PropertyLongTypeTypeEnum =
+  (typeof PropertyLongTypeTypeEnum)[keyof typeof PropertyLongTypeTypeEnum];
+
+/**
+ * Relationship to a `property-set`.
+ * @export
+ * @interface PropertySetRelationship
+ */
+export interface PropertySetRelationship {
+  /**
+   *
+   * @type {PropertySetRelationshipData}
+   * @memberof PropertySetRelationship
+   */
+  data: PropertySetRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PropertySetRelationshipData
+ */
+export interface PropertySetRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PropertySetRelationshipData
+   */
+  type: PropertySetRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PropertySetRelationshipData
+   */
+  id: string;
+}
+
+export const PropertySetRelationshipDataTypeEnum = {
+  PropertySet: 'property-set',
+} as const;
+
+export type PropertySetRelationshipDataTypeEnum =
+  (typeof PropertySetRelationshipDataTypeEnum)[keyof typeof PropertySetRelationshipDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyStringType
+ */
+export interface PropertyStringType {
+  /**
+   * Type of property-entry value.
+   * @type {string}
+   * @memberof PropertyStringType
+   */
+  type: PropertyStringTypeTypeEnum;
+  /**
+   * A string value.
+   * @type {string}
+   * @memberof PropertyStringType
+   */
+  value: string;
+}
+
+export const PropertyStringTypeTypeEnum = {
+  String: 'string',
+} as const;
+
+export type PropertyStringTypeTypeEnum =
+  (typeof PropertyStringTypeTypeEnum)[keyof typeof PropertyStringTypeTypeEnum];
+
 /**
  * Resource object type.
  * @export
@@ -6661,7 +7051,7 @@ export interface UpdateSceneRequestDataAttributes {
    * @type {string}
    * @memberof UpdateSceneRequestDataAttributes
    */
-  suppliedId?: string;
+  suppliedId?: string | null;
   /**
    *
    * @type {string}
@@ -6851,6 +7241,81 @@ export const UpdateWebhookSubscriptionRequestDataAttributesStatusEnum = {
 export type UpdateWebhookSubscriptionRequestDataAttributesStatusEnum =
   (typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum)[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
 
+/**
+ *
+ * @export
+ * @interface UpsertPropertyEntriesRequest
+ */
+export interface UpsertPropertyEntriesRequest {
+  /**
+   *
+   * @type {UpsertPropertyEntriesRequestData}
+   * @memberof UpsertPropertyEntriesRequest
+   */
+  data: UpsertPropertyEntriesRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpsertPropertyEntriesRequestData
+ */
+export interface UpsertPropertyEntriesRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpsertPropertyEntriesRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpsertPropertyEntriesRequestDataAttributes}
+   * @memberof UpsertPropertyEntriesRequestData
+   */
+  attributes: UpsertPropertyEntriesRequestDataAttributes;
+  /**
+   *
+   * @type {UpsertPropertyEntriesRequestDataRelationships}
+   * @memberof UpsertPropertyEntriesRequestData
+   */
+  relationships: UpsertPropertyEntriesRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface UpsertPropertyEntriesRequestDataAttributes
+ */
+export interface UpsertPropertyEntriesRequestDataAttributes {
+  /**
+   * Property entries for a provided resource or property set.
+   * @type {{ [key: string]: PropertyStringType | PropertyDoubleType | PropertyLongType | PropertyDateType | object; }}
+   * @memberof UpsertPropertyEntriesRequestDataAttributes
+   */
+  entries: {
+    [key: string]:
+      | PropertyStringType
+      | PropertyDoubleType
+      | PropertyLongType
+      | PropertyDateType
+      | object;
+  };
+}
+/**
+ *
+ * @export
+ * @interface UpsertPropertyEntriesRequestDataRelationships
+ */
+export interface UpsertPropertyEntriesRequestDataRelationships {
+  /**
+   * Relationship to the property set by `property-set`, `part-revision`, `part-instance` or `scene-item`.
+   * @type {PropertySetRelationship | PartRevisionRelationship | SceneItemRelationship | PartInstanceRelationship}
+   * @memberof UpsertPropertyEntriesRequestDataRelationships
+   */
+  propertySet:
+    | PropertySetRelationship
+    | PartRevisionRelationship
+    | SceneItemRelationship
+    | PartInstanceRelationship;
+}
 /**
  * 3D vector.
  * @export
@@ -13120,6 +13585,221 @@ export class PartRenditionsApi extends BaseAPI {
 }
 
 /**
+ * PartRevisionInstancesApi - axios parameter creator
+ * @export
+ */
+export const PartRevisionInstancesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRevisionInstanceList: async (
+      filterParent?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/part-revision-instances`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterParent !== undefined) {
+        localVarQueryParameter['filter[parent]'] = filterParent;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PartRevisionInstancesApi - functional programming interface
+ * @export
+ */
+export const PartRevisionInstancesApiFp = function (
+  configuration?: Configuration
+) {
+  const localVarAxiosParamCreator =
+    PartRevisionInstancesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPartRevisionInstanceList(
+      filterParent?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PartRevisionInstanceList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPartRevisionInstanceList(
+          filterParent,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PartRevisionInstancesApi - factory interface
+ * @export
+ */
+export const PartRevisionInstancesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PartRevisionInstancesApiFp(configuration);
+  return {
+    /**
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPartRevisionInstanceList(
+      filterParent?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<PartRevisionInstanceList> {
+      return localVarFp
+        .getPartRevisionInstanceList(
+          filterParent,
+          pageCursor,
+          pageSize,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for getPartRevisionInstanceList operation in PartRevisionInstancesApi.
+ * @export
+ * @interface PartRevisionInstancesApiGetPartRevisionInstanceListRequest
+ */
+export interface PartRevisionInstancesApiGetPartRevisionInstanceListRequest {
+  /**
+   * Parent ID to filter on.
+   * @type {string}
+   * @memberof PartRevisionInstancesApiGetPartRevisionInstanceList
+   */
+  readonly filterParent?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PartRevisionInstancesApiGetPartRevisionInstanceList
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PartRevisionInstancesApiGetPartRevisionInstanceList
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * PartRevisionInstancesApi - object-oriented interface
+ * @export
+ * @class PartRevisionInstancesApi
+ * @extends {BaseAPI}
+ */
+export class PartRevisionInstancesApi extends BaseAPI {
+  /**
+   * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+   * @param {PartRevisionInstancesApiGetPartRevisionInstanceListRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartRevisionInstancesApi
+   */
+  public getPartRevisionInstanceList(
+    requestParameters: PartRevisionInstancesApiGetPartRevisionInstanceListRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PartRevisionInstancesApiFp(this.configuration)
+      .getPartRevisionInstanceList(
+        requestParameters.filterParent,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * PartRevisionsApi - axios parameter creator
  * @export
  */
@@ -15144,6 +15824,371 @@ export class PmiApi extends BaseAPI {
         requestParameters.filterModelViewId,
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * PropertyEntriesApi - axios parameter creator
+ * @export
+ */
+export const PropertyEntriesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterResourceId] A resource ID to filter on
+     * @param {string} [filterResourceType] The provided type for the resource ids
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPropertyEntries: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterResourceId?: string,
+      filterResourceType?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/property-entries`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterResourceId !== undefined) {
+        localVarQueryParameter['filter[resourceId]'] = filterResourceId;
+      }
+
+      if (filterResourceType !== undefined) {
+        localVarQueryParameter['filter[resourceType]'] = filterResourceType;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    upsertPropertyEntries: async (
+      upsertPropertyEntriesRequest: UpsertPropertyEntriesRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'upsertPropertyEntriesRequest' is not null or undefined
+      assertParamExists(
+        'upsertPropertyEntries',
+        'upsertPropertyEntriesRequest',
+        upsertPropertyEntriesRequest
+      );
+      const localVarPath = `/property-entries`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        upsertPropertyEntriesRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PropertyEntriesApi - functional programming interface
+ * @export
+ */
+export const PropertyEntriesApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    PropertyEntriesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterResourceId] A resource ID to filter on
+     * @param {string} [filterResourceType] The provided type for the resource ids
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPropertyEntries(
+      pageCursor?: string,
+      pageSize?: number,
+      filterResourceId?: string,
+      filterResourceType?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PropertyEntryList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPropertyEntries(
+          pageCursor,
+          pageSize,
+          filterResourceId,
+          filterResourceType,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async upsertPropertyEntries(
+      upsertPropertyEntriesRequest: UpsertPropertyEntriesRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.upsertPropertyEntries(
+          upsertPropertyEntriesRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PropertyEntriesApi - factory interface
+ * @export
+ */
+export const PropertyEntriesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PropertyEntriesApiFp(configuration);
+  return {
+    /**
+     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterResourceId] A resource ID to filter on
+     * @param {string} [filterResourceType] The provided type for the resource ids
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPropertyEntries(
+      pageCursor?: string,
+      pageSize?: number,
+      filterResourceId?: string,
+      filterResourceType?: string,
+      options?: any
+    ): AxiosPromise<PropertyEntryList> {
+      return localVarFp
+        .getPropertyEntries(
+          pageCursor,
+          pageSize,
+          filterResourceId,
+          filterResourceType,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    upsertPropertyEntries(
+      upsertPropertyEntriesRequest: UpsertPropertyEntriesRequest,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .upsertPropertyEntries(upsertPropertyEntriesRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for getPropertyEntries operation in PropertyEntriesApi.
+ * @export
+ * @interface PropertyEntriesApiGetPropertyEntriesRequest
+ */
+export interface PropertyEntriesApiGetPropertyEntriesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PropertyEntriesApiGetPropertyEntries
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PropertyEntriesApiGetPropertyEntries
+   */
+  readonly pageSize?: number;
+
+  /**
+   * A resource ID to filter on
+   * @type {string}
+   * @memberof PropertyEntriesApiGetPropertyEntries
+   */
+  readonly filterResourceId?: string;
+
+  /**
+   * The provided type for the resource ids
+   * @type {string}
+   * @memberof PropertyEntriesApiGetPropertyEntries
+   */
+  readonly filterResourceType?: string;
+}
+
+/**
+ * Request parameters for upsertPropertyEntries operation in PropertyEntriesApi.
+ * @export
+ * @interface PropertyEntriesApiUpsertPropertyEntriesRequest
+ */
+export interface PropertyEntriesApiUpsertPropertyEntriesRequest {
+  /**
+   *
+   * @type {UpsertPropertyEntriesRequest}
+   * @memberof PropertyEntriesApiUpsertPropertyEntries
+   */
+  readonly upsertPropertyEntriesRequest: UpsertPropertyEntriesRequest;
+}
+
+/**
+ * PropertyEntriesApi - object-oriented interface
+ * @export
+ * @class PropertyEntriesApi
+ * @extends {BaseAPI}
+ */
+export class PropertyEntriesApi extends BaseAPI {
+  /**
+   * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+   * @param {PropertyEntriesApiGetPropertyEntriesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyEntriesApi
+   */
+  public getPropertyEntries(
+    requestParameters: PropertyEntriesApiGetPropertyEntriesRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyEntriesApiFp(this.configuration)
+      .getPropertyEntries(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterResourceId,
+        requestParameters.filterResourceType,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+   * @param {PropertyEntriesApiUpsertPropertyEntriesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyEntriesApi
+   */
+  public upsertPropertyEntries(
+    requestParameters: PropertyEntriesApiUpsertPropertyEntriesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyEntriesApiFp(this.configuration)
+      .upsertPropertyEntries(
+        requestParameters.upsertPropertyEntriesRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));

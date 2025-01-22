@@ -123,18 +123,26 @@ export function envVar(key: string): string {
  * @returns Item if and only if it matches ID.
  */
 export async function getBySuppliedId<
-  T extends { attributes: { suppliedId?: string } },
+  T extends {
+    attributes: { suppliedId?: string; suppliedIterationId?: string };
+  },
   TRes extends { data: T[] },
 >(
   getter: () => Promise<AxiosResponse<TRes>>,
-  suppliedId?: string
+  suppliedId?: string,
+  suppliedIterationId?: string
 ): Promise<T | undefined> {
   if (!suppliedId) return undefined;
 
   const res = await getter();
   if (res.data.data.length > 0) {
     const item = head(res.data.data);
-    if (item.attributes.suppliedId === suppliedId) return item;
+    if (
+      item.attributes.suppliedId === suppliedId &&
+      item.attributes.suppliedIterationId === suppliedIterationId
+    ) {
+      return item;
+    }
   }
 
   return undefined;
