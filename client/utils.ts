@@ -140,8 +140,9 @@ export async function getBySuppliedId<
     if (
       item.attributes.suppliedId === suppliedId &&
       item.attributes.suppliedIterationId === suppliedIterationId
-    )
+    ) {
       return item;
+    }
   }
 
   return undefined;
