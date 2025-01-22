@@ -38,6 +38,7 @@ tags:
   - name: part-revisions
   - name: parts
   - name: pmi
+  - name: property-entries
   - name: scene-alterations
   - name: scene-annotations
   - name: scene-item-overrides
@@ -2458,6 +2459,102 @@ paths:
         - OAuth2: []
       tags:
         - part-revisions
+  /part-revision-instances:
+    get:
+      description: |
+        Gets a page of 'part-revision' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+      operationId: getPartRevisionInstanceList
+      parameters:
+        - description: Parent ID to filter on.
+          explode: true
+          in: query
+          name: filter[parent]
+          required: false
+          schema:
+            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            format: uuid
+            maxLength: 36
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PartRevisionInstanceList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - part-revision-instances
+      x-scala-package: translations
   /parts/{id}/part-revisions:
     get:
       description: Get `part-revisions` for a `part`.
@@ -3265,6 +3362,140 @@ paths:
         - OAuth2: []
       tags:
         - pmi
+  /property-entries:
+    get:
+      description: |
+        Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+      operationId: getPropertyEntries
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: A resource ID to filter on
+          explode: true
+          in: query
+          name: filter[resourceId]
+          required: false
+          schema:
+            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            format: uuid
+            maxLength: 36
+            type: string
+          style: form
+        - description: The provided type for the resource ids
+          explode: true
+          in: query
+          name: filter[resourceType]
+          required: false
+          schema:
+            example: part-revision
+            maxLength: 36
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyEntryList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-entries
+    patch:
+      description: |
+        Upsert property-entries for a provided resource.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: upsertPropertyEntries
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpsertPropertyEntriesRequest'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - property-entries
   /scene-alterations/{id}:
     get:
       description: Get a `scene-alteration` by ID.
@@ -4047,7 +4278,8 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Source ID to filter on.
+        - allowEmptyValue: true
+          description: Source ID to filter on.
           explode: true
           in: query
           name: filter[source]
@@ -4055,6 +4287,7 @@ paths:
           schema:
             example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
             maxLength: 1024
+            nullable: true
             type: string
           style: form
         - description: Comma-separated list of supplied IDs to filter on.
@@ -8020,6 +8253,7 @@ components:
         $ref: '#/components/schemas/Uuid'
       style: simple
     SourceFilter:
+      allowEmptyValue: true
       description: Source ID to filter on.
       explode: true
       in: query
@@ -8028,6 +8262,7 @@ components:
       schema:
         example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
         maxLength: 1024
+        nullable: true
         type: string
       style: form
     StatusFilter:
@@ -8050,6 +8285,29 @@ components:
       schema:
         example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
         format: uuid
+        maxLength: 36
+        type: string
+      style: form
+    PropertyEntriesResourceIdFilter:
+      description: A resource ID to filter on
+      explode: true
+      in: query
+      name: filter[resourceId]
+      required: false
+      schema:
+        example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+        format: uuid
+        maxLength: 36
+        type: string
+      style: form
+    PropertyEntriesResourceTypeFilter:
+      description: The provided type for the resource ids
+      explode: true
+      in: query
+      name: filter[resourceType]
+      required: false
+      schema:
+        example: part-revision
         maxLength: 36
         type: string
       style: form
@@ -8678,6 +8936,21 @@ components:
         - 'y'
         - z
       type: object
+    PartRevisionInstanceList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PartRevisionInstanceData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     PartRevisionList:
       additionalProperties: false
       properties:
@@ -8773,6 +9046,29 @@ components:
       required:
         - data
         - links
+      type: object
+    PropertyEntryList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PropertyEntryData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    UpsertPropertyEntriesRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpsertPropertyEntriesRequest_data'
+      required:
+        - data
       type: object
     SceneAlteration:
       additionalProperties: false
@@ -9823,6 +10119,28 @@ components:
       required:
         - data
       type: object
+    PartRevisionInstanceData:
+      additionalProperties: false
+      properties:
+        type:
+          example: part-revision-instance
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PartRevisionInstanceData_attributes'
+        relationships:
+          $ref: '#/components/schemas/PartRevisionInstanceData_relationships'
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
     PartData:
       additionalProperties: false
       properties:
@@ -9905,6 +10223,129 @@ components:
         - attributes
         - id
         - type
+      type: object
+    PropertyEntryData:
+      additionalProperties: false
+      properties:
+        type:
+          example: property-entry
+          type: string
+        id:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PropertyEntryData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    PropertyStringType:
+      properties:
+        type:
+          description: Type of property-entry value.
+          enum:
+            - string
+          maxLength: 32
+          type: string
+        value:
+          description: A string value.
+          example: Some value
+          type: string
+      required:
+        - type
+        - value
+      type: object
+    PropertyDoubleType:
+      properties:
+        type:
+          description: Type of property value.
+          enum:
+            - double
+          maxLength: 32
+          type: string
+        value:
+          format: double
+          type: number
+      required:
+        - type
+        - value
+      type: object
+    PropertyLongType:
+      properties:
+        type:
+          description: Type of property-entry value.
+          enum:
+            - long
+          maxLength: 32
+          type: string
+        value:
+          description: A numerical long value.
+          format: int64
+          type: integer
+      required:
+        - type
+        - value
+      type: object
+    PropertyDateType:
+      properties:
+        type:
+          description: Type of property value.
+          enum:
+            - date
+          maxLength: 32
+          type: string
+        value:
+          description: A date value.
+          example: 2025-02-22T10:11:12Z
+          format: date-time
+          type: string
+      required:
+        - type
+        - value
+      type: object
+    PropertySetRelationship:
+      additionalProperties: false
+      description: Relationship to a `property-set`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertySetRelationship_data'
+      required:
+        - data
+      type: object
+    PartRevisionRelationship:
+      additionalProperties: false
+      description: Relationship to a `part-revision`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartData_relationships_partRevisions'
+      required:
+        - data
+      type: object
+    SceneItemRelationship:
+      additionalProperties: false
+      description: Relationship to a `scene-item`.
+      properties:
+        data:
+          $ref: '#/components/schemas/SceneItemRelationship_data'
+      required:
+        - data
+      type: object
+    PartInstanceRelationship:
+      additionalProperties: false
+      description: Relationship to a `part-instance`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PartInstanceRelationship_data'
+      required:
+        - data
       type: object
     SceneAlterationData:
       additionalProperties: false
@@ -10147,15 +10588,6 @@ components:
         - opacity
         - specular
       type: object
-    SceneItemRelationship:
-      additionalProperties: false
-      description: Relationship to a `scene-item`.
-      properties:
-        data:
-          $ref: '#/components/schemas/SceneItemRelationship_data'
-      required:
-        - data
-      type: object
     MaterialOverride:
       additionalProperties: false
       description: Color material override.
@@ -10169,15 +10601,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/GeometrySetRelationshipData'
-      required:
-        - data
-      type: object
-    PartRevisionRelationship:
-      additionalProperties: false
-      description: Relationship to a `part-revision`.
-      properties:
-        data:
-          $ref: '#/components/schemas/PartData_relationships_partRevisions'
       required:
         - data
       type: object
@@ -11203,6 +11626,13 @@ components:
             a PLM system.
           maxLength: 1024
           type: string
+        suppliedIterationId:
+          description:
+            Optional iteration ID for the revision. For example, a generated
+            version id from a PLM system to a specific revision. Used when a existing
+            revision is modified.
+          maxLength: 1024
+          type: string
       required:
         - suppliedPartId
         - suppliedRevisionId
@@ -11972,6 +12402,16 @@ components:
           example: RevA
           maxLength: 1024
           type: string
+        suppliedIterationId:
+          description: |
+            ID provided for correlation of the revision. This is an optional ID to be able to create
+            a version of a revision. For example, if and existing revision in a PLM system is modified,
+            the suppliedIterationId can be used to allow creating a new part revision having an already
+            existing suppliedId and suppliedRevisionId. This can be used when modification to an existing
+            revision is made in the PLM system before the revision is released.
+          example: Ver1
+          maxLength: 1024
+          type: string
         indexMetadata:
           description: |
             Whether or not to index metadata in the part file. To ignore metadata from the part file and add your own, pass `false` for `indexMetadata` and supply custom metadata using the `metadata` field.
@@ -12038,6 +12478,54 @@ components:
           $ref: '#/components/schemas/CreatePartRequest_data_relationships'
       required:
         - attributes
+        - type
+      type: object
+    UpsertPropertyEntriesRequest_data_attributes:
+      properties:
+        entries:
+          additionalProperties:
+            anyOf:
+              - $ref: '#/components/schemas/PropertyStringType'
+              - $ref: '#/components/schemas/PropertyDoubleType'
+              - $ref: '#/components/schemas/PropertyLongType'
+              - $ref: '#/components/schemas/PropertyDateType'
+              - nullable: true
+                type: object
+            nullable: true
+          description: |
+            Property entries for a provided resource or property set.
+          type: object
+      required:
+        - entries
+      type: object
+    UpsertPropertyEntriesRequest_data_relationships:
+      properties:
+        propertySet:
+          anyOf:
+            - $ref: '#/components/schemas/PropertySetRelationship'
+            - $ref: '#/components/schemas/PartRevisionRelationship'
+            - $ref: '#/components/schemas/SceneItemRelationship'
+            - $ref: '#/components/schemas/PartInstanceRelationship'
+          description:
+            Relationship to the property set by `property-set`, `part-revision`,
+            `part-instance` or `scene-item`.
+      required:
+        - propertySet
+      type: object
+    UpsertPropertyEntriesRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: property-entries
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpsertPropertyEntriesRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/UpsertPropertyEntriesRequest_data_relationships'
+      required:
+        - attributes
+        - relationships
         - type
       type: object
     CreateSceneAlterationRequest_data_attributes:
@@ -12923,6 +13411,11 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
+        suppliedIterationId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -12980,6 +13473,25 @@ components:
       required:
         - id
         - type
+      type: object
+    PartRevisionInstanceData_attributes:
+      properties:
+        ordinal:
+          description:
+            A 0-based index used for defining a consistent ordering for
+            children of an assembly
+          minimum: 0
+          type: integer
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+      type: object
+    PartRevisionInstanceData_relationships:
+      description: This is the relationship from the instance to the parent revision
+      properties:
+        partRevision:
+          $ref: '#/components/schemas/PartRevisionRelationship'
+      required:
+        - partRevision
       type: object
     PartData_attributes:
       properties:
@@ -13057,6 +13569,80 @@ components:
       required:
         - partRevision
       type: object
+    PropertyEntryData_attributes:
+      properties:
+        value:
+          anyOf:
+            - $ref: '#/components/schemas/PropertyStringType'
+            - $ref: '#/components/schemas/PropertyDoubleType'
+            - $ref: '#/components/schemas/PropertyLongType'
+            - $ref: '#/components/schemas/PropertyDateType'
+        key:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - key
+        - value
+      type: object
+    PropertySetRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - property-set
+          example: property-set
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    SceneItemRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - scene-item
+          example: scene-item
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    PartInstanceRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - part-instance
+          example: part-instance
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
     SceneAlterationData_relationships:
       properties:
         sceneView:
@@ -13095,25 +13681,6 @@ components:
       required:
         - sceneItem
         - sceneView
-      type: object
-    SceneItemRelationship_data:
-      properties:
-        type:
-          description: Resource object type.
-          enum:
-            - scene-item
-          example: scene-item
-          maxLength: 32
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
       type: object
     CreateSceneItemRequestData_attributes:
       properties:
