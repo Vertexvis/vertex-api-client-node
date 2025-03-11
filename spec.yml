@@ -8311,20 +8311,6 @@ components:
         maxLength: 36
         type: string
       style: form
-    PropertyEntriesCategoryFilter:
-      description: The key categories to filter by
-      explode: true
-      in: query
-      name: filter[key.category]
-      required: false
-      schema:
-        description: The key category
-        enum:
-          - vendor
-          - vertex
-          - user
-        type: string
-      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -11314,13 +11300,6 @@ components:
       type: object
     PropertyKeyType:
       properties:
-        category:
-          description: The key category
-          enum:
-            - vendor
-            - vertex
-            - user
-          type: string
         name:
           example: some-string
           maxLength: 1024
@@ -12962,7 +12941,31 @@ components:
           minimum: 1
           type: integer
         excludePrunedItems:
-          description: Whether to exclude non-visible items in the view
+          description: Whether to exclude non-visible items in the view.
+          example: true
+          type: boolean
+        sceneViewStateSuppliedId:
+          description:
+            An optional supplied ID specifying the `scene-view-state` to
+            initialize `scene-view`s created using this `stream-key` to. Mutually
+            exclusive with `sceneViewStateId`.
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        sceneViewStateId:
+          description:
+            An optional ID specifying the `scene-view-state` to initialize
+            `scene-view`s created using this `stream-key` to. Mutually exclusive with
+            `sceneViewStateSuppliedId`.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        withSearchSession:
+          description:
+            Optionally enables or disables the creation of a search session
+            for the view.
           example: true
           type: boolean
       type: object
@@ -13971,6 +13974,17 @@ components:
         excludePrunedItems:
           example: true
           type: boolean
+        sceneViewStateSuppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        sceneViewStateId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
       required:
         - created
         - expiry

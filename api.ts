@@ -2030,11 +2030,29 @@ export interface CreateStreamKeyRequestDataAttributes {
    */
   expiry?: number;
   /**
-   * Whether to exclude non-visible items in the view
+   * Whether to exclude non-visible items in the view.
    * @type {boolean}
    * @memberof CreateStreamKeyRequestDataAttributes
    */
   excludePrunedItems?: boolean;
+  /**
+   * An optional supplied ID specifying the `scene-view-state` to initialize `scene-view`s created using this `stream-key` to. Mutually exclusive with `sceneViewStateId`.
+   * @type {string}
+   * @memberof CreateStreamKeyRequestDataAttributes
+   */
+  sceneViewStateSuppliedId?: string;
+  /**
+   * An optional ID specifying the `scene-view-state` to initialize `scene-view`s created using this `stream-key` to. Mutually exclusive with `sceneViewStateSuppliedId`.
+   * @type {string}
+   * @memberof CreateStreamKeyRequestDataAttributes
+   */
+  sceneViewStateId?: string;
+  /**
+   * Optionally enables or disables the creation of a search session for the view.
+   * @type {boolean}
+   * @memberof CreateStreamKeyRequestDataAttributes
+   */
+  withSearchSession?: boolean;
 }
 /**
  *
@@ -4237,28 +4255,12 @@ export interface PropertyEntryList {
  */
 export interface PropertyKeyType {
   /**
-   * The key category
-   * @type {string}
-   * @memberof PropertyKeyType
-   */
-  category: PropertyKeyTypeCategoryEnum;
-  /**
    *
    * @type {string}
    * @memberof PropertyKeyType
    */
   name: string;
 }
-
-export const PropertyKeyTypeCategoryEnum = {
-  Vendor: 'vendor',
-  Vertex: 'vertex',
-  User: 'user',
-} as const;
-
-export type PropertyKeyTypeCategoryEnum =
-  (typeof PropertyKeyTypeCategoryEnum)[keyof typeof PropertyKeyTypeCategoryEnum];
-
 /**
  *
  * @export
@@ -6341,6 +6343,18 @@ export interface StreamKeyDataAttributes {
    * @memberof StreamKeyDataAttributes
    */
   excludePrunedItems?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof StreamKeyDataAttributes
+   */
+  sceneViewStateSuppliedId?: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof StreamKeyDataAttributes
+   */
+  sceneViewStateId?: string;
 }
 /**
  *
