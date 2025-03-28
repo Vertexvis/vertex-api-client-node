@@ -912,6 +912,57 @@ export interface CreateBatchRequest {
 /**
  *
  * @export
+ * @interface CreateDownloadRequest
+ */
+export interface CreateDownloadRequest {
+  /**
+   *
+   * @type {CreateDownloadRequestData}
+   * @memberof CreateDownloadRequest
+   */
+  data: CreateDownloadRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateDownloadRequestData
+ */
+export interface CreateDownloadRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateDownloadRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateDownloadRequestDataAttributes}
+   * @memberof CreateDownloadRequestData
+   */
+  attributes: CreateDownloadRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateDownloadRequestDataAttributes
+ */
+export interface CreateDownloadRequestDataAttributes {
+  /**
+   * Specifies the duration for which this pre-signed request should be valid. After this time has expired, attempting to use the presigned request will fail. (Defaults to 1 hour, max value is 24 hours)
+   * @type {number}
+   * @memberof CreateDownloadRequestDataAttributes
+   */
+  expiry?: number;
+  /**
+   * Specifies the maximum time (in seconds) a cached response of a signed-url remains fresh and can be used without revalidation. (Defaults to 1 hour, can send up to 30 days)
+   * @type {number}
+   * @memberof CreateDownloadRequestDataAttributes
+   */
+  maxAge?: number;
+}
+/**
+ *
+ * @export
  * @interface CreateExportRequest
  */
 export interface CreateExportRequest {
@@ -988,6 +1039,77 @@ export interface CreateExportRequestDataRelationships {
 /**
  *
  * @export
+ * @interface CreateFileCollectionRequest
+ */
+export interface CreateFileCollectionRequest {
+  /**
+   *
+   * @type {CreateFileCollectionRequestData}
+   * @memberof CreateFileCollectionRequest
+   */
+  data: CreateFileCollectionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateFileCollectionRequestData
+ */
+export interface CreateFileCollectionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateFileCollectionRequestData
+   */
+  type: CreateFileCollectionRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateFileCollectionRequestDataAttributes}
+   * @memberof CreateFileCollectionRequestData
+   */
+  attributes: CreateFileCollectionRequestDataAttributes;
+}
+
+export const CreateFileCollectionRequestDataTypeEnum = {
+  FileCollection: 'file-collection',
+} as const;
+
+export type CreateFileCollectionRequestDataTypeEnum =
+  (typeof CreateFileCollectionRequestDataTypeEnum)[keyof typeof CreateFileCollectionRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateFileCollectionRequestDataAttributes
+ */
+export interface CreateFileCollectionRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateFileCollectionRequestDataAttributes
+   */
+  name?: string;
+  /**
+   * ID provided for correlation with external systems, e.g. a PLM system.
+   * @type {string}
+   * @memberof CreateFileCollectionRequestDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   * Number of seconds before expiration
+   * @type {number}
+   * @memberof CreateFileCollectionRequestDataAttributes
+   */
+  expiry?: number;
+  /**
+   * User supplied key-value pairs for a file-collection. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+   * @type {{ [key: string]: string; }}
+   * @memberof CreateFileCollectionRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
+}
+/**
+ *
+ * @export
  * @interface CreateFileRequest
  */
 export interface CreateFileRequest {
@@ -1047,6 +1169,12 @@ export interface CreateFileRequestDataAttributes {
    * @memberof CreateFileRequestDataAttributes
    */
   expiry?: number;
+  /**
+   * User supplied key-value pairs for a file. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+   * @type {{ [key: string]: string; }}
+   * @memberof CreateFileRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  *
@@ -2274,6 +2402,69 @@ export interface Dimensions {
 /**
  *
  * @export
+ * @interface DownloadUrl
+ */
+export interface DownloadUrl {
+  /**
+   *
+   * @type {DownloadUrlData}
+   * @memberof DownloadUrl
+   */
+  data: DownloadUrlData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof DownloadUrl
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface DownloadUrlData
+ */
+export interface DownloadUrlData {
+  /**
+   *
+   * @type {string}
+   * @memberof DownloadUrlData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof DownloadUrlData
+   */
+  id: string;
+  /**
+   *
+   * @type {DownloadUrlDataAttributes}
+   * @memberof DownloadUrlData
+   */
+  attributes: DownloadUrlDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof DownloadUrlData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface DownloadUrlDataAttributes
+ */
+export interface DownloadUrlDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof DownloadUrlDataAttributes
+   */
+  downloadUrl: string;
+}
+/**
+ *
+ * @export
  * @interface Export
  */
 export interface Export {
@@ -2480,6 +2671,127 @@ export interface FeatureLines {
 /**
  *
  * @export
+ * @interface FileCollectionList
+ */
+export interface FileCollectionList {
+  /**
+   *
+   * @type {Array<FileCollectionMetadataData>}
+   * @memberof FileCollectionList
+   */
+  data: Array<FileCollectionMetadataData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof FileCollectionList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface FileCollectionMetadata
+ */
+export interface FileCollectionMetadata {
+  /**
+   *
+   * @type {FileCollectionMetadataData}
+   * @memberof FileCollectionMetadata
+   */
+  data: FileCollectionMetadataData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof FileCollectionMetadata
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface FileCollectionMetadataData
+ */
+export interface FileCollectionMetadataData {
+  /**
+   *
+   * @type {string}
+   * @memberof FileCollectionMetadataData
+   */
+  type: FileCollectionMetadataDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof FileCollectionMetadataData
+   */
+  id: string;
+  /**
+   *
+   * @type {FileCollectionMetadataDataAttributes}
+   * @memberof FileCollectionMetadataData
+   */
+  attributes: FileCollectionMetadataDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof FileCollectionMetadataData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const FileCollectionMetadataDataTypeEnum = {
+  FileCollection: 'file-collection',
+} as const;
+
+export type FileCollectionMetadataDataTypeEnum =
+  (typeof FileCollectionMetadataDataTypeEnum)[keyof typeof FileCollectionMetadataDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface FileCollectionMetadataDataAttributes
+ */
+export interface FileCollectionMetadataDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof FileCollectionMetadataDataAttributes
+   */
+  name?: string;
+  /**
+   * ID provided for correlation with external systems, e.g. a PLM system.
+   * @type {string}
+   * @memberof FileCollectionMetadataDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FileCollectionMetadataDataAttributes
+   */
+  created: string;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof FileCollectionMetadataDataAttributes
+   */
+  metadata?: { [key: string]: string };
+}
+/**
+ *
+ * @export
+ * @interface FileIdList
+ */
+export interface FileIdList {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof FileIdList
+   */
+  data: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface FileList
  */
 export interface FileList {
@@ -2594,6 +2906,12 @@ export interface FileMetadataDataAttributes {
    * @memberof FileMetadataDataAttributes
    */
   size?: number;
+  /**
+   *
+   * @type {{ [key: string]: string; }}
+   * @memberof FileMetadataDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  * Relationship to a `file`.
@@ -4506,6 +4824,71 @@ export type QueryByIdDataAttributesTypeEnum =
 /**
  *
  * @export
+ * @interface QueryByMetadata
+ */
+export interface QueryByMetadata {
+  /**
+   *
+   * @type {QueryByMetadataData}
+   * @memberof QueryByMetadata
+   */
+  data: QueryByMetadataData;
+}
+/**
+ *
+ * @export
+ * @interface QueryByMetadataData
+ */
+export interface QueryByMetadataData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof QueryByMetadataData
+   */
+  type: QueryByMetadataDataTypeEnum;
+  /**
+   *
+   * @type {QueryByMetadataDataAttributes}
+   * @memberof QueryByMetadataData
+   */
+  attributes: QueryByMetadataDataAttributes;
+}
+
+export const QueryByMetadataDataTypeEnum = {
+  QueryByMetadata: 'query-by-metadata',
+} as const;
+
+export type QueryByMetadataDataTypeEnum =
+  (typeof QueryByMetadataDataTypeEnum)[keyof typeof QueryByMetadataDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface QueryByMetadataDataAttributes
+ */
+export interface QueryByMetadataDataAttributes {
+  /**
+   *
+   * @type {boolean}
+   * @memberof QueryByMetadataDataAttributes
+   */
+  exactMatch?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof QueryByMetadataDataAttributes
+   */
+  filter: string;
+  /**
+   * Query `metadata`.
+   * @type {Array<string>}
+   * @memberof QueryByMetadataDataAttributes
+   */
+  keys: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface QueuedJob
  */
 export interface QueuedJob {
@@ -5634,10 +6017,10 @@ export interface SceneList {
 export interface SceneOperation {
   /**
    * Query `scene-items`. Use `query-by-collection` to combine multiple queries.
-   * @type {QueryById | QueryByCollection | QueryAll}
+   * @type {QueryById | QueryByCollection | QueryAll | QueryByMetadata}
    * @memberof SceneOperation
    */
-  query: QueryById | QueryByCollection | QueryAll;
+  query: QueryById | QueryByCollection | QueryAll | QueryByMetadata;
   /**
    * List of operations to perform on `scene-items` matching the query.
    * @type {Array<ChangeVisibilityOp | ChangeMaterialOp | ClearMaterialOp | ChangeTransformOp | ClearTransformOp | SelectOp | DeselectOperation | ClearRenOp | ViewDefaultRenOp | ViewRenByIdOp | ViewRenBySuppliedIdOp | ViewRepByIdOp | ViewRepByPredefinedIdOp | ClearRepOp>}
@@ -6579,6 +6962,59 @@ export interface UpdateApplicationRequestDataAttributes {
    * @memberof UpdateApplicationRequestDataAttributes
    */
   redirect_uris?: Array<string>;
+}
+/**
+ *
+ * @export
+ * @interface UpdateFileCollectionRequest
+ */
+export interface UpdateFileCollectionRequest {
+  /**
+   *
+   * @type {UpdateFileCollectionRequestData}
+   * @memberof UpdateFileCollectionRequest
+   */
+  data: UpdateFileCollectionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateFileCollectionRequestData
+ */
+export interface UpdateFileCollectionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateFileCollectionRequestData
+   */
+  type: UpdateFileCollectionRequestDataTypeEnum;
+  /**
+   *
+   * @type {UpdateFileCollectionRequestDataAttributes}
+   * @memberof UpdateFileCollectionRequestData
+   */
+  attributes: UpdateFileCollectionRequestDataAttributes;
+}
+
+export const UpdateFileCollectionRequestDataTypeEnum = {
+  FileCollection: 'file-collection',
+} as const;
+
+export type UpdateFileCollectionRequestDataTypeEnum =
+  (typeof UpdateFileCollectionRequestDataTypeEnum)[keyof typeof UpdateFileCollectionRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface UpdateFileCollectionRequestDataAttributes
+ */
+export interface UpdateFileCollectionRequestDataAttributes {
+  /**
+   * Number of seconds before expiration
+   * @type {number}
+   * @memberof UpdateFileCollectionRequestDataAttributes
+   */
+  expiry?: number;
 }
 /**
  *
@@ -10181,6 +10617,1050 @@ export class ExportsApi extends BaseAPI {
 }
 
 /**
+ * FileCollectionsApi - axios parameter creator
+ * @export
+ */
+export const FileCollectionsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Add files to a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {FileIdList} fileIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addFileCollectionFiles: async (
+      id: string,
+      fileIdList: FileIdList,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('addFileCollectionFiles', 'id', id);
+      // verify required parameter 'fileIdList' is not null or undefined
+      assertParamExists('addFileCollectionFiles', 'fileIdList', fileIdList);
+      const localVarPath = `/file-collections/{id}/files`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        fileIdList,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Create a `file-collection`.
+     * @param {CreateFileCollectionRequest} createFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createFileCollection: async (
+      createFileCollectionRequest: CreateFileCollectionRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createFileCollectionRequest' is not null or undefined
+      assertParamExists(
+        'createFileCollection',
+        'createFileCollectionRequest',
+        createFileCollectionRequest
+      );
+      const localVarPath = `/file-collections`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createFileCollectionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteFileCollection: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteFileCollection', 'id', id);
+      const localVarPath = `/file-collections/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `file-collection` by ID.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getFileCollection: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getFileCollection', 'id', id);
+      const localVarPath = `/file-collections/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List the files in a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollectionFiles: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('listFileCollectionFiles', 'id', id);
+      const localVarPath = `/file-collections/{id}/files`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `file-collection`s by supplied ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollections: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/file-collections`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Update a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {UpdateFileCollectionRequest} updateFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFileCollection: async (
+      id: string,
+      updateFileCollectionRequest: UpdateFileCollectionRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateFileCollection', 'id', id);
+      // verify required parameter 'updateFileCollectionRequest' is not null or undefined
+      assertParamExists(
+        'updateFileCollection',
+        'updateFileCollectionRequest',
+        updateFileCollectionRequest
+      );
+      const localVarPath = `/file-collections/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateFileCollectionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * FileCollectionsApi - functional programming interface
+ * @export
+ */
+export const FileCollectionsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    FileCollectionsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Add files to a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {FileIdList} fileIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addFileCollectionFiles(
+      id: string,
+      fileIdList: FileIdList,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionMetadata>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.addFileCollectionFiles(
+          id,
+          fileIdList,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Create a `file-collection`.
+     * @param {CreateFileCollectionRequest} createFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createFileCollection(
+      createFileCollectionRequest: CreateFileCollectionRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionMetadata>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createFileCollection(
+          createFileCollectionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteFileCollection(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteFileCollection(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `file-collection` by ID.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getFileCollection(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionMetadata>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getFileCollection(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List the files in a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listFileCollectionFiles(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listFileCollectionFiles(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `file-collection`s by supplied ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listFileCollections(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listFileCollections(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Update a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {UpdateFileCollectionRequest} updateFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateFileCollection(
+      id: string,
+      updateFileCollectionRequest: UpdateFileCollectionRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.updateFileCollection(
+          id,
+          updateFileCollectionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * FileCollectionsApi - factory interface
+ * @export
+ */
+export const FileCollectionsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = FileCollectionsApiFp(configuration);
+  return {
+    /**
+     * Add files to a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {FileIdList} fileIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addFileCollectionFiles(
+      id: string,
+      fileIdList: FileIdList,
+      options?: any
+    ): AxiosPromise<FileCollectionMetadata> {
+      return localVarFp
+        .addFileCollectionFiles(id, fileIdList, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Create a `file-collection`.
+     * @param {CreateFileCollectionRequest} createFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createFileCollection(
+      createFileCollectionRequest: CreateFileCollectionRequest,
+      options?: any
+    ): AxiosPromise<FileCollectionMetadata> {
+      return localVarFp
+        .createFileCollection(createFileCollectionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteFileCollection(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteFileCollection(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `file-collection` by ID.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getFileCollection(
+      id: string,
+      options?: any
+    ): AxiosPromise<FileCollectionMetadata> {
+      return localVarFp
+        .getFileCollection(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List the files in a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollectionFiles(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<FileList> {
+      return localVarFp
+        .listFileCollectionFiles(id, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `file-collection`s by supplied ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollections(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options?: any
+    ): AxiosPromise<FileCollectionList> {
+      return localVarFp
+        .listFileCollections(pageCursor, pageSize, filterSuppliedId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {UpdateFileCollectionRequest} updateFileCollectionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateFileCollection(
+      id: string,
+      updateFileCollectionRequest: UpdateFileCollectionRequest,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .updateFileCollection(id, updateFileCollectionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for addFileCollectionFiles operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiAddFileCollectionFilesRequest
+ */
+export interface FileCollectionsApiAddFileCollectionFilesRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiAddFileCollectionFiles
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {FileIdList}
+   * @memberof FileCollectionsApiAddFileCollectionFiles
+   */
+  readonly fileIdList: FileIdList;
+}
+
+/**
+ * Request parameters for createFileCollection operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiCreateFileCollectionRequest
+ */
+export interface FileCollectionsApiCreateFileCollectionRequest {
+  /**
+   *
+   * @type {CreateFileCollectionRequest}
+   * @memberof FileCollectionsApiCreateFileCollection
+   */
+  readonly createFileCollectionRequest: CreateFileCollectionRequest;
+}
+
+/**
+ * Request parameters for deleteFileCollection operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiDeleteFileCollectionRequest
+ */
+export interface FileCollectionsApiDeleteFileCollectionRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiDeleteFileCollection
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getFileCollection operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiGetFileCollectionRequest
+ */
+export interface FileCollectionsApiGetFileCollectionRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiGetFileCollection
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for listFileCollectionFiles operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiListFileCollectionFilesRequest
+ */
+export interface FileCollectionsApiListFileCollectionFilesRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiListFileCollectionFiles
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof FileCollectionsApiListFileCollectionFiles
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof FileCollectionsApiListFileCollectionFiles
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for listFileCollections operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiListFileCollectionsRequest
+ */
+export interface FileCollectionsApiListFileCollectionsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly filterSuppliedId?: string;
+}
+
+/**
+ * Request parameters for updateFileCollection operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiUpdateFileCollectionRequest
+ */
+export interface FileCollectionsApiUpdateFileCollectionRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiUpdateFileCollection
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateFileCollectionRequest}
+   * @memberof FileCollectionsApiUpdateFileCollection
+   */
+  readonly updateFileCollectionRequest: UpdateFileCollectionRequest;
+}
+
+/**
+ * FileCollectionsApi - object-oriented interface
+ * @export
+ * @class FileCollectionsApi
+ * @extends {BaseAPI}
+ */
+export class FileCollectionsApi extends BaseAPI {
+  /**
+   * Add files to a `file-collection`.
+   * @param {FileCollectionsApiAddFileCollectionFilesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public addFileCollectionFiles(
+    requestParameters: FileCollectionsApiAddFileCollectionFilesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .addFileCollectionFiles(
+        requestParameters.id,
+        requestParameters.fileIdList,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create a `file-collection`.
+   * @param {FileCollectionsApiCreateFileCollectionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public createFileCollection(
+    requestParameters: FileCollectionsApiCreateFileCollectionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .createFileCollection(
+        requestParameters.createFileCollectionRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete a `file-collection`.
+   * @param {FileCollectionsApiDeleteFileCollectionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public deleteFileCollection(
+    requestParameters: FileCollectionsApiDeleteFileCollectionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .deleteFileCollection(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `file-collection` by ID.
+   * @param {FileCollectionsApiGetFileCollectionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public getFileCollection(
+    requestParameters: FileCollectionsApiGetFileCollectionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .getFileCollection(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List the files in a `file-collection`.
+   * @param {FileCollectionsApiListFileCollectionFilesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public listFileCollectionFiles(
+    requestParameters: FileCollectionsApiListFileCollectionFilesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .listFileCollectionFiles(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `file-collection`s by supplied ID.
+   * @param {FileCollectionsApiListFileCollectionsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public listFileCollections(
+    requestParameters: FileCollectionsApiListFileCollectionsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .listFileCollections(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `file-collection`.
+   * @param {FileCollectionsApiUpdateFileCollectionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public updateFileCollection(
+    requestParameters: FileCollectionsApiUpdateFileCollectionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .updateFileCollection(
+        requestParameters.id,
+        requestParameters.updateFileCollectionRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * FilesApi - axios parameter creator
  * @export
  */
@@ -10188,6 +11668,74 @@ export const FilesApiAxiosParamCreator = function (
   configuration?: Configuration
 ) {
   return {
+    /**
+     * Create a download uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createDownloadUrl: async (
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createDownloadUrl', 'id', id);
+      // verify required parameter 'createDownloadRequest' is not null or undefined
+      assertParamExists(
+        'createDownloadUrl',
+        'createDownloadRequest',
+        createDownloadRequest
+      );
+      const localVarPath = `/files/{id}/download-url`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createDownloadRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
     /**
      * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
      * @param {CreateFileRequest} createFileRequest
@@ -10554,6 +12102,33 @@ export const FilesApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = FilesApiAxiosParamCreator(configuration);
   return {
     /**
+     * Create a download uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createDownloadUrl(
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<DownloadUrl>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createDownloadUrl(
+          id,
+          createDownloadRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
      * @param {CreateFileRequest} createFileRequest
      * @param {*} [options] Override http request option.
@@ -10718,6 +12293,22 @@ export const FilesApiFactory = function (
   const localVarFp = FilesApiFp(configuration);
   return {
     /**
+     * Create a download uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createDownloadUrl(
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options?: any
+    ): AxiosPromise<DownloadUrl> {
+      return localVarFp
+        .createDownloadUrl(id, createDownloadRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
      * @param {CreateFileRequest} createFileRequest
      * @param {*} [options] Override http request option.
@@ -10801,6 +12392,27 @@ export const FilesApiFactory = function (
     },
   };
 };
+
+/**
+ * Request parameters for createDownloadUrl operation in FilesApi.
+ * @export
+ * @interface FilesApiCreateDownloadUrlRequest
+ */
+export interface FilesApiCreateDownloadUrlRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiCreateDownloadUrl
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateDownloadRequest}
+   * @memberof FilesApiCreateDownloadUrl
+   */
+  readonly createDownloadRequest: CreateDownloadRequest;
+}
 
 /**
  * Request parameters for createFile operation in FilesApi.
@@ -10921,6 +12533,26 @@ export interface FilesApiUploadFileRequest {
  * @extends {BaseAPI}
  */
 export class FilesApi extends BaseAPI {
+  /**
+   * Create a download uri for a `file` by ID.
+   * @param {FilesApiCreateDownloadUrlRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public createDownloadUrl(
+    requestParameters: FilesApiCreateDownloadUrlRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FilesApiFp(this.configuration)
+      .createDownloadUrl(
+        requestParameters.id,
+        requestParameters.createDownloadRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    * Create a `file`. Once created, upload file content via the uploadFile API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guide.
    * @param {FilesApiCreateFileRequest} requestParameters Request parameters.

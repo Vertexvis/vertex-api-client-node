@@ -30,6 +30,7 @@ tags:
   - name: applications
   - name: batches
   - name: files
+  - name: file-collections
   - name: geometry-sets
   - name: hits
   - name: model-views
@@ -1286,6 +1287,448 @@ paths:
         - OAuth2: []
       tags:
         - files
+  /files/{id}/download-url:
+    post:
+      description: Create a download uri for a `file` by ID.
+      operationId: createDownloadUrl
+      parameters:
+        - description: The `file` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateDownloadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DownloadUrl'
+          description: Created
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - files
+  /file-collections:
+    get:
+      description: List `file-collection`s by supplied ID.
+      operationId: listFileCollections
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+    post:
+      description: Create a `file-collection`.
+      operationId: createFileCollection
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateFileCollectionRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionMetadata'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+  /file-collections/{id}:
+    delete:
+      description: Delete a `file-collection`.
+      operationId: deleteFileCollection
+      parameters:
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+    get:
+      description: Get a `file-collection` by ID.
+      operationId: getFileCollection
+      parameters:
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionMetadata'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+    patch:
+      description: Update a `file-collection`.
+      operationId: updateFileCollection
+      parameters:
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateFileCollectionRequest'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+  /file-collections/{id}/files:
+    get:
+      description: List the files in a `file-collection`.
+      operationId: listFileCollectionFiles
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
+    post:
+      description: Add files to a `file-collection`.
+      operationId: addFileCollectionFiles
+      parameters:
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/FileIdList'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionMetadata'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
   /geometry-sets:
     get:
       description: Get `geometry-sets`.
@@ -7939,6 +8382,26 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    FileCollectionId:
+      description: The `file-collection` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    FileCollectionIdFilter:
+      description: Comma-separated list of file-colllection IDs to filter on.
+      explode: true
+      in: query
+      name: filter[collectionId]
+      required: false
+      schema:
+        example: some-id-1,some-id-2
+        maxLength: 1024
+        type: string
+      style: form
     HasAnnotationsFilter:
       description: Filter model views that contain or do not contain annotations.
       explode: true
@@ -8699,6 +9162,79 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UpdateFileRequest_data'
+      required:
+        - data
+      type: object
+    CreateDownloadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateDownloadRequest_data'
+      required:
+        - data
+      type: object
+    DownloadUrl:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/DownloadUrlData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    FileCollectionList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/FileCollectionMetadataData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreateFileCollectionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateFileCollectionRequest_data'
+      required:
+        - data
+      type: object
+    FileCollectionMetadata:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/FileCollectionMetadataData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    UpdateFileCollectionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateFileCollectionRequest_data'
+      required:
+        - data
+      type: object
+    FileIdList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/Uuid'
+          type: array
       required:
         - data
       type: object
@@ -9871,6 +10407,66 @@ components:
         - id
         - type
       type: object
+    DownloadUrlData:
+      additionalProperties: false
+      properties:
+        type:
+          example: download-url
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/DownloadUrlData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    FileCollectionMetadataData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - file-collection
+          example: file-collection
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/FileCollectionMetadataData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SuppliedId:
+      description: ID provided for correlation with external systems, e.g. a PLM system.
+      example: GRP12345
+      maxLength: 1024
+      minLength: 1
+      type: string
+    ExpirySeconds:
+      description: Number of seconds before expiration
+      example: 600
+      format: int32
+      minimum: 1
+      type: integer
     GeometrySetData:
       additionalProperties: false
       properties:
@@ -10381,6 +10977,7 @@ components:
             - $ref: '#/components/schemas/QueryById'
             - $ref: '#/components/schemas/QueryByCollection'
             - $ref: '#/components/schemas/QueryAll'
+            - $ref: '#/components/schemas/QueryByMetadata'
           description:
             Query `scene-items`. Use `query-by-collection` to combine multiple
             queries.
@@ -11332,6 +11929,14 @@ components:
       example: all
       maxLength: 32
       type: string
+    QueryByMetadata:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/QueryByMetadata_data'
+      required:
+        - data
+      type: object
     ChangeVisibilityOp:
       additionalProperties: false
       properties:
@@ -12088,6 +12693,13 @@ components:
           format: int32
           minimum: 1
           type: integer
+        metadata:
+          additionalProperties:
+            maxLength: 256
+            type: string
+          description: |
+            User supplied key-value pairs for a file. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+          type: object
       required:
         - name
       type: object
@@ -12123,6 +12735,110 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateFileRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateDownloadRequest_data_attributes:
+      properties:
+        expiry:
+          description:
+            Specifies the duration for which this pre-signed request should
+            be valid. After this time has expired, attempting to use the presigned
+            request will fail. (Defaults to 1 hour, max value is 24 hours)
+          example: 3600
+          format: int32
+          maximum: 86400
+          minimum: 1
+          type: integer
+        maxAge:
+          description:
+            Specifies the maximum time (in seconds) a cached response of
+            a signed-url remains fresh and can be used without revalidation. (Defaults
+            to 1 hour, can send up to 30 days)
+          example: 1000
+          format: int32
+          maximum: 2592000
+          minimum: 1
+          type: integer
+      type: object
+    CreateDownloadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: download-url
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateDownloadRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateFileCollectionRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation with external systems, e.g. a PLM
+            system.
+          example: GRP12345
+          maxLength: 1024
+          minLength: 1
+          type: string
+        expiry:
+          description: Number of seconds before expiration
+          example: 600
+          format: int32
+          minimum: 1
+          type: integer
+        metadata:
+          additionalProperties:
+            maxLength: 256
+            type: string
+          description: |
+            User supplied key-value pairs for a file-collection. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
+          type: object
+      type: object
+    CreateFileCollectionRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - file-collection
+          example: file-collection
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateFileCollectionRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdateFileCollectionRequest_data_attributes:
+      properties:
+        expiry:
+          description: Number of seconds before expiration
+          example: 600
+          format: int32
+          minimum: 1
+          type: integer
+      type: object
+    UpdateFileCollectionRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - file-collection
+          example: file-collection
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateFileCollectionRequest_data_attributes'
       required:
         - attributes
         - type
@@ -13332,10 +14048,48 @@ components:
         size:
           format: int64
           type: integer
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
       required:
         - created
         - name
         - status
+      type: object
+    DownloadUrlData_attributes:
+      properties:
+        downloadUrl:
+          example: https://example.com/path/to/file.zip
+          type: string
+      required:
+        - downloadUrl
+      type: object
+    FileCollectionMetadataData_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation with external systems, e.g. a PLM
+            system.
+          example: GRP12345
+          maxLength: 1024
+          minLength: 1
+          type: string
+        created:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        metadata:
+          additionalProperties:
+            type: string
+          type: object
+      required:
+        - created
       type: object
     FileRelationship_data:
       properties:
@@ -14218,6 +14972,39 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/QueryByCollection_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    QueryByMetadata_data_attributes:
+      properties:
+        exactMatch:
+          type: boolean
+        filter:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        keys:
+          description: Query `metadata`.
+          items:
+            type: string
+          type: array
+      required:
+        - filter
+        - keys
+      type: object
+    QueryByMetadata_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - query-by-metadata
+          example: query-by-metadata
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/QueryByMetadata_data_attributes'
       required:
         - attributes
         - type
