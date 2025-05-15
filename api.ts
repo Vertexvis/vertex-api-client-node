@@ -443,6 +443,25 @@ export interface ApplicationList {
   links: { [key: string]: Link };
 }
 /**
+ * Represents a file and directory within an archive.
+ * @export
+ * @interface ArchiveManifestEntry
+ */
+export interface ArchiveManifestEntry {
+  /**
+   * Represents a query to select a file.
+   * @type {SelectFileById | SelectFileBySuppliedId}
+   * @memberof ArchiveManifestEntry
+   */
+  selector: SelectFileById | SelectFileBySuppliedId;
+  /**
+   * The directory in the archive where the file will be placed.
+   * @type {string}
+   * @memberof ArchiveManifestEntry
+   */
+  directory?: string;
+}
+/**
  *
  * @export
  * @interface Batch
@@ -953,12 +972,6 @@ export interface CreateDownloadRequestDataAttributes {
    * @memberof CreateDownloadRequestDataAttributes
    */
   expiry?: number;
-  /**
-   * Specifies the maximum time (in seconds) a cached response of a signed-url remains fresh and can be used without revalidation. (Defaults to 1 hour, can send up to 30 days)
-   * @type {number}
-   * @memberof CreateDownloadRequestDataAttributes
-   */
-  maxAge?: number;
 }
 /**
  *
@@ -1106,6 +1119,59 @@ export interface CreateFileCollectionRequestDataAttributes {
    * @memberof CreateFileCollectionRequestDataAttributes
    */
   metadata?: { [key: string]: string };
+}
+/**
+ *
+ * @export
+ * @interface CreateFileJobRequest
+ */
+export interface CreateFileJobRequest {
+  /**
+   *
+   * @type {CreateFileJobRequestData}
+   * @memberof CreateFileJobRequest
+   */
+  data: CreateFileJobRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateFileJobRequestData
+ */
+export interface CreateFileJobRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateFileJobRequestData
+   */
+  type: CreateFileJobRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateFileJobRequestDataAttributes}
+   * @memberof CreateFileJobRequestData
+   */
+  attributes: CreateFileJobRequestDataAttributes;
+}
+
+export const CreateFileJobRequestDataTypeEnum = {
+  FileJob: 'file-job',
+} as const;
+
+export type CreateFileJobRequestDataTypeEnum =
+  (typeof CreateFileJobRequestDataTypeEnum)[keyof typeof CreateFileJobRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateFileJobRequestDataAttributes
+ */
+export interface CreateFileJobRequestDataAttributes {
+  /**
+   * An object that describes the operation a file job will perform.
+   * @type {FileJobArchiveOperation}
+   * @memberof CreateFileJobRequestDataAttributes
+   */
+  operation: FileJobArchiveOperation;
 }
 /**
  *
@@ -1764,7 +1830,7 @@ export interface CreateSceneItemRequestDataAttributes {
    */
   ordinal?: number;
   /**
-   * Optional ability to specify a parent scene item by scene item supplied ID. For example, an  existing ID from a PLM system. This approach is an alternative to providing a specific scene  item ID with the relationship parent property.
+   * Optional ability to specify a parent scene item by scene item supplied ID. For example, an existing ID from a PLM system. This approach is an alternative to providing a specific scene item ID with the relationship parent property.
    * @type {string}
    * @memberof CreateSceneItemRequestDataAttributes
    */
@@ -1775,6 +1841,12 @@ export interface CreateSceneItemRequestDataAttributes {
    * @memberof CreateSceneItemRequestDataAttributes
    */
   partInstanceSuppliedIdsAsSuppliedIds?: boolean;
+  /**
+   * Optional rule to guide the part-revision resolution algorithm in cases where required qualifiers are not explicitly specified by the query.  In the case of assembly parts, the resolution rule also applies recursively to the resolution of the child parts. \'as-specified\' (the default) directs the resolution algorithm to use only the ids specified in this query.  An incomplete specification will result in an error.  \'latest-iteration\' directs the resolution algorithm to select, within the scope of the specified part-revision, the iteration possessing the newest creation timestamp.  Any iteration identifiers specified by this query are ignored.  Failure to specify a part-revision will result in an error.  \'latest-revision\' directs the resolution algorithm to select the part-revision possessing the newest creation timestamp.  \'latest-revision\' implies \'latest-iteration\' resolution logic.
+   * @type {string}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  resolutionRule?: CreateSceneItemRequestDataAttributesResolutionRuleEnum;
   /**
    *
    * @type {PartRevisionSuppliedId}
@@ -1825,12 +1897,22 @@ export interface CreateSceneItemRequestDataAttributes {
       | MetadataNullType;
   };
   /**
-   * Specifies which metadata keys should be copied from the source item. Sending null will  default to all keys. Sending an empty string will copy none of the sources\' metadata.  Sending an array of [\"KEY1\", \"KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
+   * Specifies which metadata keys should be copied from the source item. Sending null will default to all keys. Sending an empty string will copy none of the sources\' metadata. Sending an array of [\"KEY1\", \"KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
    * @type {Array<string>}
    * @memberof CreateSceneItemRequestDataAttributes
    */
   experimentalSourceMetadataKeys?: Array<string>;
 }
+
+export const CreateSceneItemRequestDataAttributesResolutionRuleEnum = {
+  AsSpecified: 'as-specified',
+  LatestIteration: 'latest-iteration',
+  LatestRevision: 'latest-revision',
+} as const;
+
+export type CreateSceneItemRequestDataAttributesResolutionRuleEnum =
+  (typeof CreateSceneItemRequestDataAttributesResolutionRuleEnum)[keyof typeof CreateSceneItemRequestDataAttributesResolutionRuleEnum];
+
 /**
  *
  * @export
@@ -1940,6 +2022,12 @@ export interface CreateSceneRequestDataAttributes {
    * @memberof CreateSceneRequestDataAttributes
    */
   metadata?: { [key: string]: string };
+  /**
+   * Number of seconds before expiration
+   * @type {number}
+   * @memberof CreateSceneRequestDataAttributes
+   */
+  expiry?: number;
 }
 /**
  *
@@ -2789,6 +2877,39 @@ export interface FileIdList {
    */
   data: Array<string>;
 }
+/**
+ * The operation for a file archival job.
+ * @export
+ * @interface FileJobArchiveOperation
+ */
+export interface FileJobArchiveOperation {
+  /**
+   *
+   * @type {string}
+   * @memberof FileJobArchiveOperation
+   */
+  type: FileJobArchiveOperationTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof FileJobArchiveOperation
+   */
+  fileId: string;
+  /**
+   *
+   * @type {Array<ArchiveManifestEntry>}
+   * @memberof FileJobArchiveOperation
+   */
+  manifest: Array<ArchiveManifestEntry>;
+}
+
+export const FileJobArchiveOperationTypeEnum = {
+  FileArchiveOperation: 'file-archive-operation',
+} as const;
+
+export type FileJobArchiveOperationTypeEnum =
+  (typeof FileJobArchiveOperationTypeEnum)[keyof typeof FileJobArchiveOperationTypeEnum];
+
 /**
  *
  * @export
@@ -5617,6 +5738,12 @@ export interface SceneDataAttributes {
    */
   sceneItemCount?: number;
   /**
+   *
+   * @type {string}
+   * @memberof SceneDataAttributes
+   */
+  expiresAt?: string;
+  /**
    * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters.
    * @type {{ [key: string]: string; }}
    * @memberof SceneDataAttributes
@@ -6620,6 +6747,60 @@ export interface SectionPlane {
   offset: number;
 }
 /**
+ * Queries a file by its unique ID.
+ * @export
+ * @interface SelectFileById
+ */
+export interface SelectFileById {
+  /**
+   *
+   * @type {string}
+   * @memberof SelectFileById
+   */
+  type: SelectFileByIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SelectFileById
+   */
+  id: string;
+}
+
+export const SelectFileByIdTypeEnum = {
+  FileById: 'file-by-id',
+} as const;
+
+export type SelectFileByIdTypeEnum =
+  (typeof SelectFileByIdTypeEnum)[keyof typeof SelectFileByIdTypeEnum];
+
+/**
+ * Queries a file by its supplied ID.
+ * @export
+ * @interface SelectFileBySuppliedId
+ */
+export interface SelectFileBySuppliedId {
+  /**
+   *
+   * @type {string}
+   * @memberof SelectFileBySuppliedId
+   */
+  type: SelectFileBySuppliedIdTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof SelectFileBySuppliedId
+   */
+  id: string;
+}
+
+export const SelectFileBySuppliedIdTypeEnum = {
+  FileBySuppliedId: 'file-by-supplied-id',
+} as const;
+
+export type SelectFileBySuppliedIdTypeEnum =
+  (typeof SelectFileBySuppliedIdTypeEnum)[keyof typeof SelectFileBySuppliedIdTypeEnum];
+
+/**
  *
  * @export
  * @interface SelectOp
@@ -7520,6 +7701,12 @@ export interface UpdateSceneRequestDataAttributes {
    * @memberof UpdateSceneRequestDataAttributes
    */
   worldOrientation?: Orientation;
+  /**
+   * Number of seconds before expiration
+   * @type {number}
+   * @memberof UpdateSceneRequestDataAttributes
+   */
+  expiry?: number;
   /**
    * User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
    * @type {{ [key: string]: string; }}
@@ -10985,6 +11172,65 @@ export const FileCollectionsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Remove a file from a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [filterFileId] Comma-separated list of file-ids to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeFileCollectionFiles: async (
+      id: string,
+      filterFileId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('removeFileCollectionFiles', 'id', id);
+      const localVarPath = `/file-collections/{id}/files`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterFileId !== undefined) {
+        localVarQueryParameter['filter[fileId]'] = filterFileId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Update a `file-collection`.
      * @param {string} id The &#x60;file-collection&#x60; ID.
      * @param {UpdateFileCollectionRequest} updateFileCollectionRequest
@@ -11229,6 +11475,33 @@ export const FileCollectionsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Remove a file from a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [filterFileId] Comma-separated list of file-ids to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removeFileCollectionFiles(
+      id: string,
+      filterFileId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.removeFileCollectionFiles(
+          id,
+          filterFileId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Update a `file-collection`.
      * @param {string} id The &#x60;file-collection&#x60; ID.
      * @param {UpdateFileCollectionRequest} updateFileCollectionRequest
@@ -11358,6 +11631,22 @@ export const FileCollectionsApiFactory = function (
     ): AxiosPromise<FileCollectionList> {
       return localVarFp
         .listFileCollections(pageCursor, pageSize, filterSuppliedId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Remove a file from a `file-collection`.
+     * @param {string} id The &#x60;file-collection&#x60; ID.
+     * @param {string} [filterFileId] Comma-separated list of file-ids to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removeFileCollectionFiles(
+      id: string,
+      filterFileId?: string,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .removeFileCollectionFiles(id, filterFileId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -11496,6 +11785,27 @@ export interface FileCollectionsApiListFileCollectionsRequest {
    * @memberof FileCollectionsApiListFileCollections
    */
   readonly filterSuppliedId?: string;
+}
+
+/**
+ * Request parameters for removeFileCollectionFiles operation in FileCollectionsApi.
+ * @export
+ * @interface FileCollectionsApiRemoveFileCollectionFilesRequest
+ */
+export interface FileCollectionsApiRemoveFileCollectionFilesRequest {
+  /**
+   * The &#x60;file-collection&#x60; ID.
+   * @type {string}
+   * @memberof FileCollectionsApiRemoveFileCollectionFiles
+   */
+  readonly id: string;
+
+  /**
+   * Comma-separated list of file-ids to filter on.
+   * @type {string}
+   * @memberof FileCollectionsApiRemoveFileCollectionFiles
+   */
+  readonly filterFileId?: string;
 }
 
 /**
@@ -11640,6 +11950,26 @@ export class FileCollectionsApi extends BaseAPI {
   }
 
   /**
+   * Remove a file from a `file-collection`.
+   * @param {FileCollectionsApiRemoveFileCollectionFilesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileCollectionsApi
+   */
+  public removeFileCollectionFiles(
+    requestParameters: FileCollectionsApiRemoveFileCollectionFilesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileCollectionsApiFp(this.configuration)
+      .removeFileCollectionFiles(
+        requestParameters.id,
+        requestParameters.filterFileId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Update a `file-collection`.
    * @param {FileCollectionsApiUpdateFileCollectionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
@@ -11656,6 +11986,294 @@ export class FileCollectionsApi extends BaseAPI {
         requestParameters.updateFileCollectionRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * FileJobsApi - axios parameter creator
+ * @export
+ */
+export const FileJobsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `file-job`.
+     * @param {CreateFileJobRequest} createFileJobRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createFileJob: async (
+      createFileJobRequest: CreateFileJobRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createFileJobRequest' is not null or undefined
+      assertParamExists(
+        'createFileJob',
+        'createFileJobRequest',
+        createFileJobRequest
+      );
+      const localVarPath = `/file-jobs`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createFileJobRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get the status and result of a `file-job`.
+     * @param {string} id The ID of a file job.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getFileJob: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getFileJob', 'id', id);
+      const localVarPath = `/file-jobs/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * FileJobsApi - functional programming interface
+ * @export
+ */
+export const FileJobsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = FileJobsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `file-job`.
+     * @param {CreateFileJobRequest} createFileJobRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createFileJob(
+      createFileJobRequest: CreateFileJobRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createFileJob(
+        createFileJobRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get the status and result of a `file-job`.
+     * @param {string} id The ID of a file job.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getFileJob(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getFileJob(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * FileJobsApi - factory interface
+ * @export
+ */
+export const FileJobsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = FileJobsApiFp(configuration);
+  return {
+    /**
+     * Create a `file-job`.
+     * @param {CreateFileJobRequest} createFileJobRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createFileJob(
+      createFileJobRequest: CreateFileJobRequest,
+      options?: any
+    ): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .createFileJob(createFileJobRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get the status and result of a `file-job`.
+     * @param {string} id The ID of a file job.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getFileJob(id: string, options?: any): AxiosPromise<QueuedJob> {
+      return localVarFp
+        .getFileJob(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createFileJob operation in FileJobsApi.
+ * @export
+ * @interface FileJobsApiCreateFileJobRequest
+ */
+export interface FileJobsApiCreateFileJobRequest {
+  /**
+   *
+   * @type {CreateFileJobRequest}
+   * @memberof FileJobsApiCreateFileJob
+   */
+  readonly createFileJobRequest: CreateFileJobRequest;
+}
+
+/**
+ * Request parameters for getFileJob operation in FileJobsApi.
+ * @export
+ * @interface FileJobsApiGetFileJobRequest
+ */
+export interface FileJobsApiGetFileJobRequest {
+  /**
+   * The ID of a file job.
+   * @type {string}
+   * @memberof FileJobsApiGetFileJob
+   */
+  readonly id: string;
+}
+
+/**
+ * FileJobsApi - object-oriented interface
+ * @export
+ * @class FileJobsApi
+ * @extends {BaseAPI}
+ */
+export class FileJobsApi extends BaseAPI {
+  /**
+   * Create a `file-job`.
+   * @param {FileJobsApiCreateFileJobRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileJobsApi
+   */
+  public createFileJob(
+    requestParameters: FileJobsApiCreateFileJobRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileJobsApiFp(this.configuration)
+      .createFileJob(requestParameters.createFileJobRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get the status and result of a `file-job`.
+   * @param {FileJobsApiGetFileJobRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FileJobsApi
+   */
+  public getFileJob(
+    requestParameters: FileJobsApiGetFileJobRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FileJobsApiFp(this.configuration)
+      .getFileJob(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -14739,7 +15357,7 @@ export const PartRenditionsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     *
+     * Creates a part-rendition associated with a part-revision
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {CreatePartRenditionRequest} createPartRenditionRequest
      * @param {*} [options] Override http request option.
@@ -14941,7 +15559,7 @@ export const PartRenditionsApiFp = function (configuration?: Configuration) {
     PartRenditionsApiAxiosParamCreator(configuration);
   return {
     /**
-     *
+     * Creates a part-rendition associated with a part-revision
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {CreatePartRenditionRequest} createPartRenditionRequest
      * @param {*} [options] Override http request option.
@@ -15039,7 +15657,7 @@ export const PartRenditionsApiFactory = function (
   const localVarFp = PartRenditionsApiFp(configuration);
   return {
     /**
-     *
+     * Creates a part-rendition associated with a part-revision
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {CreatePartRenditionRequest} createPartRenditionRequest
      * @param {*} [options] Override http request option.
@@ -15172,7 +15790,7 @@ export interface PartRenditionsApiGetPartRenditionsRequest {
  */
 export class PartRenditionsApi extends BaseAPI {
   /**
-   *
+   * Creates a part-rendition associated with a part-revision
    * @param {PartRenditionsApiCreatePartRenditionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -15239,7 +15857,7 @@ export const PartRevisionInstancesApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15316,7 +15934,7 @@ export const PartRevisionInstancesApiFp = function (
     PartRevisionInstancesApiAxiosParamCreator(configuration);
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15363,7 +15981,7 @@ export const PartRevisionInstancesApiFactory = function (
   const localVarFp = PartRevisionInstancesApiFp(configuration);
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15424,7 +16042,7 @@ export interface PartRevisionInstancesApiGetPartRevisionInstanceListRequest {
  */
 export class PartRevisionInstancesApi extends BaseAPI {
   /**
-   * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+   * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
    * @param {PartRevisionInstancesApiGetPartRevisionInstanceListRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -15821,7 +16439,7 @@ export const PartRevisionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes. For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes. To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -16067,7 +16685,7 @@ export const PartRevisionsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
-     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes. For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes. To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -16222,7 +16840,7 @@ export const PartRevisionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+     * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes. For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes. To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
      * @param {string} id The &#x60;part-revision&#x60; ID.
      * @param {UpdatePartRevisionRequest} updatePartRevisionRequest
      * @param {*} [options] Override http request option.
@@ -16556,7 +17174,7 @@ export class PartRevisionsApi extends BaseAPI {
   }
 
   /**
-   * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.   For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes.   To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
+   * Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes. For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes. To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
    * @param {PartRevisionsApiUpdatePartRevisionRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -16585,7 +17203,7 @@ export const PartsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201` status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -16881,7 +17499,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
   const localVarAxiosParamCreator = PartsApiAxiosParamCreator(configuration);
   return {
     /**
-     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201` status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17017,7 +17635,7 @@ export const PartsApiFactory = function (
   const localVarFp = PartsApiFp(configuration);
   return {
     /**
-     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
+     * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201` status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
      * @param {CreatePartRequest} createPartRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -17184,7 +17802,7 @@ export interface PartsApiGetQueuedPartDeletionRequest {
  */
 export class PartsApi extends BaseAPI {
   /**
-   * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`  status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
+   * Create a `part`.  This endpoint includes multiple successful response codes: [`201`, `202`].  When not given a relationship, this endpoint will create a part with an empty part revision and return a `201` status code of the part.  When given a relationship to translate, this endpoint will return a `202` status code with the location of a `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the translation is complete, a `part` and `part-revision` that references the translated geometry.  A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`, likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the existing part.  See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more information.
    * @param {PartsApiCreatePartRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -17485,7 +18103,7 @@ export const PropertyEntriesApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -17627,7 +18245,7 @@ export const PropertyEntriesApiFp = function (configuration?: Configuration) {
     PropertyEntriesApiAxiosParamCreator(configuration);
   return {
     /**
-     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -17701,7 +18319,7 @@ export const PropertyEntriesApiFactory = function (
   const localVarFp = PropertyEntriesApiFp(configuration);
   return {
     /**
-     * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -17800,7 +18418,7 @@ export interface PropertyEntriesApiUpsertPropertyEntriesRequest {
  */
 export class PropertyEntriesApi extends BaseAPI {
   /**
-   * Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+   * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
    * @param {PropertyEntriesApiGetPropertyEntriesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
