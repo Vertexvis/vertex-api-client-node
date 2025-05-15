@@ -29,14 +29,17 @@ tags:
   - name: accounts
   - name: applications
   - name: batches
+  - name: exports
   - name: files
   - name: file-collections
+  - name: file-jobs
   - name: geometry-sets
   - name: hits
   - name: model-views
   - name: oauth2
   - name: part-renditions
   - name: part-revisions
+  - name: part-revision-instances
   - name: parts
   - name: pmi
   - name: property-entries
@@ -51,6 +54,7 @@ tags:
   - name: stream-keys
   - name: translation-inspections
   - name: webhook-subscriptions
+  - name: permission-grants
 paths:
   /accounts:
     post:
@@ -1601,6 +1605,56 @@ paths:
       tags:
         - file-collections
   /file-collections/{id}/files:
+    delete:
+      description: Remove a file from a `file-collection`.
+      operationId: removeFileCollectionFiles
+      parameters:
+        - description: The `file-collection` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Comma-separated list of file-ids to filter on.
+          explode: true
+          in: query
+          name: filter[fileId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            type: string
+          style: form
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - file-collections
     get:
       description: List the files in a `file-collection`.
       operationId: listFileCollectionFiles
@@ -1729,6 +1783,110 @@ paths:
         - OAuth2: []
       tags:
         - file-collections
+  /file-jobs:
+    post:
+      description: Create a `file-job`.
+      operationId: createFileJob
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateFileJobRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - file-jobs
+  /file-jobs/{id}:
+    get:
+      description: Get the status and result of a `file-job`.
+      operationId: getFileJob
+      parameters:
+        - description: The ID of a file job.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedJob'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - file-jobs
   /geometry-sets:
     get:
       description: Get `geometry-sets`.
@@ -2539,22 +2697,9 @@ paths:
         - part-revisions
       x-scala-package: translations
     patch:
-      description:
-        "Update a `part-revision`. When given a `file` relationship as\
-        \ a payload, this will invoke a translation job, similar to the POST /parts\
-        \ endpoint. The response code will be a 202 and will respond with an async\
-        \ workflow, and return an Accepted[QueuedJob]. The geometry of the part and\
-        \ all of its children will be replaced with the geometry specified within\
-        \ the translated file given from this relationship. Some of the properties\
-        \ given here are only used for the translation of the file. Namely, `indexMetadata`,\
-        \ `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`.\
-        \ Note that geometry updates are eventually consistent and will not update\
-        \ existing scenes.  \nFor updates to the revision when the file relationship\
-        \ is not present will respond with a standard 200 ok code when successful.\
-        \ Note that metadata updates are eventually consistent and will not update\
-        \ existing scenes.   To view updated metadata within a scene, a new scene\
-        \ must be created or the updated part-revision must be removed and re-added\
-        \ to an existing scene.\n"
+      description: |
+        Update a `part-revision`. When given a `file` relationship as a payload, this will invoke a translation job, similar to the POST /parts endpoint. The response code will be a 202 and will respond with an async workflow, and return an Accepted[QueuedJob]. The geometry of the part and all of its children will be replaced with the geometry specified within the translated file given from this relationship. Some of the properties given here are only used for the translation of the file. Namely, `indexMetadata`, `name`, `suppliedIdKey`, `suppliedRevisionIdKey`, and `suppliedInstanceIdKey`. Note that geometry updates are eventually consistent and will not update existing scenes.
+        For updates to the revision when the file relationship is not present will respond with a standard 200 ok code when successful. Note that metadata updates are eventually consistent and will not update existing scenes. To view updated metadata within a scene, a new scene must be created or the updated part-revision must be removed and re-added to an existing scene.
       operationId: updatePartRevision
       parameters:
         - description: The `part-revision` ID.
@@ -2639,6 +2784,7 @@ paths:
         - part-revisions
   /part-revisions/{id}/part-renditions:
     post:
+      description: Creates a part-rendition associated with a part-revision
       operationId: createPartRendition
       parameters:
         - description: The `part-revision` ID.
@@ -2905,7 +3051,7 @@ paths:
   /part-revision-instances:
     get:
       description: |
-        Gets a page of 'part-revision' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal  used for ordering and the transform matrix for each occurrence.
+        Gets a page of 'part-revision' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
       operationId: getPartRevisionInstanceList
       parameters:
         - description: Parent ID to filter on.
@@ -3160,22 +3306,25 @@ paths:
       tags:
         - parts
     post:
-      description:
-        "Create a `part`.\n\nThis endpoint includes multiple successful\
-        \ response codes: [`201`, `202`].\n\nWhen not given a relationship, this endpoint\
-        \ will create a part with an empty part revision and return a `201` \nstatus\
-        \ code of the part.\n\nWhen given a relationship to translate, this endpoint\
-        \ will return a `202` status code with the location of a\n`queued-translation`.\
-        \ The status of the translation can be queried via `getQueuedTranslation`.\
-        \ After the\ntranslation is complete, a `part` and `part-revision` that references\
-        \ the translated geometry.\n\nA unique suppliedId/suppliedRevisionId combination\
-        \ will create a new part and new part revision. For instance, sending\nmy-part-id/my-revision-id\
-        \ will create a new part and new revision with those corresponding supplied\
-        \ ids. To create a new revision for `my-part-id`,\nlikewise you can invoke\
-        \ this endpoint with a new revision id: `my-part-id/my-new-revision-id` and\
-        \ a new revision will be created for the\nexisting part.\n\nSee our [Import\
-        \ Data](https://developer.vertexvis.com/docs/guides/import-data-with-api)\
-        \ guides for more\ninformation.\n"
+      description: |
+        Create a `part`.
+
+        This endpoint includes multiple successful response codes: [`201`, `202`].
+
+        When not given a relationship, this endpoint will create a part with an empty part revision and return a `201`
+        status code of the part.
+
+        When given a relationship to translate, this endpoint will return a `202` status code with the location of a
+        `queued-translation`. The status of the translation can be queried via `getQueuedTranslation`. After the
+        translation is complete, a `part` and `part-revision` that references the translated geometry.
+
+        A unique suppliedId/suppliedRevisionId combination will create a new part and new part revision. For instance, sending
+        my-part-id/my-revision-id will create a new part and new revision with those corresponding supplied ids. To create a new revision for `my-part-id`,
+        likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the
+        existing part.
+
+        See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more
+        information.
       operationId: createPart
       requestBody:
         content:
@@ -3807,8 +3956,9 @@ paths:
         - pmi
   /property-entries:
     get:
-      description: |
-        Get `property-entries` by a resource ID **Preview:** This is a preview API and is subject to change.
+      description:
+        "Get `property-entries` by a resource ID \n**Preview:** This is\
+        \ a preview API and is subject to change.\n"
       operationId: getPropertyEntries
       parameters:
         - description: The cursor for the next page of items.
@@ -8382,6 +8532,16 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    FileIdFilter:
+      description: Comma-separated list of file-ids to filter on.
+      explode: true
+      in: query
+      name: filter[fileId]
+      required: false
+      schema:
+        example: some-id-1,some-id-2
+        type: string
+      style: form
     FileCollectionId:
       description: The `file-collection` ID.
       explode: false
@@ -8391,17 +8551,6 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
-    FileCollectionIdFilter:
-      description: Comma-separated list of file-colllection IDs to filter on.
-      explode: true
-      in: query
-      name: filter[collectionId]
-      required: false
-      schema:
-        example: some-id-1,some-id-2
-        maxLength: 1024
-        type: string
-      style: form
     HasAnnotationsFilter:
       description: Filter model views that contain or do not contain annotations.
       explode: true
@@ -9235,6 +9384,14 @@ components:
           items:
             $ref: '#/components/schemas/Uuid'
           type: array
+      required:
+        - data
+      type: object
+    CreateFileJobRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateFileJobRequest_data'
       required:
         - data
       type: object
@@ -10467,6 +10624,29 @@ components:
       format: int32
       minimum: 1
       type: integer
+    FileJobArchiveOperation:
+      additionalProperties: false
+      description: The operation for a file archival job.
+      properties:
+        type:
+          enum:
+            - file-archive-operation
+          type: string
+        fileId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        manifest:
+          items:
+            $ref: '#/components/schemas/ArchiveManifestEntry'
+          type: array
+      required:
+        - fileId
+        - manifest
+        - type
+      type: object
     GeometrySetData:
       additionalProperties: false
       properties:
@@ -11806,6 +11986,27 @@ components:
       required:
         - href
       type: object
+    ArchiveManifestEntry:
+      additionalProperties: false
+      description: Represents a file and directory within an archive.
+      properties:
+        selector:
+          description: Represents a query to select a file.
+          discriminator:
+            mapping:
+              file-by-id: '#/components/schemas/SelectFileById'
+              file-by-supplied-id: '#/components/schemas/SelectFileBySuppliedId'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SelectFileById'
+            - $ref: '#/components/schemas/SelectFileBySuppliedId'
+        directory:
+          description: The directory in the archive where the file will be placed.
+          maxLength: 4096
+          type: string
+      required:
+        - selector
+      type: object
     BoundingBox:
       additionalProperties: false
       description: 3D bounding-box
@@ -12442,6 +12643,39 @@ components:
           minLength: 1
           type: string
       type: object
+    SelectFileById:
+      additionalProperties: false
+      description: Queries a file by its unique ID.
+      properties:
+        type:
+          enum:
+            - file-by-id
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    SelectFileBySuppliedId:
+      additionalProperties: false
+      description: Queries a file by its supplied ID.
+      properties:
+        type:
+          enum:
+            - file-by-supplied-id
+          type: string
+        id:
+          maxLength: 255
+          type: string
+      required:
+        - id
+        - type
+      type: object
     Color:
       description: Color value from 0 to 255.
       example: 255
@@ -12751,16 +12985,6 @@ components:
           maximum: 86400
           minimum: 1
           type: integer
-        maxAge:
-          description:
-            Specifies the maximum time (in seconds) a cached response of
-            a signed-url remains fresh and can be used without revalidation. (Defaults
-            to 1 hour, can send up to 30 days)
-          example: 1000
-          format: int32
-          maximum: 2592000
-          minimum: 1
-          type: integer
       type: object
     CreateDownloadRequest_data:
       properties:
@@ -12839,6 +13063,32 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateFileCollectionRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateFileJobRequest_data_attributes:
+      properties:
+        operation:
+          description: An object that describes the operation a file job will perform.
+          discriminator:
+            mapping:
+              file-archive-operation: '#/components/schemas/FileJobArchiveOperation'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/FileJobArchiveOperation'
+      required:
+        - operation
+      type: object
+    CreateFileJobRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - file-job
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateFileJobRequest_data_attributes'
       required:
         - attributes
         - type
@@ -13516,6 +13766,12 @@ components:
           description: |
             User supplied key-value pairs for a scene. You can supply up to 50 entries, with key names limited to 64 characters and values limited to 256 characters. A null value will delete the entry in the map, all other key/value pairs provided here will be inserted or updated into the existing scene metadata.
           type: object
+        expiry:
+          description: Number of seconds before expiration
+          example: 600
+          format: int32
+          minimum: 1
+          type: integer
       type: object
     CreateSceneRequest_data_relationships:
       properties:
@@ -13572,6 +13828,12 @@ components:
           type: boolean
         worldOrientation:
           $ref: '#/components/schemas/Orientation'
+        expiry:
+          description: Number of seconds before expiration
+          example: 600
+          format: int32
+          minimum: 1
+          type: integer
         metadata:
           additionalProperties:
             maxLength: 256
@@ -14485,7 +14747,7 @@ components:
           type: integer
         parent:
           description: |
-            Optional ability to specify a parent scene item by scene item supplied ID. For example, an  existing ID from a PLM system. This approach is an alternative to providing a specific scene  item ID with the relationship parent property.
+            Optional ability to specify a parent scene item by scene item supplied ID. For example, an existing ID from a PLM system. This approach is an alternative to providing a specific scene item ID with the relationship parent property.
           example: PN12345
           maxLength: 1024
           type: string
@@ -14495,6 +14757,26 @@ components:
             supplied IDs.
           example: false
           type: boolean
+        resolutionRule:
+          description:
+            "Optional rule to guide the part-revision resolution algorithm\
+            \ in cases where required qualifiers are not explicitly specified by the\
+            \ query.  In the case of assembly parts, the resolution rule also applies\
+            \ recursively to the resolution of the child parts.\n'as-specified' (the\
+            \ default) directs the resolution algorithm to use only the ids specified\
+            \ in this query.  An incomplete specification will result in an error.\
+            \ \n'latest-iteration' directs the resolution algorithm to select, within\
+            \ the scope of the specified part-revision, the iteration possessing the\
+            \ newest creation timestamp.  Any iteration identifiers specified by this\
+            \ query are ignored.  Failure to specify a part-revision will result in\
+            \ an error. \n'latest-revision' directs the resolution algorithm to select\
+            \ the part-revision possessing the newest creation timestamp.  'latest-revision'\
+            \ implies 'latest-iteration' resolution logic.\n"
+          enum:
+            - as-specified
+            - latest-iteration
+            - latest-revision
+          type: string
         source:
           $ref: '#/components/schemas/PartRevisionSuppliedId'
         suppliedId:
@@ -14529,7 +14811,7 @@ components:
           type: object
         experimentalSourceMetadataKeys:
           description: |
-            Specifies which metadata keys should be copied from the source item. Sending null will  default to all keys. Sending an empty string will copy none of the sources' metadata.  Sending an array of ["KEY1", "KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
+            Specifies which metadata keys should be copied from the source item. Sending null will default to all keys. Sending an empty string will copy none of the sources' metadata. Sending an array of ["KEY1", "KEY2] will include KEY1 and KEY2 from the source in the scene item creation. This is marked experimental since future releases are expected to prevent copying metadata entirely.
           items:
             type: string
           maxItems: 500
@@ -14636,6 +14918,10 @@ components:
             to be explicitly requested)
           example: 100
           type: integer
+        expiresAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
         metadata:
           additionalProperties:
             maxLength: 256
