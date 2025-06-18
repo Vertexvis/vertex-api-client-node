@@ -1470,9 +1470,10 @@ export interface CreatePartRequestDataAttributes {
    */
   indexMetadata?: boolean;
   /**
-   * Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+   * Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified. This has been deprecated and replaced by the PATCH endpoint /property-entries
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof CreatePartRequestDataAttributes
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -1884,9 +1885,10 @@ export interface CreateSceneItemRequestDataAttributes {
    */
   endItem?: boolean;
   /**
-   * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+   * Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file. This has been deprecated and replaced by the PATCH endpoint /property-entries.
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof CreateSceneItemRequestDataAttributes
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -2264,7 +2266,7 @@ export interface CreateStreamKeyRequestDataAttributes {
    */
   sceneViewStateId?: string;
   /**
-   * Optionally enables or disables the creation of a search session for the view.
+   * Optionally enables or disables the creation of a search session for the view. The default creates a session for the scene-view
    * @type {boolean}
    * @memberof CreateStreamKeyRequestDataAttributes
    */
@@ -3799,9 +3801,10 @@ export interface PartAssemblyRelationshipData {
    */
   children: Array<PartRevisionInstance>;
   /**
-   * Additional metadata about the `part` and/or `part-revision`.
+   * Additional metadata about the `part` and/or `part-revision`. This has been deprecated and replaced by the PATCH endpoint /property-entries
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof PartAssemblyRelationshipData
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -4228,9 +4231,10 @@ export interface PartRevisionDataAttributes {
    */
   created?: string;
   /**
-   *
+   * This has been deprecated and replaced by the GET endpoint /property-entries
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof PartRevisionDataAttributes
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -5837,9 +5841,10 @@ export interface SceneItemDataAttributes {
    */
   materialOverride?: ColorMaterial;
   /**
-   *
+   * This has been deprecated and replaced by the GET endpoint /property-entries
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof SceneItemDataAttributes
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -7320,9 +7325,10 @@ export interface UpdatePartRevisionRequestData {
  */
 export interface UpdatePartRevisionRequestDataAttributes {
   /**
-   * Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+   * Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified. This has been deprecated and replaced by the PATCH endpoint /property-entries
    * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
    * @memberof UpdatePartRevisionRequestDataAttributes
+   * @deprecated
    */
   metadata?: {
     [key: string]:
@@ -18103,7 +18109,7 @@ export const PropertyEntriesApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -18173,7 +18179,7 @@ export const PropertyEntriesApiAxiosParamCreator = function (
       };
     },
     /**
-     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * Upsert property-entries for a provided resource.
      * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18245,7 +18251,7 @@ export const PropertyEntriesApiFp = function (configuration?: Configuration) {
     PropertyEntriesApiAxiosParamCreator(configuration);
   return {
     /**
-     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -18281,7 +18287,7 @@ export const PropertyEntriesApiFp = function (configuration?: Configuration) {
       );
     },
     /**
-     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * Upsert property-entries for a provided resource.
      * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18319,7 +18325,7 @@ export const PropertyEntriesApiFactory = function (
   const localVarFp = PropertyEntriesApiFp(configuration);
   return {
     /**
-     * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
+     * Get `property-entries` by a resource ID
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterResourceId] A resource ID to filter on
@@ -18345,7 +18351,7 @@ export const PropertyEntriesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+     * Upsert property-entries for a provided resource.
      * @param {UpsertPropertyEntriesRequest} upsertPropertyEntriesRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -18418,7 +18424,7 @@ export interface PropertyEntriesApiUpsertPropertyEntriesRequest {
  */
 export class PropertyEntriesApi extends BaseAPI {
   /**
-   * Get `property-entries` by a resource ID  **Preview:** This is a preview API and is subject to change.
+   * Get `property-entries` by a resource ID
    * @param {PropertyEntriesApiGetPropertyEntriesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -18440,7 +18446,7 @@ export class PropertyEntriesApi extends BaseAPI {
   }
 
   /**
-   * Upsert property-entries for a provided resource. **Preview:** This is a preview API and is subject to change.
+   * Upsert property-entries for a provided resource.
    * @param {PropertyEntriesApiUpsertPropertyEntriesRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}

@@ -3956,9 +3956,8 @@ paths:
         - pmi
   /property-entries:
     get:
-      description:
-        "Get `property-entries` by a resource ID \n**Preview:** This is\
-        \ a preview API and is subject to change.\n"
+      description: |
+        Get `property-entries` by a resource ID
       operationId: getPropertyEntries
       parameters:
         - description: The cursor for the next page of items.
@@ -4041,7 +4040,6 @@ paths:
     patch:
       description: |
         Upsert property-entries for a provided resource.
-        **Preview:** This is a preview API and is subject to change.
       operationId: upsertPropertyEntries
       requestBody:
         content:
@@ -13247,8 +13245,10 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
           description: |
             Metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+            This has been deprecated and replaced by the PATCH endpoint /property-entries
           type: object
         indexMetadata:
           description: |
@@ -13402,8 +13402,10 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
           description: |
             Additional metadata about the `part` and/or `part-revision`. This metadata will take precedence over any metadata that belongs to the part file if `indexMetadata` is specified.
+            This has been deprecated and replaced by the PATCH endpoint /property-entries
           type: object
         name:
           description: Name to be used for the root part.
@@ -13943,7 +13945,7 @@ components:
         withSearchSession:
           description:
             Optionally enables or disables the creation of a search session
-            for the view.
+            for the view. The default creates a session for the scene-view
           example: true
           type: boolean
       type: object
@@ -14409,6 +14411,8 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
+          description: This has been deprecated and replaced by the GET endpoint /property-entries
           type: object
         name:
           example: some-string
@@ -14457,6 +14461,8 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
+          description: This has been deprecated and replaced by the GET endpoint /property-entries
           type: object
         suppliedId:
           example: some-string
@@ -14608,8 +14614,10 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
           description: |
             Additional metadata about the `part` and/or `part-revision`.
+            This has been deprecated and replaced by the PATCH endpoint /property-entries
           type: object
       required:
         - children
@@ -14806,8 +14814,10 @@ components:
               - $ref: '#/components/schemas/MetadataDateType'
               - $ref: '#/components/schemas/MetadataStringType'
               - $ref: '#/components/schemas/MetadataNullType'
+          deprecated: true
           description: |
             Additional metadata for the scene-item. This metadata will take precedence over any metadata that belongs to the part file.
+            This has been deprecated and replaced by the PATCH endpoint /property-entries.
           type: object
         experimentalSourceMetadataKeys:
           description: |
