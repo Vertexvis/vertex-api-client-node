@@ -2206,6 +2206,78 @@ export interface CreateSceneViewStateRequestDataRelationships {
 /**
  *
  * @export
+ * @interface CreateSearchSessionRequest
+ */
+export interface CreateSearchSessionRequest {
+  /**
+   *
+   * @type {CreateSearchSessionRequestData}
+   * @memberof CreateSearchSessionRequest
+   */
+  data: CreateSearchSessionRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateSearchSessionRequestData
+ */
+export interface CreateSearchSessionRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateSearchSessionRequestData
+   */
+  type: CreateSearchSessionRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateSearchSessionRequestDataAttributes}
+   * @memberof CreateSearchSessionRequestData
+   */
+  attributes: CreateSearchSessionRequestDataAttributes;
+  /**
+   *
+   * @type {CreateSearchSessionRequestDataRelationships}
+   * @memberof CreateSearchSessionRequestData
+   */
+  relationships: CreateSearchSessionRequestDataRelationships;
+}
+
+export const CreateSearchSessionRequestDataTypeEnum = {
+  SearchSession: 'search-session',
+} as const;
+
+export type CreateSearchSessionRequestDataTypeEnum =
+  (typeof CreateSearchSessionRequestDataTypeEnum)[keyof typeof CreateSearchSessionRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateSearchSessionRequestDataAttributes
+ */
+export interface CreateSearchSessionRequestDataAttributes {
+  /**
+   * Number of seconds before the search session is deleted.
+   * @type {number}
+   * @memberof CreateSearchSessionRequestDataAttributes
+   */
+  expiry?: number;
+}
+/**
+ *
+ * @export
+ * @interface CreateSearchSessionRequestDataRelationships
+ */
+export interface CreateSearchSessionRequestDataRelationships {
+  /**
+   *
+   * @type {SceneRelationship}
+   * @memberof CreateSearchSessionRequestDataRelationships
+   */
+  scene?: SceneRelationship;
+}
+/**
+ *
+ * @export
  * @interface CreateStreamKeyRequest
  */
 export interface CreateStreamKeyRequest {
@@ -3118,6 +3190,12 @@ export interface FilterExpression {
    * @memberof FilterExpression
    */
   lte?: string;
+  /**
+   * A value of a filter.
+   * @type {string}
+   * @memberof FilterExpression
+   */
+  contains?: string;
 }
 /**
  *
@@ -6732,6 +6810,75 @@ export const SceneViewStateRelationshipDataTypeEnum = {
 export type SceneViewStateRelationshipDataTypeEnum =
   (typeof SceneViewStateRelationshipDataTypeEnum)[keyof typeof SceneViewStateRelationshipDataTypeEnum];
 
+/**
+ *
+ * @export
+ * @interface SearchSession
+ */
+export interface SearchSession {
+  /**
+   *
+   * @type {SearchSessionData}
+   * @memberof SearchSession
+   */
+  data: SearchSessionData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SearchSession
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SearchSessionData
+ */
+export interface SearchSessionData {
+  /**
+   *
+   * @type {string}
+   * @memberof SearchSessionData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SearchSessionData
+   */
+  id: string;
+  /**
+   *
+   * @type {SearchSessionDataAttributes}
+   * @memberof SearchSessionData
+   */
+  attributes: SearchSessionDataAttributes;
+  /**
+   *
+   * @type {SceneViewDataRelationships}
+   * @memberof SearchSessionData
+   */
+  relationships?: SceneViewDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof SearchSessionData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface SearchSessionDataAttributes
+ */
+export interface SearchSessionDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof SearchSessionDataAttributes
+   */
+  status: string;
+}
 /**
  *
  * @export
@@ -15863,7 +16010,7 @@ export const PartRevisionInstancesApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15940,7 +16087,7 @@ export const PartRevisionInstancesApiFp = function (
     PartRevisionInstancesApiAxiosParamCreator(configuration);
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15987,7 +16134,7 @@ export const PartRevisionInstancesApiFactory = function (
   const localVarFp = PartRevisionInstancesApiFp(configuration);
   return {
     /**
-     * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
+     * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -16048,7 +16195,7 @@ export interface PartRevisionInstancesApiGetPartRevisionInstanceListRequest {
  */
 export class PartRevisionInstancesApi extends BaseAPI {
   /**
-   * Gets a page of \'part-revision\' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
+   * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
    * @param {PartRevisionInstancesApiGetPartRevisionInstanceListRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -25232,6 +25379,297 @@ export class ScenesApi extends BaseAPI {
         requestParameters.updateSceneRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * SearchSessionsApi - axios parameter creator
+ * @export
+ */
+export const SearchSessionsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `search-session`.
+     * @param {CreateSearchSessionRequest} createSearchSessionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSearchSession: async (
+      createSearchSessionRequest: CreateSearchSessionRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createSearchSessionRequest' is not null or undefined
+      assertParamExists(
+        'createSearchSession',
+        'createSearchSessionRequest',
+        createSearchSessionRequest
+      );
+      const localVarPath = `/search-sessions`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createSearchSessionRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `search-session`.
+     * @param {string} id The &#x60;search-session&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSearchSession: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getSearchSession', 'id', id);
+      const localVarPath = `/search-sessions/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * SearchSessionsApi - functional programming interface
+ * @export
+ */
+export const SearchSessionsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    SearchSessionsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `search-session`.
+     * @param {CreateSearchSessionRequest} createSearchSessionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createSearchSession(
+      createSearchSessionRequest: CreateSearchSessionRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SearchSession>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createSearchSession(
+          createSearchSessionRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `search-session`.
+     * @param {string} id The &#x60;search-session&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getSearchSession(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SearchSession>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getSearchSession(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * SearchSessionsApi - factory interface
+ * @export
+ */
+export const SearchSessionsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = SearchSessionsApiFp(configuration);
+  return {
+    /**
+     * Create a `search-session`.
+     * @param {CreateSearchSessionRequest} createSearchSessionRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createSearchSession(
+      createSearchSessionRequest: CreateSearchSessionRequest,
+      options?: any
+    ): AxiosPromise<SearchSession> {
+      return localVarFp
+        .createSearchSession(createSearchSessionRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `search-session`.
+     * @param {string} id The &#x60;search-session&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getSearchSession(id: string, options?: any): AxiosPromise<SearchSession> {
+      return localVarFp
+        .getSearchSession(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createSearchSession operation in SearchSessionsApi.
+ * @export
+ * @interface SearchSessionsApiCreateSearchSessionRequest
+ */
+export interface SearchSessionsApiCreateSearchSessionRequest {
+  /**
+   *
+   * @type {CreateSearchSessionRequest}
+   * @memberof SearchSessionsApiCreateSearchSession
+   */
+  readonly createSearchSessionRequest: CreateSearchSessionRequest;
+}
+
+/**
+ * Request parameters for getSearchSession operation in SearchSessionsApi.
+ * @export
+ * @interface SearchSessionsApiGetSearchSessionRequest
+ */
+export interface SearchSessionsApiGetSearchSessionRequest {
+  /**
+   * The &#x60;search-session&#x60; ID.
+   * @type {string}
+   * @memberof SearchSessionsApiGetSearchSession
+   */
+  readonly id: string;
+}
+
+/**
+ * SearchSessionsApi - object-oriented interface
+ * @export
+ * @class SearchSessionsApi
+ * @extends {BaseAPI}
+ */
+export class SearchSessionsApi extends BaseAPI {
+  /**
+   * Create a `search-session`.
+   * @param {SearchSessionsApiCreateSearchSessionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SearchSessionsApi
+   */
+  public createSearchSession(
+    requestParameters: SearchSessionsApiCreateSearchSessionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SearchSessionsApiFp(this.configuration)
+      .createSearchSession(
+        requestParameters.createSearchSessionRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `search-session`.
+   * @param {SearchSessionsApiGetSearchSessionRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof SearchSessionsApi
+   */
+  public getSearchSession(
+    requestParameters: SearchSessionsApiGetSearchSessionRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return SearchSessionsApiFp(this.configuration)
+      .getSearchSession(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
