@@ -51,6 +51,7 @@ tags:
   - name: scene-views
   - name: scenes
   - name: scene-view-states
+  - name: search-sessions
   - name: stream-keys
   - name: translation-inspections
   - name: webhook-subscriptions
@@ -3051,7 +3052,7 @@ paths:
   /part-revision-instances:
     get:
       description: |
-        Gets a page of 'part-revision' instances. An instance is an occurence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
+        Gets a page of 'part-revision' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
       operationId: getPartRevisionInstanceList
       parameters:
         - description: Parent ID to filter on.
@@ -7992,6 +7993,113 @@ paths:
         - OAuth2: []
       tags:
         - exports
+  /search-sessions/{id}:
+    get:
+      description: Get a `search-session`.
+      operationId: getSearchSession
+      parameters:
+        - description: The `search-session` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SearchSession'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - search-sessions
+  /search-sessions:
+    post:
+      description: Create a `search-session`.
+      operationId: createSearchSession
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateSearchSessionRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/SearchSession'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - search-sessions
   /webhook-subscriptions:
     get:
       description: Get `webhook-subscription`s.
@@ -10213,6 +10321,9 @@ components:
         lte:
           description: A value of a filter.
           type: string
+        contains:
+          description: A value of a filter.
+          type: string
       type: object
     QueuedJobList:
       additionalProperties: false
@@ -10265,6 +10376,26 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - data
+      type: object
+    SearchSession:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/SearchSessionData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    CreateSearchSessionRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateSearchSessionRequest_data'
       required:
         - data
       type: object
@@ -11844,6 +11975,33 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/ExportData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    SearchSessionData:
+      additionalProperties: false
+      properties:
+        type:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/SearchSessionData_attributes'
+        relationships:
+          $ref: '#/components/schemas/SceneViewData_relationships'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -14142,6 +14300,34 @@ components:
         - relationships
         - type
       type: object
+    CreateSearchSessionRequest_data_attributes:
+      properties:
+        expiry:
+          description: Number of seconds before the search session is deleted.
+          format: int32
+          type: integer
+      type: object
+    CreateSearchSessionRequest_data_relationships:
+      properties:
+        scene:
+          $ref: '#/components/schemas/SceneRelationship'
+      type: object
+    CreateSearchSessionRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - search-session
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSearchSessionRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateSearchSessionRequest_data_relationships'
+      required:
+        - attributes
+        - relationships
+        - type
+      type: object
     CreateWebhookSubscriptionRequest_data_attributes:
       properties:
         url:
@@ -15175,6 +15361,13 @@ components:
       required:
         - created
         - downloadUrl
+      type: object
+    SearchSessionData_attributes:
+      properties:
+        status:
+          type: string
+      required:
+        - status
       type: object
     WebhookSubscriptionData_attributes:
       properties:
