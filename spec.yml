@@ -3271,6 +3271,17 @@ paths:
             maxLength: 1024
             type: string
           style: form
+        - description: Owner ID to filter on.
+          explode: true
+          in: query
+          name: filter[ownerId]
+          required: false
+          schema:
+            example: 7cd2a284-a854-4152-8fcc-05444cdf4f0d
+            format: uuid
+            maxLength: 36
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -4222,7 +4233,9 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/CreateSceneAlterationRequest'
+              oneOf:
+                - $ref: '#/components/schemas/CreateSceneAlterationRequest'
+                - $ref: '#/components/schemas/CreateSceneExpressionAlterationRequest'
         required: true
       responses:
         '202':
@@ -8475,6 +8488,198 @@ paths:
         - OAuth2: []
       tags:
         - webhook-subscriptions
+  /permission-grants:
+    get:
+      description: List all permission grants
+      operationId: listPermissionGrants
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PermissionGrantList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2: []
+      summary: List all permission grants
+      tags:
+        - permission-grants
+    post:
+      description: Create a permission grant for a grantee to a subject resource
+      operationId: createPermissionGrant
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreatePermissionGrant'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PermissionGrant'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '409':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '409'
+                    code: Conflict
+                    title: The state of the resource does not permit this operation.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Conflict
+      security:
+        - OAuth2: []
+      summary: Create a permission grant for a grantee to a subject resource
+      tags:
+        - permission-grants
+  /permission-grants/{id}:
+    delete:
+      description: Remove a permission grant by ID
+      operationId: removePermissionGrant
+      parameters:
+        - description: The permission grant ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2: []
+      summary: Remove a permission grant by ID
+      tags:
+        - permission-grants
+    get:
+      description: Get a permission grant by ID
+      operationId: getPermissionGrant
+      parameters:
+        - description: The permission grant ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PermissionGrant'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+      security:
+        - OAuth2: []
+      summary: Get a permission grant by ID
+      tags:
+        - permission-grants
 components:
   headers:
     Location:
@@ -8872,6 +9077,18 @@ components:
           type: string
         example: filter[metadata][key1]=test
         type: object
+      style: form
+    OwnerIdFilter:
+      description: Owner ID to filter on.
+      explode: true
+      in: query
+      name: filter[ownerId]
+      required: false
+      schema:
+        example: 7cd2a284-a854-4152-8fcc-05444cdf4f0d
+        format: uuid
+        maxLength: 36
+        type: string
       style: form
     QueuedSceneSyncId:
       description: The `queued-scene-sync` ID.
@@ -9898,9 +10115,62 @@ components:
       type: object
     CreateSceneAlterationRequest:
       additionalProperties: false
+      deprecated: true
       properties:
         data:
           $ref: '#/components/schemas/CreateSceneAlterationRequest_data'
+      required:
+        - data
+      type: object
+    CreateSceneExpressionAlterationRequest:
+      additionalProperties: false
+      description:
+        "Support a query expression for a scene alteration. \nTo perform\
+        \ a standard item alteration: ```json {\n  \"data\" : {\n    \"type\" : \"\
+        scene-alteration-expression\",\n    \"attributes\" : {\n      \"operations\"\
+        \ : [\n        {\n          \"expression\" : {\n            \"type\" : \"\
+        query-operand\",\n            \"query\" : {\n              \"type\" : \"query-by-id\"\
+        ,\n              \"value\" : \"{SCENE_ITEM_ID}\"\n            }\n        \
+        \  },\n          \"changes\" : [\n            {\n              \"type\" :\
+        \ \"change-visibility\",\n              \"visible\" : false\n            }\n\
+        \          ]\n        }\n      ]\n    }\n  }\n} ```\nTo perform a join of\
+        \ two metadata queries, i.e, an \"and\" query: ```json {\n  \"data\" : {\n\
+        \    \"type\" : \"scene-alteration-expression\",\n    \"attributes\" : {\n\
+        \      \"operations\" : [\n        {\n          \"expression\" : {\n     \
+        \       \"type\" : \"and\",\n            \"left\" : {\n              \"type\"\
+        \ : \"query-operand\",\n              \"query\" : {\n                \"type\"\
+        \ : \"query-by-metadata\",\n                \"filter\" : \"vdXUKl2pQr\",\n\
+        \                \"keys\" : [\n                  \"jxIuahIdXS\",\n       \
+        \           \"9tegKF6acH\"\n                ]\n              }\n         \
+        \   },\n            \"right\" : {\n              \"type\" : \"query-operand\"\
+        ,\n              \"query\" : {\n                \"type\" : \"query-by-metadata\"\
+        ,\n                \"filter\" : \"IE8P9JRPXC\",\n                \"keys\"\
+        \ : [\n                  \"5ggPOzw4bT\",\n                  \"7xQrQE5Q67\"\
+        \n                ]\n              }\n            }\n          },\n      \
+        \    \"changes\" : [\n            {\n              \"type\" : \"change-visibility\"\
+        ,\n              \"visible\" : false\n            }\n          ]\n       \
+        \ }\n      ]\n    }\n  }\n} ```\nTo provide more complex queries, the left/right\
+        \ also accept or/and expressions. Here's an example of a nested `or` item\
+        \ based query: ```json {\n  \"data\" : {\n    \"type\" : \"scene-alteration-expression\"\
+        ,\n    \"attributes\" : {\n      \"operations\" : [\n        {\n         \
+        \ \"expression\" : {\n            \"type\" : \"or\",\n            \"left\"\
+        \ : {\n              \"type\" : \"or\",\n              \"left\" : {\n    \
+        \            \"type\" : \"query-operand\",\n                \"query\" : {\n\
+        \                  \"type\" : \"query-by-id\",\n                  \"value\"\
+        \ : \"{SCENE_ITEM_ID_1}\"\n                }\n              },\n         \
+        \     \"right\" : {\n                \"type\" : \"query-operand\",\n     \
+        \           \"query\" : {\n                  \"type\" : \"query-by-id\",\n\
+        \                  \"value\" : \"{SCENE_ITEM_ID_2}\"\n                }\n\
+        \              }\n            },\n            \"right\" : {\n            \
+        \  \"type\" : \"query-operand\",\n              \"query\" : {\n          \
+        \      \"type\" : \"query-by-id\",\n                \"value\" : \"{SCENE_ITEM_ID_3}\"\
+        \n              }\n            }\n          },\n          \"changes\" : [\n\
+        \            {\n              \"type\" : \"change-visibility\",\n        \
+        \      \"visible\" : false\n            }\n          ]\n        }\n      ]\n\
+        \    }\n  }\n} ```\n"
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateSceneExpressionAlterationRequest_data'
       required:
         - data
       type: object
@@ -10495,6 +10765,42 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UpdateWebhookSubscriptionRequest_data'
+      required:
+        - data
+      type: object
+    PermissionGrantList:
+      additionalProperties: false
+      description: A list of permission grants
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PermissionGrant'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreatePermissionGrant:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreatePermissionGrant_data'
+      required:
+        - data
+      type: object
+    PermissionGrant:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PermissionGrantData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
       required:
         - data
       type: object
@@ -11316,6 +11622,40 @@ components:
         - operations
         - query
       type: object
+    SceneItemExpressionOperation:
+      additionalProperties: false
+      properties:
+        expression:
+          oneOf:
+            - $ref: '#/components/schemas/SceneItemQueryOperand'
+            - $ref: '#/components/schemas/SceneItemAndExpression'
+            - $ref: '#/components/schemas/SceneItemOrExpression'
+        changes:
+          description:
+            List of changes to perform on `scene-items` matching the query
+            for the operation
+          items:
+            oneOf:
+              - $ref: '#/components/schemas/ChangeVisibilityOp'
+              - $ref: '#/components/schemas/ChangeMaterialOp'
+              - $ref: '#/components/schemas/ClearMaterialOp'
+              - $ref: '#/components/schemas/ChangeTransformOp'
+              - $ref: '#/components/schemas/ClearTransformOp'
+              - $ref: '#/components/schemas/SelectOp'
+              - $ref: '#/components/schemas/DeselectOperation'
+              - $ref: '#/components/schemas/ClearRenOp'
+              - $ref: '#/components/schemas/ViewDefaultRenOp'
+              - $ref: '#/components/schemas/ViewRenByIdOp'
+              - $ref: '#/components/schemas/ViewRenBySuppliedIdOp'
+              - $ref: '#/components/schemas/ViewRepByIdOp'
+              - $ref: '#/components/schemas/ViewRepByPredefinedIdOp'
+              - $ref: '#/components/schemas/ClearRepOp'
+          maxItems: 1024
+          type: array
+      required:
+        - changes
+        - expression
+      type: object
     Matrix4Nullable:
       additionalProperties: false
       description:
@@ -12131,6 +12471,42 @@ components:
         - links
         - type
       type: object
+    PermissionGrantee:
+      description: The grantee portion of a permission grant tuple
+      discriminator:
+        propertyName: type
+      oneOf:
+        - $ref: '#/components/schemas/GranteeAccount'
+      type: object
+    PermissionSubject:
+      description: A resource category subject to a permission grant
+      discriminator:
+        propertyName: domain
+      oneOf:
+        - $ref: '#/components/schemas/PartsDomainSubject'
+        - $ref: '#/components/schemas/PropertySetDomainSubject'
+      type: object
+    PermissionGrantData:
+      additionalProperties: false
+      description: A permission grant tuple
+      properties:
+        type:
+          enum:
+            - permission-grant
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreatePermissionGrant_data_attributes'
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     Link:
       additionalProperties: false
       example:
@@ -12223,6 +12599,15 @@ components:
       required:
         - id
         - type
+      type: object
+    AccountRelationship:
+      additionalProperties: false
+      description: Relationship to an `account`.
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountRelationship_data'
+      required:
+        - data
       type: object
     PartRevisionInstance:
       additionalProperties: false
@@ -12514,6 +12899,79 @@ components:
       required:
         - type
       type: object
+    SceneItemQueryOperand:
+      additionalProperties: false
+      properties:
+        type:
+          description: The type of the expression denoting it as an operand
+          enum:
+            - query-operand
+          example: query-operand
+          maxLength: 32
+          type: string
+        query:
+          description: Query Operand for searching `scene-items`.
+          oneOf:
+            - $ref: '#/components/schemas/QueryBySceneItemId'
+            - $ref: '#/components/schemas/QueryBySceneItemIds'
+            - $ref: '#/components/schemas/QueryByRoot'
+            - $ref: '#/components/schemas/QueryBySceneItemMetadata'
+      required:
+        - query
+        - type
+      type: object
+    SceneItemAndExpression:
+      additionalProperties: false
+      description: The union of the items of the provided queries
+      properties:
+        type:
+          description: The type of the expression
+          enum:
+            - and
+          example: and
+          maxLength: 32
+          type: string
+        left:
+          oneOf:
+            - $ref: '#/components/schemas/SceneItemQueryOperand'
+            - $ref: '#/components/schemas/SceneItemAndExpression'
+            - $ref: '#/components/schemas/SceneItemOrExpression'
+        right:
+          oneOf:
+            - $ref: '#/components/schemas/SceneItemQueryOperand'
+            - $ref: '#/components/schemas/SceneItemAndExpression'
+            - $ref: '#/components/schemas/SceneItemOrExpression'
+      required:
+        - left
+        - right
+        - type
+      type: object
+    SceneItemOrExpression:
+      additionalProperties: false
+      description: The join of the items of the provided queries
+      properties:
+        type:
+          description: The type of the expression
+          enum:
+            - or
+          example: or
+          maxLength: 32
+          type: string
+        left:
+          oneOf:
+            - $ref: '#/components/schemas/SceneItemQueryOperand'
+            - $ref: '#/components/schemas/SceneItemAndExpression'
+            - $ref: '#/components/schemas/SceneItemOrExpression'
+        right:
+          oneOf:
+            - $ref: '#/components/schemas/SceneItemQueryOperand'
+            - $ref: '#/components/schemas/SceneItemAndExpression'
+            - $ref: '#/components/schemas/SceneItemOrExpression'
+      required:
+        - left
+        - right
+        - type
+      type: object
     Vector4:
       additionalProperties: false
       description: 4D vector.
@@ -12799,6 +13257,46 @@ components:
           minLength: 1
           type: string
       type: object
+    GranteeAccount:
+      additionalProperties: false
+      description: A reference to an account receiving a permission grant
+      properties:
+        type:
+          enum:
+            - account
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    PartsDomainSubject:
+      additionalProperties: false
+      description: A subject domain encompassing all part resources
+      properties:
+        domain:
+          enum:
+            - parts
+          type: string
+      required:
+        - domain
+      type: object
+    PropertySetDomainSubject:
+      additionalProperties: false
+      description: A subject domain encompassing all property set resources
+      properties:
+        domain:
+          enum:
+            - property-sets
+          type: string
+      required:
+        - domain
+      type: object
     SelectFileById:
       additionalProperties: false
       description: Queries a file by its unique ID.
@@ -12830,6 +13328,86 @@ components:
           type: string
       required:
         - id
+        - type
+      type: object
+    QueryBySceneItemId:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - query-by-id
+            - query-by-supplied-id
+          example: query-by-supplied-id
+          maxLength: 32
+          type: string
+        value:
+          description: ID of the resource.
+          maxLength: 1024
+          type: string
+      required:
+        - type
+        - value
+      type: object
+    QueryBySceneItemIds:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - query-by-collection
+          example: query-by-collection
+          maxLength: 32
+          type: string
+        values:
+          description: Query `scene-items`.
+          items:
+            $ref: '#/components/schemas/QueryBySceneItemId'
+          maxItems: 1024
+          type: array
+      required:
+        - type
+        - values
+      type: object
+    QueryByRoot:
+      additionalProperties: false
+      description: Query the root items of a scene
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - query-by-root
+          example: query-by-root
+          maxLength: 32
+          type: string
+      required:
+        - type
+      type: object
+    QueryBySceneItemMetadata:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - query-by-metadata
+          example: query-by-metadata
+          maxLength: 32
+          type: string
+        exactMatch:
+          type: boolean
+        filter:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        keys:
+          description: Query `metadata`.
+          items:
+            type: string
+          type: array
+      required:
+        - filter
+        - keys
         - type
       type: object
     Color:
@@ -13689,6 +14267,31 @@ components:
         - attributes
         - type
       type: object
+    CreateSceneExpressionAlterationRequest_data_attributes:
+      properties:
+        operations:
+          description: List of operations to apply for the alteration request
+          items:
+            $ref: '#/components/schemas/SceneItemExpressionOperation'
+          maxItems: 1024
+          type: array
+      required:
+        - operations
+      type: object
+    CreateSceneExpressionAlterationRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - scene-alteration-expression
+          example: scene-alteration-expression
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateSceneExpressionAlterationRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     UpdateSceneItemOverrideRequest_data_attributes:
       properties:
         visible:
@@ -14388,6 +14991,33 @@ components:
         - attributes
         - type
       type: object
+    CreatePermissionGrant_data_attributes:
+      properties:
+        grantee:
+          $ref: '#/components/schemas/PermissionGrantee'
+        subject:
+          $ref: '#/components/schemas/PermissionSubject'
+        capability:
+          enum:
+            - read
+          type: string
+      required:
+        - capability
+        - grantee
+        - subject
+      type: object
+    CreatePermissionGrant_data:
+      properties:
+        type:
+          enum:
+            - permission-grant
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreatePermissionGrant_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     ApiError_source:
       properties:
         pointer:
@@ -14783,6 +15413,8 @@ components:
           items:
             $ref: '#/components/schemas/PartData_relationships_partRevisions'
           type: array
+        owner:
+          $ref: '#/components/schemas/AccountRelationship'
       required:
         - partRevisions
       type: object
@@ -15396,6 +16028,24 @@ components:
         - status
         - topics
         - url
+      type: object
+    AccountRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - account
+          example: account
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     QueryById_data_attributes:
       properties:

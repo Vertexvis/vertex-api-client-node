@@ -103,6 +103,46 @@ export interface AccountDataAttributes {
   created: string;
 }
 /**
+ * Relationship to an `account`.
+ * @export
+ * @interface AccountRelationship
+ */
+export interface AccountRelationship {
+  /**
+   *
+   * @type {AccountRelationshipData}
+   * @memberof AccountRelationship
+   */
+  data: AccountRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface AccountRelationshipData
+ */
+export interface AccountRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof AccountRelationshipData
+   */
+  type: AccountRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof AccountRelationshipData
+   */
+  id: string;
+}
+
+export const AccountRelationshipDataTypeEnum = {
+  Account: 'account',
+} as const;
+
+export type AccountRelationshipDataTypeEnum =
+  (typeof AccountRelationshipDataTypeEnum)[keyof typeof AccountRelationshipDataTypeEnum];
+
+/**
  *
  * @export
  * @interface AdminConsentAcceptRequest
@@ -1530,6 +1570,79 @@ export interface CreatePartRequestDataRelationships {
 /**
  *
  * @export
+ * @interface CreatePermissionGrant
+ */
+export interface CreatePermissionGrant {
+  /**
+   *
+   * @type {CreatePermissionGrantData}
+   * @memberof CreatePermissionGrant
+   */
+  data: CreatePermissionGrantData;
+}
+/**
+ *
+ * @export
+ * @interface CreatePermissionGrantData
+ */
+export interface CreatePermissionGrantData {
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePermissionGrantData
+   */
+  type: CreatePermissionGrantDataTypeEnum;
+  /**
+   *
+   * @type {CreatePermissionGrantDataAttributes}
+   * @memberof CreatePermissionGrantData
+   */
+  attributes: CreatePermissionGrantDataAttributes;
+}
+
+export const CreatePermissionGrantDataTypeEnum = {
+  PermissionGrant: 'permission-grant',
+} as const;
+
+export type CreatePermissionGrantDataTypeEnum =
+  (typeof CreatePermissionGrantDataTypeEnum)[keyof typeof CreatePermissionGrantDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreatePermissionGrantDataAttributes
+ */
+export interface CreatePermissionGrantDataAttributes {
+  /**
+   *
+   * @type {PermissionGrantee}
+   * @memberof CreatePermissionGrantDataAttributes
+   */
+  grantee: PermissionGrantee;
+  /**
+   *
+   * @type {PermissionSubject}
+   * @memberof CreatePermissionGrantDataAttributes
+   */
+  subject: PermissionSubject;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePermissionGrantDataAttributes
+   */
+  capability: CreatePermissionGrantDataAttributesCapabilityEnum;
+}
+
+export const CreatePermissionGrantDataAttributesCapabilityEnum = {
+  Read: 'read',
+} as const;
+
+export type CreatePermissionGrantDataAttributesCapabilityEnum =
+  (typeof CreatePermissionGrantDataAttributesCapabilityEnum)[keyof typeof CreatePermissionGrantDataAttributesCapabilityEnum];
+
+/**
+ *
+ * @export
  * @interface CreateSceneAlterationRequest
  */
 export interface CreateSceneAlterationRequest {
@@ -1673,6 +1786,59 @@ export interface CreateSceneAnnotationSetRequestDataAttributes {
    * @memberof CreateSceneAnnotationSetRequestDataAttributes
    */
   suppliedId?: string;
+}
+/**
+ * Support a query expression for a scene alteration.  To perform a standard item alteration: ```json {   \"data\" : {     \"type\" : \"scene-alteration-expression\",     \"attributes\" : {       \"operations\" : [         {           \"expression\" : {             \"type\" : \"query-operand\",             \"query\" : {               \"type\" : \"query-by-id\",               \"value\" : \"{SCENE_ITEM_ID}\"             }           },           \"changes\" : [             {               \"type\" : \"change-visibility\",               \"visible\" : false             }           ]         }       ]     }   } } ``` To perform a join of two metadata queries, i.e, an \"and\" query: ```json {   \"data\" : {     \"type\" : \"scene-alteration-expression\",     \"attributes\" : {       \"operations\" : [         {           \"expression\" : {             \"type\" : \"and\",             \"left\" : {               \"type\" : \"query-operand\",               \"query\" : {                 \"type\" : \"query-by-metadata\",                 \"filter\" : \"vdXUKl2pQr\",                 \"keys\" : [                   \"jxIuahIdXS\",                   \"9tegKF6acH\"                 ]               }             },             \"right\" : {               \"type\" : \"query-operand\",               \"query\" : {                 \"type\" : \"query-by-metadata\",                 \"filter\" : \"IE8P9JRPXC\",                 \"keys\" : [                   \"5ggPOzw4bT\",                   \"7xQrQE5Q67\"                 ]               }             }           },           \"changes\" : [             {               \"type\" : \"change-visibility\",               \"visible\" : false             }           ]         }       ]     }   } } ``` To provide more complex queries, the left/right also accept or/and expressions. Here\'s an example of a nested `or` item based query: ```json {   \"data\" : {     \"type\" : \"scene-alteration-expression\",     \"attributes\" : {       \"operations\" : [         {           \"expression\" : {             \"type\" : \"or\",             \"left\" : {               \"type\" : \"or\",               \"left\" : {                 \"type\" : \"query-operand\",                 \"query\" : {                   \"type\" : \"query-by-id\",                   \"value\" : \"{SCENE_ITEM_ID_1}\"                 }               },               \"right\" : {                 \"type\" : \"query-operand\",                 \"query\" : {                   \"type\" : \"query-by-id\",                   \"value\" : \"{SCENE_ITEM_ID_2}\"                 }               }             },             \"right\" : {               \"type\" : \"query-operand\",               \"query\" : {                 \"type\" : \"query-by-id\",                 \"value\" : \"{SCENE_ITEM_ID_3}\"               }             }           },           \"changes\" : [             {               \"type\" : \"change-visibility\",               \"visible\" : false             }           ]         }       ]     }   } } ```
+ * @export
+ * @interface CreateSceneExpressionAlterationRequest
+ */
+export interface CreateSceneExpressionAlterationRequest {
+  /**
+   *
+   * @type {CreateSceneExpressionAlterationRequestData}
+   * @memberof CreateSceneExpressionAlterationRequest
+   */
+  data: CreateSceneExpressionAlterationRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateSceneExpressionAlterationRequestData
+ */
+export interface CreateSceneExpressionAlterationRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateSceneExpressionAlterationRequestData
+   */
+  type: CreateSceneExpressionAlterationRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateSceneExpressionAlterationRequestDataAttributes}
+   * @memberof CreateSceneExpressionAlterationRequestData
+   */
+  attributes: CreateSceneExpressionAlterationRequestDataAttributes;
+}
+
+export const CreateSceneExpressionAlterationRequestDataTypeEnum = {
+  SceneAlterationExpression: 'scene-alteration-expression',
+} as const;
+
+export type CreateSceneExpressionAlterationRequestDataTypeEnum =
+  (typeof CreateSceneExpressionAlterationRequestDataTypeEnum)[keyof typeof CreateSceneExpressionAlterationRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateSceneExpressionAlterationRequestDataAttributes
+ */
+export interface CreateSceneExpressionAlterationRequestDataAttributes {
+  /**
+   * List of operations to apply for the alteration request
+   * @type {Array<SceneItemExpressionOperation>}
+   * @memberof CreateSceneExpressionAlterationRequestDataAttributes
+   */
+  operations: Array<SceneItemExpressionOperation>;
 }
 /**
  *
@@ -3307,6 +3473,33 @@ export type GeometrySetRelationshipDataTypeEnum =
   (typeof GeometrySetRelationshipDataTypeEnum)[keyof typeof GeometrySetRelationshipDataTypeEnum];
 
 /**
+ * A reference to an account receiving a permission grant
+ * @export
+ * @interface GranteeAccount
+ */
+export interface GranteeAccount {
+  /**
+   *
+   * @type {string}
+   * @memberof GranteeAccount
+   */
+  type: GranteeAccountTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof GranteeAccount
+   */
+  id: string;
+}
+
+export const GranteeAccountTypeEnum = {
+  Account: 'account',
+} as const;
+
+export type GranteeAccountTypeEnum =
+  (typeof GranteeAccountTypeEnum)[keyof typeof GranteeAccountTypeEnum];
+
+/**
  *
  * @export
  * @interface Hit
@@ -3967,6 +4160,12 @@ export interface PartDataRelationships {
    * @memberof PartDataRelationships
    */
   partRevisions: Array<PartDataRelationshipsPartRevisions>;
+  /**
+   *
+   * @type {AccountRelationship}
+   * @memberof PartDataRelationships
+   */
+  owner?: AccountRelationship;
 }
 /**
  *
@@ -4537,6 +4736,112 @@ export interface PartRevisionSuppliedId {
   suppliedIterationId?: string;
 }
 /**
+ * A subject domain encompassing all part resources
+ * @export
+ * @interface PartsDomainSubject
+ */
+export interface PartsDomainSubject {
+  /**
+   *
+   * @type {string}
+   * @memberof PartsDomainSubject
+   */
+  domain: PartsDomainSubjectDomainEnum;
+}
+
+export const PartsDomainSubjectDomainEnum = {
+  Parts: 'parts',
+} as const;
+
+export type PartsDomainSubjectDomainEnum =
+  (typeof PartsDomainSubjectDomainEnum)[keyof typeof PartsDomainSubjectDomainEnum];
+
+/**
+ *
+ * @export
+ * @interface PermissionGrant
+ */
+export interface PermissionGrant {
+  /**
+   *
+   * @type {PermissionGrantData}
+   * @memberof PermissionGrant
+   */
+  data: PermissionGrantData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PermissionGrant
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ * A permission grant tuple
+ * @export
+ * @interface PermissionGrantData
+ */
+export interface PermissionGrantData {
+  /**
+   *
+   * @type {string}
+   * @memberof PermissionGrantData
+   */
+  type: PermissionGrantDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PermissionGrantData
+   */
+  id: string;
+  /**
+   *
+   * @type {CreatePermissionGrantDataAttributes}
+   * @memberof PermissionGrantData
+   */
+  attributes: CreatePermissionGrantDataAttributes;
+}
+
+export const PermissionGrantDataTypeEnum = {
+  PermissionGrant: 'permission-grant',
+} as const;
+
+export type PermissionGrantDataTypeEnum =
+  (typeof PermissionGrantDataTypeEnum)[keyof typeof PermissionGrantDataTypeEnum];
+
+/**
+ * A list of permission grants
+ * @export
+ * @interface PermissionGrantList
+ */
+export interface PermissionGrantList {
+  /**
+   *
+   * @type {Array<PermissionGrant>}
+   * @memberof PermissionGrantList
+   */
+  data: Array<PermissionGrant>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PermissionGrantList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ * @type PermissionGrantee
+ * The grantee portion of a permission grant tuple
+ * @export
+ */
+export type PermissionGrantee = GranteeAccount;
+
+/**
+ * @type PermissionSubject
+ * A resource category subject to a permission grant
+ * @export
+ */
+export type PermissionSubject = PartsDomainSubject | PropertySetDomainSubject;
+
+/**
  * A camera type that mimics the way the human eye sees.
  * @export
  * @interface PerspectiveCamera
@@ -4808,6 +5113,27 @@ export const PropertyLongTypeTypeEnum = {
 
 export type PropertyLongTypeTypeEnum =
   (typeof PropertyLongTypeTypeEnum)[keyof typeof PropertyLongTypeTypeEnum];
+
+/**
+ * A subject domain encompassing all property set resources
+ * @export
+ * @interface PropertySetDomainSubject
+ */
+export interface PropertySetDomainSubject {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertySetDomainSubject
+   */
+  domain: PropertySetDomainSubjectDomainEnum;
+}
+
+export const PropertySetDomainSubjectDomainEnum = {
+  PropertySets: 'property-sets',
+} as const;
+
+export type PropertySetDomainSubjectDomainEnum =
+  (typeof PropertySetDomainSubjectDomainEnum)[keyof typeof PropertySetDomainSubjectDomainEnum];
 
 /**
  * Relationship to a `property-set`.
@@ -5089,6 +5415,121 @@ export interface QueryByMetadataDataAttributes {
    */
   keys: Array<string>;
 }
+/**
+ * Query the root items of a scene
+ * @export
+ * @interface QueryByRoot
+ */
+export interface QueryByRoot {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof QueryByRoot
+   */
+  type: QueryByRootTypeEnum;
+}
+
+export const QueryByRootTypeEnum = {
+  QueryByRoot: 'query-by-root',
+} as const;
+
+export type QueryByRootTypeEnum =
+  (typeof QueryByRootTypeEnum)[keyof typeof QueryByRootTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface QueryBySceneItemId
+ */
+export interface QueryBySceneItemId {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof QueryBySceneItemId
+   */
+  type: QueryBySceneItemIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof QueryBySceneItemId
+   */
+  value: string;
+}
+
+export const QueryBySceneItemIdTypeEnum = {
+  Id: 'query-by-id',
+  SuppliedId: 'query-by-supplied-id',
+} as const;
+
+export type QueryBySceneItemIdTypeEnum =
+  (typeof QueryBySceneItemIdTypeEnum)[keyof typeof QueryBySceneItemIdTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface QueryBySceneItemIds
+ */
+export interface QueryBySceneItemIds {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof QueryBySceneItemIds
+   */
+  type: QueryBySceneItemIdsTypeEnum;
+  /**
+   * Query `scene-items`.
+   * @type {Array<QueryBySceneItemId>}
+   * @memberof QueryBySceneItemIds
+   */
+  values: Array<QueryBySceneItemId>;
+}
+
+export const QueryBySceneItemIdsTypeEnum = {
+  QueryByCollection: 'query-by-collection',
+} as const;
+
+export type QueryBySceneItemIdsTypeEnum =
+  (typeof QueryBySceneItemIdsTypeEnum)[keyof typeof QueryBySceneItemIdsTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface QueryBySceneItemMetadata
+ */
+export interface QueryBySceneItemMetadata {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof QueryBySceneItemMetadata
+   */
+  type: QueryBySceneItemMetadataTypeEnum;
+  /**
+   *
+   * @type {boolean}
+   * @memberof QueryBySceneItemMetadata
+   */
+  exactMatch?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof QueryBySceneItemMetadata
+   */
+  filter: string;
+  /**
+   * Query `metadata`.
+   * @type {Array<string>}
+   * @memberof QueryBySceneItemMetadata
+   */
+  keys: Array<string>;
+}
+
+export const QueryBySceneItemMetadataTypeEnum = {
+  QueryByMetadata: 'query-by-metadata',
+} as const;
+
+export type QueryBySceneItemMetadataTypeEnum =
+  (typeof QueryBySceneItemMetadataTypeEnum)[keyof typeof QueryBySceneItemMetadataTypeEnum];
+
 /**
  *
  * @export
@@ -5852,6 +6293,39 @@ export interface SceneItem {
   links?: { [key: string]: Link };
 }
 /**
+ * The union of the items of the provided queries
+ * @export
+ * @interface SceneItemAndExpression
+ */
+export interface SceneItemAndExpression {
+  /**
+   * The type of the expression
+   * @type {string}
+   * @memberof SceneItemAndExpression
+   */
+  type: SceneItemAndExpressionTypeEnum;
+  /**
+   *
+   * @type {SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression}
+   * @memberof SceneItemAndExpression
+   */
+  left: SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression;
+  /**
+   *
+   * @type {SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression}
+   * @memberof SceneItemAndExpression
+   */
+  right: SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression;
+}
+
+export const SceneItemAndExpressionTypeEnum = {
+  And: 'and',
+} as const;
+
+export type SceneItemAndExpressionTypeEnum =
+  (typeof SceneItemAndExpressionTypeEnum)[keyof typeof SceneItemAndExpressionTypeEnum];
+
+/**
  *
  * @export
  * @interface SceneItemData
@@ -6001,6 +6475,43 @@ export interface SceneItemDataRelationships {
 /**
  *
  * @export
+ * @interface SceneItemExpressionOperation
+ */
+export interface SceneItemExpressionOperation {
+  /**
+   *
+   * @type {SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression}
+   * @memberof SceneItemExpressionOperation
+   */
+  expression:
+    | SceneItemQueryOperand
+    | SceneItemAndExpression
+    | SceneItemOrExpression;
+  /**
+   * List of changes to perform on `scene-items` matching the query for the operation
+   * @type {Array<ChangeVisibilityOp | ChangeMaterialOp | ClearMaterialOp | ChangeTransformOp | ClearTransformOp | SelectOp | DeselectOperation | ClearRenOp | ViewDefaultRenOp | ViewRenByIdOp | ViewRenBySuppliedIdOp | ViewRepByIdOp | ViewRepByPredefinedIdOp | ClearRepOp>}
+   * @memberof SceneItemExpressionOperation
+   */
+  changes: Array<
+    | ChangeVisibilityOp
+    | ChangeMaterialOp
+    | ClearMaterialOp
+    | ChangeTransformOp
+    | ClearTransformOp
+    | SelectOp
+    | DeselectOperation
+    | ClearRenOp
+    | ViewDefaultRenOp
+    | ViewRenByIdOp
+    | ViewRenBySuppliedIdOp
+    | ViewRepByIdOp
+    | ViewRepByPredefinedIdOp
+    | ClearRepOp
+  >;
+}
+/**
+ *
+ * @export
  * @interface SceneItemList
  */
 export interface SceneItemList {
@@ -6017,6 +6528,39 @@ export interface SceneItemList {
    */
   links: { [key: string]: Link };
 }
+/**
+ * The join of the items of the provided queries
+ * @export
+ * @interface SceneItemOrExpression
+ */
+export interface SceneItemOrExpression {
+  /**
+   * The type of the expression
+   * @type {string}
+   * @memberof SceneItemOrExpression
+   */
+  type: SceneItemOrExpressionTypeEnum;
+  /**
+   *
+   * @type {SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression}
+   * @memberof SceneItemOrExpression
+   */
+  left: SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression;
+  /**
+   *
+   * @type {SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression}
+   * @memberof SceneItemOrExpression
+   */
+  right: SceneItemQueryOperand | SceneItemAndExpression | SceneItemOrExpression;
+}
+
+export const SceneItemOrExpressionTypeEnum = {
+  Or: 'or',
+} as const;
+
+export type SceneItemOrExpressionTypeEnum =
+  (typeof SceneItemOrExpressionTypeEnum)[keyof typeof SceneItemOrExpressionTypeEnum];
+
 /**
  *
  * @export
@@ -6160,6 +6704,37 @@ export interface SceneItemOverrideList {
    */
   links: { [key: string]: Link };
 }
+/**
+ *
+ * @export
+ * @interface SceneItemQueryOperand
+ */
+export interface SceneItemQueryOperand {
+  /**
+   * The type of the expression denoting it as an operand
+   * @type {string}
+   * @memberof SceneItemQueryOperand
+   */
+  type: SceneItemQueryOperandTypeEnum;
+  /**
+   * Query Operand for searching `scene-items`.
+   * @type {QueryBySceneItemId | QueryBySceneItemIds | QueryByRoot | QueryBySceneItemMetadata}
+   * @memberof SceneItemQueryOperand
+   */
+  query:
+    | QueryBySceneItemId
+    | QueryBySceneItemIds
+    | QueryByRoot
+    | QueryBySceneItemMetadata;
+}
+
+export const SceneItemQueryOperandTypeEnum = {
+  QueryOperand: 'query-operand',
+} as const;
+
+export type SceneItemQueryOperandTypeEnum =
+  (typeof SceneItemQueryOperandTypeEnum)[keyof typeof SceneItemQueryOperandTypeEnum];
+
 /**
  * Relationship to a `scene-item`.
  * @export
@@ -17529,6 +18104,7 @@ export const PartsApiAxiosParamCreator = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17536,6 +18112,7 @@ export const PartsApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
+      filterOwnerId?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/parts`;
@@ -17573,6 +18150,10 @@ export const PartsApiAxiosParamCreator = function (
 
       if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      if (filterOwnerId !== undefined) {
+        localVarQueryParameter['filter[ownerId]'] = filterOwnerId;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -17728,6 +18309,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17735,6 +18317,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
+      filterOwnerId?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PartList>
@@ -17743,6 +18326,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
         pageCursor,
         pageSize,
         filterSuppliedId,
+        filterOwnerId,
         options
       );
       return createRequestFunction(
@@ -17829,6 +18413,7 @@ export const PartsApiFactory = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17836,10 +18421,17 @@ export const PartsApiFactory = function (
       pageCursor?: string,
       pageSize?: number,
       filterSuppliedId?: string,
+      filterOwnerId?: string,
       options?: any
     ): AxiosPromise<PartList> {
       return localVarFp
-        .getParts(pageCursor, pageSize, filterSuppliedId, options)
+        .getParts(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          filterOwnerId,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -17931,6 +18523,13 @@ export interface PartsApiGetPartsRequest {
    * @memberof PartsApiGetParts
    */
   readonly filterSuppliedId?: string;
+
+  /**
+   * Owner ID to filter on.
+   * @type {string}
+   * @memberof PartsApiGetParts
+   */
+  readonly filterOwnerId?: string;
 }
 
 /**
@@ -18018,6 +18617,7 @@ export class PartsApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.filterSuppliedId,
+        requestParameters.filterOwnerId,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -18036,6 +18636,579 @@ export class PartsApi extends BaseAPI {
   ) {
     return PartsApiFp(this.configuration)
       .getQueuedPartDeletion(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * PermissionGrantsApi - axios parameter creator
+ * @export
+ */
+export const PermissionGrantsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a permission grant for a grantee to a subject resource
+     * @summary Create a permission grant for a grantee to a subject resource
+     * @param {CreatePermissionGrant} createPermissionGrant
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPermissionGrant: async (
+      createPermissionGrant: CreatePermissionGrant,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createPermissionGrant' is not null or undefined
+      assertParamExists(
+        'createPermissionGrant',
+        'createPermissionGrant',
+        createPermissionGrant
+      );
+      const localVarPath = `/permission-grants`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createPermissionGrant,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a permission grant by ID
+     * @summary Get a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPermissionGrant: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getPermissionGrant', 'id', id);
+      const localVarPath = `/permission-grants/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List all permission grants
+     * @summary List all permission grants
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPermissionGrants: async (
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/permission-grants`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Remove a permission grant by ID
+     * @summary Remove a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removePermissionGrant: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('removePermissionGrant', 'id', id);
+      const localVarPath = `/permission-grants/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PermissionGrantsApi - functional programming interface
+ * @export
+ */
+export const PermissionGrantsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    PermissionGrantsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a permission grant for a grantee to a subject resource
+     * @summary Create a permission grant for a grantee to a subject resource
+     * @param {CreatePermissionGrant} createPermissionGrant
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createPermissionGrant(
+      createPermissionGrant: CreatePermissionGrant,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PermissionGrant>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createPermissionGrant(
+          createPermissionGrant,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a permission grant by ID
+     * @summary Get a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPermissionGrant(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PermissionGrant>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPermissionGrant(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List all permission grants
+     * @summary List all permission grants
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listPermissionGrants(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PermissionGrantList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listPermissionGrants(
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Remove a permission grant by ID
+     * @summary Remove a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async removePermissionGrant(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.removePermissionGrant(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PermissionGrantsApi - factory interface
+ * @export
+ */
+export const PermissionGrantsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PermissionGrantsApiFp(configuration);
+  return {
+    /**
+     * Create a permission grant for a grantee to a subject resource
+     * @summary Create a permission grant for a grantee to a subject resource
+     * @param {CreatePermissionGrant} createPermissionGrant
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPermissionGrant(
+      createPermissionGrant: CreatePermissionGrant,
+      options?: any
+    ): AxiosPromise<PermissionGrant> {
+      return localVarFp
+        .createPermissionGrant(createPermissionGrant, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a permission grant by ID
+     * @summary Get a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPermissionGrant(
+      id: string,
+      options?: any
+    ): AxiosPromise<PermissionGrant> {
+      return localVarFp
+        .getPermissionGrant(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List all permission grants
+     * @summary List all permission grants
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPermissionGrants(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<PermissionGrantList> {
+      return localVarFp
+        .listPermissionGrants(pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Remove a permission grant by ID
+     * @summary Remove a permission grant by ID
+     * @param {string} id The permission grant ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    removePermissionGrant(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .removePermissionGrant(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createPermissionGrant operation in PermissionGrantsApi.
+ * @export
+ * @interface PermissionGrantsApiCreatePermissionGrantRequest
+ */
+export interface PermissionGrantsApiCreatePermissionGrantRequest {
+  /**
+   *
+   * @type {CreatePermissionGrant}
+   * @memberof PermissionGrantsApiCreatePermissionGrant
+   */
+  readonly createPermissionGrant: CreatePermissionGrant;
+}
+
+/**
+ * Request parameters for getPermissionGrant operation in PermissionGrantsApi.
+ * @export
+ * @interface PermissionGrantsApiGetPermissionGrantRequest
+ */
+export interface PermissionGrantsApiGetPermissionGrantRequest {
+  /**
+   * The permission grant ID.
+   * @type {string}
+   * @memberof PermissionGrantsApiGetPermissionGrant
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for listPermissionGrants operation in PermissionGrantsApi.
+ * @export
+ * @interface PermissionGrantsApiListPermissionGrantsRequest
+ */
+export interface PermissionGrantsApiListPermissionGrantsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PermissionGrantsApiListPermissionGrants
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PermissionGrantsApiListPermissionGrants
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for removePermissionGrant operation in PermissionGrantsApi.
+ * @export
+ * @interface PermissionGrantsApiRemovePermissionGrantRequest
+ */
+export interface PermissionGrantsApiRemovePermissionGrantRequest {
+  /**
+   * The permission grant ID.
+   * @type {string}
+   * @memberof PermissionGrantsApiRemovePermissionGrant
+   */
+  readonly id: string;
+}
+
+/**
+ * PermissionGrantsApi - object-oriented interface
+ * @export
+ * @class PermissionGrantsApi
+ * @extends {BaseAPI}
+ */
+export class PermissionGrantsApi extends BaseAPI {
+  /**
+   * Create a permission grant for a grantee to a subject resource
+   * @summary Create a permission grant for a grantee to a subject resource
+   * @param {PermissionGrantsApiCreatePermissionGrantRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PermissionGrantsApi
+   */
+  public createPermissionGrant(
+    requestParameters: PermissionGrantsApiCreatePermissionGrantRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PermissionGrantsApiFp(this.configuration)
+      .createPermissionGrant(requestParameters.createPermissionGrant, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a permission grant by ID
+   * @summary Get a permission grant by ID
+   * @param {PermissionGrantsApiGetPermissionGrantRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PermissionGrantsApi
+   */
+  public getPermissionGrant(
+    requestParameters: PermissionGrantsApiGetPermissionGrantRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PermissionGrantsApiFp(this.configuration)
+      .getPermissionGrant(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List all permission grants
+   * @summary List all permission grants
+   * @param {PermissionGrantsApiListPermissionGrantsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PermissionGrantsApi
+   */
+  public listPermissionGrants(
+    requestParameters: PermissionGrantsApiListPermissionGrantsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PermissionGrantsApiFp(this.configuration)
+      .listPermissionGrants(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Remove a permission grant by ID
+   * @summary Remove a permission grant by ID
+   * @param {PermissionGrantsApiRemovePermissionGrantRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PermissionGrantsApi
+   */
+  public removePermissionGrant(
+    requestParameters: PermissionGrantsApiRemovePermissionGrantRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PermissionGrantsApiFp(this.configuration)
+      .removePermissionGrant(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -18623,22 +19796,24 @@ export const SceneAlterationsApiAxiosParamCreator = function (
     /**
      * Create a `scene-alteration` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
+     * @param {CreateSceneAlterationRequest | CreateSceneExpressionAlterationRequest} createSceneAlterationRequestCreateSceneExpressionAlterationRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneAlteration: async (
       id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
+      createSceneAlterationRequestCreateSceneExpressionAlterationRequest:
+        | CreateSceneAlterationRequest
+        | CreateSceneExpressionAlterationRequest,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
       assertParamExists('createSceneAlteration', 'id', id);
-      // verify required parameter 'createSceneAlterationRequest' is not null or undefined
+      // verify required parameter 'createSceneAlterationRequestCreateSceneExpressionAlterationRequest' is not null or undefined
       assertParamExists(
         'createSceneAlteration',
-        'createSceneAlterationRequest',
-        createSceneAlterationRequest
+        'createSceneAlterationRequestCreateSceneExpressionAlterationRequest',
+        createSceneAlterationRequestCreateSceneExpressionAlterationRequest
       );
       const localVarPath = `/scene-views/{id}/scene-alterations`.replace(
         `{${'id'}}`,
@@ -18678,7 +19853,7 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        createSceneAlterationRequest,
+        createSceneAlterationRequestCreateSceneExpressionAlterationRequest,
         localVarRequestOptions,
         configuration
       );
@@ -18861,13 +20036,15 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
     /**
      * Create a `scene-alteration` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
+     * @param {CreateSceneAlterationRequest | CreateSceneExpressionAlterationRequest} createSceneAlterationRequestCreateSceneExpressionAlterationRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async createSceneAlteration(
       id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
+      createSceneAlterationRequestCreateSceneExpressionAlterationRequest:
+        | CreateSceneAlterationRequest
+        | CreateSceneExpressionAlterationRequest,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJob>
@@ -18875,7 +20052,7 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.createSceneAlteration(
           id,
-          createSceneAlterationRequest,
+          createSceneAlterationRequestCreateSceneExpressionAlterationRequest,
           options
         );
       return createRequestFunction(
@@ -18971,17 +20148,23 @@ export const SceneAlterationsApiFactory = function (
     /**
      * Create a `scene-alteration` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
-     * @param {CreateSceneAlterationRequest} createSceneAlterationRequest
+     * @param {CreateSceneAlterationRequest | CreateSceneExpressionAlterationRequest} createSceneAlterationRequestCreateSceneExpressionAlterationRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     createSceneAlteration(
       id: string,
-      createSceneAlterationRequest: CreateSceneAlterationRequest,
+      createSceneAlterationRequestCreateSceneExpressionAlterationRequest:
+        | CreateSceneAlterationRequest
+        | CreateSceneExpressionAlterationRequest,
       options?: any
     ): AxiosPromise<QueuedJob> {
       return localVarFp
-        .createSceneAlteration(id, createSceneAlterationRequest, options)
+        .createSceneAlteration(
+          id,
+          createSceneAlterationRequestCreateSceneExpressionAlterationRequest,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -19044,10 +20227,12 @@ export interface SceneAlterationsApiCreateSceneAlterationRequest {
 
   /**
    *
-   * @type {CreateSceneAlterationRequest}
+   * @type {CreateSceneAlterationRequest | CreateSceneExpressionAlterationRequest}
    * @memberof SceneAlterationsApiCreateSceneAlteration
    */
-  readonly createSceneAlterationRequest: CreateSceneAlterationRequest;
+  readonly createSceneAlterationRequestCreateSceneExpressionAlterationRequest:
+    | CreateSceneAlterationRequest
+    | CreateSceneExpressionAlterationRequest;
 }
 
 /**
@@ -19113,7 +20298,7 @@ export class SceneAlterationsApi extends BaseAPI {
     return SceneAlterationsApiFp(this.configuration)
       .createSceneAlteration(
         requestParameters.id,
-        requestParameters.createSceneAlterationRequest,
+        requestParameters.createSceneAlterationRequestCreateSceneExpressionAlterationRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
