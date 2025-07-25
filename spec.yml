@@ -29,6 +29,7 @@ tags:
   - name: accounts
   - name: applications
   - name: batches
+  - name: collaboration-contexts
   - name: exports
   - name: files
   - name: file-collections
@@ -53,7 +54,10 @@ tags:
   - name: scene-view-states
   - name: search-sessions
   - name: stream-keys
+  - name: threads
   - name: translation-inspections
+  - name: users
+  - name: user-groups
   - name: webhook-subscriptions
   - name: permission-grants
 paths:
@@ -894,6 +898,383 @@ paths:
         - OAuth2: []
       tags:
         - batches
+  /collaboration-contexts:
+    post:
+      description: Create a `collaboration-context`.
+      operationId: createCollaborationContext
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateCollaborationContextRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CollaborationContext'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - collaboration-contexts
+  /collaboration-contexts/{id}:
+    get:
+      description: Get a `collaboration-context` by ID.
+      operationId: getCollaborationContext
+      parameters:
+        - description: The `collaboration-context` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CollaborationContext'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - collaboration-contexts
+  /collaboration-contexts/{id}/user-groups:
+    post:
+      description: Create a `collaboration-context`.
+      operationId: addCollaborationContextUserGroups
+      parameters:
+        - description: The `collaboration-context` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UserGroupIdsList'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - collaboration-contexts
+  /collaboration-contexts/{id}/threads:
+    post:
+      description: Create a `thread` belonging to a `collaboration-context`.
+      operationId: createThread
+      parameters:
+        - description: The `collaboration-context` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateThreadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - threads
+  /threads/{id}:
+    get:
+      description: Get a `thread`.
+      operationId: getThread
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - threads
+  /threads:
+    get:
+      description: Get a page of `thread`s.
+      operationId: getThreads
+      parameters:
+        - description: A collaboration context to filter on.
+          explode: true
+          in: query
+          name: filter[collaborationContextId]
+          required: false
+          schema:
+            example: some-id-1
+            maxLength: 1024
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ThreadList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - threads
   /files:
     get:
       description: Get `files`.
@@ -3726,7 +4107,6 @@ paths:
           required: false
           schema:
             example: true
-            maxLength: 1024
             type: boolean
           style: form
         - description: The cursor for the next page of items.
@@ -3816,7 +4196,6 @@ paths:
           required: false
           schema:
             example: true
-            maxLength: 1024
             type: boolean
           style: form
         - description: The cursor for the next page of items.
@@ -4915,6 +5294,26 @@ paths:
             format: uuid
             maxLength: 36
             type: string
+          style: form
+        - description:
+            Filter scene-items based on whether they are the parent of at
+            least one other scene-item
+          explode: true
+          in: query
+          name: filter[hasChildren]
+          required: false
+          schema:
+            example: true
+            type: boolean
+          style: form
+        - description: Filter scene-items based on whether they have an associated geometry-set.
+          explode: true
+          in: query
+          name: filter[hasGeometrySet]
+          required: false
+          schema:
+            example: true
+            type: boolean
           style: form
       responses:
         '200':
@@ -8113,6 +8512,393 @@ paths:
         - OAuth2: []
       tags:
         - search-sessions
+  /users:
+    get:
+      description: List `user`s.
+      operationId: listUsers
+      parameters:
+        - description: Comma-separated list of client IDs to filter on.
+          explode: true
+          in: query
+          name: filter[clientId]
+          required: false
+          schema:
+            example: ?filter[clientId]=some-id-1&filter[clientId]=some-id-2
+            maxLength: 1024
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - users
+    post:
+      description: Create a `user`
+      operationId: createUser
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateUserRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '409':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '409'
+                    code: Conflict
+                    title: The state of the resource does not permit this operation.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Conflict
+      security:
+        - OAuth2: []
+      tags:
+        - users
+  /users/{id}:
+    get:
+      description: Get a `user`.
+      operationId: getUser
+      parameters:
+        - description: The `user` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - users
+  /users/{id}/user-groups:
+    get:
+      description: Get `user-group`s.
+      operationId: getUserGroupsForUser
+      parameters:
+        - description: The `user` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserGroupList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - users
+  /user-groups:
+    post:
+      description: Create a `user-group`
+      operationId: createUserGroup
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateUserGroupRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserGroup'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '409':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '409'
+                    code: Conflict
+                    title: The state of the resource does not permit this operation.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Conflict
+      security:
+        - OAuth2: []
+      tags:
+        - user-groups
+  /user-groups/{id}:
+    get:
+      description: Get a `user-group`.
+      operationId: getUserGroup
+      parameters:
+        - description: The `user-group` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserGroup'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - user-groups
   /webhook-subscriptions:
     get:
       description: Get `webhook-subscription`s.
@@ -8816,6 +9602,26 @@ components:
       schema:
         $ref: '#/components/schemas/Vector3'
       style: deepObject
+    CollaborationContextId:
+      description: The `collaboration-context` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
+    CollaborationContextIdFilter:
+      description: A collaboration context to filter on.
+      explode: true
+      in: query
+      name: filter[collaborationContextId]
+      required: false
+      schema:
+        example: some-id-1
+        maxLength: 1024
+        type: string
+      style: form
     CompletedAtFilter:
       description: The completion date and time to filter on.
       explode: true
@@ -8870,7 +9676,28 @@ components:
       required: false
       schema:
         example: true
-        maxLength: 1024
+        type: boolean
+      style: form
+    HasChildrenFilter:
+      description:
+        Filter scene-items based on whether they are the parent of at least
+        one other scene-item
+      explode: true
+      in: query
+      name: filter[hasChildren]
+      required: false
+      schema:
+        example: true
+        type: boolean
+      style: form
+    HasGeometrySetFilter:
+      description: Filter scene-items based on whether they have an associated geometry-set.
+      explode: true
+      in: query
+      name: filter[hasGeometrySet]
+      required: false
+      schema:
+        example: true
         type: boolean
       style: form
     Height:
@@ -8894,6 +9721,16 @@ components:
       required: false
       schema:
         example: some-id-1,some-id-2
+        type: string
+      style: form
+    IdpIdFilter:
+      description: Id from the idpProvider.
+      explode: true
+      in: query
+      name: filter[idpId]
+      required: false
+      schema:
+        example: id
         type: string
       style: form
     IncludeSource:
@@ -9306,6 +10143,15 @@ components:
         example: -age,name
         type: string
       style: form
+    ThreadId:
+      description: The `thread` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     ClientIdFilter:
       description: Comma-separated list of client IDs to filter on.
       explode: true
@@ -9593,6 +10439,71 @@ components:
           type: array
       required:
         - vertexvis/batch:results
+      type: object
+    CreateCollaborationContextRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateCollaborationContextRequest_data'
+      required:
+        - data
+      type: object
+    CollaborationContext:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CollaborationContextData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    UserGroupIdsList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserGroupId'
+          type: array
+      required:
+        - data
+      type: object
+    CreateThreadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateThreadRequest_data'
+      required:
+        - data
+      type: object
+    Thread:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ThreadData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    ThreadList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ThreadData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
       type: object
     FileList:
       additionalProperties: false
@@ -10669,6 +11580,76 @@ components:
       required:
         - data
       type: object
+    UserList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreateUserRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUserRequest_data'
+      required:
+        - data
+      type: object
+    User:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UserData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    UserGroupList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserGroupData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreateUserGroupRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUserGroupRequest_data'
+      required:
+        - data
+      type: object
+    UserGroup:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UserGroupData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     WebhookSubscriptionList:
       additionalProperties: false
       properties:
@@ -10974,6 +11955,89 @@ components:
           type: string
       required:
         - id
+        - type
+      type: object
+    CollaborationContextData:
+      additionalProperties: false
+      properties:
+        type:
+          example: collaboration-context
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CollaborationContextData_attributes'
+        relationships:
+          $ref: '#/components/schemas/CollaborationContextData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    UserGroupId:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - user-group
+          example: user-group
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    ThreadType:
+      enum:
+        - comment
+        - issue
+      type: string
+    ThreadStatus:
+      enum:
+        - open
+        - resolved
+      type: string
+    ThreadData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - thread
+          example: thread
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ThreadData_attributes'
+        relationships:
+          $ref: '#/components/schemas/ThreadData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
         - type
       type: object
     FileMetadataData:
@@ -12351,6 +13415,46 @@ components:
         - id
         - type
       type: object
+    UserData:
+      additionalProperties: false
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UserData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    UserGroupData:
+      additionalProperties: false
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UserGroupData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     WebhookSubscriptionData:
       additionalProperties: false
       properties:
@@ -12518,6 +13622,31 @@ components:
       required:
         - href
       type: object
+    AccountRelationship:
+      additionalProperties: false
+      description: Relationship to an `account`.
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountRelationship_data'
+      required:
+        - data
+      type: object
+    CollaborationContextRelationship:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CollaborationContextRelationship_data'
+      required:
+        - data
+      type: object
+    UserRelationship:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UserRelationship_data'
+      required:
+        - data
+      type: object
     ArchiveManifestEntry:
       additionalProperties: false
       description: Represents a file and directory within an archive.
@@ -12599,15 +13728,6 @@ components:
       required:
         - id
         - type
-      type: object
-    AccountRelationship:
-      additionalProperties: false
-      description: Relationship to an `account`.
-      properties:
-        data:
-          $ref: '#/components/schemas/AccountRelationship_data'
-      required:
-        - data
       type: object
     PartRevisionInstance:
       additionalProperties: false
@@ -13627,6 +14747,44 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateApplicationRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateCollaborationContextRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - collaboration-context
+          type: string
+      required:
+        - type
+      type: object
+    CreateThreadRequest_data_attributes:
+      properties:
+        type:
+          $ref: '#/components/schemas/ThreadType'
+        status:
+          $ref: '#/components/schemas/ThreadStatus'
+        title:
+          type: string
+        body:
+          type: string
+      required:
+        - status
+        - type
+      type: object
+    CreateThreadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - thread
+          example: thread
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateThreadRequest_data_attributes'
       required:
         - attributes
         - type
@@ -14931,6 +16089,62 @@ components:
         - relationships
         - type
       type: object
+    CreateUserRequest_data_attributes:
+      properties:
+        fullName:
+          description: Full name of the user.
+          type: string
+        email:
+          description: Email of the user
+          type: string
+        idpId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - email
+        - fullName
+      type: object
+    CreateUserRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - user
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateUserRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateUserGroupRequest_data_attributes:
+      properties:
+        name:
+          description: Name of the user group.
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - name
+      type: object
+    CreateUserGroupRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - user-group
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateUserGroupRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateWebhookSubscriptionRequest_data_attributes:
       properties:
         url:
@@ -15096,6 +16310,56 @@ components:
       required:
         - created
         - status
+      type: object
+    CollaborationContextData_attributes:
+      properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+      required:
+        - createdAt
+      type: object
+    CollaborationContextData_relationships:
+      properties:
+        account:
+          $ref: '#/components/schemas/AccountRelationship'
+      required:
+        - account
+      type: object
+    ThreadData_attributes:
+      properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        modifiedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        type:
+          $ref: '#/components/schemas/ThreadType'
+        status:
+          $ref: '#/components/schemas/ThreadStatus'
+        title:
+          type: string
+        body:
+          type: string
+      required:
+        - createdAt
+        - modifiedAt
+        - status
+        - type
+      type: object
+    ThreadData_relationships:
+      properties:
+        collaborationContext:
+          $ref: '#/components/schemas/CollaborationContextRelationship'
+        user:
+          $ref: '#/components/schemas/UserRelationship'
+      required:
+        - collaborationContext
+        - user
       type: object
     FileMetadataData_attributes:
       properties:
@@ -16001,6 +17265,43 @@ components:
       required:
         - status
       type: object
+    UserData_attributes:
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        idpId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - email
+        - fullName
+      type: object
+    UserGroupData_attributes:
+      properties:
+        name:
+          type: string
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - name
+      type: object
     WebhookSubscriptionData_attributes:
       properties:
         url:
@@ -16036,6 +17337,38 @@ components:
           enum:
             - account
           example: account
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    CollaborationContextRelationship_data:
+      properties:
+        type:
+          enum:
+            - collaboration-context
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    UserRelationship_data:
+      properties:
+        type:
+          enum:
+            - user
           type: string
         id:
           description: ID of the resource.
