@@ -787,6 +787,128 @@ export type ClearTransformOpTypeEnum =
   (typeof ClearTransformOpTypeEnum)[keyof typeof ClearTransformOpTypeEnum];
 
 /**
+ *
+ * @export
+ * @interface CollaborationContext
+ */
+export interface CollaborationContext {
+  /**
+   *
+   * @type {CollaborationContextData}
+   * @memberof CollaborationContext
+   */
+  data: CollaborationContextData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof CollaborationContext
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface CollaborationContextData
+ */
+export interface CollaborationContextData {
+  /**
+   *
+   * @type {string}
+   * @memberof CollaborationContextData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CollaborationContextData
+   */
+  id: string;
+  /**
+   *
+   * @type {CollaborationContextDataAttributes}
+   * @memberof CollaborationContextData
+   */
+  attributes: CollaborationContextDataAttributes;
+  /**
+   *
+   * @type {CollaborationContextDataRelationships}
+   * @memberof CollaborationContextData
+   */
+  relationships: CollaborationContextDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof CollaborationContextData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface CollaborationContextDataAttributes
+ */
+export interface CollaborationContextDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CollaborationContextDataAttributes
+   */
+  createdAt: string;
+}
+/**
+ *
+ * @export
+ * @interface CollaborationContextDataRelationships
+ */
+export interface CollaborationContextDataRelationships {
+  /**
+   *
+   * @type {AccountRelationship}
+   * @memberof CollaborationContextDataRelationships
+   */
+  account: AccountRelationship;
+}
+/**
+ *
+ * @export
+ * @interface CollaborationContextRelationship
+ */
+export interface CollaborationContextRelationship {
+  /**
+   *
+   * @type {CollaborationContextRelationshipData}
+   * @memberof CollaborationContextRelationship
+   */
+  data: CollaborationContextRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface CollaborationContextRelationshipData
+ */
+export interface CollaborationContextRelationshipData {
+  /**
+   *
+   * @type {string}
+   * @memberof CollaborationContextRelationshipData
+   */
+  type: CollaborationContextRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CollaborationContextRelationshipData
+   */
+  id: string;
+}
+
+export const CollaborationContextRelationshipDataTypeEnum = {
+  CollaborationContext: 'collaboration-context',
+} as const;
+
+export type CollaborationContextRelationshipDataTypeEnum =
+  (typeof CollaborationContextRelationshipDataTypeEnum)[keyof typeof CollaborationContextRelationshipDataTypeEnum];
+
+/**
  * RGB color.
  * @export
  * @interface Color3
@@ -968,6 +1090,40 @@ export interface CreateBatchRequest {
    */
   'vertexvis/batch:operations': Array<BatchOperation>;
 }
+/**
+ *
+ * @export
+ * @interface CreateCollaborationContextRequest
+ */
+export interface CreateCollaborationContextRequest {
+  /**
+   *
+   * @type {CreateCollaborationContextRequestData}
+   * @memberof CreateCollaborationContextRequest
+   */
+  data: CreateCollaborationContextRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateCollaborationContextRequestData
+ */
+export interface CreateCollaborationContextRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateCollaborationContextRequestData
+   */
+  type: CreateCollaborationContextRequestDataTypeEnum;
+}
+
+export const CreateCollaborationContextRequestDataTypeEnum = {
+  CollaborationContext: 'collaboration-context',
+} as const;
+
+export type CreateCollaborationContextRequestDataTypeEnum =
+  (typeof CreateCollaborationContextRequestDataTypeEnum)[keyof typeof CreateCollaborationContextRequestDataTypeEnum];
+
 /**
  *
  * @export
@@ -2513,6 +2669,77 @@ export interface CreateStreamKeyRequestDataAttributes {
 /**
  *
  * @export
+ * @interface CreateThreadRequest
+ */
+export interface CreateThreadRequest {
+  /**
+   *
+   * @type {CreateThreadRequestData}
+   * @memberof CreateThreadRequest
+   */
+  data: CreateThreadRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateThreadRequestData
+ */
+export interface CreateThreadRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateThreadRequestData
+   */
+  type: CreateThreadRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateThreadRequestDataAttributes}
+   * @memberof CreateThreadRequestData
+   */
+  attributes: CreateThreadRequestDataAttributes;
+}
+
+export const CreateThreadRequestDataTypeEnum = {
+  Thread: 'thread',
+} as const;
+
+export type CreateThreadRequestDataTypeEnum =
+  (typeof CreateThreadRequestDataTypeEnum)[keyof typeof CreateThreadRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateThreadRequestDataAttributes
+ */
+export interface CreateThreadRequestDataAttributes {
+  /**
+   *
+   * @type {ThreadType}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  type: ThreadType;
+  /**
+   *
+   * @type {ThreadStatus}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  status: ThreadStatus;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  title?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  body?: string;
+}
+/**
+ *
+ * @export
  * @interface CreateTranslationInspectionRequest
  */
 export interface CreateTranslationInspectionRequest {
@@ -2541,6 +2768,130 @@ export interface CreateTranslationInspectionRequestData {
    * @memberof CreateTranslationInspectionRequestData
    */
   relationships: CreateGeometrySetRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface CreateUserGroupRequest
+ */
+export interface CreateUserGroupRequest {
+  /**
+   *
+   * @type {CreateUserGroupRequestData}
+   * @memberof CreateUserGroupRequest
+   */
+  data: CreateUserGroupRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateUserGroupRequestData
+ */
+export interface CreateUserGroupRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateUserGroupRequestData
+   */
+  type: CreateUserGroupRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateUserGroupRequestDataAttributes}
+   * @memberof CreateUserGroupRequestData
+   */
+  attributes: CreateUserGroupRequestDataAttributes;
+}
+
+export const CreateUserGroupRequestDataTypeEnum = {
+  UserGroup: 'user-group',
+} as const;
+
+export type CreateUserGroupRequestDataTypeEnum =
+  (typeof CreateUserGroupRequestDataTypeEnum)[keyof typeof CreateUserGroupRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateUserGroupRequestDataAttributes
+ */
+export interface CreateUserGroupRequestDataAttributes {
+  /**
+   * Name of the user group.
+   * @type {string}
+   * @memberof CreateUserGroupRequestDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateUserGroupRequestDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface CreateUserRequest
+ */
+export interface CreateUserRequest {
+  /**
+   *
+   * @type {CreateUserRequestData}
+   * @memberof CreateUserRequest
+   */
+  data: CreateUserRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateUserRequestData
+ */
+export interface CreateUserRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateUserRequestData
+   */
+  type: CreateUserRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateUserRequestDataAttributes}
+   * @memberof CreateUserRequestData
+   */
+  attributes: CreateUserRequestDataAttributes;
+}
+
+export const CreateUserRequestDataTypeEnum = {
+  User: 'user',
+} as const;
+
+export type CreateUserRequestDataTypeEnum =
+  (typeof CreateUserRequestDataTypeEnum)[keyof typeof CreateUserRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateUserRequestDataAttributes
+ */
+export interface CreateUserRequestDataAttributes {
+  /**
+   * Full name of the user.
+   * @type {string}
+   * @memberof CreateUserRequestDataAttributes
+   */
+  fullName: string;
+  /**
+   * Email of the user
+   * @type {string}
+   * @memberof CreateUserRequestDataAttributes
+   */
+  email: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateUserRequestDataAttributes
+   */
+  idpId?: string;
 }
 /**
  *
@@ -7669,6 +8020,177 @@ export interface StreamKeyList {
 /**
  *
  * @export
+ * @interface Thread
+ */
+export interface Thread {
+  /**
+   *
+   * @type {ThreadData}
+   * @memberof Thread
+   */
+  data: ThreadData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Thread
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface ThreadData
+ */
+export interface ThreadData {
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadData
+   */
+  type: ThreadDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ThreadData
+   */
+  id: string;
+  /**
+   *
+   * @type {ThreadDataAttributes}
+   * @memberof ThreadData
+   */
+  attributes: ThreadDataAttributes;
+  /**
+   *
+   * @type {ThreadDataRelationships}
+   * @memberof ThreadData
+   */
+  relationships: ThreadDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ThreadData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const ThreadDataTypeEnum = {
+  Thread: 'thread',
+} as const;
+
+export type ThreadDataTypeEnum =
+  (typeof ThreadDataTypeEnum)[keyof typeof ThreadDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ThreadDataAttributes
+ */
+export interface ThreadDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  modifiedAt: string;
+  /**
+   *
+   * @type {ThreadType}
+   * @memberof ThreadDataAttributes
+   */
+  type: ThreadType;
+  /**
+   *
+   * @type {ThreadStatus}
+   * @memberof ThreadDataAttributes
+   */
+  status: ThreadStatus;
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  title?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  body?: string;
+}
+/**
+ *
+ * @export
+ * @interface ThreadDataRelationships
+ */
+export interface ThreadDataRelationships {
+  /**
+   *
+   * @type {CollaborationContextRelationship}
+   * @memberof ThreadDataRelationships
+   */
+  collaborationContext: CollaborationContextRelationship;
+  /**
+   *
+   * @type {UserRelationship}
+   * @memberof ThreadDataRelationships
+   */
+  user: UserRelationship;
+}
+/**
+ *
+ * @export
+ * @interface ThreadList
+ */
+export interface ThreadList {
+  /**
+   *
+   * @type {Array<ThreadData>}
+   * @memberof ThreadList
+   */
+  data: Array<ThreadData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ThreadList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const ThreadStatus = {
+  Open: 'open',
+  Resolved: 'resolved',
+} as const;
+
+export type ThreadStatus = (typeof ThreadStatus)[keyof typeof ThreadStatus];
+
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const ThreadType = {
+  Comment: 'comment',
+  Issue: 'issue',
+} as const;
+
+export type ThreadType = (typeof ThreadType)[keyof typeof ThreadType];
+
+/**
+ *
+ * @export
  * @interface ThumbnailData
  */
 export interface ThumbnailData {
@@ -8681,6 +9203,268 @@ export interface UpsertPropertyEntriesRequestDataRelationships {
     | SceneItemRelationship
     | PartInstanceRelationship;
 }
+/**
+ *
+ * @export
+ * @interface User
+ */
+export interface User {
+  /**
+   *
+   * @type {UserData}
+   * @memberof User
+   */
+  data: UserData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof User
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserData
+ */
+export interface UserData {
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UserData
+   */
+  id: string;
+  /**
+   *
+   * @type {UserDataAttributes}
+   * @memberof UserData
+   */
+  attributes: UserDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UserData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserDataAttributes
+ */
+export interface UserDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UserDataAttributes
+   */
+  fullName: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDataAttributes
+   */
+  email: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserDataAttributes
+   */
+  idpId?: string;
+}
+/**
+ *
+ * @export
+ * @interface UserGroup
+ */
+export interface UserGroup {
+  /**
+   *
+   * @type {UserGroupData}
+   * @memberof UserGroup
+   */
+  data: UserGroupData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UserGroup
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserGroupData
+ */
+export interface UserGroupData {
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UserGroupData
+   */
+  id: string;
+  /**
+   *
+   * @type {UserGroupDataAttributes}
+   * @memberof UserGroupData
+   */
+  attributes: UserGroupDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UserGroupData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserGroupDataAttributes
+ */
+export interface UserGroupDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UserGroupDataAttributes
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserGroupDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof UserGroupDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface UserGroupId
+ */
+export interface UserGroupId {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UserGroupId
+   */
+  type: UserGroupIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UserGroupId
+   */
+  id: string;
+}
+
+export const UserGroupIdTypeEnum = {
+  UserGroup: 'user-group',
+} as const;
+
+export type UserGroupIdTypeEnum =
+  (typeof UserGroupIdTypeEnum)[keyof typeof UserGroupIdTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface UserGroupIdsList
+ */
+export interface UserGroupIdsList {
+  /**
+   *
+   * @type {Array<UserGroupId>}
+   * @memberof UserGroupIdsList
+   */
+  data: Array<UserGroupId>;
+}
+/**
+ *
+ * @export
+ * @interface UserGroupList
+ */
+export interface UserGroupList {
+  /**
+   *
+   * @type {Array<UserGroupData>}
+   * @memberof UserGroupList
+   */
+  data: Array<UserGroupData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UserGroupList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserList
+ */
+export interface UserList {
+  /**
+   *
+   * @type {Array<UserData>}
+   * @memberof UserList
+   */
+  data: Array<UserData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UserList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserRelationship
+ */
+export interface UserRelationship {
+  /**
+   *
+   * @type {UserRelationshipData}
+   * @memberof UserRelationship
+   */
+  data: UserRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface UserRelationshipData
+ */
+export interface UserRelationshipData {
+  /**
+   *
+   * @type {string}
+   * @memberof UserRelationshipData
+   */
+  type: UserRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UserRelationshipData
+   */
+  id: string;
+}
+
+export const UserRelationshipDataTypeEnum = {
+  User: 'user',
+} as const;
+
+export type UserRelationshipDataTypeEnum =
+  (typeof UserRelationshipDataTypeEnum)[keyof typeof UserRelationshipDataTypeEnum];
+
 /**
  * 3D vector.
  * @export
@@ -11122,6 +11906,460 @@ export class BatchesApi extends BaseAPI {
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * CollaborationContextsApi - axios parameter creator
+ * @export
+ */
+export const CollaborationContextsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {UserGroupIdsList} userGroupIdsList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addCollaborationContextUserGroups: async (
+      id: string,
+      userGroupIdsList: UserGroupIdsList,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('addCollaborationContextUserGroups', 'id', id);
+      // verify required parameter 'userGroupIdsList' is not null or undefined
+      assertParamExists(
+        'addCollaborationContextUserGroups',
+        'userGroupIdsList',
+        userGroupIdsList
+      );
+      const localVarPath = `/collaboration-contexts/{id}/user-groups`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        userGroupIdsList,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Create a `collaboration-context`.
+     * @param {CreateCollaborationContextRequest} createCollaborationContextRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createCollaborationContext: async (
+      createCollaborationContextRequest: CreateCollaborationContextRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createCollaborationContextRequest' is not null or undefined
+      assertParamExists(
+        'createCollaborationContext',
+        'createCollaborationContextRequest',
+        createCollaborationContextRequest
+      );
+      const localVarPath = `/collaboration-contexts`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createCollaborationContextRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `collaboration-context` by ID.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCollaborationContext: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getCollaborationContext', 'id', id);
+      const localVarPath = `/collaboration-contexts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * CollaborationContextsApi - functional programming interface
+ * @export
+ */
+export const CollaborationContextsApiFp = function (
+  configuration?: Configuration
+) {
+  const localVarAxiosParamCreator =
+    CollaborationContextsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {UserGroupIdsList} userGroupIdsList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addCollaborationContextUserGroups(
+      id: string,
+      userGroupIdsList: UserGroupIdsList,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.addCollaborationContextUserGroups(
+          id,
+          userGroupIdsList,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Create a `collaboration-context`.
+     * @param {CreateCollaborationContextRequest} createCollaborationContextRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createCollaborationContext(
+      createCollaborationContextRequest: CreateCollaborationContextRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CollaborationContext>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createCollaborationContext(
+          createCollaborationContextRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `collaboration-context` by ID.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getCollaborationContext(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CollaborationContext>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getCollaborationContext(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * CollaborationContextsApi - factory interface
+ * @export
+ */
+export const CollaborationContextsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = CollaborationContextsApiFp(configuration);
+  return {
+    /**
+     * Create a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {UserGroupIdsList} userGroupIdsList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addCollaborationContextUserGroups(
+      id: string,
+      userGroupIdsList: UserGroupIdsList,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .addCollaborationContextUserGroups(id, userGroupIdsList, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Create a `collaboration-context`.
+     * @param {CreateCollaborationContextRequest} createCollaborationContextRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createCollaborationContext(
+      createCollaborationContextRequest: CreateCollaborationContextRequest,
+      options?: any
+    ): AxiosPromise<CollaborationContext> {
+      return localVarFp
+        .createCollaborationContext(createCollaborationContextRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `collaboration-context` by ID.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCollaborationContext(
+      id: string,
+      options?: any
+    ): AxiosPromise<CollaborationContext> {
+      return localVarFp
+        .getCollaborationContext(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for addCollaborationContextUserGroups operation in CollaborationContextsApi.
+ * @export
+ * @interface CollaborationContextsApiAddCollaborationContextUserGroupsRequest
+ */
+export interface CollaborationContextsApiAddCollaborationContextUserGroupsRequest {
+  /**
+   * The &#x60;collaboration-context&#x60; ID.
+   * @type {string}
+   * @memberof CollaborationContextsApiAddCollaborationContextUserGroups
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UserGroupIdsList}
+   * @memberof CollaborationContextsApiAddCollaborationContextUserGroups
+   */
+  readonly userGroupIdsList: UserGroupIdsList;
+}
+
+/**
+ * Request parameters for createCollaborationContext operation in CollaborationContextsApi.
+ * @export
+ * @interface CollaborationContextsApiCreateCollaborationContextRequest
+ */
+export interface CollaborationContextsApiCreateCollaborationContextRequest {
+  /**
+   *
+   * @type {CreateCollaborationContextRequest}
+   * @memberof CollaborationContextsApiCreateCollaborationContext
+   */
+  readonly createCollaborationContextRequest: CreateCollaborationContextRequest;
+}
+
+/**
+ * Request parameters for getCollaborationContext operation in CollaborationContextsApi.
+ * @export
+ * @interface CollaborationContextsApiGetCollaborationContextRequest
+ */
+export interface CollaborationContextsApiGetCollaborationContextRequest {
+  /**
+   * The &#x60;collaboration-context&#x60; ID.
+   * @type {string}
+   * @memberof CollaborationContextsApiGetCollaborationContext
+   */
+  readonly id: string;
+}
+
+/**
+ * CollaborationContextsApi - object-oriented interface
+ * @export
+ * @class CollaborationContextsApi
+ * @extends {BaseAPI}
+ */
+export class CollaborationContextsApi extends BaseAPI {
+  /**
+   * Create a `collaboration-context`.
+   * @param {CollaborationContextsApiAddCollaborationContextUserGroupsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CollaborationContextsApi
+   */
+  public addCollaborationContextUserGroups(
+    requestParameters: CollaborationContextsApiAddCollaborationContextUserGroupsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CollaborationContextsApiFp(this.configuration)
+      .addCollaborationContextUserGroups(
+        requestParameters.id,
+        requestParameters.userGroupIdsList,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create a `collaboration-context`.
+   * @param {CollaborationContextsApiCreateCollaborationContextRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CollaborationContextsApi
+   */
+  public createCollaborationContext(
+    requestParameters: CollaborationContextsApiCreateCollaborationContextRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CollaborationContextsApiFp(this.configuration)
+      .createCollaborationContext(
+        requestParameters.createCollaborationContextRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `collaboration-context` by ID.
+   * @param {CollaborationContextsApiGetCollaborationContextRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CollaborationContextsApi
+   */
+  public getCollaborationContext(
+    requestParameters: CollaborationContextsApiGetCollaborationContextRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CollaborationContextsApiFp(this.configuration)
+      .getCollaborationContext(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -22126,6 +23364,8 @@ export const SceneItemsApiAxiosParamCreator = function (
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on.
+     * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
+     * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -22136,6 +23376,8 @@ export const SceneItemsApiAxiosParamCreator = function (
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
+      filterHasChildren?: boolean,
+      filterHasGeometrySet?: boolean,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -22186,6 +23428,14 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       if (filterParent !== undefined) {
         localVarQueryParameter['filter[parent]'] = filterParent;
+      }
+
+      if (filterHasChildren !== undefined) {
+        localVarQueryParameter['filter[hasChildren]'] = filterHasChildren;
+      }
+
+      if (filterHasGeometrySet !== undefined) {
+        localVarQueryParameter['filter[hasGeometrySet]'] = filterHasGeometrySet;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -22405,6 +23655,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on.
+     * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
+     * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -22415,6 +23667,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
+      filterHasChildren?: boolean,
+      filterHasGeometrySet?: boolean,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>
@@ -22426,6 +23680,8 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
         filterSource,
         filterSuppliedId,
         filterParent,
+        filterHasChildren,
+        filterHasGeometrySet,
         options
       );
       return createRequestFunction(
@@ -22551,6 +23807,8 @@ export const SceneItemsApiFactory = function (
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on.
+     * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
+     * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -22561,6 +23819,8 @@ export const SceneItemsApiFactory = function (
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
+      filterHasChildren?: boolean,
+      filterHasGeometrySet?: boolean,
       options?: any
     ): AxiosPromise<SceneItemList> {
       return localVarFp
@@ -22571,6 +23831,8 @@ export const SceneItemsApiFactory = function (
           filterSource,
           filterSuppliedId,
           filterParent,
+          filterHasChildren,
+          filterHasGeometrySet,
           options
         )
         .then((request) => request(axios, basePath));
@@ -22725,6 +23987,20 @@ export interface SceneItemsApiGetSceneItemsRequest {
    * @memberof SceneItemsApiGetSceneItems
    */
   readonly filterParent?: string;
+
+  /**
+   * Filter scene-items based on whether they are the parent of at least one other scene-item
+   * @type {boolean}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly filterHasChildren?: boolean;
+
+  /**
+   * Filter scene-items based on whether they have an associated geometry-set.
+   * @type {boolean}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly filterHasGeometrySet?: boolean;
 }
 
 /**
@@ -22862,6 +24138,8 @@ export class SceneItemsApi extends BaseAPI {
         requestParameters.filterSource,
         requestParameters.filterSuppliedId,
         requestParameters.filterParent,
+        requestParameters.filterHasChildren,
+        requestParameters.filterHasGeometrySet,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -27333,6 +28611,478 @@ export class StreamKeysApi extends BaseAPI {
 }
 
 /**
+ * ThreadsApi - axios parameter creator
+ * @export
+ */
+export const ThreadsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `thread` belonging to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {CreateThreadRequest} createThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createThread: async (
+      id: string,
+      createThreadRequest: CreateThreadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createThread', 'id', id);
+      // verify required parameter 'createThreadRequest' is not null or undefined
+      assertParamExists(
+        'createThread',
+        'createThreadRequest',
+        createThreadRequest
+      );
+      const localVarPath = `/collaboration-contexts/{id}/threads`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createThreadRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThread: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getThread', 'id', id);
+      const localVarPath = `/threads/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a page of `thread`s.
+     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThreads: async (
+      filterCollaborationContextId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/threads`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterCollaborationContextId !== undefined) {
+        localVarQueryParameter['filter[collaborationContextId]'] =
+          filterCollaborationContextId;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * ThreadsApi - functional programming interface
+ * @export
+ */
+export const ThreadsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = ThreadsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `thread` belonging to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {CreateThreadRequest} createThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createThread(
+      id: string,
+      createThreadRequest: CreateThreadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Thread>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createThread(
+        id,
+        createThreadRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getThread(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Thread>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getThread(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a page of `thread`s.
+     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getThreads(
+      filterCollaborationContextId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThreadList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getThreads(
+        filterCollaborationContextId,
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * ThreadsApi - factory interface
+ * @export
+ */
+export const ThreadsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = ThreadsApiFp(configuration);
+  return {
+    /**
+     * Create a `thread` belonging to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {CreateThreadRequest} createThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createThread(
+      id: string,
+      createThreadRequest: CreateThreadRequest,
+      options?: any
+    ): AxiosPromise<Thread> {
+      return localVarFp
+        .createThread(id, createThreadRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThread(id: string, options?: any): AxiosPromise<Thread> {
+      return localVarFp
+        .getThread(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a page of `thread`s.
+     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThreads(
+      filterCollaborationContextId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<ThreadList> {
+      return localVarFp
+        .getThreads(filterCollaborationContextId, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createThread operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiCreateThreadRequest
+ */
+export interface ThreadsApiCreateThreadRequest {
+  /**
+   * The &#x60;collaboration-context&#x60; ID.
+   * @type {string}
+   * @memberof ThreadsApiCreateThread
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateThreadRequest}
+   * @memberof ThreadsApiCreateThread
+   */
+  readonly createThreadRequest: CreateThreadRequest;
+}
+
+/**
+ * Request parameters for getThread operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiGetThreadRequest
+ */
+export interface ThreadsApiGetThreadRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof ThreadsApiGetThread
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getThreads operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiGetThreadsRequest
+ */
+export interface ThreadsApiGetThreadsRequest {
+  /**
+   * A collaboration context to filter on.
+   * @type {string}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly filterCollaborationContextId?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * ThreadsApi - object-oriented interface
+ * @export
+ * @class ThreadsApi
+ * @extends {BaseAPI}
+ */
+export class ThreadsApi extends BaseAPI {
+  /**
+   * Create a `thread` belonging to a `collaboration-context`.
+   * @param {ThreadsApiCreateThreadRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public createThread(
+    requestParameters: ThreadsApiCreateThreadRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .createThread(
+        requestParameters.id,
+        requestParameters.createThreadRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `thread`.
+   * @param {ThreadsApiGetThreadRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public getThread(
+    requestParameters: ThreadsApiGetThreadRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .getThread(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a page of `thread`s.
+   * @param {ThreadsApiGetThreadsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public getThreads(
+    requestParameters: ThreadsApiGetThreadsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .getThreads(
+        requestParameters.filterCollaborationContextId,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * TranslationInspectionsApi - axios parameter creator
  * @export
  */
@@ -28242,6 +29992,901 @@ export class TranslationInspectionsApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.filterStatus,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * UserGroupsApi - axios parameter creator
+ * @export
+ */
+export const UserGroupsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `user-group`
+     * @param {CreateUserGroupRequest} createUserGroupRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUserGroup: async (
+      createUserGroupRequest: CreateUserGroupRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createUserGroupRequest' is not null or undefined
+      assertParamExists(
+        'createUserGroup',
+        'createUserGroupRequest',
+        createUserGroupRequest
+      );
+      const localVarPath = `/user-groups`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createUserGroupRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `user-group`.
+     * @param {string} id The &#x60;user-group&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserGroup: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getUserGroup', 'id', id);
+      const localVarPath = `/user-groups/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * UserGroupsApi - functional programming interface
+ * @export
+ */
+export const UserGroupsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    UserGroupsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `user-group`
+     * @param {CreateUserGroupRequest} createUserGroupRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createUserGroup(
+      createUserGroupRequest: CreateUserGroupRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroup>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createUserGroup(
+        createUserGroupRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `user-group`.
+     * @param {string} id The &#x60;user-group&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUserGroup(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroup>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getUserGroup(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * UserGroupsApi - factory interface
+ * @export
+ */
+export const UserGroupsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = UserGroupsApiFp(configuration);
+  return {
+    /**
+     * Create a `user-group`
+     * @param {CreateUserGroupRequest} createUserGroupRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUserGroup(
+      createUserGroupRequest: CreateUserGroupRequest,
+      options?: any
+    ): AxiosPromise<UserGroup> {
+      return localVarFp
+        .createUserGroup(createUserGroupRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `user-group`.
+     * @param {string} id The &#x60;user-group&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserGroup(id: string, options?: any): AxiosPromise<UserGroup> {
+      return localVarFp
+        .getUserGroup(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createUserGroup operation in UserGroupsApi.
+ * @export
+ * @interface UserGroupsApiCreateUserGroupRequest
+ */
+export interface UserGroupsApiCreateUserGroupRequest {
+  /**
+   *
+   * @type {CreateUserGroupRequest}
+   * @memberof UserGroupsApiCreateUserGroup
+   */
+  readonly createUserGroupRequest: CreateUserGroupRequest;
+}
+
+/**
+ * Request parameters for getUserGroup operation in UserGroupsApi.
+ * @export
+ * @interface UserGroupsApiGetUserGroupRequest
+ */
+export interface UserGroupsApiGetUserGroupRequest {
+  /**
+   * The &#x60;user-group&#x60; ID.
+   * @type {string}
+   * @memberof UserGroupsApiGetUserGroup
+   */
+  readonly id: string;
+}
+
+/**
+ * UserGroupsApi - object-oriented interface
+ * @export
+ * @class UserGroupsApi
+ * @extends {BaseAPI}
+ */
+export class UserGroupsApi extends BaseAPI {
+  /**
+   * Create a `user-group`
+   * @param {UserGroupsApiCreateUserGroupRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserGroupsApi
+   */
+  public createUserGroup(
+    requestParameters: UserGroupsApiCreateUserGroupRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UserGroupsApiFp(this.configuration)
+      .createUserGroup(requestParameters.createUserGroupRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `user-group`.
+   * @param {UserGroupsApiGetUserGroupRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserGroupsApi
+   */
+  public getUserGroup(
+    requestParameters: UserGroupsApiGetUserGroupRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UserGroupsApiFp(this.configuration)
+      .getUserGroup(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * UsersApi - axios parameter creator
+ * @export
+ */
+export const UsersApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `user`
+     * @param {CreateUserRequest} createUserRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUser: async (
+      createUserRequest: CreateUserRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createUserRequest' is not null or undefined
+      assertParamExists('createUser', 'createUserRequest', createUserRequest);
+      const localVarPath = `/users`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createUserRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `user`.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUser: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getUser', 'id', id);
+      const localVarPath = `/users/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `user-group`s.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserGroupsForUser: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getUserGroupsForUser', 'id', id);
+      const localVarPath = `/users/{id}/user-groups`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `user`s.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUsers: async (
+      filterClientId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/users`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterClientId !== undefined) {
+        localVarQueryParameter['filter[clientId]'] = filterClientId;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * UsersApi - functional programming interface
+ * @export
+ */
+export const UsersApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = UsersApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `user`
+     * @param {CreateUserRequest} createUserRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createUser(
+      createUserRequest: CreateUserRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createUser(
+        createUserRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `user`.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUser(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<User>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getUser(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `user-group`s.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUserGroupsForUser(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroupList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getUserGroupsForUser(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `user`s.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listUsers(
+      filterClientId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(
+        filterClientId,
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * UsersApi - factory interface
+ * @export
+ */
+export const UsersApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = UsersApiFp(configuration);
+  return {
+    /**
+     * Create a `user`
+     * @param {CreateUserRequest} createUserRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUser(
+      createUserRequest: CreateUserRequest,
+      options?: any
+    ): AxiosPromise<User> {
+      return localVarFp
+        .createUser(createUserRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `user`.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUser(id: string, options?: any): AxiosPromise<User> {
+      return localVarFp
+        .getUser(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `user-group`s.
+     * @param {string} id The &#x60;user&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUserGroupsForUser(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<UserGroupList> {
+      return localVarFp
+        .getUserGroupsForUser(id, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `user`s.
+     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listUsers(
+      filterClientId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<UserList> {
+      return localVarFp
+        .listUsers(filterClientId, pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createUser operation in UsersApi.
+ * @export
+ * @interface UsersApiCreateUserRequest
+ */
+export interface UsersApiCreateUserRequest {
+  /**
+   *
+   * @type {CreateUserRequest}
+   * @memberof UsersApiCreateUser
+   */
+  readonly createUserRequest: CreateUserRequest;
+}
+
+/**
+ * Request parameters for getUser operation in UsersApi.
+ * @export
+ * @interface UsersApiGetUserRequest
+ */
+export interface UsersApiGetUserRequest {
+  /**
+   * The &#x60;user&#x60; ID.
+   * @type {string}
+   * @memberof UsersApiGetUser
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getUserGroupsForUser operation in UsersApi.
+ * @export
+ * @interface UsersApiGetUserGroupsForUserRequest
+ */
+export interface UsersApiGetUserGroupsForUserRequest {
+  /**
+   * The &#x60;user&#x60; ID.
+   * @type {string}
+   * @memberof UsersApiGetUserGroupsForUser
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof UsersApiGetUserGroupsForUser
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof UsersApiGetUserGroupsForUser
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for listUsers operation in UsersApi.
+ * @export
+ * @interface UsersApiListUsersRequest
+ */
+export interface UsersApiListUsersRequest {
+  /**
+   * Comma-separated list of client IDs to filter on.
+   * @type {string}
+   * @memberof UsersApiListUsers
+   */
+  readonly filterClientId?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof UsersApiListUsers
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof UsersApiListUsers
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * UsersApi - object-oriented interface
+ * @export
+ * @class UsersApi
+ * @extends {BaseAPI}
+ */
+export class UsersApi extends BaseAPI {
+  /**
+   * Create a `user`
+   * @param {UsersApiCreateUserRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UsersApi
+   */
+  public createUser(
+    requestParameters: UsersApiCreateUserRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UsersApiFp(this.configuration)
+      .createUser(requestParameters.createUserRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `user`.
+   * @param {UsersApiGetUserRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UsersApi
+   */
+  public getUser(
+    requestParameters: UsersApiGetUserRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UsersApiFp(this.configuration)
+      .getUser(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `user-group`s.
+   * @param {UsersApiGetUserGroupsForUserRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UsersApi
+   */
+  public getUserGroupsForUser(
+    requestParameters: UsersApiGetUserGroupsForUserRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UsersApiFp(this.configuration)
+      .getUserGroupsForUser(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `user`s.
+   * @param {UsersApiListUsersRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UsersApi
+   */
+  public listUsers(
+    requestParameters: UsersApiListUsersRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return UsersApiFp(this.configuration)
+      .listUsers(
+        requestParameters.filterClientId,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
         options
       )
       .then((request) => request(this.axios, this.basePath));
