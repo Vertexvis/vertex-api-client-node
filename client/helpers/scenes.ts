@@ -23,6 +23,8 @@ import {
 } from '../../index';
 import {
   BaseReq,
+  DefaultPolling,
+  DefaultShortPolling,
   defined,
   DeleteReq,
   getPage,
@@ -165,8 +167,7 @@ export interface QueuedSceneItem {
   readonly res?: Failure | QueuedJob;
 }
 
-const defaultPolling: Polling = { intervalMs: 200, maxAttempts: 4500 }; // 15 minute timeout for batch completions
-const sceneReadyPolling: Polling = { intervalMs: 1000, maxAttempts: 3600 }; // one hour timeout for scene state ready
+const sceneReadyPolling: Polling = DefaultPolling; // one hour timeout for scene state ready
 
 /**
  * Create a scene with scene items.
@@ -179,7 +180,7 @@ export async function createSceneAndSceneItems({
   onMsg = console.log,
   onProgress,
   parallelism,
-  polling = defaultPolling,
+  polling = DefaultShortPolling,
   returnQueued = false,
   verbose,
 }: CreateSceneAndSceneItemsReq): Promise<CreateSceneAndSceneItemsRes> {
@@ -467,7 +468,7 @@ export const createSceneItemBatch = async ({
   onProgress,
   limit,
   sceneId,
-  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  polling = DefaultShortPolling,
 }: CreateSceneItemBatchReq): Promise<CreateSceneItemBatchRes> => {
   let batchErrors: QueuedBatchOps[] = [];
   let itemErrors: SceneItemError[] = [];

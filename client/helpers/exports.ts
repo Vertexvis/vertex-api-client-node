@@ -1,9 +1,8 @@
 import { CreateExportRequest, Export } from '../../index';
 import {
   BaseReq,
+  DefaultPolling,
   isPollError,
-  MaxAttempts,
-  PollIntervalMs,
   pollQueuedJob,
   throwOnError,
 } from '../index';
@@ -36,7 +35,7 @@ export async function createExport({
   const pollRes = await pollQueuedJob<Export>({
     id: queuedId,
     getQueuedJob: (id) => client.exports.getQueuedExport({ id }),
-    polling: { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+    polling: DefaultPolling,
   });
   if (isPollError(pollRes.res)) throwOnError(pollRes);
   if (verbose) onMsg(`Completed export ${pollRes.res.data.id}`);

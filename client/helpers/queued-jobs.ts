@@ -2,7 +2,14 @@ import axios, { AxiosResponse, CancelToken } from 'axios';
 import { Limit } from 'p-limit';
 import { hrtime } from 'process';
 
-import { ApiError, Batch, Failure, Polling, QueuedJob } from '../../index';
+import {
+  ApiError,
+  Batch,
+  Failure,
+  getPollingDelay,
+  Polling,
+  QueuedJob,
+} from '../../index';
 import {
   defined,
   delay,
@@ -14,7 +21,7 @@ import {
   VertexError,
 } from '../utils';
 
-export const PollIntervalMs = 5000;
+export const PollIntervalMs = 1000;
 
 export const AttemptsPerMin = 60000 / PollIntervalMs;
 
@@ -68,8 +75,9 @@ export async function pollQueuedJob<T>({
   getQueuedJob,
   allow404 = false,
   limit,
-  polling: { intervalMs, maxAttempts, backoff },
+  polling,
 }: PollQueuedJobReq): Promise<PollQueuedJobRes<T>> {
+  const { maxAttempts } = polling;
   async function poll(attempt: number): Promise<PollJobRes<T>> {
     const cancelSrc = axios.CancelToken.source();
     const timerId = setTimeout(
@@ -123,7 +131,10 @@ export async function pollQueuedJob<T>({
   }
 
   let attempts = 1;
-  let backoffMs = backoff?.[attempts] ?? 0;
+  let pollDelay = getPollingDelay({
+    attempt: attempts,
+    polling,
+  });
   // eslint-disable-next-line prefer-const
   let pollRes = await poll(attempts);
   /* eslint-disable no-await-in-loop */
@@ -135,8 +146,11 @@ export async function pollQueuedJob<T>({
     attempts <= maxAttempts
   ) {
     attempts += 1;
-    backoffMs = backoff?.[attempts] ?? backoffMs;
-    await delay(intervalMs + backoffMs);
+    pollDelay = getPollingDelay({
+      attempt: attempts,
+      polling,
+    });
+    await delay(pollDelay);
     pollRes = await poll(attempts);
   }
   /* eslint-enable no-await-in-loop */

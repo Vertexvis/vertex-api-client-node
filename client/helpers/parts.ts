@@ -15,14 +15,13 @@ import {
 } from '../../index';
 import {
   BaseReq,
+  DefaultPolling,
   DeleteReq,
   encodeIfNotEncoded,
   getBySuppliedId,
   getPage,
   head,
-  MaxAttempts,
   Polling,
-  PollIntervalMs,
   prettyJson,
   RenderImageReq,
   toAccept,
@@ -85,7 +84,7 @@ export async function createPartFromFile({
   client,
   createPartReq,
   onMsg = console.log,
-  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  polling = DefaultPolling,
   returnQueued = false,
   verbose,
   ...rest

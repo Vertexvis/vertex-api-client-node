@@ -1,12 +1,11 @@
 import { CreateSceneItemRequest, SceneItem } from '../../index';
 import {
   BaseReq,
+  DefaultShortPolling,
   defined,
   isApiError,
   isPollError,
-  MaxAttempts,
   Polling,
-  PollIntervalMs,
   pollQueuedJob,
   throwOnError,
 } from '../index';
@@ -57,7 +56,7 @@ export async function createSceneItem({
   client,
   createSceneItemReq,
   onMsg = console.log,
-  polling = { intervalMs: PollIntervalMs, maxAttempts: MaxAttempts },
+  polling = DefaultShortPolling,
   sceneId,
   verbose,
 }: CreateSceneItemReq): Promise<SceneItem> {
