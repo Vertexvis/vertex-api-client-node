@@ -4,24 +4,39 @@ import {
   AccountsApi,
   ApplicationsApi,
   BatchesApi,
+  CollaborationContextsApi,
   Configuration,
   ExportsApi,
+  FileCollectionsApi,
+  FileJobsApi,
   FilesApi,
   GeometrySetsApi,
   HitsApi,
+  ModelViewsApi,
   Oauth2Api,
   OAuth2Token,
+  PartRenditionsApi,
+  PartRevisionInstancesApi,
   PartRevisionsApi,
   PartsApi,
+  PermissionGrantsApi,
+  PmiApi,
+  PropertyEntriesApi,
+  RepliesApi,
   SceneAlterationsApi,
   SceneAnnotationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
   ScenesApi,
+  SceneSynchronizationsApi,
   SceneViewsApi,
   SceneViewStatesApi,
+  SearchSessionsApi,
   StreamKeysApi,
+  ThreadsApi,
   TranslationInspectionsApi,
+  UserGroupsApi,
+  UsersApi,
   WebhookSubscriptionsApi,
 } from '../index';
 import {
@@ -67,6 +82,11 @@ export interface BuildReq {
   };
 
   readonly initialToken?: OAuth2Token;
+  /**
+   * An async function to fetch an access token.
+   * If not provided, the default implementation will be used.
+   */
+  readonly tokenFetcher?: () => Promise<OAuth2Token>;
 }
 
 /**
@@ -77,6 +97,7 @@ interface CtorReq {
   readonly axiosInst: AxiosInstance;
   readonly basePath: string;
   readonly token: OAuth2Token;
+  readonly tokenFetcher?: () => Promise<OAuth2Token>;
 }
 
 const TenMinsInMs = 600_000;
@@ -121,33 +142,56 @@ export class VertexClient {
   public accounts: AccountsApi;
   public applications: ApplicationsApi;
   public batches: BatchesApi;
+  public collaborationContexts: CollaborationContextsApi;
   public exports: ExportsApi;
+  public fileCollections: FileCollectionsApi;
+  public fileJobs: FileJobsApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
   public hits: HitsApi;
+  public modelViews: ModelViewsApi;
   public oAuth2: Oauth2Api;
+  public partRenditions: PartRenditionsApi;
+  public partRevisionInstances: PartRevisionInstancesApi;
   public partRevisions: PartRevisionsApi;
   public parts: PartsApi;
+  public permissionGrants: PermissionGrantsApi;
+  public pmi: PmiApi;
+  public propertyEntries: PropertyEntriesApi;
+  public replies: RepliesApi;
   public sceneAlterations: SceneAlterationsApi;
   public sceneAnnotations: SceneAnnotationsApi;
   public sceneItemOverrides: SceneItemOverridesApi;
   public sceneItems: SceneItemsApi;
+  public sceneSynchronizations: SceneSynchronizationsApi;
   public scenes: ScenesApi;
   public sceneViews: SceneViewsApi;
   public sceneViewStates: SceneViewStatesApi;
+  public searchSessions: SearchSessionsApi;
   public streamKeys: StreamKeysApi;
+  public threads: ThreadsApi;
   public translationInspections: TranslationInspectionsApi;
+  public userGroups: UserGroupsApi;
+  public users: UsersApi;
   public webhookSubscriptions: WebhookSubscriptionsApi;
 
   public axiosInstance: AxiosInstance;
   public config: Configuration;
   public token: OAuth2Token;
 
+  private acquireToken: () => Promise<OAuth2Token>;
   private tokenFetchedEpochMs: number;
 
-  private constructor({ auth, axiosInst, basePath, token }: CtorReq) {
+  private constructor({
+    auth,
+    axiosInst,
+    basePath,
+    token,
+    tokenFetcher,
+  }: CtorReq) {
     this.oAuth2 = auth;
     this.token = token;
+    this.acquireToken = tokenFetcher || (() => createToken(auth));
     this.tokenFetchedEpochMs = nowEpochMs();
     this.config = new Configuration({
       accessToken: this.accessTokenRefresher,
@@ -157,16 +201,50 @@ export class VertexClient {
     this.accounts = new AccountsApi(this.config, undefined, axiosInst);
     this.applications = new ApplicationsApi(this.config, undefined, axiosInst);
     this.batches = new BatchesApi(this.config, undefined, axiosInst);
+    this.collaborationContexts = new CollaborationContextsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.exports = new ExportsApi(this.config, undefined, axiosInst);
+    this.fileCollections = new FileCollectionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.fileJobs = new FileJobsApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
     this.hits = new HitsApi(this.config, undefined, axiosInst);
+    this.modelViews = new ModelViewsApi(this.config, undefined, axiosInst);
+    this.partRenditions = new PartRenditionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.partRevisionInstances = new PartRevisionInstancesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.partRevisions = new PartRevisionsApi(
       this.config,
       undefined,
       axiosInst
     );
     this.parts = new PartsApi(this.config, undefined, axiosInst);
+    this.permissionGrants = new PermissionGrantsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.pmi = new PmiApi(this.config, undefined, axiosInst);
+    this.propertyEntries = new PropertyEntriesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.replies = new RepliesApi(this.config, undefined, axiosInst);
     this.sceneAlterations = new SceneAlterationsApi(
       this.config,
       undefined,
@@ -183,19 +261,32 @@ export class VertexClient {
       axiosInst
     );
     this.sceneItems = new SceneItemsApi(this.config, undefined, axiosInst);
-    this.scenes = new ScenesApi(this.config, undefined, axiosInst);
-    this.sceneViews = new SceneViewsApi(this.config, undefined, axiosInst);
+    this.sceneSynchronizations = new SceneSynchronizationsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.sceneViewStates = new SceneViewStatesApi(
       this.config,
       undefined,
       axiosInst
     );
+    this.sceneViews = new SceneViewsApi(this.config, undefined, axiosInst);
+    this.scenes = new ScenesApi(this.config, undefined, axiosInst);
+    this.searchSessions = new SearchSessionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.streamKeys = new StreamKeysApi(this.config, undefined, axiosInst);
+    this.threads = new ThreadsApi(this.config, undefined, axiosInst);
     this.translationInspections = new TranslationInspectionsApi(
       this.config,
       undefined,
       axiosInst
     );
+    this.userGroups = new UserGroupsApi(this.config, undefined, axiosInst);
+    this.users = new UsersApi(this.config, undefined, axiosInst);
     this.webhookSubscriptions = new WebhookSubscriptionsApi(
       this.config,
       undefined,
@@ -263,7 +354,9 @@ export class VertexClient {
       axiosInst
     );
 
-    const token = args?.initialToken || (await createToken(auth));
+    const token =
+      args?.initialToken ||
+      (await (args?.tokenFetcher ? args.tokenFetcher() : createToken(auth)));
 
     return new VertexClient({ auth, axiosInst, basePath, token });
   };
@@ -276,7 +369,7 @@ export class VertexClient {
     if (tokenValid) return this.token.access_token;
 
     console.log('Refreshing access token');
-    this.token = await createToken(this.oAuth2);
+    this.token = await this.acquireToken();
     this.tokenFetchedEpochMs = nowEpochMs();
     return this.token.access_token;
   };

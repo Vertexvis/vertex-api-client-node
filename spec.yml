@@ -899,6 +899,77 @@ paths:
       tags:
         - batches
   /collaboration-contexts:
+    get:
+      description: List `collaboration-context`s
+      operationId: listCollaborationContexts
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/CollaborationContextList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - replies
     post:
       description: Create a `collaboration-context`.
       operationId: createCollaborationContext
@@ -1158,6 +1229,16 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: user
+            maxLength: 32
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -1239,6 +1320,16 @@ paths:
             maximum: 200
             minimum: 1
             type: integer
+          style: form
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: user
+            maxLength: 32
+            type: string
           style: form
       responses:
         '200':
@@ -2450,6 +2541,235 @@ paths:
         - OAuth2: []
       tags:
         - geometry-sets
+  /replies:
+    get:
+      description: List `replies`
+      operationId: listReplies
+      parameters:
+        - description: Comma-separated list of supplied IDs to filter on.
+          example: some-id-1,some-id-2
+          explode: true
+          in: query
+          name: filter[threadId]
+          required: false
+          schema:
+            maxLength: 1024
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: user
+            maxLength: 32
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/ReplyList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - replies
+  /replies/{id}:
+    get:
+      description: Get a `reply`.
+      operationId: getReply
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Comma-separated list of relationships to include in response.
+          explode: true
+          in: query
+          name: include
+          required: false
+          schema:
+            example: user
+            maxLength: 32
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - replies
+  /threads/{id}/replies:
+    post:
+      description: Create a `reply` belonging to a `thread`.
+      operationId: createReply
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateReplyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - replies
   /scene-views/{id}/hits:
     post:
       description: Create a `hit` for a `scene-view`.
@@ -8517,14 +8837,13 @@ paths:
       description: List `user`s.
       operationId: listUsers
       parameters:
-        - description: Comma-separated list of client IDs to filter on.
+        - description: Id from the idpProvider.
           explode: true
           in: query
-          name: filter[clientId]
+          name: filter[idpId]
           required: false
           schema:
-            example: ?filter[clientId]=some-id-1&filter[clientId]=some-id-2
-            maxLength: 1024
+            example: id
             type: string
           style: form
         - description: The cursor for the next page of items.
@@ -8854,12 +9173,69 @@ paths:
             $ref: '#/components/schemas/Uuid'
           style: simple
       responses:
-        '200':
+        '204':
+          description: No Content
+        '401':
           content:
             application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
               schema:
-                $ref: '#/components/schemas/UserGroup'
-          description: OK
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - user-groups
+  /user-groups/{id}/users:
+    post:
+      description: Add a `user` to a `user-group`.
+      operationId: addUsersToUserGroup
+      parameters:
+        - description: A `user-group` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UserIdList'
+        required: true
+      responses:
+        '204':
+          description: No Content
         '401':
           content:
             application/vnd.api+json:
@@ -9766,6 +10142,17 @@ components:
         maxLength: 32
         type: string
       style: form
+    IncludeUser:
+      description: Comma-separated list of relationships to include in response.
+      explode: true
+      in: query
+      name: include
+      required: false
+      schema:
+        example: user
+        maxLength: 32
+        type: string
+      style: form
     ModelViewIdFilter:
       description: Filter annotations belonging to a model view.
       explode: true
@@ -9850,6 +10237,20 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    ThreadField:
+      description:
+        Comma-separated list of fields to return in response. An empty
+        value returns no fields. Due to its potential size, metadata is only returned
+        if explicitly requested.
+      explode: true
+      in: query
+      name: fields[thread]
+      required: false
+      schema:
+        example: replyCount
+        maxLength: 32
+        type: string
+      style: form
     SceneId:
       description: The `scene` ID.
       explode: false
@@ -10143,6 +10544,15 @@ components:
         example: -age,name
         type: string
       style: form
+    ReplyId:
+      description: The `thread` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     ThreadId:
       description: The `thread` ID.
       explode: false
@@ -10152,6 +10562,17 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    ThreadIdFilter:
+      description: Comma-separated list of supplied IDs to filter on.
+      example: some-id-1,some-id-2
+      explode: true
+      in: query
+      name: filter[threadId]
+      required: false
+      schema:
+        maxLength: 1024
+        type: string
+      style: form
     ClientIdFilter:
       description: Comma-separated list of client IDs to filter on.
       explode: true
@@ -10440,6 +10861,21 @@ components:
       required:
         - vertexvis/batch:results
       type: object
+    CollaborationContextList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/CollaborationContextData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     CreateCollaborationContextRequest:
       additionalProperties: false
       properties:
@@ -10487,6 +10923,10 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+        included:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
       required:
         - data
       type: object
@@ -10501,6 +10941,10 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+        included:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
       required:
         - data
         - links
@@ -10664,6 +11108,49 @@ components:
       required:
         - data
       type: object
+    ReplyList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/ReplyData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        included:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
+      required:
+        - data
+        - links
+      type: object
+    Reply:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ReplyData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+        included:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
+      required:
+        - data
+      type: object
+    CreateReplyRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateReplyRequest_data'
+      required:
+        - data
+      type: object
     CreateHitRequest:
       additionalProperties: false
       properties:
@@ -10704,9 +11191,13 @@ components:
           $ref: '#/components/schemas/NonEmptyString'
         grant_type:
           example: client_credentials
-          maxLength: 32
+          maxLength: 64
           type: string
+        subject_token_type:
+          $ref: '#/components/schemas/NonEmptyString'
         refresh_token:
+          $ref: '#/components/schemas/NonEmptyString'
+        subject_token:
           $ref: '#/components/schemas/NonEmptyString'
       required:
         - grant_type
@@ -11650,6 +12141,16 @@ components:
       required:
         - data
       type: object
+    UserIdList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserId'
+          type: array
+      required:
+        - data
+      type: object
     WebhookSubscriptionList:
       additionalProperties: false
       properties:
@@ -12040,6 +12541,26 @@ components:
         - relationships
         - type
       type: object
+    UserData:
+      additionalProperties: false
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UserData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     FileMetadataData:
       additionalProperties: false
       properties:
@@ -12177,6 +12698,34 @@ components:
           $ref: '#/components/schemas/FileRelationship_data'
       required:
         - data
+      type: object
+    ReplyData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - reply
+          example: reply
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/ReplyData_attributes'
+        relationships:
+          $ref: '#/components/schemas/ReplyData_relationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
       type: object
     Point:
       additionalProperties: false
@@ -12914,6 +13463,10 @@ components:
       required:
         - data
       type: object
+    NullableObject:
+      maxProperties: 0
+      nullable: true
+      type: object
     CreateSceneItemRequestData:
       additionalProperties: false
       properties:
@@ -13415,26 +13968,6 @@ components:
         - id
         - type
       type: object
-    UserData:
-      additionalProperties: false
-      properties:
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/UserData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
-        - type
-      type: object
     UserGroupData:
       additionalProperties: false
       properties:
@@ -13452,6 +13985,25 @@ components:
           type: object
       required:
         - attributes
+        - id
+        - type
+      type: object
+    UserId:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - user
+          example: user
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
         - id
         - type
       type: object
@@ -13667,6 +14219,14 @@ components:
           type: string
       required:
         - selector
+      type: object
+    ThreadRelationship:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/ThreadRelationship_data'
+      required:
+        - data
       type: object
     BoundingBox:
       additionalProperties: false
@@ -15005,6 +15565,27 @@ components:
         - relationships
         - type
       type: object
+    CreateReplyRequest_data_attributes:
+      properties:
+        body:
+          type: string
+      required:
+        - body
+      type: object
+    CreateReplyRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - reply
+          example: reply
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateReplyRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateHitRequest_data_attributes:
       properties:
         point:
@@ -15579,7 +16160,9 @@ components:
           anyOf:
             - $ref: '#/components/schemas/GeometrySetRelationship'
             - $ref: '#/components/schemas/PartRevisionRelationship'
+            - $ref: '#/components/schemas/NullableObject'
           description: Relationship to a `geometry-set` or `part-revision`.
+          nullable: true
       type: object
     UpdateSceneItemRequest_data:
       properties:
@@ -16345,6 +16928,9 @@ components:
           type: string
         body:
           type: string
+        replyCount:
+          format: int32
+          type: integer
       required:
         - createdAt
         - modifiedAt
@@ -16360,6 +16946,26 @@ components:
       required:
         - collaborationContext
         - user
+      type: object
+    UserData_attributes:
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        idpId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - email
+        - fullName
       type: object
     FileMetadataData_attributes:
       properties:
@@ -16453,6 +17059,33 @@ components:
       required:
         - id
         - type
+      type: object
+    ReplyData_attributes:
+      properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        modifiedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        body:
+          type: string
+      required:
+        - body
+        - createdAt
+        - modifiedAt
+      type: object
+    ReplyData_relationships:
+      properties:
+        thread:
+          $ref: '#/components/schemas/ThreadRelationship'
+        user:
+          $ref: '#/components/schemas/UserRelationship'
+      required:
+        - thread
+        - user
       type: object
     HitResultData_attributes:
       properties:
@@ -17265,26 +17898,6 @@ components:
       required:
         - status
       type: object
-    UserData_attributes:
-      properties:
-        fullName:
-          type: string
-        email:
-          type: string
-        createdAt:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        idpId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - createdAt
-        - email
-        - fullName
-      type: object
     UserGroupData_attributes:
       properties:
         name:
@@ -17369,6 +17982,22 @@ components:
         type:
           enum:
             - user
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    ThreadRelationship_data:
+      properties:
+        type:
+          enum:
+            - thread
           type: string
         id:
           description: ID of the resource.

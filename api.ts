@@ -871,6 +871,25 @@ export interface CollaborationContextDataRelationships {
 /**
  *
  * @export
+ * @interface CollaborationContextList
+ */
+export interface CollaborationContextList {
+  /**
+   *
+   * @type {Array<CollaborationContextData>}
+   * @memberof CollaborationContextList
+   */
+  data: Array<CollaborationContextData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof CollaborationContextList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
  * @interface CollaborationContextRelationship
  */
 export interface CollaborationContextRelationship {
@@ -1796,6 +1815,59 @@ export const CreatePermissionGrantDataAttributesCapabilityEnum = {
 export type CreatePermissionGrantDataAttributesCapabilityEnum =
   (typeof CreatePermissionGrantDataAttributesCapabilityEnum)[keyof typeof CreatePermissionGrantDataAttributesCapabilityEnum];
 
+/**
+ *
+ * @export
+ * @interface CreateReplyRequest
+ */
+export interface CreateReplyRequest {
+  /**
+   *
+   * @type {CreateReplyRequestData}
+   * @memberof CreateReplyRequest
+   */
+  data: CreateReplyRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateReplyRequestData
+ */
+export interface CreateReplyRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateReplyRequestData
+   */
+  type: CreateReplyRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateReplyRequestDataAttributes}
+   * @memberof CreateReplyRequestData
+   */
+  attributes: CreateReplyRequestDataAttributes;
+}
+
+export const CreateReplyRequestDataTypeEnum = {
+  Reply: 'reply',
+} as const;
+
+export type CreateReplyRequestDataTypeEnum =
+  (typeof CreateReplyRequestDataTypeEnum)[keyof typeof CreateReplyRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateReplyRequestDataAttributes
+ */
+export interface CreateReplyRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateReplyRequestDataAttributes
+   */
+  body: string;
+}
 /**
  *
  * @export
@@ -6128,6 +6200,145 @@ export interface RelationshipLinks {
 /**
  *
  * @export
+ * @interface Reply
+ */
+export interface Reply {
+  /**
+   *
+   * @type {ReplyData}
+   * @memberof Reply
+   */
+  data: ReplyData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Reply
+   */
+  links?: { [key: string]: Link };
+  /**
+   *
+   * @type {Array<UserData>}
+   * @memberof Reply
+   */
+  included?: Array<UserData>;
+}
+/**
+ *
+ * @export
+ * @interface ReplyData
+ */
+export interface ReplyData {
+  /**
+   *
+   * @type {string}
+   * @memberof ReplyData
+   */
+  type: ReplyDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ReplyData
+   */
+  id: string;
+  /**
+   *
+   * @type {ReplyDataAttributes}
+   * @memberof ReplyData
+   */
+  attributes: ReplyDataAttributes;
+  /**
+   *
+   * @type {ReplyDataRelationships}
+   * @memberof ReplyData
+   */
+  relationships: ReplyDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ReplyData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const ReplyDataTypeEnum = {
+  Reply: 'reply',
+} as const;
+
+export type ReplyDataTypeEnum =
+  (typeof ReplyDataTypeEnum)[keyof typeof ReplyDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ReplyDataAttributes
+ */
+export interface ReplyDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof ReplyDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ReplyDataAttributes
+   */
+  modifiedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ReplyDataAttributes
+   */
+  body: string;
+}
+/**
+ *
+ * @export
+ * @interface ReplyDataRelationships
+ */
+export interface ReplyDataRelationships {
+  /**
+   *
+   * @type {ThreadRelationship}
+   * @memberof ReplyDataRelationships
+   */
+  thread: ThreadRelationship;
+  /**
+   *
+   * @type {UserRelationship}
+   * @memberof ReplyDataRelationships
+   */
+  user: UserRelationship;
+}
+/**
+ *
+ * @export
+ * @interface ReplyList
+ */
+export interface ReplyList {
+  /**
+   *
+   * @type {Array<ReplyData>}
+   * @memberof ReplyList
+   */
+  data: Array<ReplyData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof ReplyList
+   */
+  links: { [key: string]: Link };
+  /**
+   *
+   * @type {Array<UserData>}
+   * @memberof ReplyList
+   */
+  included?: Array<UserData>;
+}
+/**
+ *
+ * @export
  * @interface RevokeOAuth2TokenRequest
  */
 export interface RevokeOAuth2TokenRequest {
@@ -8035,6 +8246,12 @@ export interface Thread {
    * @memberof Thread
    */
   links?: { [key: string]: Link };
+  /**
+   *
+   * @type {Array<UserData>}
+   * @memberof Thread
+   */
+  included?: Array<UserData>;
 }
 /**
  *
@@ -8123,6 +8340,12 @@ export interface ThreadDataAttributes {
    * @memberof ThreadDataAttributes
    */
   body?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof ThreadDataAttributes
+   */
+  replyCount?: number;
 }
 /**
  *
@@ -8161,7 +8384,53 @@ export interface ThreadList {
    * @memberof ThreadList
    */
   links: { [key: string]: Link };
+  /**
+   *
+   * @type {Array<UserData>}
+   * @memberof ThreadList
+   */
+  included?: Array<UserData>;
 }
+/**
+ *
+ * @export
+ * @interface ThreadRelationship
+ */
+export interface ThreadRelationship {
+  /**
+   *
+   * @type {ThreadRelationshipData}
+   * @memberof ThreadRelationship
+   */
+  data: ThreadRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface ThreadRelationshipData
+ */
+export interface ThreadRelationshipData {
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadRelationshipData
+   */
+  type: ThreadRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof ThreadRelationshipData
+   */
+  id: string;
+}
+
+export const ThreadRelationshipDataTypeEnum = {
+  Thread: 'thread',
+} as const;
+
+export type ThreadRelationshipDataTypeEnum =
+  (typeof ThreadRelationshipDataTypeEnum)[keyof typeof ThreadRelationshipDataTypeEnum];
+
 /**
  *
  * @export
@@ -8872,10 +9141,10 @@ export interface UpdateSceneItemRequestDataAttributes {
 export interface UpdateSceneItemRequestDataRelationships {
   /**
    * Relationship to a `geometry-set` or `part-revision`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship}
+   * @type {GeometrySetRelationship | PartRevisionRelationship | object}
    * @memberof UpdateSceneItemRequestDataRelationships
    */
-  source?: GeometrySetRelationship | PartRevisionRelationship;
+  source?: GeometrySetRelationship | PartRevisionRelationship | object | null;
 }
 /**
  *
@@ -9405,6 +9674,46 @@ export interface UserGroupList {
    * @memberof UserGroupList
    */
   links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UserId
+ */
+export interface UserId {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UserId
+   */
+  type: UserIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UserId
+   */
+  id: string;
+}
+
+export const UserIdTypeEnum = {
+  User: 'user',
+} as const;
+
+export type UserIdTypeEnum =
+  (typeof UserIdTypeEnum)[keyof typeof UserIdTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface UserIdList
+ */
+export interface UserIdList {
+  /**
+   *
+   * @type {Array<UserId>}
+   * @memberof UserIdList
+   */
+  data: Array<UserId>;
 }
 /**
  *
@@ -16788,7 +17097,9 @@ export const Oauth2ApiAxiosParamCreator = function (
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [subjectTokenType]
      * @param {string} [refreshToken]
+     * @param {string} [subjectToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -16797,7 +17108,9 @@ export const Oauth2ApiAxiosParamCreator = function (
       scope?: string,
       code?: string,
       redirectUri?: string,
+      subjectTokenType?: string,
       refreshToken?: string,
+      subjectToken?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'grantType' is not null or undefined
@@ -16839,8 +17152,16 @@ export const Oauth2ApiAxiosParamCreator = function (
         localVarFormParams.set('grant_type', grantType as any);
       }
 
+      if (subjectTokenType !== undefined) {
+        localVarFormParams.set('subject_token_type', subjectTokenType as any);
+      }
+
       if (refreshToken !== undefined) {
         localVarFormParams.set('refresh_token', refreshToken as any);
+      }
+
+      if (subjectToken !== undefined) {
+        localVarFormParams.set('subject_token', subjectToken as any);
       }
 
       localVarHeaderParameter['Content-Type'] =
@@ -16992,7 +17313,9 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [subjectTokenType]
      * @param {string} [refreshToken]
+     * @param {string} [subjectToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17001,7 +17324,9 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
       scope?: string,
       code?: string,
       redirectUri?: string,
+      subjectTokenType?: string,
       refreshToken?: string,
+      subjectToken?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<OAuth2Token>
@@ -17011,7 +17336,9 @@ export const Oauth2ApiFp = function (configuration?: Configuration) {
         scope,
         code,
         redirectUri,
+        subjectTokenType,
         refreshToken,
+        subjectToken,
         options
       );
       return createRequestFunction(
@@ -17096,7 +17423,9 @@ export const Oauth2ApiFactory = function (
      * @param {string} [scope]
      * @param {string} [code]
      * @param {string} [redirectUri]
+     * @param {string} [subjectTokenType]
      * @param {string} [refreshToken]
+     * @param {string} [subjectToken]
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -17105,11 +17434,22 @@ export const Oauth2ApiFactory = function (
       scope?: string,
       code?: string,
       redirectUri?: string,
+      subjectTokenType?: string,
       refreshToken?: string,
+      subjectToken?: string,
       options?: any
     ): AxiosPromise<OAuth2Token> {
       return localVarFp
-        .createToken(grantType, scope, code, redirectUri, refreshToken, options)
+        .createToken(
+          grantType,
+          scope,
+          code,
+          redirectUri,
+          subjectTokenType,
+          refreshToken,
+          subjectToken,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -17210,7 +17550,21 @@ export interface Oauth2ApiCreateTokenRequest {
    * @type {string}
    * @memberof Oauth2ApiCreateToken
    */
+  readonly subjectTokenType?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
   readonly refreshToken?: string;
+
+  /**
+   *
+   * @type {string}
+   * @memberof Oauth2ApiCreateToken
+   */
+  readonly subjectToken?: string;
 }
 
 /**
@@ -17291,7 +17645,9 @@ export class Oauth2Api extends BaseAPI {
         requestParameters.scope,
         requestParameters.code,
         requestParameters.redirectUri,
+        requestParameters.subjectTokenType,
         requestParameters.refreshToken,
+        requestParameters.subjectToken,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -21017,6 +21373,658 @@ export class PropertyEntriesApi extends BaseAPI {
     return PropertyEntriesApiFp(this.configuration)
       .upsertPropertyEntries(
         requestParameters.upsertPropertyEntriesRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * RepliesApi - axios parameter creator
+ * @export
+ */
+export const RepliesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `reply` belonging to a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {CreateReplyRequest} createReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createReply: async (
+      id: string,
+      createReplyRequest: CreateReplyRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createReply', 'id', id);
+      // verify required parameter 'createReplyRequest' is not null or undefined
+      assertParamExists(
+        'createReply',
+        'createReplyRequest',
+        createReplyRequest
+      );
+      const localVarPath = `/threads/{id}/replies`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createReplyRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getReply: async (
+      id: string,
+      include?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getReply', 'id', id);
+      const localVarPath = `/replies/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `collaboration-context`s
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listCollaborationContexts: async (
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/collaboration-contexts`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `replies`
+     * @param {string} [filterThreadId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listReplies: async (
+      filterThreadId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      include?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/replies`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterThreadId !== undefined) {
+        localVarQueryParameter['filter[threadId]'] = filterThreadId;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * RepliesApi - functional programming interface
+ * @export
+ */
+export const RepliesApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = RepliesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `reply` belonging to a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {CreateReplyRequest} createReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createReply(
+      id: string,
+      createReplyRequest: CreateReplyRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reply>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createReply(
+        id,
+        createReplyRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getReply(
+      id: string,
+      include?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reply>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getReply(
+        id,
+        include,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `collaboration-context`s
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listCollaborationContexts(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CollaborationContextList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listCollaborationContexts(
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `replies`
+     * @param {string} [filterThreadId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listReplies(
+      filterThreadId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      include?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ReplyList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listReplies(
+        filterThreadId,
+        pageCursor,
+        pageSize,
+        include,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * RepliesApi - factory interface
+ * @export
+ */
+export const RepliesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = RepliesApiFp(configuration);
+  return {
+    /**
+     * Create a `reply` belonging to a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {CreateReplyRequest} createReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createReply(
+      id: string,
+      createReplyRequest: CreateReplyRequest,
+      options?: any
+    ): AxiosPromise<Reply> {
+      return localVarFp
+        .createReply(id, createReplyRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getReply(id: string, include?: string, options?: any): AxiosPromise<Reply> {
+      return localVarFp
+        .getReply(id, include, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `collaboration-context`s
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listCollaborationContexts(
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<CollaborationContextList> {
+      return localVarFp
+        .listCollaborationContexts(pageCursor, pageSize, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `replies`
+     * @param {string} [filterThreadId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listReplies(
+      filterThreadId?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      include?: string,
+      options?: any
+    ): AxiosPromise<ReplyList> {
+      return localVarFp
+        .listReplies(filterThreadId, pageCursor, pageSize, include, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createReply operation in RepliesApi.
+ * @export
+ * @interface RepliesApiCreateReplyRequest
+ */
+export interface RepliesApiCreateReplyRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof RepliesApiCreateReply
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateReplyRequest}
+   * @memberof RepliesApiCreateReply
+   */
+  readonly createReplyRequest: CreateReplyRequest;
+}
+
+/**
+ * Request parameters for getReply operation in RepliesApi.
+ * @export
+ * @interface RepliesApiGetReplyRequest
+ */
+export interface RepliesApiGetReplyRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof RepliesApiGetReply
+   */
+  readonly id: string;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof RepliesApiGetReply
+   */
+  readonly include?: string;
+}
+
+/**
+ * Request parameters for listCollaborationContexts operation in RepliesApi.
+ * @export
+ * @interface RepliesApiListCollaborationContextsRequest
+ */
+export interface RepliesApiListCollaborationContextsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof RepliesApiListCollaborationContexts
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof RepliesApiListCollaborationContexts
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * Request parameters for listReplies operation in RepliesApi.
+ * @export
+ * @interface RepliesApiListRepliesRequest
+ */
+export interface RepliesApiListRepliesRequest {
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof RepliesApiListReplies
+   */
+  readonly filterThreadId?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof RepliesApiListReplies
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof RepliesApiListReplies
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof RepliesApiListReplies
+   */
+  readonly include?: string;
+}
+
+/**
+ * RepliesApi - object-oriented interface
+ * @export
+ * @class RepliesApi
+ * @extends {BaseAPI}
+ */
+export class RepliesApi extends BaseAPI {
+  /**
+   * Create a `reply` belonging to a `thread`.
+   * @param {RepliesApiCreateReplyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public createReply(
+    requestParameters: RepliesApiCreateReplyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .createReply(
+        requestParameters.id,
+        requestParameters.createReplyRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `reply`.
+   * @param {RepliesApiGetReplyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public getReply(
+    requestParameters: RepliesApiGetReplyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .getReply(requestParameters.id, requestParameters.include, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `collaboration-context`s
+   * @param {RepliesApiListCollaborationContextsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public listCollaborationContexts(
+    requestParameters: RepliesApiListCollaborationContextsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .listCollaborationContexts(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `replies`
+   * @param {RepliesApiListRepliesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public listReplies(
+    requestParameters: RepliesApiListRepliesRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .listReplies(
+        requestParameters.filterThreadId,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.include,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -28689,11 +29697,13 @@ export const ThreadsApiAxiosParamCreator = function (
     /**
      * Get a `thread`.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getThread: async (
       id: string,
+      include?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -28726,6 +29736,10 @@ export const ThreadsApiAxiosParamCreator = function (
         configuration
       );
 
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
+      }
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions?.headers ?? {};
       localVarRequestOptions.headers = {
@@ -28744,6 +29758,7 @@ export const ThreadsApiAxiosParamCreator = function (
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -28751,6 +29766,7 @@ export const ThreadsApiAxiosParamCreator = function (
       filterCollaborationContextId?: string,
       pageCursor?: string,
       pageSize?: number,
+      include?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/threads`;
@@ -28789,6 +29805,10 @@ export const ThreadsApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (include !== undefined) {
+        localVarQueryParameter['include'] = include;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -28843,17 +29863,20 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
     /**
      * Get a `thread`.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getThread(
       id: string,
+      include?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Thread>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getThread(
         id,
+        include,
         options
       );
       return createRequestFunction(
@@ -28868,6 +29891,7 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -28875,6 +29899,7 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
       filterCollaborationContextId?: string,
       pageCursor?: string,
       pageSize?: number,
+      include?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThreadList>
@@ -28883,6 +29908,7 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
         filterCollaborationContextId,
         pageCursor,
         pageSize,
+        include,
         options
       );
       return createRequestFunction(
@@ -28925,12 +29951,17 @@ export const ThreadsApiFactory = function (
     /**
      * Get a `thread`.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getThread(id: string, options?: any): AxiosPromise<Thread> {
+    getThread(
+      id: string,
+      include?: string,
+      options?: any
+    ): AxiosPromise<Thread> {
       return localVarFp
-        .getThread(id, options)
+        .getThread(id, include, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -28938,6 +29969,7 @@ export const ThreadsApiFactory = function (
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {string} [include] Comma-separated list of relationships to include in response.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -28945,10 +29977,17 @@ export const ThreadsApiFactory = function (
       filterCollaborationContextId?: string,
       pageCursor?: string,
       pageSize?: number,
+      include?: string,
       options?: any
     ): AxiosPromise<ThreadList> {
       return localVarFp
-        .getThreads(filterCollaborationContextId, pageCursor, pageSize, options)
+        .getThreads(
+          filterCollaborationContextId,
+          pageCursor,
+          pageSize,
+          include,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
   };
@@ -28987,6 +30026,13 @@ export interface ThreadsApiGetThreadRequest {
    * @memberof ThreadsApiGetThread
    */
   readonly id: string;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof ThreadsApiGetThread
+   */
+  readonly include?: string;
 }
 
 /**
@@ -29015,6 +30061,13 @@ export interface ThreadsApiGetThreadsRequest {
    * @memberof ThreadsApiGetThreads
    */
   readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of relationships to include in response.
+   * @type {string}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly include?: string;
 }
 
 /**
@@ -29056,7 +30109,7 @@ export class ThreadsApi extends BaseAPI {
     options?: AxiosRequestConfig
   ) {
     return ThreadsApiFp(this.configuration)
-      .getThread(requestParameters.id, options)
+      .getThread(requestParameters.id, requestParameters.include, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -29076,6 +30129,7 @@ export class ThreadsApi extends BaseAPI {
         requestParameters.filterCollaborationContextId,
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.include,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -30007,6 +31061,70 @@ export const UserGroupsApiAxiosParamCreator = function (
 ) {
   return {
     /**
+     * Add a `user` to a `user-group`.
+     * @param {string} id A &#x60;user-group&#x60; ID.
+     * @param {UserIdList} userIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addUsersToUserGroup: async (
+      id: string,
+      userIdList: UserIdList,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('addUsersToUserGroup', 'id', id);
+      // verify required parameter 'userIdList' is not null or undefined
+      assertParamExists('addUsersToUserGroup', 'userIdList', userIdList);
+      const localVarPath = `/user-groups/{id}/users`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        userIdList,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Create a `user-group`
      * @param {CreateUserGroupRequest} createUserGroupRequest
      * @param {*} [options] Override http request option.
@@ -30132,6 +31250,33 @@ export const UserGroupsApiFp = function (configuration?: Configuration) {
     UserGroupsApiAxiosParamCreator(configuration);
   return {
     /**
+     * Add a `user` to a `user-group`.
+     * @param {string} id A &#x60;user-group&#x60; ID.
+     * @param {UserIdList} userIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async addUsersToUserGroup(
+      id: string,
+      userIdList: UserIdList,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.addUsersToUserGroup(
+          id,
+          userIdList,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Create a `user-group`
      * @param {CreateUserGroupRequest} createUserGroupRequest
      * @param {*} [options] Override http request option.
@@ -30164,7 +31309,7 @@ export const UserGroupsApiFp = function (configuration?: Configuration) {
       id: string,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroup>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getUserGroup(
         id,
@@ -30192,6 +31337,22 @@ export const UserGroupsApiFactory = function (
   const localVarFp = UserGroupsApiFp(configuration);
   return {
     /**
+     * Add a `user` to a `user-group`.
+     * @param {string} id A &#x60;user-group&#x60; ID.
+     * @param {UserIdList} userIdList
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    addUsersToUserGroup(
+      id: string,
+      userIdList: UserIdList,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .addUsersToUserGroup(id, userIdList, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Create a `user-group`
      * @param {CreateUserGroupRequest} createUserGroupRequest
      * @param {*} [options] Override http request option.
@@ -30211,13 +31372,34 @@ export const UserGroupsApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getUserGroup(id: string, options?: any): AxiosPromise<UserGroup> {
+    getUserGroup(id: string, options?: any): AxiosPromise<void> {
       return localVarFp
         .getUserGroup(id, options)
         .then((request) => request(axios, basePath));
     },
   };
 };
+
+/**
+ * Request parameters for addUsersToUserGroup operation in UserGroupsApi.
+ * @export
+ * @interface UserGroupsApiAddUsersToUserGroupRequest
+ */
+export interface UserGroupsApiAddUsersToUserGroupRequest {
+  /**
+   * A &#x60;user-group&#x60; ID.
+   * @type {string}
+   * @memberof UserGroupsApiAddUsersToUserGroup
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UserIdList}
+   * @memberof UserGroupsApiAddUsersToUserGroup
+   */
+  readonly userIdList: UserIdList;
+}
 
 /**
  * Request parameters for createUserGroup operation in UserGroupsApi.
@@ -30254,6 +31436,26 @@ export interface UserGroupsApiGetUserGroupRequest {
  * @extends {BaseAPI}
  */
 export class UserGroupsApi extends BaseAPI {
+  /**
+   * Add a `user` to a `user-group`.
+   * @param {UserGroupsApiAddUsersToUserGroupRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof UserGroupsApi
+   */
+  public addUsersToUserGroup(
+    requestParameters: UserGroupsApiAddUsersToUserGroupRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return UserGroupsApiFp(this.configuration)
+      .addUsersToUserGroup(
+        requestParameters.id,
+        requestParameters.userIdList,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
   /**
    * Create a `user-group`
    * @param {UserGroupsApiCreateUserGroupRequest} requestParameters Request parameters.
@@ -30472,14 +31674,14 @@ export const UsersApiAxiosParamCreator = function (
     },
     /**
      * List `user`s.
-     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [filterIdpId] Id from the idpProvider.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listUsers: async (
-      filterClientId?: string,
+      filterIdpId?: string,
       pageCursor?: string,
       pageSize?: number,
       options: AxiosRequestConfig = {}
@@ -30509,8 +31711,8 @@ export const UsersApiAxiosParamCreator = function (
         configuration
       );
 
-      if (filterClientId !== undefined) {
-        localVarQueryParameter['filter[clientId]'] = filterClientId;
+      if (filterIdpId !== undefined) {
+        localVarQueryParameter['filter[idpId]'] = filterIdpId;
       }
 
       if (pageCursor !== undefined) {
@@ -30622,14 +31824,14 @@ export const UsersApiFp = function (configuration?: Configuration) {
     },
     /**
      * List `user`s.
-     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [filterIdpId] Id from the idpProvider.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async listUsers(
-      filterClientId?: string,
+      filterIdpId?: string,
       pageCursor?: string,
       pageSize?: number,
       options?: AxiosRequestConfig
@@ -30637,7 +31839,7 @@ export const UsersApiFp = function (configuration?: Configuration) {
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserList>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.listUsers(
-        filterClientId,
+        filterIdpId,
         pageCursor,
         pageSize,
         options
@@ -30708,20 +31910,20 @@ export const UsersApiFactory = function (
     },
     /**
      * List `user`s.
-     * @param {string} [filterClientId] Comma-separated list of client IDs to filter on.
+     * @param {string} [filterIdpId] Id from the idpProvider.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listUsers(
-      filterClientId?: string,
+      filterIdpId?: string,
       pageCursor?: string,
       pageSize?: number,
       options?: any
     ): AxiosPromise<UserList> {
       return localVarFp
-        .listUsers(filterClientId, pageCursor, pageSize, options)
+        .listUsers(filterIdpId, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -30790,11 +31992,11 @@ export interface UsersApiGetUserGroupsForUserRequest {
  */
 export interface UsersApiListUsersRequest {
   /**
-   * Comma-separated list of client IDs to filter on.
+   * Id from the idpProvider.
    * @type {string}
    * @memberof UsersApiListUsers
    */
-  readonly filterClientId?: string;
+  readonly filterIdpId?: string;
 
   /**
    * The cursor for the next page of items.
@@ -30884,7 +32086,7 @@ export class UsersApi extends BaseAPI {
   ) {
     return UsersApiFp(this.configuration)
       .listUsers(
-        requestParameters.filterClientId,
+        requestParameters.filterIdpId,
         requestParameters.pageCursor,
         requestParameters.pageSize,
         options
