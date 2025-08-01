@@ -1,4 +1,5 @@
 export * from './exports';
+export * from './file-collections';
 export * from './files';
 export * from './parts';
 export * from './queued-jobs';
