@@ -92,14 +92,26 @@ export function getPollingConfiguration({
  * @param param0
  * @returns {number} - The delay in milliseconds for the polling attempt.
  */
-export const getPollingDelay = ({
+export function getPollingDelay({
   attempt,
   polling,
 }: {
   attempt: number;
   polling: Polling;
-}): number =>
-  polling.intervalMs + getBackoffForAttempt(attempt, polling.backoff);
+}): number {
+  return polling.intervalMs + getBackoffForAttempt(attempt, polling.backoff);
+}
+
+/**
+ * Gets the backoff keys from the backoff configuration.
+ * @param backoff - The backoff configuration.
+ * @returns {number[]} - The array of backoff keys.
+ */
+function getBackoffKeys(backoff: Record<number, number | undefined>): number[] {
+  return Object.keys(backoff)
+    .map((key) => parseInt(key, 10))
+    .reverse();
+}
 
 /**
  * Calculates the maximum number of polling attempts based on the provided
@@ -122,7 +134,6 @@ function getMaxAttempts({
     const backoffKeys = getBackoffKeys(backoff);
     while (remainingTimeMs > 0) {
       const backoffMs = getBackoffForAttempt(attempt + 1, backoff, backoffKeys);
-      console.log(`Attempt ${attempt + 1}, backoffMs: ${backoffMs}`);
       remainingTimeMs -= intervalMs + backoffMs;
       attempt += 1;
     }
@@ -143,23 +154,10 @@ function getBackoffForAttempt(
   backoff?: Record<number, number | undefined>,
   backoffKeys?: number[]
 ): number {
-  return backoff
-    ? backoff[
-        [...(backoffKeys ?? getBackoffKeys(backoff))].find(
-          (key) => attempt > key
-        ) ?? 0
-      ] ?? 0
-    : 0;
+  if (backoff) {
+    const keys = backoffKeys ?? getBackoffKeys(backoff);
+    const foundKey = [...keys].find((key) => attempt > key);
+    return backoff[foundKey ?? 0] ?? 0;
+  }
+  return 0;
 }
-
-/**
- * Gets the backoff keys from the backoff configuration.
- * @param backoff - The backoff configuration.
- * @returns {number[]} - The array of backoff keys.
- */
-const getBackoffKeys = (
-  backoff: Record<number, number | undefined>
-): number[] =>
-  Object.keys(backoff)
-    .map((key) => parseInt(key, 10))
-    .reverse();
