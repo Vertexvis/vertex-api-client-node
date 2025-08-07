@@ -4,6 +4,7 @@ import {
   AccountsApi,
   ApplicationsApi,
   BatchesApi,
+  CollaborationContextsApi,
   Configuration,
   ExportsApi,
   FilesApi,
@@ -22,6 +23,7 @@ import {
   SceneViewStatesApi,
   StreamKeysApi,
   TranslationInspectionsApi,
+  UsersApi,
   WebhookSubscriptionsApi,
 } from '../index';
 import {
@@ -121,6 +123,7 @@ export class VertexClient {
   public accounts: AccountsApi;
   public applications: ApplicationsApi;
   public batches: BatchesApi;
+  public collaborationContexts: CollaborationContextsApi;
   public exports: ExportsApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
@@ -137,6 +140,7 @@ export class VertexClient {
   public sceneViewStates: SceneViewStatesApi;
   public streamKeys: StreamKeysApi;
   public translationInspections: TranslationInspectionsApi;
+  public users: UsersApi;
   public webhookSubscriptions: WebhookSubscriptionsApi;
 
   public axiosInstance: AxiosInstance;
@@ -157,6 +161,11 @@ export class VertexClient {
     this.accounts = new AccountsApi(this.config, undefined, axiosInst);
     this.applications = new ApplicationsApi(this.config, undefined, axiosInst);
     this.batches = new BatchesApi(this.config, undefined, axiosInst);
+    this.collaborationContexts = new CollaborationContextsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.exports = new ExportsApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
@@ -196,6 +205,7 @@ export class VertexClient {
       undefined,
       axiosInst
     );
+    this.users = new UsersApi(this.config, undefined, axiosInst);
     this.webhookSubscriptions = new WebhookSubscriptionsApi(
       this.config,
       undefined,
