@@ -37,6 +37,6 @@ function create_pull_request() {
   gh pr create --reviewer danschultz --title "[$(git_current_branch | tr '[:lower:]' '[:upper:]')]: Update to latest spec"
 }
 
-# generate_client
-# version_package "$@"
+generate_client
+version_package "$@"
 create_pull_request
