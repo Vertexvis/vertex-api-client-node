@@ -2339,6 +2339,51 @@ export interface CreateSceneItemRequestDataRelationships {
   referenceTree?: SceneItemRelationship;
 }
 /**
+ * A reference to a scene to be created for a thread.
+ * @export
+ * @interface CreateSceneReference
+ */
+export interface CreateSceneReference {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateSceneReference
+   */
+  type: CreateSceneReferenceTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CreateSceneReference
+   */
+  sceneId: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof CreateSceneReference
+   */
+  position?: Vector3;
+  /**
+   *
+   * @type {WithSceneViewId | WithSceneViewStateId}
+   * @memberof CreateSceneReference
+   */
+  withSceneViewState?: WithSceneViewId | WithSceneViewStateId;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CreateSceneReference
+   */
+  sceneItemId?: string;
+}
+
+export const CreateSceneReferenceTypeEnum = {
+  SceneReference: 'scene-reference',
+} as const;
+
+export type CreateSceneReferenceTypeEnum =
+  (typeof CreateSceneReferenceTypeEnum)[keyof typeof CreateSceneReferenceTypeEnum];
+
+/**
  *
  * @export
  * @interface CreateSceneRequest
@@ -2808,6 +2853,12 @@ export interface CreateThreadRequestDataAttributes {
    * @memberof CreateThreadRequestDataAttributes
    */
   body?: string;
+  /**
+   *
+   * @type {CreateSceneReference}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  reference?: CreateSceneReference;
 }
 /**
  *
@@ -7391,6 +7442,51 @@ export interface SceneOperation {
   >;
 }
 /**
+ * A reference to a scene for a thread.
+ * @export
+ * @interface SceneReference
+ */
+export interface SceneReference {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneReference
+   */
+  type: SceneReferenceTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneReference
+   */
+  sceneId: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof SceneReference
+   */
+  position?: Vector3;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneReference
+   */
+  sceneViewStateId?: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneReference
+   */
+  sceneItemId?: string;
+}
+
+export const SceneReferenceTypeEnum = {
+  SceneReference: 'scene-reference',
+} as const;
+
+export type SceneReferenceTypeEnum =
+  (typeof SceneReferenceTypeEnum)[keyof typeof SceneReferenceTypeEnum];
+
+/**
  * Relationship to a `scene`.
  * @export
  * @interface SceneRelationship
@@ -8346,6 +8442,12 @@ export interface ThreadDataAttributes {
    * @memberof ThreadDataAttributes
    */
   replyCount?: number;
+  /**
+   *
+   * @type {SceneReference}
+   * @memberof ThreadDataAttributes
+   */
+  reference?: SceneReference;
 }
 /**
  *
@@ -8793,6 +8895,51 @@ export const UpdateItemToDefaultRenditionOperationTypeEnum = {
 export type UpdateItemToDefaultRenditionOperationTypeEnum =
   (typeof UpdateItemToDefaultRenditionOperationTypeEnum)[keyof typeof UpdateItemToDefaultRenditionOperationTypeEnum];
 
+/**
+ *
+ * @export
+ * @interface UpdatePartRequest
+ */
+export interface UpdatePartRequest {
+  /**
+   *
+   * @type {UpdatePartRequestData}
+   * @memberof UpdatePartRequest
+   */
+  data: UpdatePartRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRequestData
+ */
+export interface UpdatePartRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdatePartRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdatePartRequestDataAttributes}
+   * @memberof UpdatePartRequestData
+   */
+  attributes: UpdatePartRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdatePartRequestDataAttributes
+ */
+export interface UpdatePartRequestDataAttributes {
+  /**
+   * Name to be used for the root part.
+   * @type {string}
+   * @memberof UpdatePartRequestDataAttributes
+   */
+  name?: string;
+}
 /**
  *
  * @export
@@ -10385,6 +10532,59 @@ export interface WebhookSubscriptionList {
    */
   links: { [key: string]: Link };
 }
+/**
+ * A sceneViewId to be associated as a reference.
+ * @export
+ * @interface WithSceneViewId
+ */
+export interface WithSceneViewId {
+  /**
+   *
+   * @type {string}
+   * @memberof WithSceneViewId
+   */
+  type: WithSceneViewIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WithSceneViewId
+   */
+  sceneViewId: string;
+}
+
+export const WithSceneViewIdTypeEnum = {
+  SceneViewId: 'scene-view-id',
+} as const;
+
+export type WithSceneViewIdTypeEnum =
+  (typeof WithSceneViewIdTypeEnum)[keyof typeof WithSceneViewIdTypeEnum];
+
+/**
+ * A sceneViewStateId to be associated as a reference.
+ * @export
+ * @interface WithSceneViewStateId
+ */
+export interface WithSceneViewStateId {
+  /**
+   *
+   * @type {string}
+   * @memberof WithSceneViewStateId
+   */
+  type: WithSceneViewStateIdTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WithSceneViewStateId
+   */
+  sceneViewStateId: string;
+}
+
+export const WithSceneViewStateIdTypeEnum = {
+  SceneViewStateId: 'scene-view-state-id',
+} as const;
+
+export type WithSceneViewStateIdTypeEnum =
+  (typeof WithSceneViewStateIdTypeEnum)[keyof typeof WithSceneViewStateIdTypeEnum];
 
 /**
  * AccountsApi - axios parameter creator
@@ -19967,6 +20167,70 @@ export const PartsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Update a `part` by ID
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {UpdatePartRequest} updatePartRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePart: async (
+      id: string,
+      updatePartRequest: UpdatePartRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updatePart', 'id', id);
+      // verify required parameter 'updatePartRequest' is not null or undefined
+      assertParamExists('updatePart', 'updatePartRequest', updatePartRequest);
+      const localVarPath = `/parts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updatePartRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -20102,6 +20366,32 @@ export const PartsApiFp = function (configuration?: Configuration) {
         configuration
       );
     },
+    /**
+     * Update a `part` by ID
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {UpdatePartRequest} updatePartRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updatePart(
+      id: string,
+      updatePartRequest: UpdatePartRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updatePart(
+        id,
+        updatePartRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -20188,6 +20478,22 @@ export const PartsApiFactory = function (
     getQueuedPartDeletion(id: string, options?: any): AxiosPromise<QueuedJob> {
       return localVarFp
         .getQueuedPartDeletion(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update a `part` by ID
+     * @param {string} id The &#x60;part&#x60; ID.
+     * @param {UpdatePartRequest} updatePartRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updatePart(
+      id: string,
+      updatePartRequest: UpdatePartRequest,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .updatePart(id, updatePartRequest, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -20292,6 +20598,27 @@ export interface PartsApiGetQueuedPartDeletionRequest {
 }
 
 /**
+ * Request parameters for updatePart operation in PartsApi.
+ * @export
+ * @interface PartsApiUpdatePartRequest
+ */
+export interface PartsApiUpdatePartRequest {
+  /**
+   * The &#x60;part&#x60; ID.
+   * @type {string}
+   * @memberof PartsApiUpdatePart
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdatePartRequest}
+   * @memberof PartsApiUpdatePart
+   */
+  readonly updatePartRequest: UpdatePartRequest;
+}
+
+/**
  * PartsApi - object-oriented interface
  * @export
  * @class PartsApi
@@ -20381,6 +20708,26 @@ export class PartsApi extends BaseAPI {
   ) {
     return PartsApiFp(this.configuration)
       .getQueuedPartDeletion(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `part` by ID
+   * @param {PartsApiUpdatePartRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PartsApi
+   */
+  public updatePart(
+    requestParameters: PartsApiUpdatePartRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PartsApiFp(this.configuration)
+      .updatePart(
+        requestParameters.id,
+        requestParameters.updatePartRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -29766,6 +30113,59 @@ export const ThreadsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Get a `thread`s `user`s.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThreadParticipants: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getThreadParticipants', 'id', id);
+      const localVarPath = `/threads/{id}/users`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
@@ -29908,6 +30308,27 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Get a `thread`s `user`s.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getThreadParticipants(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getThreadParticipants(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
@@ -29991,6 +30412,17 @@ export const ThreadsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Get a `thread`s `user`s.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getThreadParticipants(id: string, options?: any): AxiosPromise<UserList> {
+      return localVarFp
+        .getThreadParticipants(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
      * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
@@ -30069,6 +30501,20 @@ export interface ThreadsApiGetThreadRequest {
    * @memberof ThreadsApiGetThread
    */
   readonly include?: string;
+}
+
+/**
+ * Request parameters for getThreadParticipants operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiGetThreadParticipantsRequest
+ */
+export interface ThreadsApiGetThreadParticipantsRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof ThreadsApiGetThreadParticipants
+   */
+  readonly id: string;
 }
 
 /**
@@ -30158,6 +30604,22 @@ export class ThreadsApi extends BaseAPI {
         requestParameters.include,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `thread`s `user`s.
+   * @param {ThreadsApiGetThreadParticipantsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public getThreadParticipants(
+    requestParameters: ThreadsApiGetThreadParticipantsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .getThreadParticipants(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
