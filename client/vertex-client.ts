@@ -14,6 +14,7 @@ import {
   OAuth2Token,
   PartRevisionsApi,
   PartsApi,
+  PropertyEntriesApi,
   SceneAlterationsApi,
   SceneAnnotationsApi,
   SceneItemOverridesApi,
@@ -131,6 +132,7 @@ export class VertexClient {
   public oAuth2: Oauth2Api;
   public partRevisions: PartRevisionsApi;
   public parts: PartsApi;
+  public properties: PropertyEntriesApi;
   public sceneAlterations: SceneAlterationsApi;
   public sceneAnnotations: SceneAnnotationsApi;
   public sceneItemOverrides: SceneItemOverridesApi;
@@ -176,6 +178,7 @@ export class VertexClient {
       axiosInst
     );
     this.parts = new PartsApi(this.config, undefined, axiosInst);
+    this.properties = new PropertyEntriesApi(this.config, undefined, axiosInst);
     this.sceneAlterations = new SceneAlterationsApi(
       this.config,
       undefined,
