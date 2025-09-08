@@ -1298,6 +1298,65 @@ paths:
         - OAuth2: []
       tags:
         - threads
+  /threads/{id}/users:
+    get:
+      description: Get a `thread`s `user`s.
+      operationId: getThreadParticipants
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - threads
   /threads:
     get:
       description: Get a page of `thread`s.
@@ -4252,6 +4311,64 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - parts
+    patch:
+      description: Update a `part` by ID
+      operationId: updatePart
+      parameters:
+        - description: The `part` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdatePartRequest'
+        required: true
+      responses:
+        '202':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
       security:
         - OAuth2: []
       tags:
@@ -10956,6 +11073,21 @@ components:
       required:
         - data
       type: object
+    UserList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     ThreadList:
       additionalProperties: false
       properties:
@@ -11446,6 +11578,14 @@ components:
           additionalProperties:
             $ref: '#/components/schemas/Link'
           type: object
+      required:
+        - data
+      type: object
+    UpdatePartRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdatePartRequest_data'
       required:
         - data
       type: object
@@ -12097,21 +12237,6 @@ components:
       required:
         - data
       type: object
-    UserList:
-      additionalProperties: false
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/UserData'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
-      type: object
     CreateUserRequest:
       additionalProperties: false
       properties:
@@ -12539,6 +12664,38 @@ components:
         - open
         - resolved
       type: string
+    CreateSceneReference:
+      additionalProperties: false
+      description: A reference to a scene to be created for a thread.
+      properties:
+        type:
+          enum:
+            - scene-reference
+          type: string
+        sceneId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        position:
+          $ref: '#/components/schemas/Vector3'
+        withSceneViewState:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/WithSceneViewId'
+            - $ref: '#/components/schemas/WithSceneViewStateId'
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - sceneId
+        - type
+      type: object
     ThreadData:
       additionalProperties: false
       properties:
@@ -14209,6 +14366,74 @@ components:
       required:
         - data
       type: object
+    WithSceneViewId:
+      additionalProperties: false
+      description: A sceneViewId to be associated as a reference.
+      properties:
+        type:
+          enum:
+            - scene-view-id
+          type: string
+        sceneViewId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - sceneViewId
+        - type
+      type: object
+    WithSceneViewStateId:
+      additionalProperties: false
+      description: A sceneViewStateId to be associated as a reference.
+      properties:
+        type:
+          enum:
+            - scene-view-state-id
+          type: string
+        sceneViewStateId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - sceneViewStateId
+        - type
+      type: object
+    SceneReference:
+      additionalProperties: false
+      description: A reference to a scene for a thread.
+      properties:
+        type:
+          enum:
+            - scene-reference
+          type: string
+        sceneId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        position:
+          $ref: '#/components/schemas/Vector3'
+        sceneViewStateId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - sceneId
+        - type
+      type: object
     CollaborationContextRelationship:
       additionalProperties: false
       properties:
@@ -15357,6 +15582,11 @@ components:
           type: string
         body:
           type: string
+        reference:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/CreateSceneReference'
       required:
         - status
         - type
@@ -15962,6 +16192,27 @@ components:
           $ref: '#/components/schemas/CreatePartRequest_data_attributes'
         relationships:
           $ref: '#/components/schemas/CreatePartRequest_data_relationships'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdatePartRequest_data_attributes:
+      properties:
+        name:
+          description: Name to be used for the root part.
+          example: 1/2in. Flat Washer
+          maxLength: 255
+          type: string
+      type: object
+    UpdatePartRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: part
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdatePartRequest_data_attributes'
       required:
         - attributes
         - type
@@ -16963,6 +17214,11 @@ components:
         replyCount:
           format: int32
           type: integer
+        reference:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SceneReference'
       required:
         - createdAt
         - modifiedAt
