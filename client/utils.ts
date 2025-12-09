@@ -5,7 +5,6 @@ import { parse, ParsedUrlQuery } from 'querystring';
 import { DUMMY_BASE_URL } from '../common';
 import {
   ApiError,
-  CreateSceneItemRequestData,
   Failure,
   ImageType,
   Matrix4,
@@ -287,13 +286,6 @@ export function isQueuedJob(obj: unknown): obj is QueuedJob {
     defined(qj.data?.type) &&
     qj.data.type.startsWith('queued-')
   );
-}
-
-export function isCreateSceneItemRequestData(
-  obj: unknown
-): obj is CreateSceneItemRequestData {
-  const rd = obj as CreateSceneItemRequestData;
-  return defined(rd.attributes), defined(rd.relationships), defined(rd.type);
 }
 
 export function hasVertexError(error: unknown): error is VertexError {
