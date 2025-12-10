@@ -29,7 +29,8 @@ tags:
   - name: accounts
   - name: applications
   - name: batches
-  - name: collaboration-contexts
+  - description: Requires Engage Module
+    name: collaboration-contexts
   - name: exports
   - name: files
   - name: file-collections
@@ -42,8 +43,12 @@ tags:
   - name: part-revisions
   - name: part-revision-instances
   - name: parts
-  - name: pmi
+  - name: permission-grants
+  - description: Requires Engage Module
+    name: pmi
   - name: property-entries
+  - description: Requires Engage Module
+    name: replies
   - name: scene-alterations
   - name: scene-annotations
   - name: scene-item-overrides
@@ -54,12 +59,12 @@ tags:
   - name: scene-view-states
   - name: search-sessions
   - name: stream-keys
-  - name: threads
+  - description: Requires Engage Module
+    name: threads
   - name: translation-inspections
   - name: users
   - name: user-groups
   - name: webhook-subscriptions
-  - name: permission-grants
 paths:
   /accounts:
     post:
@@ -5778,6 +5783,17 @@ paths:
             example: true
             type: boolean
           style: form
+        - description:
+            A sort to apply to the collection. A "minus" prefixed before
+            the field name is used to specify descending sort order.
+          explode: true
+          in: query
+          name: sort
+          required: false
+          schema:
+            example: -age,name
+            type: string
+          style: form
       responses:
         '200':
           content:
@@ -8425,6 +8441,73 @@ paths:
               schema:
                 $ref: '#/components/schemas/QueuedJobList'
           description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - translation-inspections
+  /query-translation-jobs:
+    post:
+      description: Get all the specified translation jobs.
+      operationId: postQueryTranslationJobs
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/QueryTranslationJobs'
+        required: true
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/QueuedTranslationJobList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
         '401':
           content:
             application/vnd.api+json:
@@ -12178,6 +12261,24 @@ components:
         - data
         - links
       type: object
+    QueryTranslationJobs:
+      additionalProperties: false
+      properties:
+        filter:
+          $ref: '#/components/schemas/QueryTranslationJobs_filter'
+      required:
+        - filter
+      type: object
+    QueuedTranslationJobList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/QueuedTranslationJob'
+          type: array
+      required:
+        - data
+      type: object
     QueuedTranslationJob:
       additionalProperties: false
       properties:
@@ -12549,13 +12650,15 @@ components:
       additionalProperties: false
       properties:
         data:
-          anyOf:
-            - $ref: '#/components/schemas/CreateSceneItemRequestData'
           description: Operation's primary data.
+          oneOf:
+            - $ref: '#/components/schemas/CreateSceneItemRequestData'
+            - $ref: '#/components/schemas/RelationshipData'
         op:
           description: Batch operation type type.
           enum:
             - add
+            - remove
           example: add
           maxLength: 32
           type: string
@@ -12878,7 +12981,7 @@ components:
       description: Relationship to a `file`.
       properties:
         data:
-          $ref: '#/components/schemas/FileRelationship_data'
+          $ref: '#/components/schemas/FileRelationshipData'
       required:
         - data
       type: object
@@ -13123,6 +13226,36 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/PartRenditionRelationship_data'
+      required:
+        - data
+      type: object
+    PartRevisionChildren:
+      additionalProperties: false
+      properties:
+        data:
+          allOf:
+            - $ref: '#/components/schemas/FileRelationshipData'
+          description: |
+            ID of a uploaded file that contains assembly children in JSON format.
+            The file content MUST be a JSON object with a "children" array matching the
+            PartAssemblyInstance schema.
+            Each child must include the UUID of the revision. The optional transform may be included
+            to position the child relative to the parent. See the Matrix4 schema for details.
+            Note: The ordinal will not be used even if specified. The children will be ordered as
+            they appear in the array. Also, the suppliedRevisionId will be ignored as it has been
+            deprecated in the PartAssemblyInstance schema.
+            Example file content:
+            {
+              "children": [
+                { "revisionId": "00000000-0000-0000-0000-000000000001" },
+                { "revisionId": "00000000-0000-0000-0000-000000000002", "transform": {
+                  "r0": {"x": 1, "y": 0, "z": 0, "w": 0 },
+                  "r1": {"x": 0, "y": 1, "z": 0, "w": 0 },
+                  "r2": {"x": 0, "y": 0, "z": 1, "w": 0 },
+                  "r3": {"x": 0, "y": 0, "z": 0, "w": 1 }
+                }}
+              ]
+            }
       required:
         - data
       type: object
@@ -14470,6 +14603,26 @@ components:
           type: string
       required:
         - selector
+      type: object
+    FileRelationshipData:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - file
+          example: file
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     ThreadRelationship:
       additionalProperties: false
@@ -16027,6 +16180,8 @@ components:
           $ref: '#/components/schemas/FileRelationship'
         defaultPartRendition:
           $ref: '#/components/schemas/PartRenditionRelationship'
+        children:
+          $ref: '#/components/schemas/PartRevisionChildren'
       type: object
     UpdatePartRevisionRequest_data:
       description: |
@@ -16501,6 +16656,12 @@ components:
           description: Whether to exclude non-visible items in the view
           example: true
           type: boolean
+        expiry:
+          description:
+            Number of seconds before expiration. Defaults to 24 hours in
+            seconds. Max is 7 days in seconds
+          example: 600
+          type: integer
       type: object
     CreateSceneViewRequest_data_relationships:
       properties:
@@ -16881,6 +17042,18 @@ components:
         - attributes
         - id
         - type
+      type: object
+    QueryTranslationJobs_filter:
+      properties:
+        jobId:
+          items:
+            format: uuid
+            type: string
+          maxItems: 1000
+          minItems: 0
+          type: array
+      required:
+        - jobId
       type: object
     CreateExportRequest_data_attributes:
       properties:
@@ -17328,25 +17501,6 @@ components:
           type: object
       required:
         - created
-      type: object
-    FileRelationship_data:
-      properties:
-        type:
-          description: Resource object type.
-          enum:
-            - file
-          example: file
-          maxLength: 32
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
       type: object
     ReplyData_attributes:
       properties:

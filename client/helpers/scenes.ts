@@ -519,7 +519,12 @@ export const createSceneItemBatch = async ({
     itemResults = batchRes.flatMap((b, i) =>
       isBatch(b.res)
         ? b.res['vertexvis/batch:results'].map((r, j) => {
-            return { req: batchOps[i].ops[j].data, res: r };
+            return {
+              // `batchOps[i].ops[j].data` is guaranteed to be of type `CreateSceneItemRequestData`, as the
+              // `createSceneItems` used to construct operations only deals with this type of payload.
+              req: batchOps[i].ops[j].data as CreateSceneItemRequestData,
+              res: r,
+            };
           })
         : []
     );
@@ -532,9 +537,14 @@ export const createSceneItemBatch = async ({
   errors.forEach((error) => {
     console.log(error);
     error.ops.forEach((op) => {
-      // `error.res` guaranteed to be non-null due to `isApiError()` condition above
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      itemErrors.push({ req: op.data, res: error.res! });
+      itemErrors.push({
+        // `op.data` is guaranteed to be of type `CreateSceneItemRequestData`, as the
+        // `createSceneItems` used to construct operations only deals with this type of payload.
+        req: op.data as CreateSceneItemRequestData,
+        // `error.res` guaranteed to be non-null due to `isApiError()` condition above
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        res: error.res!,
+      });
     });
   });
 

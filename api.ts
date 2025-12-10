@@ -522,10 +522,10 @@ export interface Batch {
 export interface BatchOperation {
   /**
    * Operation\'s primary data.
-   * @type {CreateSceneItemRequestData}
+   * @type {CreateSceneItemRequestData | RelationshipData}
    * @memberof BatchOperation
    */
-  data: CreateSceneItemRequestData;
+  data: CreateSceneItemRequestData | RelationshipData;
   /**
    * Batch operation type type.
    * @type {string}
@@ -542,6 +542,7 @@ export interface BatchOperation {
 
 export const BatchOperationOpEnum = {
   Add: 'add',
+  Remove: 'remove',
 } as const;
 
 export type BatchOperationOpEnum =
@@ -2558,6 +2559,12 @@ export interface CreateSceneViewRequestDataAttributes {
    * @memberof CreateSceneViewRequestDataAttributes
    */
   excludePrunedItems?: boolean;
+  /**
+   * Number of seconds before expiration. Defaults to 24 hours in seconds. Max is 7 days in seconds
+   * @type {number}
+   * @memberof CreateSceneViewRequestDataAttributes
+   */
+  expiry?: number;
 }
 /**
  *
@@ -4935,6 +4942,19 @@ export interface PartRevision {
 /**
  *
  * @export
+ * @interface PartRevisionChildren
+ */
+export interface PartRevisionChildren {
+  /**
+   * ID of a uploaded file that contains assembly children in JSON format. The file content MUST be a JSON object with a \"children\" array matching the PartAssemblyInstance schema. Each child must include the UUID of the revision. The optional transform may be included to position the child relative to the parent. See the Matrix4 schema for details. Note: The ordinal will not be used even if specified. The children will be ordered as they appear in the array. Also, the suppliedRevisionId will be ignored as it has been deprecated in the PartAssemblyInstance schema. Example file content: {   \"children\": [     { \"revisionId\": \"00000000-0000-0000-0000-000000000001\" },     { \"revisionId\": \"00000000-0000-0000-0000-000000000002\", \"transform\": {       \"r0\": {\"x\": 1, \"y\": 0, \"z\": 0, \"w\": 0 },       \"r1\": {\"x\": 0, \"y\": 1, \"z\": 0, \"w\": 0 },       \"r2\": {\"x\": 0, \"y\": 0, \"z\": 1, \"w\": 0 },       \"r3\": {\"x\": 0, \"y\": 0, \"z\": 0, \"w\": 1 }     }}   ] }
+   * @type {FileRelationshipData}
+   * @memberof PartRevisionChildren
+   */
+  data: FileRelationshipData;
+}
+/**
+ *
+ * @export
  * @interface PartRevisionData
  */
 export interface PartRevisionData {
@@ -6007,6 +6027,32 @@ export type QueryBySceneItemMetadataTypeEnum =
 /**
  *
  * @export
+ * @interface QueryTranslationJobs
+ */
+export interface QueryTranslationJobs {
+  /**
+   *
+   * @type {QueryTranslationJobsFilter}
+   * @memberof QueryTranslationJobs
+   */
+  filter: QueryTranslationJobsFilter;
+}
+/**
+ *
+ * @export
+ * @interface QueryTranslationJobsFilter
+ */
+export interface QueryTranslationJobsFilter {
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof QueryTranslationJobsFilter
+   */
+  jobId: Array<string>;
+}
+/**
+ *
+ * @export
  * @interface QueuedJob
  */
 export interface QueuedJob {
@@ -6215,6 +6261,19 @@ export interface QueuedTranslationJobDataRelationships {
    * @memberof QueuedTranslationJobDataRelationships
    */
   partRendition?: PartRenditionRelationship;
+}
+/**
+ *
+ * @export
+ * @interface QueuedTranslationJobList
+ */
+export interface QueuedTranslationJobList {
+  /**
+   *
+   * @type {Array<QueuedTranslationJob>}
+   * @memberof QueuedTranslationJobList
+   */
+  data: Array<QueuedTranslationJob>;
 }
 /**
  *
@@ -9053,6 +9112,12 @@ export interface UpdatePartRevisionRequestDataRelationships {
    * @memberof UpdatePartRevisionRequestDataRelationships
    */
   defaultPartRendition?: PartRenditionRelationship;
+  /**
+   *
+   * @type {PartRevisionChildren}
+   * @memberof UpdatePartRevisionRequestDataRelationships
+   */
+  children?: PartRevisionChildren;
 }
 /**
  *
@@ -24727,6 +24792,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -24739,6 +24805,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       filterParent?: string,
       filterHasChildren?: boolean,
       filterHasGeometrySet?: boolean,
+      sort?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -24797,6 +24864,10 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       if (filterHasGeometrySet !== undefined) {
         localVarQueryParameter['filter[hasGeometrySet]'] = filterHasGeometrySet;
+      }
+
+      if (sort !== undefined) {
+        localVarQueryParameter['sort'] = sort;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -25018,6 +25089,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -25030,6 +25102,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       filterParent?: string,
       filterHasChildren?: boolean,
       filterHasGeometrySet?: boolean,
+      sort?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<SceneItemList>
@@ -25043,6 +25116,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
         filterParent,
         filterHasChildren,
         filterHasGeometrySet,
+        sort,
         options
       );
       return createRequestFunction(
@@ -25170,6 +25244,7 @@ export const SceneItemsApiFactory = function (
      * @param {string} [filterParent] Parent ID to filter on.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -25182,6 +25257,7 @@ export const SceneItemsApiFactory = function (
       filterParent?: string,
       filterHasChildren?: boolean,
       filterHasGeometrySet?: boolean,
+      sort?: string,
       options?: any
     ): AxiosPromise<SceneItemList> {
       return localVarFp
@@ -25194,6 +25270,7 @@ export const SceneItemsApiFactory = function (
           filterParent,
           filterHasChildren,
           filterHasGeometrySet,
+          sort,
           options
         )
         .then((request) => request(axios, basePath));
@@ -25362,6 +25439,13 @@ export interface SceneItemsApiGetSceneItemsRequest {
    * @memberof SceneItemsApiGetSceneItems
    */
   readonly filterHasGeometrySet?: boolean;
+
+  /**
+   * A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
+   * @type {string}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly sort?: string;
 }
 
 /**
@@ -25501,6 +25585,7 @@ export class SceneItemsApi extends BaseAPI {
         requestParameters.filterParent,
         requestParameters.filterHasChildren,
         requestParameters.filterHasGeometrySet,
+        requestParameters.sort,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -31017,6 +31102,67 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Get all the specified translation jobs.
+     * @param {QueryTranslationJobs} queryTranslationJobs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    postQueryTranslationJobs: async (
+      queryTranslationJobs: QueryTranslationJobs,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'queryTranslationJobs' is not null or undefined
+      assertParamExists(
+        'postQueryTranslationJobs',
+        'queryTranslationJobs',
+        queryTranslationJobs
+      );
+      const localVarPath = `/query-translation-jobs`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        queryTranslationJobs,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -31194,6 +31340,33 @@ export const TranslationInspectionsApiFp = function (
         configuration
       );
     },
+    /**
+     * Get all the specified translation jobs.
+     * @param {QueryTranslationJobs} queryTranslationJobs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async postQueryTranslationJobs(
+      queryTranslationJobs: QueryTranslationJobs,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<QueuedTranslationJobList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.postQueryTranslationJobs(
+          queryTranslationJobs,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -31311,6 +31484,20 @@ export const TranslationInspectionsApiFactory = function (
     ): AxiosPromise<QueuedJobList> {
       return localVarFp
         .getQueuedTranslations(pageCursor, pageSize, filterStatus, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get all the specified translation jobs.
+     * @param {QueryTranslationJobs} queryTranslationJobs
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    postQueryTranslationJobs(
+      queryTranslationJobs: QueryTranslationJobs,
+      options?: any
+    ): AxiosPromise<QueuedTranslationJobList> {
+      return localVarFp
+        .postQueryTranslationJobs(queryTranslationJobs, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -31443,6 +31630,20 @@ export interface TranslationInspectionsApiGetQueuedTranslationsRequest {
 }
 
 /**
+ * Request parameters for postQueryTranslationJobs operation in TranslationInspectionsApi.
+ * @export
+ * @interface TranslationInspectionsApiPostQueryTranslationJobsRequest
+ */
+export interface TranslationInspectionsApiPostQueryTranslationJobsRequest {
+  /**
+   *
+   * @type {QueryTranslationJobs}
+   * @memberof TranslationInspectionsApiPostQueryTranslationJobs
+   */
+  readonly queryTranslationJobs: QueryTranslationJobs;
+}
+
+/**
  * TranslationInspectionsApi - object-oriented interface
  * @export
  * @class TranslationInspectionsApi
@@ -31559,6 +31760,22 @@ export class TranslationInspectionsApi extends BaseAPI {
         requestParameters.filterStatus,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get all the specified translation jobs.
+   * @param {TranslationInspectionsApiPostQueryTranslationJobsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof TranslationInspectionsApi
+   */
+  public postQueryTranslationJobs(
+    requestParameters: TranslationInspectionsApiPostQueryTranslationJobsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return TranslationInspectionsApiFp(this.configuration)
+      .postQueryTranslationJobs(requestParameters.queryTranslationJobs, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
