@@ -28,6 +28,8 @@ servers:
 tags:
   - name: accounts
   - name: applications
+  - description: Requires Engage Module
+    name: attachments
   - name: batches
   - description: Requires Engage Module
     name: collaboration-contexts
@@ -720,6 +722,162 @@ paths:
         - OAuth2: []
       tags:
         - applications
+  /attachments:
+    get:
+      description: |
+        List attachments
+        **Preview:** This is a preview API and is subject to change.
+      operationId: listAttachments
+      parameters:
+        - description: A relationship id to filter attachments for
+          explode: true
+          in: query
+          name: filter[relationshipId]
+          required: true
+          schema:
+            example: some-id-1
+            maxLength: 1024
+            type: string
+          style: form
+        - description: The type of relationship (reply or thread)
+          explode: true
+          in: query
+          name: filter[relationshipType]
+          required: true
+          schema:
+            enum:
+              - thread
+              - reply
+            example: thread
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/AttachmentList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - attachments
+    post:
+      description: |
+        Create an `attachment` for a thread or a reply relationship. The content of the attachment can be a scene-view-state (created or provided), or a file. A file attachment requires the caller to upload the file after the attachment creation using a provided upload url.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: createAttachment
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateAttachmentRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Attachment'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - attachments
   /batches:
     post:
       description:
@@ -1034,6 +1192,47 @@ paths:
       tags:
         - collaboration-contexts
   /collaboration-contexts/{id}:
+    delete:
+      description: Remove a collaboration context along with all of its data
+      operationId: deleteCollaborationContext
+      parameters:
+        - description: The `collaboration-context` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - collaboration-contexts
     get:
       description: Get a `collaboration-context` by ID.
       operationId: getCollaborationContext
@@ -1222,6 +1421,47 @@ paths:
       tags:
         - threads
   /threads/{id}:
+    delete:
+      description: Remove a thread.
+      operationId: deleteThread
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - threads
     get:
       description: Get a `thread`.
       operationId: getThread
@@ -1257,6 +1497,70 @@ paths:
             maxLength: 32
             type: string
           style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Thread'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - threads
+    patch:
+      description: Update a `thread`.
+      operationId: updateThread
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateThreadRequest'
+        required: true
       responses:
         '200':
           content:
@@ -1420,6 +1724,17 @@ paths:
             example: user
             maxLength: 32
             type: string
+          style: form
+        - description: |
+            The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+          explode: false
+          in: query
+          name: filter[threadStatus]
+          required: false
+          schema:
+            items:
+              $ref: '#/components/schemas/ThreadStatus'
+            type: array
           style: form
       responses:
         '200':
@@ -1815,6 +2130,71 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - files
+  /files/{id}/upload-url:
+    post:
+      description: Create an upload uri for a `file` by ID.
+      operationId: createUploadUrl
+      parameters:
+        - description: The `file` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UploadUrl'
+          description: Created
         '401':
           content:
             application/vnd.api+json:
@@ -2724,6 +3104,47 @@ paths:
       tags:
         - replies
   /replies/{id}:
+    delete:
+      description: Remove a reply.
+      operationId: deleteReply
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+      security:
+        - OAuth2: []
+      tags:
+        - replies
     get:
       description: Get a `reply`.
       operationId: getReply
@@ -2746,6 +3167,70 @@ paths:
             maxLength: 32
             type: string
           style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Reply'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - replies
+    patch:
+      description: Update a `reply`.
+      operationId: updateReply
+      parameters:
+        - description: The `thread` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpdateReplyRequest'
+        required: true
       responses:
         '200':
           content:
@@ -3846,16 +4331,22 @@ paths:
         Gets a page of 'part-revision' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
       operationId: getPartRevisionInstanceList
       parameters:
-        - description: Parent ID to filter on.
+        - description:
+            Parent ID to filter on. Sending null will return items without
+            a parent.
           explode: true
           in: query
           name: filter[parent]
           required: false
           schema:
-            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-            format: uuid
-            maxLength: 36
-            type: string
+            oneOf:
+              - example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+                format: uuid
+                maxLength: 36
+                type: string
+              - enum:
+                  - 'null'
+                type: string
           style: form
         - description: The cursor for the next page of items.
           explode: true
@@ -5752,16 +6243,22 @@ paths:
             maxLength: 1024
             type: string
           style: form
-        - description: Parent ID to filter on.
+        - description:
+            Parent ID to filter on. Sending null will return items without
+            a parent.
           explode: true
           in: query
           name: filter[parent]
           required: false
           schema:
-            example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-            format: uuid
-            maxLength: 36
-            type: string
+            oneOf:
+              - example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+                format: uuid
+                maxLength: 36
+                type: string
+              - enum:
+                  - 'null'
+                type: string
           style: form
         - description:
             Filter scene-items based on whether they are the parent of at
@@ -10233,6 +10730,30 @@ components:
       schema:
         $ref: '#/components/schemas/FilterExpression'
       style: form
+    RelationshipIdFilter:
+      description: A relationship id to filter attachments for
+      explode: true
+      in: query
+      name: filter[relationshipId]
+      required: true
+      schema:
+        example: some-id-1
+        maxLength: 1024
+        type: string
+      style: form
+    RelationshipTypeFilter:
+      description: The type of relationship (reply or thread)
+      explode: true
+      in: query
+      name: filter[relationshipType]
+      required: true
+      schema:
+        enum:
+          - thread
+          - reply
+        example: thread
+        type: string
+      style: form
     ExportId:
       description: The `export` ID.
       explode: false
@@ -10687,6 +11208,18 @@ components:
         maxLength: 36
         type: string
       style: form
+    ThreadStatusFilter:
+      description: |
+        The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+      explode: false
+      in: query
+      name: filter[threadStatus]
+      required: false
+      schema:
+        items:
+          $ref: '#/components/schemas/ThreadStatus'
+        type: array
+      style: form
     PropertyEntriesResourceIdFilter:
       description: A resource ID to filter on
       explode: true
@@ -10811,16 +11344,22 @@ components:
         type: string
       style: form
     ParentIdFilter:
-      description: Parent ID to filter on.
+      description:
+        Parent ID to filter on. Sending null will return items without
+        a parent.
       explode: true
       in: query
       name: filter[parent]
       required: false
       schema:
-        example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-        format: uuid
-        maxLength: 36
-        type: string
+        oneOf:
+          - example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+            format: uuid
+            maxLength: 36
+            type: string
+          - enum:
+              - 'null'
+            type: string
       style: form
     StreamKeyFilter:
       description: Stream key to filter on.
@@ -11050,6 +11589,41 @@ components:
       required:
         - data
       type: object
+    AttachmentList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/AttachmentData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreateAttachmentRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateAttachmentRequest_data'
+      required:
+        - data
+      type: object
+    Attachment:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AttachmentData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
     CreateBatchRequest:
       additionalProperties: false
       properties:
@@ -11156,6 +11730,14 @@ components:
       required:
         - data
       type: object
+    UpdateThreadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateThreadRequest_data'
+      required:
+        - data
+      type: object
     UserList:
       additionalProperties: false
       properties:
@@ -11171,6 +11753,11 @@ components:
         - data
         - links
       type: object
+    ThreadStatus:
+      enum:
+        - open
+        - resolved
+      type: string
     ThreadList:
       additionalProperties: false
       properties:
@@ -11230,6 +11817,26 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UpdateFileRequest_data'
+      required:
+        - data
+      type: object
+    CreateUploadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUploadRequest_data'
+      required:
+        - data
+      type: object
+    UploadUrl:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UploadUrlData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
       required:
         - data
       type: object
@@ -11381,6 +11988,14 @@ components:
           items:
             $ref: '#/components/schemas/UserData'
           type: array
+      required:
+        - data
+      type: object
+    UpdateReplyRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/UpdateReplyRequest_data'
       required:
         - data
       type: object
@@ -12646,6 +13261,91 @@ components:
         - id
         - type
       type: object
+    AttachmentData:
+      additionalProperties: false
+      properties:
+        type:
+          example: attachment
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/AttachmentData_attributes'
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    WithFileContent:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - file-content
+          type: string
+        name:
+          description: The name of the file to create
+          example: text.foo
+          type: string
+      required:
+        - name
+        - type
+      type: object
+    WithSceneViewStateContent:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - scene-view-state-content
+          type: string
+        withSceneViewState:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/WithSceneViewId'
+            - $ref: '#/components/schemas/WithSceneViewStateId'
+      required:
+        - type
+        - withSceneViewState
+      type: object
+    WithThread:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - thread
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
+    WithReply:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - reply
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
     BatchOperation:
       additionalProperties: false
       properties:
@@ -12762,11 +13462,6 @@ components:
         - comment
         - issue
       type: string
-    ThreadStatus:
-      enum:
-        - open
-        - resolved
-      type: string
     CreateSceneReference:
       additionalProperties: false
       description: A reference to a scene to be created for a thread.
@@ -12861,6 +13556,29 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/FileMetadataData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    UploadUrlData:
+      additionalProperties: false
+      properties:
+        type:
+          example: upload-url
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UploadUrlData_attributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -13306,12 +14024,35 @@ components:
         - id
         - type
       type: object
-    PartAssemblyRelationship:
+    PartInstancesRelationship:
+      additionalProperties: false
+      description: Part Revision Assembly Instance Data
+      properties:
+        data:
+          description: |
+            Each child must include the UUID of the revision. The optional transform may be included to position the child relative to the parent. See the Matrix4 schema for details. Note: The children will be ordered as they appear in the array. Also, it is suggested to not include the transform for any that has identity transform to keep the payload size small. Example file content: {
+              "children": [
+                { "id": "00000000-0000-0000-0000-000000000001" },
+                { "id": "00000000-0000-0000-0000-000000000002", "transform": {
+                  "r0": {"x": 1, "y": -1, "z": 0, "w": 123.4 },
+                  "r1": {"x": 1, "y": 1, "z": 0, "w": 234.5 },
+                  "r2": {"x": 0, "y": 0, "z": 1, "w": 345.6 },
+                  "r3": {"x": 0, "y": 0, "z": 0, "w": 1 }
+                }}
+              ]
+            }
+          items:
+            $ref: '#/components/schemas/PartInstancesRelationship_data'
+          type: array
+      required:
+        - data
+      type: object
+    DeprecatedPartAssemblyRelationship:
       additionalProperties: false
       description: Create Part Assembly
       properties:
         data:
-          $ref: '#/components/schemas/PartAssemblyRelationship_data'
+          $ref: '#/components/schemas/DeprecatedPartAssemblyRelationship_data'
       required:
         - data
       type: object
@@ -14248,6 +14989,8 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/ExportData_attributes'
+        relationships:
+          $ref: '#/components/schemas/ExportData_relationships'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -14490,14 +15233,39 @@ components:
       required:
         - href
       type: object
-    AccountRelationship:
+    FileAttachment:
       additionalProperties: false
-      description: Relationship to an `account`.
       properties:
-        data:
-          $ref: '#/components/schemas/AccountRelationship_data'
+        type:
+          enum:
+            - file
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
       required:
-        - data
+        - id
+        - type
+      type: object
+    SceneViewStateAttachment:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - scene-view-state
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     WithSceneViewId:
       additionalProperties: false
@@ -14534,6 +15302,15 @@ components:
       required:
         - sceneViewStateId
         - type
+      type: object
+    AccountRelationship:
+      additionalProperties: false
+      description: Relationship to an `account`.
+      properties:
+        data:
+          $ref: '#/components/schemas/AccountRelationship_data'
+      required:
+        - data
       type: object
     SceneReference:
       additionalProperties: false
@@ -14712,10 +15489,13 @@ components:
           maxLength: 36
           type: string
         suppliedRevisionId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
+          allOf:
+            - $ref: '#/components/schemas/NonEmptyString'
+          deprecated: true
+          description:
+            This has been deprecated. Use instead the revisionId to reference
+            the revision instance. The revisionId can be found by using the [List
+            Part Revisions](#tag/part-revisions/operation/getPartRevisions) endpoint.
         transform:
           $ref: '#/components/schemas/Matrix4'
       required:
@@ -15715,6 +16495,45 @@ components:
         - attributes
         - type
       type: object
+    CreateAttachmentRequest_data_attributes:
+      properties:
+        withContent:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/WithFileContent'
+            - $ref: '#/components/schemas/WithSceneViewStateContent'
+      required:
+        - withContent
+      type: object
+    CreateAttachmentRequest_data_relationships:
+      properties:
+        context:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/WithThread'
+            - $ref: '#/components/schemas/WithReply'
+      required:
+        - context
+      type: object
+    CreateAttachmentRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - attachment
+          example: attachment
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateAttachmentRequest_data_attributes'
+        relationships:
+          $ref: '#/components/schemas/CreateAttachmentRequest_data_relationships'
+      required:
+        - attributes
+        - relationships
+        - type
+      type: object
     CreateCollaborationContextRequest_data:
       properties:
         type:
@@ -15735,6 +16554,8 @@ components:
           type: string
         body:
           type: string
+        isDrafting:
+          type: boolean
         reference:
           discriminator:
             propertyName: type
@@ -15754,6 +16575,32 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/CreateThreadRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    UpdateThreadRequest_data_attributes:
+      properties:
+        status:
+          $ref: '#/components/schemas/ThreadStatus'
+        title:
+          nullable: true
+          type: string
+        isDrafting:
+          type: boolean
+        body:
+          nullable: true
+          type: string
+      type: object
+    UpdateThreadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: thread
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateThreadRequest_data_attributes'
       required:
         - attributes
         - type
@@ -15836,6 +16683,32 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateFileRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateUploadRequest_data_attributes:
+      properties:
+        expiry:
+          description:
+            Specifies the duration for which this pre-signed request should
+            be valid for upload. After this time has expired, attempting to use the
+            presigned request will fail. (Defaults to 1 hour, max value is 24 hours)
+          example: 3600
+          format: int32
+          maximum: 86400
+          minimum: 1
+          type: integer
+      type: object
+    CreateUploadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: upload-url
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateUploadRequest_data_attributes'
       required:
         - attributes
         - type
@@ -15980,10 +16853,33 @@ components:
         - relationships
         - type
       type: object
+    UpdateReplyRequest_data_attributes:
+      properties:
+        body:
+          nullable: true
+          type: string
+        isDrafting:
+          type: boolean
+      type: object
+    UpdateReplyRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: reply
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UpdateReplyRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateReplyRequest_data_attributes:
       properties:
         body:
           type: string
+        isDrafting:
+          type: boolean
       required:
         - body
       type: object
@@ -16327,12 +17223,12 @@ components:
       type: object
     CreatePartRequest_data_relationships:
       properties:
+        instances:
+          $ref: '#/components/schemas/PartInstancesRelationship'
         source:
-          anyOf:
+          oneOf:
             - $ref: '#/components/schemas/FileRelationship'
-            - $ref: '#/components/schemas/PartAssemblyRelationship'
-      required:
-        - source
+            - $ref: '#/components/schemas/DeprecatedPartAssemblyRelationship'
       type: object
     CreatePartRequest_data:
       properties:
@@ -16918,7 +17814,7 @@ components:
         suppliedId:
           description: A customer provided ID used for correlation.
           example: PN12345
-          maxLength: 256
+          maxLength: 1024
           type: string
       type: object
     CreateSceneAnnotationSetRequest_data:
@@ -16949,7 +17845,7 @@ components:
         suppliedId:
           description: A customer provided ID used for correlation.
           example: PN12345
-          maxLength: 256
+          maxLength: 1024
           type: string
       required:
         - data
@@ -17072,6 +17968,15 @@ components:
           example: exportedScene
           maxLength: 1024
           type: string
+        downloadUrlExpiry:
+          description:
+            Number of seconds before the download url for the export expires
+            when retrieving a completed export. This expiry takes effect when retrieving
+            the export and is valid for the specified time here.
+          example: 600
+          maximum: 604800
+          minimum: 1
+          type: integer
       required:
         - config
       type: object
@@ -17311,6 +18216,16 @@ components:
         - redirectUris
         - scopes
       type: object
+    AttachmentData_attributes:
+      properties:
+        content:
+          description: The underlying content of the attachment
+          oneOf:
+            - $ref: '#/components/schemas/FileAttachment'
+            - $ref: '#/components/schemas/SceneViewStateAttachment'
+      required:
+        - content
+      type: object
     BatchOperation_ref:
       description: Target of batch operation.
       properties:
@@ -17376,6 +18291,10 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        editedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
         type:
           $ref: '#/components/schemas/ThreadType'
         status:
@@ -17384,6 +18303,9 @@ components:
           type: string
         body:
           type: string
+        isDrafting:
+          description: Indicates whether or not the thread is in a drafted state
+          type: boolean
         replyCount:
           format: int32
           type: integer
@@ -17394,6 +18316,7 @@ components:
             - $ref: '#/components/schemas/SceneReference'
       required:
         - createdAt
+        - isDrafting
         - modifiedAt
         - status
         - type
@@ -17463,10 +18386,22 @@ components:
           additionalProperties:
             type: string
           type: object
+        expiresAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
       required:
         - created
         - name
         - status
+      type: object
+    UploadUrlData_attributes:
+      properties:
+        uploadUrl:
+          example: https://example.com/path/to/file.zip
+          type: string
+      required:
+        - uploadUrl
       type: object
     DownloadUrlData_attributes:
       properties:
@@ -17499,6 +18434,10 @@ components:
           additionalProperties:
             type: string
           type: object
+        expiresAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
       required:
         - created
       type: object
@@ -17512,11 +18451,19 @@ components:
           example: 2020-01-01T12:00:00Z
           format: date-time
           type: string
+        editedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
         body:
           type: string
+        isDrafting:
+          description: Indicates whether or not the thread is in a drafted state
+          type: boolean
       required:
         - body
         - createdAt
+        - isDrafting
         - modifiedAt
       type: object
     ReplyData_relationships:
@@ -17757,7 +18704,31 @@ components:
       required:
         - partRevisions
       type: object
-    PartAssemblyRelationship_data:
+    PartInstancesRelationship_attributes:
+      properties:
+        transform:
+          $ref: '#/components/schemas/Matrix4'
+      type: object
+    PartInstancesRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - part-revision-instance
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PartInstancesRelationship_attributes'
+      required:
+        - id
+        - type
+      type: object
+    DeprecatedPartAssemblyRelationship_data:
       properties:
         children:
           items:
@@ -18329,9 +19300,22 @@ components:
         downloadUrl:
           example: https://example.com/path/to/file.jt
           type: string
+        downloadUrlExpiry:
+          description:
+            Number of seconds before the download url for the export expires
+            when retrieving a completed export. The url can be recreated by re-fetching
+            the export.
+          type: integer
       required:
         - created
         - downloadUrl
+      type: object
+    ExportData_relationships:
+      properties:
+        file:
+          $ref: '#/components/schemas/FileRelationship'
+      required:
+        - file
       type: object
     SearchSessionData_attributes:
       properties:
