@@ -31,7 +31,7 @@ import {
   createRequestFunction,
 } from './common';
 // @ts-ignore
-import { BASE_PATH, RequestArgs, BaseAPI, RequiredError } from './base';
+import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI } from './base';
 
 /**
  *
@@ -500,6 +500,82 @@ export interface ArchiveManifestEntry {
    * @memberof ArchiveManifestEntry
    */
   directory?: string;
+}
+/**
+ *
+ * @export
+ * @interface Attachment
+ */
+export interface Attachment {
+  /**
+   *
+   * @type {AttachmentData}
+   * @memberof Attachment
+   */
+  data: AttachmentData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Attachment
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface AttachmentData
+ */
+export interface AttachmentData {
+  /**
+   *
+   * @type {string}
+   * @memberof AttachmentData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof AttachmentData
+   */
+  id: string;
+  /**
+   *
+   * @type {AttachmentDataAttributes}
+   * @memberof AttachmentData
+   */
+  attributes: AttachmentDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface AttachmentDataAttributes
+ */
+export interface AttachmentDataAttributes {
+  /**
+   * The underlying content of the attachment
+   * @type {FileAttachment | SceneViewStateAttachment}
+   * @memberof AttachmentDataAttributes
+   */
+  content: FileAttachment | SceneViewStateAttachment;
+}
+/**
+ *
+ * @export
+ * @interface AttachmentList
+ */
+export interface AttachmentList {
+  /**
+   *
+   * @type {Array<AttachmentData>}
+   * @memberof AttachmentList
+   */
+  data: Array<AttachmentData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof AttachmentList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -1100,6 +1176,78 @@ export interface CreateApplicationRequest {
 /**
  *
  * @export
+ * @interface CreateAttachmentRequest
+ */
+export interface CreateAttachmentRequest {
+  /**
+   *
+   * @type {CreateAttachmentRequestData}
+   * @memberof CreateAttachmentRequest
+   */
+  data: CreateAttachmentRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateAttachmentRequestData
+ */
+export interface CreateAttachmentRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateAttachmentRequestData
+   */
+  type: CreateAttachmentRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateAttachmentRequestDataAttributes}
+   * @memberof CreateAttachmentRequestData
+   */
+  attributes: CreateAttachmentRequestDataAttributes;
+  /**
+   *
+   * @type {CreateAttachmentRequestDataRelationships}
+   * @memberof CreateAttachmentRequestData
+   */
+  relationships: CreateAttachmentRequestDataRelationships;
+}
+
+export const CreateAttachmentRequestDataTypeEnum = {
+  Attachment: 'attachment',
+} as const;
+
+export type CreateAttachmentRequestDataTypeEnum =
+  (typeof CreateAttachmentRequestDataTypeEnum)[keyof typeof CreateAttachmentRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateAttachmentRequestDataAttributes
+ */
+export interface CreateAttachmentRequestDataAttributes {
+  /**
+   *
+   * @type {WithFileContent | WithSceneViewStateContent}
+   * @memberof CreateAttachmentRequestDataAttributes
+   */
+  withContent: WithFileContent | WithSceneViewStateContent;
+}
+/**
+ *
+ * @export
+ * @interface CreateAttachmentRequestDataRelationships
+ */
+export interface CreateAttachmentRequestDataRelationships {
+  /**
+   *
+   * @type {WithThread | WithReply}
+   * @memberof CreateAttachmentRequestDataRelationships
+   */
+  context: WithThread | WithReply;
+}
+/**
+ *
+ * @export
  * @interface CreateBatchRequest
  */
 export interface CreateBatchRequest {
@@ -1245,6 +1393,12 @@ export interface CreateExportRequestDataAttributes {
    * @memberof CreateExportRequestDataAttributes
    */
   fileName?: string;
+  /**
+   * Number of seconds before the download url for the export expires when retrieving a completed export. This expiry takes effect when retrieving the export and is valid for the specified time here.
+   * @type {number}
+   * @memberof CreateExportRequestDataAttributes
+   */
+  downloadUrlExpiry?: number;
 }
 /**
  *
@@ -1738,10 +1892,16 @@ export interface CreatePartRequestDataAttributes {
 export interface CreatePartRequestDataRelationships {
   /**
    *
-   * @type {FileRelationship | PartAssemblyRelationship}
+   * @type {PartInstancesRelationship}
    * @memberof CreatePartRequestDataRelationships
    */
-  source: FileRelationship | PartAssemblyRelationship;
+  instances?: PartInstancesRelationship;
+  /**
+   *
+   * @type {FileRelationship | DeprecatedPartAssemblyRelationship}
+   * @memberof CreatePartRequestDataRelationships
+   */
+  source?: FileRelationship | DeprecatedPartAssemblyRelationship;
 }
 /**
  *
@@ -1868,6 +2028,12 @@ export interface CreateReplyRequestDataAttributes {
    * @memberof CreateReplyRequestDataAttributes
    */
   body: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof CreateReplyRequestDataAttributes
+   */
+  isDrafting?: boolean;
 }
 /**
  *
@@ -2862,6 +3028,12 @@ export interface CreateThreadRequestDataAttributes {
   body?: string;
   /**
    *
+   * @type {boolean}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  isDrafting?: boolean;
+  /**
+   *
    * @type {CreateSceneReference}
    * @memberof CreateThreadRequestDataAttributes
    */
@@ -2898,6 +3070,51 @@ export interface CreateTranslationInspectionRequestData {
    * @memberof CreateTranslationInspectionRequestData
    */
   relationships: CreateGeometrySetRequestDataRelationships;
+}
+/**
+ *
+ * @export
+ * @interface CreateUploadRequest
+ */
+export interface CreateUploadRequest {
+  /**
+   *
+   * @type {CreateUploadRequestData}
+   * @memberof CreateUploadRequest
+   */
+  data: CreateUploadRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateUploadRequestData
+ */
+export interface CreateUploadRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CreateUploadRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {CreateUploadRequestDataAttributes}
+   * @memberof CreateUploadRequestData
+   */
+  attributes: CreateUploadRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface CreateUploadRequestDataAttributes
+ */
+export interface CreateUploadRequestDataAttributes {
+  /**
+   * Specifies the duration for which this pre-signed request should be valid for upload. After this time has expired, attempting to use the presigned request will fail. (Defaults to 1 hour, max value is 24 hours)
+   * @type {number}
+   * @memberof CreateUploadRequestDataAttributes
+   */
+  expiry?: number;
 }
 /**
  *
@@ -3169,6 +3386,46 @@ export interface CrossSectioning {
   planes: Array<SectionPlane>;
 }
 /**
+ * Create Part Assembly
+ * @export
+ * @interface DeprecatedPartAssemblyRelationship
+ */
+export interface DeprecatedPartAssemblyRelationship {
+  /**
+   *
+   * @type {DeprecatedPartAssemblyRelationshipData}
+   * @memberof DeprecatedPartAssemblyRelationship
+   */
+  data: DeprecatedPartAssemblyRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface DeprecatedPartAssemblyRelationshipData
+ */
+export interface DeprecatedPartAssemblyRelationshipData {
+  /**
+   *
+   * @type {Array<PartRevisionInstance>}
+   * @memberof DeprecatedPartAssemblyRelationshipData
+   */
+  children: Array<PartRevisionInstance>;
+  /**
+   * Additional metadata about the `part` and/or `part-revision`. This has been deprecated and replaced by the PATCH endpoint /property-entries
+   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
+   * @memberof DeprecatedPartAssemblyRelationshipData
+   * @deprecated
+   */
+  metadata?: {
+    [key: string]:
+      | MetadataLongType
+      | MetadataFloatType
+      | MetadataDateType
+      | MetadataStringType
+      | MetadataNullType;
+  };
+}
+/**
  *
  * @export
  * @interface DeselectOperation
@@ -3329,6 +3586,12 @@ export interface ExportData {
   attributes: ExportDataAttributes;
   /**
    *
+   * @type {ExportDataRelationships}
+   * @memberof ExportData
+   */
+  relationships?: ExportDataRelationships;
+  /**
+   *
    * @type {{ [key: string]: Link; }}
    * @memberof ExportData
    */
@@ -3352,6 +3615,25 @@ export interface ExportDataAttributes {
    * @memberof ExportDataAttributes
    */
   downloadUrl: string;
+  /**
+   * Number of seconds before the download url for the export expires when retrieving a completed export. The url can be recreated by re-fetching the export.
+   * @type {number}
+   * @memberof ExportDataAttributes
+   */
+  downloadUrlExpiry?: number;
+}
+/**
+ *
+ * @export
+ * @interface ExportDataRelationships
+ */
+export interface ExportDataRelationships {
+  /**
+   *
+   * @type {FileRelationship}
+   * @memberof ExportDataRelationships
+   */
+  file: FileRelationship;
 }
 /**
  * Relationship to an `export`.
@@ -3480,6 +3762,33 @@ export interface FeatureLines {
 /**
  *
  * @export
+ * @interface FileAttachment
+ */
+export interface FileAttachment {
+  /**
+   *
+   * @type {string}
+   * @memberof FileAttachment
+   */
+  type: FileAttachmentTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof FileAttachment
+   */
+  id: string;
+}
+
+export const FileAttachmentTypeEnum = {
+  File: 'file',
+} as const;
+
+export type FileAttachmentTypeEnum =
+  (typeof FileAttachmentTypeEnum)[keyof typeof FileAttachmentTypeEnum];
+
+/**
+ *
+ * @export
  * @interface FileCollectionList
  */
 export interface FileCollectionList {
@@ -3584,6 +3893,12 @@ export interface FileCollectionMetadataDataAttributes {
    * @memberof FileCollectionMetadataDataAttributes
    */
   metadata?: { [key: string]: string };
+  /**
+   *
+   * @type {string}
+   * @memberof FileCollectionMetadataDataAttributes
+   */
+  expiresAt?: string;
 }
 /**
  *
@@ -3754,6 +4069,12 @@ export interface FileMetadataDataAttributes {
    * @memberof FileMetadataDataAttributes
    */
   metadata?: { [key: string]: string };
+  /**
+   *
+   * @type {string}
+   * @memberof FileMetadataDataAttributes
+   */
+  expiresAt?: string;
 }
 /**
  * Relationship to a `file`.
@@ -4528,46 +4849,6 @@ export interface Part {
   links?: { [key: string]: Link };
 }
 /**
- * Create Part Assembly
- * @export
- * @interface PartAssemblyRelationship
- */
-export interface PartAssemblyRelationship {
-  /**
-   *
-   * @type {PartAssemblyRelationshipData}
-   * @memberof PartAssemblyRelationship
-   */
-  data: PartAssemblyRelationshipData;
-}
-/**
- *
- * @export
- * @interface PartAssemblyRelationshipData
- */
-export interface PartAssemblyRelationshipData {
-  /**
-   *
-   * @type {Array<PartRevisionInstance>}
-   * @memberof PartAssemblyRelationshipData
-   */
-  children: Array<PartRevisionInstance>;
-  /**
-   * Additional metadata about the `part` and/or `part-revision`. This has been deprecated and replaced by the PATCH endpoint /property-entries
-   * @type {{ [key: string]: MetadataLongType | MetadataFloatType | MetadataDateType | MetadataStringType | MetadataNullType; }}
-   * @memberof PartAssemblyRelationshipData
-   * @deprecated
-   */
-  metadata?: {
-    [key: string]:
-      | MetadataLongType
-      | MetadataFloatType
-      | MetadataDateType
-      | MetadataStringType
-      | MetadataNullType;
-  };
-}
-/**
  *
  * @export
  * @interface PartData
@@ -4714,6 +4995,65 @@ export const PartInstanceRelationshipDataTypeEnum = {
 
 export type PartInstanceRelationshipDataTypeEnum =
   (typeof PartInstanceRelationshipDataTypeEnum)[keyof typeof PartInstanceRelationshipDataTypeEnum];
+
+/**
+ * Part Revision Assembly Instance Data
+ * @export
+ * @interface PartInstancesRelationship
+ */
+export interface PartInstancesRelationship {
+  /**
+   * Each child must include the UUID of the revision. The optional transform may be included to position the child relative to the parent. See the Matrix4 schema for details. Note: The children will be ordered as they appear in the array. Also, it is suggested to not include the transform for any that has identity transform to keep the payload size small. Example file content: {   \"children\": [     { \"id\": \"00000000-0000-0000-0000-000000000001\" },     { \"id\": \"00000000-0000-0000-0000-000000000002\", \"transform\": {       \"r0\": {\"x\": 1, \"y\": -1, \"z\": 0, \"w\": 123.4 },       \"r1\": {\"x\": 1, \"y\": 1, \"z\": 0, \"w\": 234.5 },       \"r2\": {\"x\": 0, \"y\": 0, \"z\": 1, \"w\": 345.6 },       \"r3\": {\"x\": 0, \"y\": 0, \"z\": 0, \"w\": 1 }     }}   ] }
+   * @type {Array<PartInstancesRelationshipData>}
+   * @memberof PartInstancesRelationship
+   */
+  data: Array<PartInstancesRelationshipData>;
+}
+/**
+ *
+ * @export
+ * @interface PartInstancesRelationshipAttributes
+ */
+export interface PartInstancesRelationshipAttributes {
+  /**
+   *
+   * @type {Matrix4}
+   * @memberof PartInstancesRelationshipAttributes
+   */
+  transform?: Matrix4;
+}
+/**
+ *
+ * @export
+ * @interface PartInstancesRelationshipData
+ */
+export interface PartInstancesRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PartInstancesRelationshipData
+   */
+  type: PartInstancesRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PartInstancesRelationshipData
+   */
+  id: string;
+  /**
+   *
+   * @type {PartInstancesRelationshipAttributes}
+   * @memberof PartInstancesRelationshipData
+   */
+  attributes?: PartInstancesRelationshipAttributes;
+}
+
+export const PartInstancesRelationshipDataTypeEnum = {
+  PartRevisionInstance: 'part-revision-instance',
+} as const;
+
+export type PartInstancesRelationshipDataTypeEnum =
+  (typeof PartInstancesRelationshipDataTypeEnum)[keyof typeof PartInstancesRelationshipDataTypeEnum];
 
 /**
  *
@@ -5078,9 +5418,10 @@ export interface PartRevisionInstance {
    */
   revisionId?: string;
   /**
-   *
+   * This has been deprecated. Use instead the revisionId to reference the revision instance. The revisionId can be found by using the [List Part Revisions](#tag/part-revisions/operation/getPartRevisions) endpoint.
    * @type {string}
    * @memberof PartRevisionInstance
+   * @deprecated
    */
   suppliedRevisionId?: string;
   /**
@@ -6400,7 +6741,19 @@ export interface ReplyDataAttributes {
    * @type {string}
    * @memberof ReplyDataAttributes
    */
+  editedAt?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof ReplyDataAttributes
+   */
   body: string;
+  /**
+   * Indicates whether or not the thread is in a drafted state
+   * @type {boolean}
+   * @memberof ReplyDataAttributes
+   */
+  isDrafting: boolean;
 }
 /**
  *
@@ -7966,6 +8319,33 @@ export interface SceneViewState {
 /**
  *
  * @export
+ * @interface SceneViewStateAttachment
+ */
+export interface SceneViewStateAttachment {
+  /**
+   *
+   * @type {string}
+   * @memberof SceneViewStateAttachment
+   */
+  type: SceneViewStateAttachmentTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneViewStateAttachment
+   */
+  id: string;
+}
+
+export const SceneViewStateAttachmentTypeEnum = {
+  SceneViewState: 'scene-view-state',
+} as const;
+
+export type SceneViewStateAttachmentTypeEnum =
+  (typeof SceneViewStateAttachmentTypeEnum)[keyof typeof SceneViewStateAttachmentTypeEnum];
+
+/**
+ *
+ * @export
  * @interface SceneViewStateData
  */
 export interface SceneViewStateData {
@@ -8473,6 +8853,12 @@ export interface ThreadDataAttributes {
   modifiedAt: string;
   /**
    *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  editedAt?: string;
+  /**
+   *
    * @type {ThreadType}
    * @memberof ThreadDataAttributes
    */
@@ -8495,6 +8881,12 @@ export interface ThreadDataAttributes {
    * @memberof ThreadDataAttributes
    */
   body?: string;
+  /**
+   * Indicates whether or not the thread is in a drafted state
+   * @type {boolean}
+   * @memberof ThreadDataAttributes
+   */
+  isDrafting: boolean;
   /**
    *
    * @type {number}
@@ -9122,6 +9514,57 @@ export interface UpdatePartRevisionRequestDataRelationships {
 /**
  *
  * @export
+ * @interface UpdateReplyRequest
+ */
+export interface UpdateReplyRequest {
+  /**
+   *
+   * @type {UpdateReplyRequestData}
+   * @memberof UpdateReplyRequest
+   */
+  data: UpdateReplyRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateReplyRequestData
+ */
+export interface UpdateReplyRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateReplyRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateReplyRequestDataAttributes}
+   * @memberof UpdateReplyRequestData
+   */
+  attributes: UpdateReplyRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateReplyRequestDataAttributes
+ */
+export interface UpdateReplyRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateReplyRequestDataAttributes
+   */
+  body?: string | null;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UpdateReplyRequestDataAttributes
+   */
+  isDrafting?: boolean;
+}
+/**
+ *
+ * @export
  * @interface UpdateSceneAnnotationRequest
  */
 export interface UpdateSceneAnnotationRequest {
@@ -9552,6 +9995,69 @@ export interface UpdateSceneViewStateRequestData {
 /**
  *
  * @export
+ * @interface UpdateThreadRequest
+ */
+export interface UpdateThreadRequest {
+  /**
+   *
+   * @type {UpdateThreadRequestData}
+   * @memberof UpdateThreadRequest
+   */
+  data: UpdateThreadRequestData;
+}
+/**
+ *
+ * @export
+ * @interface UpdateThreadRequestData
+ */
+export interface UpdateThreadRequestData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof UpdateThreadRequestData
+   */
+  type: string;
+  /**
+   *
+   * @type {UpdateThreadRequestDataAttributes}
+   * @memberof UpdateThreadRequestData
+   */
+  attributes: UpdateThreadRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateThreadRequestDataAttributes
+ */
+export interface UpdateThreadRequestDataAttributes {
+  /**
+   *
+   * @type {ThreadStatus}
+   * @memberof UpdateThreadRequestDataAttributes
+   */
+  status?: ThreadStatus;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateThreadRequestDataAttributes
+   */
+  title?: string | null;
+  /**
+   *
+   * @type {boolean}
+   * @memberof UpdateThreadRequestDataAttributes
+   */
+  isDrafting?: boolean;
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateThreadRequestDataAttributes
+   */
+  body?: string | null;
+}
+/**
+ *
+ * @export
  * @interface UpdateWebhookSubscriptionRequest
  */
 export interface UpdateWebhookSubscriptionRequest {
@@ -9615,6 +10121,69 @@ export const UpdateWebhookSubscriptionRequestDataAttributesStatusEnum = {
 export type UpdateWebhookSubscriptionRequestDataAttributesStatusEnum =
   (typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum)[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
 
+/**
+ *
+ * @export
+ * @interface UploadUrl
+ */
+export interface UploadUrl {
+  /**
+   *
+   * @type {UploadUrlData}
+   * @memberof UploadUrl
+   */
+  data: UploadUrlData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UploadUrl
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UploadUrlData
+ */
+export interface UploadUrlData {
+  /**
+   *
+   * @type {string}
+   * @memberof UploadUrlData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UploadUrlData
+   */
+  id: string;
+  /**
+   *
+   * @type {UploadUrlDataAttributes}
+   * @memberof UploadUrlData
+   */
+  attributes: UploadUrlDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof UploadUrlData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface UploadUrlDataAttributes
+ */
+export interface UploadUrlDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UploadUrlDataAttributes
+   */
+  uploadUrl: string;
+}
 /**
  *
  * @export
@@ -10598,6 +11167,60 @@ export interface WebhookSubscriptionList {
   links: { [key: string]: Link };
 }
 /**
+ *
+ * @export
+ * @interface WithFileContent
+ */
+export interface WithFileContent {
+  /**
+   *
+   * @type {string}
+   * @memberof WithFileContent
+   */
+  type: WithFileContentTypeEnum;
+  /**
+   * The name of the file to create
+   * @type {string}
+   * @memberof WithFileContent
+   */
+  name: string;
+}
+
+export const WithFileContentTypeEnum = {
+  FileContent: 'file-content',
+} as const;
+
+export type WithFileContentTypeEnum =
+  (typeof WithFileContentTypeEnum)[keyof typeof WithFileContentTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface WithReply
+ */
+export interface WithReply {
+  /**
+   *
+   * @type {string}
+   * @memberof WithReply
+   */
+  type: WithReplyTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WithReply
+   */
+  id: string;
+}
+
+export const WithReplyTypeEnum = {
+  Reply: 'reply',
+} as const;
+
+export type WithReplyTypeEnum =
+  (typeof WithReplyTypeEnum)[keyof typeof WithReplyTypeEnum];
+
+/**
  * A sceneViewId to be associated as a reference.
  * @export
  * @interface WithSceneViewId
@@ -10625,6 +11248,33 @@ export type WithSceneViewIdTypeEnum =
   (typeof WithSceneViewIdTypeEnum)[keyof typeof WithSceneViewIdTypeEnum];
 
 /**
+ *
+ * @export
+ * @interface WithSceneViewStateContent
+ */
+export interface WithSceneViewStateContent {
+  /**
+   *
+   * @type {string}
+   * @memberof WithSceneViewStateContent
+   */
+  type: WithSceneViewStateContentTypeEnum;
+  /**
+   *
+   * @type {WithSceneViewId | WithSceneViewStateId}
+   * @memberof WithSceneViewStateContent
+   */
+  withSceneViewState: WithSceneViewId | WithSceneViewStateId;
+}
+
+export const WithSceneViewStateContentTypeEnum = {
+  SceneViewStateContent: 'scene-view-state-content',
+} as const;
+
+export type WithSceneViewStateContentTypeEnum =
+  (typeof WithSceneViewStateContentTypeEnum)[keyof typeof WithSceneViewStateContentTypeEnum];
+
+/**
  * A sceneViewStateId to be associated as a reference.
  * @export
  * @interface WithSceneViewStateId
@@ -10650,6 +11300,33 @@ export const WithSceneViewStateIdTypeEnum = {
 
 export type WithSceneViewStateIdTypeEnum =
   (typeof WithSceneViewStateIdTypeEnum)[keyof typeof WithSceneViewStateIdTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface WithThread
+ */
+export interface WithThread {
+  /**
+   *
+   * @type {string}
+   * @memberof WithThread
+   */
+  type: WithThreadTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof WithThread
+   */
+  id: string;
+}
+
+export const WithThreadTypeEnum = {
+  Thread: 'thread',
+} as const;
+
+export type WithThreadTypeEnum =
+  (typeof WithThreadTypeEnum)[keyof typeof WithThreadTypeEnum];
 
 /**
  * AccountsApi - axios parameter creator
@@ -12086,6 +12763,377 @@ export class ApplicationsApi extends BaseAPI {
 }
 
 /**
+ * AttachmentsApi - axios parameter creator
+ * @export
+ */
+export const AttachmentsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create an `attachment` for a thread or a reply relationship. The content of the attachment can be a scene-view-state (created or provided), or a file. A file attachment requires the caller to upload the file after the attachment creation using a provided upload url. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateAttachmentRequest} createAttachmentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachment: async (
+      createAttachmentRequest: CreateAttachmentRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createAttachmentRequest' is not null or undefined
+      assertParamExists(
+        'createAttachment',
+        'createAttachmentRequest',
+        createAttachmentRequest
+      );
+      const localVarPath = `/attachments`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createAttachmentRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List attachments **Preview:** This is a preview API and is subject to change.
+     * @param {string} filterRelationshipId A relationship id to filter attachments for
+     * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listAttachments: async (
+      filterRelationshipId: string,
+      filterRelationshipType: 'thread' | 'reply',
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'filterRelationshipId' is not null or undefined
+      assertParamExists(
+        'listAttachments',
+        'filterRelationshipId',
+        filterRelationshipId
+      );
+      // verify required parameter 'filterRelationshipType' is not null or undefined
+      assertParamExists(
+        'listAttachments',
+        'filterRelationshipType',
+        filterRelationshipType
+      );
+      const localVarPath = `/attachments`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterRelationshipId !== undefined) {
+        localVarQueryParameter['filter[relationshipId]'] = filterRelationshipId;
+      }
+
+      if (filterRelationshipType !== undefined) {
+        localVarQueryParameter['filter[relationshipType]'] =
+          filterRelationshipType;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * AttachmentsApi - functional programming interface
+ * @export
+ */
+export const AttachmentsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    AttachmentsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create an `attachment` for a thread or a reply relationship. The content of the attachment can be a scene-view-state (created or provided), or a file. A file attachment requires the caller to upload the file after the attachment creation using a provided upload url. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateAttachmentRequest} createAttachmentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createAttachment(
+      createAttachmentRequest: CreateAttachmentRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Attachment>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createAttachment(
+          createAttachmentRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List attachments **Preview:** This is a preview API and is subject to change.
+     * @param {string} filterRelationshipId A relationship id to filter attachments for
+     * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listAttachments(
+      filterRelationshipId: string,
+      filterRelationshipType: 'thread' | 'reply',
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<AttachmentList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listAttachments(
+        filterRelationshipId,
+        filterRelationshipType,
+        pageCursor,
+        pageSize,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * AttachmentsApi - factory interface
+ * @export
+ */
+export const AttachmentsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = AttachmentsApiFp(configuration);
+  return {
+    /**
+     * Create an `attachment` for a thread or a reply relationship. The content of the attachment can be a scene-view-state (created or provided), or a file. A file attachment requires the caller to upload the file after the attachment creation using a provided upload url. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateAttachmentRequest} createAttachmentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachment(
+      createAttachmentRequest: CreateAttachmentRequest,
+      options?: any
+    ): AxiosPromise<Attachment> {
+      return localVarFp
+        .createAttachment(createAttachmentRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List attachments **Preview:** This is a preview API and is subject to change.
+     * @param {string} filterRelationshipId A relationship id to filter attachments for
+     * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listAttachments(
+      filterRelationshipId: string,
+      filterRelationshipType: 'thread' | 'reply',
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<AttachmentList> {
+      return localVarFp
+        .listAttachments(
+          filterRelationshipId,
+          filterRelationshipType,
+          pageCursor,
+          pageSize,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createAttachment operation in AttachmentsApi.
+ * @export
+ * @interface AttachmentsApiCreateAttachmentRequest
+ */
+export interface AttachmentsApiCreateAttachmentRequest {
+  /**
+   *
+   * @type {CreateAttachmentRequest}
+   * @memberof AttachmentsApiCreateAttachment
+   */
+  readonly createAttachmentRequest: CreateAttachmentRequest;
+}
+
+/**
+ * Request parameters for listAttachments operation in AttachmentsApi.
+ * @export
+ * @interface AttachmentsApiListAttachmentsRequest
+ */
+export interface AttachmentsApiListAttachmentsRequest {
+  /**
+   * A relationship id to filter attachments for
+   * @type {string}
+   * @memberof AttachmentsApiListAttachments
+   */
+  readonly filterRelationshipId: string;
+
+  /**
+   * The type of relationship (reply or thread)
+   * @type {'thread' | 'reply'}
+   * @memberof AttachmentsApiListAttachments
+   */
+  readonly filterRelationshipType: 'thread' | 'reply';
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof AttachmentsApiListAttachments
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof AttachmentsApiListAttachments
+   */
+  readonly pageSize?: number;
+}
+
+/**
+ * AttachmentsApi - object-oriented interface
+ * @export
+ * @class AttachmentsApi
+ * @extends {BaseAPI}
+ */
+export class AttachmentsApi extends BaseAPI {
+  /**
+   * Create an `attachment` for a thread or a reply relationship. The content of the attachment can be a scene-view-state (created or provided), or a file. A file attachment requires the caller to upload the file after the attachment creation using a provided upload url. **Preview:** This is a preview API and is subject to change.
+   * @param {AttachmentsApiCreateAttachmentRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AttachmentsApi
+   */
+  public createAttachment(
+    requestParameters: AttachmentsApiCreateAttachmentRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return AttachmentsApiFp(this.configuration)
+      .createAttachment(requestParameters.createAttachmentRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List attachments **Preview:** This is a preview API and is subject to change.
+   * @param {AttachmentsApiListAttachmentsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AttachmentsApi
+   */
+  public listAttachments(
+    requestParameters: AttachmentsApiListAttachmentsRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return AttachmentsApiFp(this.configuration)
+      .listAttachments(
+        requestParameters.filterRelationshipId,
+        requestParameters.filterRelationshipType,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
  * BatchesApi - axios parameter creator
  * @export
  */
@@ -12628,6 +13676,59 @@ export const CollaborationContextsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Remove a collaboration context along with all of its data
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteCollaborationContext: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteCollaborationContext', 'id', id);
+      const localVarPath = `/collaboration-contexts/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `collaboration-context` by ID.
      * @param {string} id The &#x60;collaboration-context&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -12806,6 +13907,27 @@ export const CollaborationContextsApiFp = function (
       );
     },
     /**
+     * Remove a collaboration context along with all of its data
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteCollaborationContext(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deleteCollaborationContext(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Get a `collaboration-context` by ID.
      * @param {string} id The &#x60;collaboration-context&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -12904,6 +14026,17 @@ export const CollaborationContextsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Remove a collaboration context along with all of its data
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteCollaborationContext(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteCollaborationContext(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a `collaboration-context` by ID.
      * @param {string} id The &#x60;collaboration-context&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -12969,6 +14102,20 @@ export interface CollaborationContextsApiCreateCollaborationContextRequest {
    * @memberof CollaborationContextsApiCreateCollaborationContext
    */
   readonly createCollaborationContextRequest: CreateCollaborationContextRequest;
+}
+
+/**
+ * Request parameters for deleteCollaborationContext operation in CollaborationContextsApi.
+ * @export
+ * @interface CollaborationContextsApiDeleteCollaborationContextRequest
+ */
+export interface CollaborationContextsApiDeleteCollaborationContextRequest {
+  /**
+   * The &#x60;collaboration-context&#x60; ID.
+   * @type {string}
+   * @memberof CollaborationContextsApiDeleteCollaborationContext
+   */
+  readonly id: string;
 }
 
 /**
@@ -13049,6 +14196,22 @@ export class CollaborationContextsApi extends BaseAPI {
         requestParameters.createCollaborationContextRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Remove a collaboration context along with all of its data
+   * @param {CollaborationContextsApiDeleteCollaborationContextRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CollaborationContextsApi
+   */
+  public deleteCollaborationContext(
+    requestParameters: CollaborationContextsApiDeleteCollaborationContextRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CollaborationContextsApiFp(this.configuration)
+      .deleteCollaborationContext(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -15103,6 +16266,74 @@ export const FilesApiAxiosParamCreator = function (
       };
     },
     /**
+     * Create an upload uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUploadUrl: async (
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createUploadUrl', 'id', id);
+      // verify required parameter 'createUploadRequest' is not null or undefined
+      assertParamExists(
+        'createUploadUrl',
+        'createUploadRequest',
+        createUploadRequest
+      );
+      const localVarPath = `/files/{id}/upload-url`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createUploadRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Delete a `file`.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -15461,6 +16692,32 @@ export const FilesApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Create an upload uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createUploadUrl(
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadUrl>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createUploadUrl(
+        id,
+        createUploadRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Delete a `file`.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -15632,6 +16889,22 @@ export const FilesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Create an upload uri for a `file` by ID.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createUploadUrl(
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options?: any
+    ): AxiosPromise<UploadUrl> {
+      return localVarFp
+        .createUploadUrl(id, createUploadRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Delete a `file`.
      * @param {string} id The &#x60;file&#x60; ID.
      * @param {*} [options] Override http request option.
@@ -15735,6 +17008,27 @@ export interface FilesApiCreateFileRequest {
    * @memberof FilesApiCreateFile
    */
   readonly createFileRequest: CreateFileRequest;
+}
+
+/**
+ * Request parameters for createUploadUrl operation in FilesApi.
+ * @export
+ * @interface FilesApiCreateUploadUrlRequest
+ */
+export interface FilesApiCreateUploadUrlRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiCreateUploadUrl
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateUploadRequest}
+   * @memberof FilesApiCreateUploadUrl
+   */
+  readonly createUploadRequest: CreateUploadRequest;
 }
 
 /**
@@ -15875,6 +17169,26 @@ export class FilesApi extends BaseAPI {
   ) {
     return FilesApiFp(this.configuration)
       .createFile(requestParameters.createFileRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create an upload uri for a `file` by ID.
+   * @param {FilesApiCreateUploadUrlRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public createUploadUrl(
+    requestParameters: FilesApiCreateUploadUrlRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FilesApiFp(this.configuration)
+      .createUploadUrl(
+        requestParameters.id,
+        requestParameters.createUploadRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -18596,7 +19910,7 @@ export const PartRevisionInstancesApiAxiosParamCreator = function (
   return {
     /**
      * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
@@ -18673,7 +19987,7 @@ export const PartRevisionInstancesApiFp = function (
   return {
     /**
      * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
@@ -18720,7 +20034,7 @@ export const PartRevisionInstancesApiFactory = function (
   return {
     /**
      * Gets a page of \'part-revision\' instances. An instance is an occurrence of a revision that is a child of a parent revision. The returned data will have the ordinal used for ordering and the transform matrix for each occurrence.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
@@ -18751,7 +20065,7 @@ export const PartRevisionInstancesApiFactory = function (
  */
 export interface PartRevisionInstancesApiGetPartRevisionInstanceListRequest {
   /**
-   * Parent ID to filter on.
+   * Parent ID to filter on. Sending null will return items without a parent.
    * @type {string}
    * @memberof PartRevisionInstancesApiGetPartRevisionInstanceList
    */
@@ -22019,6 +23333,59 @@ export const RepliesApiAxiosParamCreator = function (
       };
     },
     /**
+     * Remove a reply.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteReply: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteReply', 'id', id);
+      const localVarPath = `/replies/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `reply`.
      * @param {string} id The &#x60;thread&#x60; ID.
      * @param {string} [include] Comma-separated list of relationships to include in response.
@@ -22147,6 +23514,74 @@ export const RepliesApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Update a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateReplyRequest} updateReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateReply: async (
+      id: string,
+      updateReplyRequest: UpdateReplyRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateReply', 'id', id);
+      // verify required parameter 'updateReplyRequest' is not null or undefined
+      assertParamExists(
+        'updateReply',
+        'updateReplyRequest',
+        updateReplyRequest
+      );
+      const localVarPath = `/replies/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateReplyRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -22174,6 +23609,29 @@ export const RepliesApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createReply(
         id,
         createReplyRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Remove a reply.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteReply(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteReply(
+        id,
         options
       );
       return createRequestFunction(
@@ -22241,6 +23699,32 @@ export const RepliesApiFp = function (configuration?: Configuration) {
         configuration
       );
     },
+    /**
+     * Update a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateReplyRequest} updateReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateReply(
+      id: string,
+      updateReplyRequest: UpdateReplyRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Reply>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateReply(
+        id,
+        updateReplyRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
   };
 };
 
@@ -22269,6 +23753,17 @@ export const RepliesApiFactory = function (
     ): AxiosPromise<Reply> {
       return localVarFp
         .createReply(id, createReplyRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Remove a reply.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteReply(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteReply(id, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -22303,6 +23798,22 @@ export const RepliesApiFactory = function (
         .listReplies(filterThreadId, pageCursor, pageSize, include, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     * Update a `reply`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateReplyRequest} updateReplyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateReply(
+      id: string,
+      updateReplyRequest: UpdateReplyRequest,
+      options?: any
+    ): AxiosPromise<Reply> {
+      return localVarFp
+        .updateReply(id, updateReplyRequest, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -22325,6 +23836,20 @@ export interface RepliesApiCreateReplyRequest {
    * @memberof RepliesApiCreateReply
    */
   readonly createReplyRequest: CreateReplyRequest;
+}
+
+/**
+ * Request parameters for deleteReply operation in RepliesApi.
+ * @export
+ * @interface RepliesApiDeleteReplyRequest
+ */
+export interface RepliesApiDeleteReplyRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof RepliesApiDeleteReply
+   */
+  readonly id: string;
 }
 
 /**
@@ -22384,6 +23909,27 @@ export interface RepliesApiListRepliesRequest {
 }
 
 /**
+ * Request parameters for updateReply operation in RepliesApi.
+ * @export
+ * @interface RepliesApiUpdateReplyRequest
+ */
+export interface RepliesApiUpdateReplyRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof RepliesApiUpdateReply
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateReplyRequest}
+   * @memberof RepliesApiUpdateReply
+   */
+  readonly updateReplyRequest: UpdateReplyRequest;
+}
+
+/**
  * RepliesApi - object-oriented interface
  * @export
  * @class RepliesApi
@@ -22407,6 +23953,22 @@ export class RepliesApi extends BaseAPI {
         requestParameters.createReplyRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Remove a reply.
+   * @param {RepliesApiDeleteReplyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public deleteReply(
+    requestParameters: RepliesApiDeleteReplyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .deleteReply(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -22443,6 +24005,26 @@ export class RepliesApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.include,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `reply`.
+   * @param {RepliesApiUpdateReplyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof RepliesApi
+   */
+  public updateReply(
+    requestParameters: RepliesApiUpdateReplyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return RepliesApiFp(this.configuration)
+      .updateReply(
+        requestParameters.id,
+        requestParameters.updateReplyRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -24789,7 +26371,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
@@ -25086,7 +26668,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
@@ -25241,7 +26823,7 @@ export const SceneItemsApiFactory = function (
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
-     * @param {string} [filterParent] Parent ID to filter on.
+     * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
      * @param {boolean} [filterHasChildren] Filter scene-items based on whether they are the parent of at least one other scene-item
      * @param {boolean} [filterHasGeometrySet] Filter scene-items based on whether they have an associated geometry-set.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
@@ -25420,7 +27002,7 @@ export interface SceneItemsApiGetSceneItemsRequest {
   readonly filterSuppliedId?: string;
 
   /**
-   * Parent ID to filter on.
+   * Parent ID to filter on. Sending null will return items without a parent.
    * @type {string}
    * @memberof SceneItemsApiGetSceneItems
    */
@@ -30133,6 +31715,59 @@ export const ThreadsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Remove a thread.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteThread: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deleteThread', 'id', id);
+      const localVarPath = `/threads/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Get a `thread`.
      * @param {string} id The &#x60;thread&#x60; ID.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
@@ -30257,6 +31892,7 @@ export const ThreadsApiAxiosParamCreator = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -30266,6 +31902,7 @@ export const ThreadsApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       include?: string,
+      filterThreadStatus?: Array<ThreadStatus>,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/threads`;
@@ -30314,6 +31951,11 @@ export const ThreadsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
+      if (filterThreadStatus) {
+        localVarQueryParameter['filter[threadStatus]'] =
+          filterThreadStatus.join(COLLECTION_FORMATS.csv);
+      }
+
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions?.headers ?? {};
       localVarRequestOptions.headers = {
@@ -30321,6 +31963,74 @@ export const ThreadsApiAxiosParamCreator = function (
         ...headersFromBaseOptions,
         ...options.headers,
       };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Update a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateThreadRequest} updateThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateThread: async (
+      id: string,
+      updateThreadRequest: UpdateThreadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('updateThread', 'id', id);
+      // verify required parameter 'updateThreadRequest' is not null or undefined
+      assertParamExists(
+        'updateThread',
+        'updateThreadRequest',
+        updateThreadRequest
+      );
+      const localVarPath = `/threads/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PATCH',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        updateThreadRequest,
+        localVarRequestOptions,
+        configuration
+      );
 
       return {
         url: toPathString(localVarUrlObj),
@@ -30354,6 +32064,29 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createThread(
         id,
         createThreadRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Remove a thread.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteThread(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteThread(
+        id,
         options
       );
       return createRequestFunction(
@@ -30420,6 +32153,7 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -30429,6 +32163,7 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       include?: string,
+      filterThreadStatus?: Array<ThreadStatus>,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThreadList>
@@ -30439,6 +32174,33 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
         pageCursor,
         pageSize,
         include,
+        filterThreadStatus,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Update a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateThreadRequest} updateThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async updateThread(
+      id: string,
+      updateThreadRequest: UpdateThreadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Thread>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.updateThread(
+        id,
+        updateThreadRequest,
         options
       );
       return createRequestFunction(
@@ -30479,6 +32241,17 @@ export const ThreadsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Remove a thread.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteThread(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteThread(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Get a `thread`.
      * @param {string} id The &#x60;thread&#x60; ID.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
@@ -30514,6 +32287,7 @@ export const ThreadsApiFactory = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
+     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -30523,6 +32297,7 @@ export const ThreadsApiFactory = function (
       pageCursor?: string,
       pageSize?: number,
       include?: string,
+      filterThreadStatus?: Array<ThreadStatus>,
       options?: any
     ): AxiosPromise<ThreadList> {
       return localVarFp
@@ -30532,8 +32307,25 @@ export const ThreadsApiFactory = function (
           pageCursor,
           pageSize,
           include,
+          filterThreadStatus,
           options
         )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Update a `thread`.
+     * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {UpdateThreadRequest} updateThreadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    updateThread(
+      id: string,
+      updateThreadRequest: UpdateThreadRequest,
+      options?: any
+    ): AxiosPromise<Thread> {
+      return localVarFp
+        .updateThread(id, updateThreadRequest, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -30558,6 +32350,20 @@ export interface ThreadsApiCreateThreadRequest {
    * @memberof ThreadsApiCreateThread
    */
   readonly createThreadRequest: CreateThreadRequest;
+}
+
+/**
+ * Request parameters for deleteThread operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiDeleteThreadRequest
+ */
+export interface ThreadsApiDeleteThreadRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof ThreadsApiDeleteThread
+   */
+  readonly id: string;
 }
 
 /**
@@ -30642,6 +32448,34 @@ export interface ThreadsApiGetThreadsRequest {
    * @memberof ThreadsApiGetThreads
    */
   readonly include?: string;
+
+  /**
+   * The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+   * @type {Array<ThreadStatus>}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly filterThreadStatus?: Array<ThreadStatus>;
+}
+
+/**
+ * Request parameters for updateThread operation in ThreadsApi.
+ * @export
+ * @interface ThreadsApiUpdateThreadRequest
+ */
+export interface ThreadsApiUpdateThreadRequest {
+  /**
+   * The &#x60;thread&#x60; ID.
+   * @type {string}
+   * @memberof ThreadsApiUpdateThread
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpdateThreadRequest}
+   * @memberof ThreadsApiUpdateThread
+   */
+  readonly updateThreadRequest: UpdateThreadRequest;
 }
 
 /**
@@ -30668,6 +32502,22 @@ export class ThreadsApi extends BaseAPI {
         requestParameters.createThreadRequest,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Remove a thread.
+   * @param {ThreadsApiDeleteThreadRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public deleteThread(
+    requestParameters: ThreadsApiDeleteThreadRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .deleteThread(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -30726,6 +32576,27 @@ export class ThreadsApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.include,
+        requestParameters.filterThreadStatus,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Update a `thread`.
+   * @param {ThreadsApiUpdateThreadRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof ThreadsApi
+   */
+  public updateThread(
+    requestParameters: ThreadsApiUpdateThreadRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return ThreadsApiFp(this.configuration)
+      .updateThread(
+        requestParameters.id,
+        requestParameters.updateThreadRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));

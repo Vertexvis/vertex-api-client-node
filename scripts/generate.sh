@@ -15,7 +15,7 @@ docker run --rm -v "${PWD}:/local" openapitools/openapi-generator-cli:v5.4.0 gen
     --config /local/config.yml \
     --output /local
 
-sed_inplace "s/, COLLECTION_FORMATS, /, /" api.ts
+sed_inplace "s/, RequiredError }/ }/" api.ts
 sed_inplace "s/, setApiKeyToObject, /, /" api.ts
 sed_inplace "s/, setBearerAuthToObject, /, /" api.ts
 sed_inplace "s/baseOptions && baseOptions.headers ? baseOptions.headers :/baseOptions?.headers ??/" api.ts
