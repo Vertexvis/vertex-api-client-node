@@ -878,6 +878,136 @@ paths:
         - OAuth2: []
       tags:
         - attachments
+  /attachments/{id}/download-url:
+    post:
+      description: Create a download url for a file `attachment` by ID.
+      operationId: createAttachmentDownloadUrl
+      parameters:
+        - description: The `attachment` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateDownloadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PresignedUrl'
+          description: Created
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - attachments
+  /attachments/{id}/upload-url:
+    post:
+      description: Create an upload url for a file `attachment` by ID.
+      operationId: createAttachmentUploadUrl
+      parameters:
+        - description: The `attachment` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateUploadRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PresignedUrl'
+          description: Created
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - attachments
   /batches:
     post:
       description:
@@ -2193,7 +2323,7 @@ paths:
           content:
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/UploadUrl'
+                $ref: '#/components/schemas/PresignedUrl'
           description: Created
         '401':
           content:
@@ -10600,6 +10730,15 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    AttachmentId:
+      description: The `attachment` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     PerspectiveCamera:
       description: A perspective camera that mimics the way the human eye sees.
       explode: true
@@ -11624,6 +11763,34 @@ components:
       required:
         - data
       type: object
+    CreateDownloadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateDownloadRequest_data'
+      required:
+        - data
+      type: object
+    PresignedUrl:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PresignedUrlData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    CreateUploadRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateUploadRequest_data'
+      required:
+        - data
+      type: object
     CreateBatchRequest:
       additionalProperties: false
       properties:
@@ -11817,34 +11984,6 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/UpdateFileRequest_data'
-      required:
-        - data
-      type: object
-    CreateUploadRequest:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateUploadRequest_data'
-      required:
-        - data
-      type: object
-    UploadUrl:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/UploadUrlData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-      type: object
-    CreateDownloadRequest:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/CreateDownloadRequest_data'
       required:
         - data
       type: object
@@ -12054,7 +12193,10 @@ components:
         refresh_token:
           $ref: '#/components/schemas/NonEmptyString'
         subject_token:
-          $ref: '#/components/schemas/NonEmptyString'
+          example: some-string
+          maxLength: 4096
+          minLength: 1
+          type: string
       required:
         - grant_type
       type: object
@@ -13295,23 +13437,6 @@ components:
         - name
         - type
       type: object
-    WithSceneViewStateContent:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - scene-view-state-content
-          type: string
-        withSceneViewState:
-          discriminator:
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/WithSceneViewId'
-            - $ref: '#/components/schemas/WithSceneViewStateId'
-      required:
-        - type
-        - withSceneViewState
-      type: object
     WithThread:
       additionalProperties: false
       properties:
@@ -13343,6 +13468,29 @@ components:
           maxLength: 36
           type: string
       required:
+        - id
+        - type
+      type: object
+    PresignedUrlData:
+      additionalProperties: false
+      properties:
+        type:
+          example: presigned-url
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PresignedUrlData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
         - id
         - type
       type: object
@@ -13556,29 +13704,6 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/FileMetadataData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    UploadUrlData:
-      additionalProperties: false
-      properties:
-        type:
-          example: upload-url
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/UploadUrlData_attributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -15246,26 +15371,31 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        status:
+          example: complete
+          type: string
+        size:
+          format: int64
+          type: integer
       required:
         - id
+        - name
+        - status
         - type
       type: object
-    SceneViewStateAttachment:
+    AccountRelationship:
       additionalProperties: false
+      description: Relationship to an `account`.
       properties:
-        type:
-          enum:
-            - scene-view-state
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
+        data:
+          $ref: '#/components/schemas/AccountRelationship_data'
       required:
-        - id
-        - type
+        - data
       type: object
     WithSceneViewId:
       additionalProperties: false
@@ -15303,15 +15433,6 @@ components:
         - sceneViewStateId
         - type
       type: object
-    AccountRelationship:
-      additionalProperties: false
-      description: Relationship to an `account`.
-      properties:
-        data:
-          $ref: '#/components/schemas/AccountRelationship_data'
-      required:
-        - data
-      type: object
     SceneReference:
       additionalProperties: false
       description: A reference to a scene for a thread.
@@ -15340,8 +15461,13 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        thumbnails:
+          items:
+            $ref: '#/components/schemas/ThumbnailData'
+          type: array
       required:
         - sceneId
+        - thumbnails
         - type
       type: object
     CollaborationContextRelationship:
@@ -16502,7 +16628,6 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/WithFileContent'
-            - $ref: '#/components/schemas/WithSceneViewStateContent'
       required:
         - withContent
       type: object
@@ -16532,6 +16657,58 @@ components:
       required:
         - attributes
         - relationships
+        - type
+      type: object
+    CreateDownloadRequest_data_attributes:
+      properties:
+        expiry:
+          description:
+            Specifies the duration for which this pre-signed request should
+            be valid. After this time has expired, attempting to use the presigned
+            request will fail. (Defaults to 1 hour, max value is 24 hours)
+          example: 3600
+          format: int32
+          maximum: 86400
+          minimum: 1
+          type: integer
+      type: object
+    CreateDownloadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: download-url
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateDownloadRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
+    CreateUploadRequest_data_attributes:
+      properties:
+        expiry:
+          description:
+            Specifies the duration for which this pre-signed request should
+            be valid for upload. After this time has expired, attempting to use the
+            presigned request will fail. (Defaults to 1 hour, max value is 24 hours)
+          example: 3600
+          format: int32
+          maximum: 86400
+          minimum: 1
+          type: integer
+      type: object
+    CreateUploadRequest_data:
+      properties:
+        type:
+          description: Resource object type.
+          example: upload-url
+          maxLength: 32
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateUploadRequest_data_attributes'
+      required:
+        - attributes
         - type
       type: object
     CreateCollaborationContextRequest_data:
@@ -16673,6 +16850,14 @@ components:
           minimum: 1
           nullable: true
           type: integer
+        metadata:
+          additionalProperties:
+            nullable: true
+            type: string
+          description:
+            Updates to file metadata. Null values delete the associated
+            key/value pair.
+          type: object
       type: object
     UpdateFileRequest_data:
       properties:
@@ -16683,58 +16868,6 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/UpdateFileRequest_data_attributes'
-      required:
-        - attributes
-        - type
-      type: object
-    CreateUploadRequest_data_attributes:
-      properties:
-        expiry:
-          description:
-            Specifies the duration for which this pre-signed request should
-            be valid for upload. After this time has expired, attempting to use the
-            presigned request will fail. (Defaults to 1 hour, max value is 24 hours)
-          example: 3600
-          format: int32
-          maximum: 86400
-          minimum: 1
-          type: integer
-      type: object
-    CreateUploadRequest_data:
-      properties:
-        type:
-          description: Resource object type.
-          example: upload-url
-          maxLength: 32
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CreateUploadRequest_data_attributes'
-      required:
-        - attributes
-        - type
-      type: object
-    CreateDownloadRequest_data_attributes:
-      properties:
-        expiry:
-          description:
-            Specifies the duration for which this pre-signed request should
-            be valid. After this time has expired, attempting to use the presigned
-            request will fail. (Defaults to 1 hour, max value is 24 hours)
-          example: 3600
-          format: int32
-          maximum: 86400
-          minimum: 1
-          type: integer
-      type: object
-    CreateDownloadRequest_data:
-      properties:
-        type:
-          description: Resource object type.
-          example: download-url
-          maxLength: 32
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CreateDownloadRequest_data_attributes'
       required:
         - attributes
         - type
@@ -16791,6 +16924,14 @@ components:
           format: int32
           minimum: 1
           type: integer
+        metadata:
+          additionalProperties:
+            nullable: true
+            type: string
+          description:
+            Updates to file collection metadata. Null values delete the
+            associated key/value pair.
+          type: object
       type: object
     UpdateFileCollectionRequest_data:
       properties:
@@ -18222,9 +18363,17 @@ components:
           description: The underlying content of the attachment
           oneOf:
             - $ref: '#/components/schemas/FileAttachment'
-            - $ref: '#/components/schemas/SceneViewStateAttachment'
       required:
         - content
+        - thumbnails
+      type: object
+    PresignedUrlData_attributes:
+      properties:
+        uri:
+          example: https://example.com/path/to/file.zip
+          type: string
+      required:
+        - uri
       type: object
     BatchOperation_ref:
       description: Target of batch operation.
@@ -18395,21 +18544,19 @@ components:
         - name
         - status
       type: object
-    UploadUrlData_attributes:
-      properties:
-        uploadUrl:
-          example: https://example.com/path/to/file.zip
-          type: string
-      required:
-        - uploadUrl
-      type: object
     DownloadUrlData_attributes:
       properties:
         downloadUrl:
+          deprecated: true
+          description: Deprecated. Use `uri` instead.
+          example: https://example.com/path/to/file.zip
+          type: string
+        uri:
           example: https://example.com/path/to/file.zip
           type: string
       required:
         - downloadUrl
+        - uri
       type: object
     FileCollectionMetadataData_attributes:
       properties:

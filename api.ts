@@ -553,10 +553,10 @@ export interface AttachmentData {
 export interface AttachmentDataAttributes {
   /**
    * The underlying content of the attachment
-   * @type {FileAttachment | SceneViewStateAttachment}
+   * @type {FileAttachment}
    * @memberof AttachmentDataAttributes
    */
-  content: FileAttachment | SceneViewStateAttachment;
+  content: FileAttachment;
 }
 /**
  *
@@ -1227,10 +1227,10 @@ export type CreateAttachmentRequestDataTypeEnum =
 export interface CreateAttachmentRequestDataAttributes {
   /**
    *
-   * @type {WithFileContent | WithSceneViewStateContent}
+   * @type {WithFileContent}
    * @memberof CreateAttachmentRequestDataAttributes
    */
-  withContent: WithFileContent | WithSceneViewStateContent;
+  withContent: WithFileContent;
 }
 /**
  *
@@ -3522,11 +3522,18 @@ export interface DownloadUrlData {
  */
 export interface DownloadUrlDataAttributes {
   /**
+   * Deprecated. Use `uri` instead.
+   * @type {string}
+   * @memberof DownloadUrlDataAttributes
+   * @deprecated
+   */
+  downloadUrl: string;
+  /**
    *
    * @type {string}
    * @memberof DownloadUrlDataAttributes
    */
-  downloadUrl: string;
+  uri: string;
 }
 /**
  *
@@ -3777,6 +3784,24 @@ export interface FileAttachment {
    * @memberof FileAttachment
    */
   id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FileAttachment
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof FileAttachment
+   */
+  status: string;
+  /**
+   *
+   * @type {number}
+   * @memberof FileAttachment
+   */
+  size?: number;
 }
 
 export const FileAttachmentTypeEnum = {
@@ -5781,6 +5806,69 @@ export interface Point {
    * @memberof Point
    */
   dy: number;
+}
+/**
+ *
+ * @export
+ * @interface PresignedUrl
+ */
+export interface PresignedUrl {
+  /**
+   *
+   * @type {PresignedUrlData}
+   * @memberof PresignedUrl
+   */
+  data: PresignedUrlData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PresignedUrl
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PresignedUrlData
+ */
+export interface PresignedUrlData {
+  /**
+   *
+   * @type {string}
+   * @memberof PresignedUrlData
+   */
+  type: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PresignedUrlData
+   */
+  id: string;
+  /**
+   *
+   * @type {PresignedUrlDataAttributes}
+   * @memberof PresignedUrlData
+   */
+  attributes: PresignedUrlDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PresignedUrlData
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PresignedUrlDataAttributes
+ */
+export interface PresignedUrlDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof PresignedUrlDataAttributes
+   */
+  uri: string;
 }
 /**
  *
@@ -7889,6 +7977,12 @@ export interface SceneReference {
    * @memberof SceneReference
    */
   sceneItemId?: string;
+  /**
+   *
+   * @type {Array<ThumbnailData>}
+   * @memberof SceneReference
+   */
+  thumbnails: Array<ThumbnailData>;
 }
 
 export const SceneReferenceTypeEnum = {
@@ -8316,33 +8410,6 @@ export interface SceneViewState {
    */
   links?: { [key: string]: Link };
 }
-/**
- *
- * @export
- * @interface SceneViewStateAttachment
- */
-export interface SceneViewStateAttachment {
-  /**
-   *
-   * @type {string}
-   * @memberof SceneViewStateAttachment
-   */
-  type: SceneViewStateAttachmentTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof SceneViewStateAttachment
-   */
-  id: string;
-}
-
-export const SceneViewStateAttachmentTypeEnum = {
-  SceneViewState: 'scene-view-state',
-} as const;
-
-export type SceneViewStateAttachmentTypeEnum =
-  (typeof SceneViewStateAttachmentTypeEnum)[keyof typeof SceneViewStateAttachmentTypeEnum];
-
 /**
  *
  * @export
@@ -9267,6 +9334,12 @@ export interface UpdateFileCollectionRequestDataAttributes {
    * @memberof UpdateFileCollectionRequestDataAttributes
    */
   expiry?: number;
+  /**
+   * Updates to file collection metadata. Null values delete the associated key/value pair.
+   * @type {{ [key: string]: string; }}
+   * @memberof UpdateFileCollectionRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  *
@@ -9318,6 +9391,12 @@ export interface UpdateFileRequestDataAttributes {
    * @memberof UpdateFileRequestDataAttributes
    */
   expiry?: number | null;
+  /**
+   * Updates to file metadata. Null values delete the associated key/value pair.
+   * @type {{ [key: string]: string; }}
+   * @memberof UpdateFileRequestDataAttributes
+   */
+  metadata?: { [key: string]: string };
 }
 /**
  * An operation that updates items with the specified revision to the default rendition.
@@ -10121,69 +10200,6 @@ export const UpdateWebhookSubscriptionRequestDataAttributesStatusEnum = {
 export type UpdateWebhookSubscriptionRequestDataAttributesStatusEnum =
   (typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum)[keyof typeof UpdateWebhookSubscriptionRequestDataAttributesStatusEnum];
 
-/**
- *
- * @export
- * @interface UploadUrl
- */
-export interface UploadUrl {
-  /**
-   *
-   * @type {UploadUrlData}
-   * @memberof UploadUrl
-   */
-  data: UploadUrlData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof UploadUrl
-   */
-  links?: { [key: string]: Link };
-}
-/**
- *
- * @export
- * @interface UploadUrlData
- */
-export interface UploadUrlData {
-  /**
-   *
-   * @type {string}
-   * @memberof UploadUrlData
-   */
-  type: string;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof UploadUrlData
-   */
-  id: string;
-  /**
-   *
-   * @type {UploadUrlDataAttributes}
-   * @memberof UploadUrlData
-   */
-  attributes: UploadUrlDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof UploadUrlData
-   */
-  links?: { [key: string]: Link };
-}
-/**
- *
- * @export
- * @interface UploadUrlDataAttributes
- */
-export interface UploadUrlDataAttributes {
-  /**
-   *
-   * @type {string}
-   * @memberof UploadUrlDataAttributes
-   */
-  uploadUrl: string;
-}
 /**
  *
  * @export
@@ -11246,33 +11262,6 @@ export const WithSceneViewIdTypeEnum = {
 
 export type WithSceneViewIdTypeEnum =
   (typeof WithSceneViewIdTypeEnum)[keyof typeof WithSceneViewIdTypeEnum];
-
-/**
- *
- * @export
- * @interface WithSceneViewStateContent
- */
-export interface WithSceneViewStateContent {
-  /**
-   *
-   * @type {string}
-   * @memberof WithSceneViewStateContent
-   */
-  type: WithSceneViewStateContentTypeEnum;
-  /**
-   *
-   * @type {WithSceneViewId | WithSceneViewStateId}
-   * @memberof WithSceneViewStateContent
-   */
-  withSceneViewState: WithSceneViewId | WithSceneViewStateId;
-}
-
-export const WithSceneViewStateContentTypeEnum = {
-  SceneViewStateContent: 'scene-view-state-content',
-} as const;
-
-export type WithSceneViewStateContentTypeEnum =
-  (typeof WithSceneViewStateContentTypeEnum)[keyof typeof WithSceneViewStateContentTypeEnum];
 
 /**
  * A sceneViewStateId to be associated as a reference.
@@ -12832,6 +12821,142 @@ export const AttachmentsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Create a download url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachmentDownloadUrl: async (
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createAttachmentDownloadUrl', 'id', id);
+      // verify required parameter 'createDownloadRequest' is not null or undefined
+      assertParamExists(
+        'createAttachmentDownloadUrl',
+        'createDownloadRequest',
+        createDownloadRequest
+      );
+      const localVarPath = `/attachments/{id}/download-url`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createDownloadRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Create an upload url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachmentUploadUrl: async (
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('createAttachmentUploadUrl', 'id', id);
+      // verify required parameter 'createUploadRequest' is not null or undefined
+      assertParamExists(
+        'createAttachmentUploadUrl',
+        'createUploadRequest',
+        createUploadRequest
+      );
+      const localVarPath = `/attachments/{id}/upload-url`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createUploadRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * List attachments **Preview:** This is a preview API and is subject to change.
      * @param {string} filterRelationshipId A relationship id to filter attachments for
      * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
@@ -12950,6 +13075,60 @@ export const AttachmentsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
+     * Create a download url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createAttachmentDownloadUrl(
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PresignedUrl>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createAttachmentDownloadUrl(
+          id,
+          createDownloadRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Create an upload url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createAttachmentUploadUrl(
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PresignedUrl>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createAttachmentUploadUrl(
+          id,
+          createUploadRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * List attachments **Preview:** This is a preview API and is subject to change.
      * @param {string} filterRelationshipId A relationship id to filter attachments for
      * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
@@ -13010,6 +13189,38 @@ export const AttachmentsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Create a download url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateDownloadRequest} createDownloadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachmentDownloadUrl(
+      id: string,
+      createDownloadRequest: CreateDownloadRequest,
+      options?: any
+    ): AxiosPromise<PresignedUrl> {
+      return localVarFp
+        .createAttachmentDownloadUrl(id, createDownloadRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Create an upload url for a file `attachment` by ID.
+     * @param {string} id The &#x60;attachment&#x60; ID.
+     * @param {CreateUploadRequest} createUploadRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createAttachmentUploadUrl(
+      id: string,
+      createUploadRequest: CreateUploadRequest,
+      options?: any
+    ): AxiosPromise<PresignedUrl> {
+      return localVarFp
+        .createAttachmentUploadUrl(id, createUploadRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * List attachments **Preview:** This is a preview API and is subject to change.
      * @param {string} filterRelationshipId A relationship id to filter attachments for
      * @param {'thread' | 'reply'} filterRelationshipType The type of relationship (reply or thread)
@@ -13050,6 +13261,48 @@ export interface AttachmentsApiCreateAttachmentRequest {
    * @memberof AttachmentsApiCreateAttachment
    */
   readonly createAttachmentRequest: CreateAttachmentRequest;
+}
+
+/**
+ * Request parameters for createAttachmentDownloadUrl operation in AttachmentsApi.
+ * @export
+ * @interface AttachmentsApiCreateAttachmentDownloadUrlRequest
+ */
+export interface AttachmentsApiCreateAttachmentDownloadUrlRequest {
+  /**
+   * The &#x60;attachment&#x60; ID.
+   * @type {string}
+   * @memberof AttachmentsApiCreateAttachmentDownloadUrl
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateDownloadRequest}
+   * @memberof AttachmentsApiCreateAttachmentDownloadUrl
+   */
+  readonly createDownloadRequest: CreateDownloadRequest;
+}
+
+/**
+ * Request parameters for createAttachmentUploadUrl operation in AttachmentsApi.
+ * @export
+ * @interface AttachmentsApiCreateAttachmentUploadUrlRequest
+ */
+export interface AttachmentsApiCreateAttachmentUploadUrlRequest {
+  /**
+   * The &#x60;attachment&#x60; ID.
+   * @type {string}
+   * @memberof AttachmentsApiCreateAttachmentUploadUrl
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {CreateUploadRequest}
+   * @memberof AttachmentsApiCreateAttachmentUploadUrl
+   */
+  readonly createUploadRequest: CreateUploadRequest;
 }
 
 /**
@@ -13107,6 +13360,46 @@ export class AttachmentsApi extends BaseAPI {
   ) {
     return AttachmentsApiFp(this.configuration)
       .createAttachment(requestParameters.createAttachmentRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create a download url for a file `attachment` by ID.
+   * @param {AttachmentsApiCreateAttachmentDownloadUrlRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AttachmentsApi
+   */
+  public createAttachmentDownloadUrl(
+    requestParameters: AttachmentsApiCreateAttachmentDownloadUrlRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return AttachmentsApiFp(this.configuration)
+      .createAttachmentDownloadUrl(
+        requestParameters.id,
+        requestParameters.createDownloadRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Create an upload url for a file `attachment` by ID.
+   * @param {AttachmentsApiCreateAttachmentUploadUrlRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof AttachmentsApi
+   */
+  public createAttachmentUploadUrl(
+    requestParameters: AttachmentsApiCreateAttachmentUploadUrlRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return AttachmentsApiFp(this.configuration)
+      .createAttachmentUploadUrl(
+        requestParameters.id,
+        requestParameters.createUploadRequest,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -16703,7 +16996,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       createUploadRequest: CreateUploadRequest,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UploadUrl>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<PresignedUrl>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createUploadUrl(
         id,
@@ -16899,7 +17192,7 @@ export const FilesApiFactory = function (
       id: string,
       createUploadRequest: CreateUploadRequest,
       options?: any
-    ): AxiosPromise<UploadUrl> {
+    ): AxiosPromise<PresignedUrl> {
       return localVarFp
         .createUploadUrl(id, createUploadRequest, options)
         .then((request) => request(axios, basePath));
