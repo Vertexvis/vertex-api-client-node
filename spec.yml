@@ -31,6 +31,7 @@ tags:
   - description: Requires Engage Module
     name: attachments
   - name: batches
+  - name: canvases
   - description: Requires Engage Module
     name: collaboration-contexts
   - name: exports
@@ -1191,6 +1192,65 @@ paths:
         - OAuth2: []
       tags:
         - batches
+  /canvases/{id}:
+    get:
+      description: Get a `canvas` by ID.
+      operationId: getCanvas
+      parameters:
+        - description: The `canvas` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Canvas'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - canvases
   /collaboration-contexts:
     get:
       description: List `collaboration-context`s
@@ -10840,6 +10900,15 @@ components:
       schema:
         $ref: '#/components/schemas/Vector3'
       style: deepObject
+    CanvasId:
+      description: The `canvas` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     CollaborationContextId:
       description: The `collaboration-context` ID.
       explode: false
@@ -11827,6 +11896,18 @@ components:
           type: array
       required:
         - vertexvis/batch:results
+      type: object
+    Canvas:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CanvasData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
       type: object
     CollaborationContextList:
       additionalProperties: false
@@ -13417,9 +13498,12 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/AttachmentData_attributes'
+        relationships:
+          $ref: '#/components/schemas/AttachmentData_relationships'
       required:
         - attributes
         - id
+        - relationships
         - type
       type: object
     WithFileContent:
@@ -13557,6 +13641,30 @@ components:
           minLength: 1
           type: string
       required:
+        - id
+        - type
+      type: object
+    CanvasData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - canvas
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CanvasData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
         - id
         - type
       type: object
@@ -14826,6 +14934,8 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/SceneViewStateData_attributes'
+        relationships:
+          $ref: '#/components/schemas/SceneViewStateData_relationships'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -14833,6 +14943,24 @@ components:
       required:
         - attributes
         - id
+        - type
+      type: object
+    WithCanvas:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - with-canvas
+          type: string
+        document:
+          $ref: '#/components/schemas/CanvasDocument'
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - document
         - type
       type: object
     SceneViewRelationship:
@@ -15388,6 +15516,44 @@ components:
         - status
         - type
       type: object
+    AttachmentRelationship:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/AttachmentRelationship_data'
+      required:
+        - data
+      type: object
+    CanvasDocument:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - canvas-document-v1
+          type: string
+        items:
+          items:
+            description: A canvas item.
+            discriminator:
+              mapping:
+                line-item-2d: '#/components/schemas/LineItem2d'
+                oval-item-2d: '#/components/schemas/OvalItem2d'
+                freeform-item-2d: '#/components/schemas/FreeformItem2d'
+                callout-item: '#/components/schemas/CalloutItem'
+                pin-item-2d: '#/components/schemas/PinItem2d'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/LineItem2d'
+              - $ref: '#/components/schemas/OvalItem2d'
+              - $ref: '#/components/schemas/FreeformItem2d'
+              - $ref: '#/components/schemas/CalloutItem'
+              - $ref: '#/components/schemas/PinItem2d'
+          maxItems: 1024
+          type: array
+      required:
+        - items
+        - type
+      type: object
     AccountRelationship:
       additionalProperties: false
       description: Relationship to an `account`.
@@ -15411,6 +15577,8 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        withCanvas:
+          $ref: '#/components/schemas/WithCanvas'
       required:
         - sceneViewId
         - type
@@ -15465,6 +15633,12 @@ components:
           items:
             $ref: '#/components/schemas/ThumbnailData'
           type: array
+        canvasId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
       required:
         - sceneId
         - thumbnails
@@ -16104,6 +16278,15 @@ components:
         - color
         - width
       type: object
+    CanvasRelationship:
+      additionalProperties: false
+      description: Relationship to a `canvas`.
+      properties:
+        data:
+          $ref: '#/components/schemas/CanvasRelationshipData'
+      required:
+        - data
+      type: object
     HexColor:
       description: A hex color value.
       example: '#FFFFFF'
@@ -16287,6 +16470,144 @@ components:
       required:
         - domain
       type: object
+    LineItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - line-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        startPosition:
+          $ref: '#/components/schemas/Vector2'
+        endPosition:
+          $ref: '#/components/schemas/Vector2'
+        startShape:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/ArrowEndShape'
+            - $ref: '#/components/schemas/CircleEndShape'
+            - $ref: '#/components/schemas/DashEndShape'
+        endShape:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/ArrowEndShape'
+            - $ref: '#/components/schemas/CircleEndShape'
+            - $ref: '#/components/schemas/DashEndShape'
+      required:
+        - endPosition
+        - fill
+        - startPosition
+        - stroke
+        - type
+      type: object
+    OvalItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - oval-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        topLeft:
+          $ref: '#/components/schemas/Vector2'
+        bottomRight:
+          $ref: '#/components/schemas/Vector2'
+      required:
+        - bottomRight
+        - fill
+        - stroke
+        - topLeft
+        - type
+      type: object
+    FreeformItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - freeform-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        positions:
+          items:
+            $ref: '#/components/schemas/Vector2'
+          type: array
+      required:
+        - fill
+        - positions
+        - stroke
+        - type
+      type: object
+    CalloutItem:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - callout-item
+          type: string
+        primaryColor:
+          $ref: '#/components/schemas/Color3'
+        accentColor:
+          $ref: '#/components/schemas/Color3'
+        text:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        anchorPosition:
+          $ref: '#/components/schemas/Vector3'
+        textPosition:
+          $ref: '#/components/schemas/Vector2'
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - accentColor
+        - anchorPosition
+        - primaryColor
+        - text
+        - textPosition
+        - type
+      type: object
+    PinItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - pin-item-2d
+          type: string
+        primaryColor:
+          $ref: '#/components/schemas/Color3'
+        accentColor:
+          $ref: '#/components/schemas/Color3'
+        position:
+          $ref: '#/components/schemas/Vector3'
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - accentColor
+        - position
+        - primaryColor
+        - type
+      type: object
     SelectFileById:
       additionalProperties: false
       description: Queries a file by its unique ID.
@@ -16407,6 +16728,26 @@ components:
       maximum: 255
       minimum: 0
       type: integer
+    CanvasRelationshipData:
+      additionalProperties: false
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - canvas
+          example: canvas
+          maxLength: 32
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
+      type: object
     RelationshipLinks:
       additionalProperties: false
       example:
@@ -16417,6 +16758,94 @@ components:
           type: string
       required:
         - related
+      type: object
+    StrokeStyle:
+      additionalProperties: false
+      properties:
+        color:
+          $ref: '#/components/schemas/Color3'
+        thickness:
+          description: A numerical floating-point value.
+          type: number
+      required:
+        - color
+        - thickness
+      type: object
+    FillStyle:
+      additionalProperties: false
+      properties:
+        color:
+          $ref: '#/components/schemas/Color3'
+      required:
+        - color
+      type: object
+    Vector2:
+      additionalProperties: false
+      description: 2D Vector.
+      properties:
+        x:
+          description: x-axis coordinate.
+          example: 1.0
+          type: number
+        y:
+          description: y-axis coordinate.
+          example: 0.0
+          type: number
+      required:
+        - x
+        - 'y'
+      type: object
+    ArrowEndShape:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - arrow-end
+          type: string
+        width:
+          description: A numerical floating-point value.
+          type: number
+        filled:
+          description: Indicates if the arrow end should be filled.
+          type: boolean
+      required:
+        - filled
+        - type
+        - width
+      type: object
+    CircleEndShape:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - circle-end
+          type: string
+        diameter:
+          description: A numerical floating-point value for the diameter of the end.
+          type: number
+        filled:
+          description: Indicates if the circle end should be filled.
+          type: boolean
+      required:
+        - diameter
+        - filled
+        - type
+      type: object
+    DashEndShape:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - dash-end
+          type: string
+        width:
+          description:
+            A numerical floating-point value indicating the width of the
+            dash.
+          type: number
+      required:
+        - type
+        - width
       type: object
     CreateAccountRequest_data_attributes:
       properties:
@@ -17021,6 +17450,11 @@ components:
           type: string
         isDrafting:
           type: boolean
+        reference:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/CreateSceneReference'
       required:
         - body
       type: object
@@ -17855,6 +18289,8 @@ components:
           example: PN12345
           maxLength: 1024
           type: string
+        withCanvas:
+          $ref: '#/components/schemas/WithCanvas'
       type: object
     CreateSceneViewStateRequest_data_relationships:
       properties:
@@ -17881,6 +18317,21 @@ components:
         - relationships
         - type
       type: object
+    UpdateSceneViewStateRequest_data_attributes:
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation. For example, an existing ID from
+            a PLM system.
+          example: PN12345
+          maxLength: 1024
+          type: string
+      type: object
     UpdateSceneViewStateRequest_data:
       properties:
         type:
@@ -17889,7 +18340,7 @@ components:
           maxLength: 32
           type: string
         attributes:
-          $ref: '#/components/schemas/CreateSceneViewStateRequest_data_attributes'
+          $ref: '#/components/schemas/UpdateSceneViewStateRequest_data_attributes'
       required:
         - attributes
         - type
@@ -18367,6 +18818,11 @@ components:
         - content
         - thumbnails
       type: object
+    AttachmentData_relationships:
+      properties:
+        relationship:
+          $ref: '#/components/schemas/AttachmentRelationship'
+      type: object
     PresignedUrlData_attributes:
       properties:
         uri:
@@ -18413,6 +18869,28 @@ components:
       required:
         - created
         - status
+      type: object
+    CanvasData_attributes:
+      properties:
+        document:
+          $ref: '#/components/schemas/CanvasDocument'
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        modifiedAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        suppliedId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - document
+        - modifiedAt
       type: object
     CollaborationContextData_attributes:
       properties:
@@ -18607,6 +19085,11 @@ components:
         isDrafting:
           description: Indicates whether or not the thread is in a drafted state
           type: boolean
+        reference:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/SceneReference'
       required:
         - body
         - createdAt
@@ -19264,6 +19747,11 @@ components:
           minLength: 1
           type: string
       type: object
+    SceneViewStateData_relationships:
+      properties:
+        canvas:
+          $ref: '#/components/schemas/CanvasRelationship'
+      type: object
     SceneViewRelationship_data:
       properties:
         type:
@@ -19515,6 +20003,23 @@ components:
         - status
         - topics
         - url
+      type: object
+    AttachmentRelationship_data:
+      properties:
+        type:
+          enum:
+            - thread
+            - reply
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
     AccountRelationship_data:
       properties:

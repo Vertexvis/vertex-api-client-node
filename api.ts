@@ -504,6 +504,39 @@ export interface ArchiveManifestEntry {
 /**
  *
  * @export
+ * @interface ArrowEndShape
+ */
+export interface ArrowEndShape {
+  /**
+   *
+   * @type {string}
+   * @memberof ArrowEndShape
+   */
+  type: ArrowEndShapeTypeEnum;
+  /**
+   * A numerical floating-point value.
+   * @type {number}
+   * @memberof ArrowEndShape
+   */
+  width: number;
+  /**
+   * Indicates if the arrow end should be filled.
+   * @type {boolean}
+   * @memberof ArrowEndShape
+   */
+  filled: boolean;
+}
+
+export const ArrowEndShapeTypeEnum = {
+  ArrowEnd: 'arrow-end',
+} as const;
+
+export type ArrowEndShapeTypeEnum =
+  (typeof ArrowEndShapeTypeEnum)[keyof typeof ArrowEndShapeTypeEnum];
+
+/**
+ *
+ * @export
  * @interface Attachment
  */
 export interface Attachment {
@@ -544,6 +577,12 @@ export interface AttachmentData {
    * @memberof AttachmentData
    */
   attributes: AttachmentDataAttributes;
+  /**
+   *
+   * @type {AttachmentDataRelationships}
+   * @memberof AttachmentData
+   */
+  relationships: AttachmentDataRelationships;
 }
 /**
  *
@@ -557,6 +596,19 @@ export interface AttachmentDataAttributes {
    * @memberof AttachmentDataAttributes
    */
   content: FileAttachment;
+}
+/**
+ *
+ * @export
+ * @interface AttachmentDataRelationships
+ */
+export interface AttachmentDataRelationships {
+  /**
+   *
+   * @type {AttachmentRelationship}
+   * @memberof AttachmentDataRelationships
+   */
+  relationship?: AttachmentRelationship;
 }
 /**
  *
@@ -577,6 +629,47 @@ export interface AttachmentList {
    */
   links: { [key: string]: Link };
 }
+/**
+ *
+ * @export
+ * @interface AttachmentRelationship
+ */
+export interface AttachmentRelationship {
+  /**
+   *
+   * @type {AttachmentRelationshipData}
+   * @memberof AttachmentRelationship
+   */
+  data: AttachmentRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface AttachmentRelationshipData
+ */
+export interface AttachmentRelationshipData {
+  /**
+   *
+   * @type {string}
+   * @memberof AttachmentRelationshipData
+   */
+  type: AttachmentRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof AttachmentRelationshipData
+   */
+  id: string;
+}
+
+export const AttachmentRelationshipDataTypeEnum = {
+  Thread: 'thread',
+  Reply: 'reply',
+} as const;
+
+export type AttachmentRelationshipDataTypeEnum =
+  (typeof AttachmentRelationshipDataTypeEnum)[keyof typeof AttachmentRelationshipDataTypeEnum];
+
 /**
  *
  * @export
@@ -677,6 +770,63 @@ export interface BoundingBox {
  */
 export interface CADExportConfig extends ExportConfig {}
 /**
+ *
+ * @export
+ * @interface CalloutItem
+ */
+export interface CalloutItem {
+  /**
+   *
+   * @type {string}
+   * @memberof CalloutItem
+   */
+  type: CalloutItemTypeEnum;
+  /**
+   *
+   * @type {Color3}
+   * @memberof CalloutItem
+   */
+  primaryColor: Color3;
+  /**
+   *
+   * @type {Color3}
+   * @memberof CalloutItem
+   */
+  accentColor: Color3;
+  /**
+   *
+   * @type {string}
+   * @memberof CalloutItem
+   */
+  text: string;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof CalloutItem
+   */
+  anchorPosition: Vector3;
+  /**
+   *
+   * @type {Vector2}
+   * @memberof CalloutItem
+   */
+  textPosition: Vector2;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CalloutItem
+   */
+  sceneItemId?: string;
+}
+
+export const CalloutItemTypeEnum = {
+  CalloutItem: 'callout-item',
+} as const;
+
+export type CalloutItemTypeEnum =
+  (typeof CalloutItemTypeEnum)[keyof typeof CalloutItemTypeEnum];
+
+/**
  * Fit camera in 3D space based on items in scene.
  * @export
  * @interface CameraFit
@@ -697,6 +847,164 @@ export const CameraFitTypeEnum = {
 
 export type CameraFitTypeEnum =
   (typeof CameraFitTypeEnum)[keyof typeof CameraFitTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface Canvas
+ */
+export interface Canvas {
+  /**
+   *
+   * @type {CanvasData}
+   * @memberof Canvas
+   */
+  data: CanvasData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Canvas
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface CanvasData
+ */
+export interface CanvasData {
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasData
+   */
+  type: CanvasDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CanvasData
+   */
+  id: string;
+  /**
+   *
+   * @type {CanvasDataAttributes}
+   * @memberof CanvasData
+   */
+  attributes: CanvasDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof CanvasData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const CanvasDataTypeEnum = {
+  Canvas: 'canvas',
+} as const;
+
+export type CanvasDataTypeEnum =
+  (typeof CanvasDataTypeEnum)[keyof typeof CanvasDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CanvasDataAttributes
+ */
+export interface CanvasDataAttributes {
+  /**
+   *
+   * @type {CanvasDocument}
+   * @memberof CanvasDataAttributes
+   */
+  document: CanvasDocument;
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasDataAttributes
+   */
+  createdAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasDataAttributes
+   */
+  modifiedAt: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasDataAttributes
+   */
+  suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface CanvasDocument
+ */
+export interface CanvasDocument {
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasDocument
+   */
+  type: CanvasDocumentTypeEnum;
+  /**
+   *
+   * @type {Array<LineItem2d | OvalItem2d | FreeformItem2d | CalloutItem | PinItem2d>}
+   * @memberof CanvasDocument
+   */
+  items: Array<
+    LineItem2d | OvalItem2d | FreeformItem2d | CalloutItem | PinItem2d
+  >;
+}
+
+export const CanvasDocumentTypeEnum = {
+  CanvasDocumentV1: 'canvas-document-v1',
+} as const;
+
+export type CanvasDocumentTypeEnum =
+  (typeof CanvasDocumentTypeEnum)[keyof typeof CanvasDocumentTypeEnum];
+
+/**
+ * Relationship to a `canvas`.
+ * @export
+ * @interface CanvasRelationship
+ */
+export interface CanvasRelationship {
+  /**
+   *
+   * @type {CanvasRelationshipData}
+   * @memberof CanvasRelationship
+   */
+  data: CanvasRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface CanvasRelationshipData
+ */
+export interface CanvasRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof CanvasRelationshipData
+   */
+  type: CanvasRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CanvasRelationshipData
+   */
+  id: string;
+}
+
+export const CanvasRelationshipDataTypeEnum = {
+  Canvas: 'canvas',
+} as const;
+
+export type CanvasRelationshipDataTypeEnum =
+  (typeof CanvasRelationshipDataTypeEnum)[keyof typeof CanvasRelationshipDataTypeEnum];
 
 /**
  *
@@ -778,6 +1086,39 @@ export const ChangeVisibilityOpTypeEnum = {
 
 export type ChangeVisibilityOpTypeEnum =
   (typeof ChangeVisibilityOpTypeEnum)[keyof typeof ChangeVisibilityOpTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CircleEndShape
+ */
+export interface CircleEndShape {
+  /**
+   *
+   * @type {string}
+   * @memberof CircleEndShape
+   */
+  type: CircleEndShapeTypeEnum;
+  /**
+   * A numerical floating-point value for the diameter of the end.
+   * @type {number}
+   * @memberof CircleEndShape
+   */
+  diameter: number;
+  /**
+   * Indicates if the circle end should be filled.
+   * @type {boolean}
+   * @memberof CircleEndShape
+   */
+  filled: boolean;
+}
+
+export const CircleEndShapeTypeEnum = {
+  CircleEnd: 'circle-end',
+} as const;
+
+export type CircleEndShapeTypeEnum =
+  (typeof CircleEndShapeTypeEnum)[keyof typeof CircleEndShapeTypeEnum];
 
 /**
  *
@@ -2034,6 +2375,12 @@ export interface CreateReplyRequestDataAttributes {
    * @memberof CreateReplyRequestDataAttributes
    */
   isDrafting?: boolean;
+  /**
+   *
+   * @type {CreateSceneReference}
+   * @memberof CreateReplyRequestDataAttributes
+   */
+  reference?: CreateSceneReference;
 }
 /**
  *
@@ -2801,6 +3148,12 @@ export interface CreateSceneViewStateRequestDataAttributes {
    * @memberof CreateSceneViewStateRequestDataAttributes
    */
   suppliedId?: string;
+  /**
+   *
+   * @type {WithCanvas}
+   * @memberof CreateSceneViewStateRequestDataAttributes
+   */
+  withCanvas?: WithCanvas;
 }
 /**
  *
@@ -3385,6 +3738,33 @@ export interface CrossSectioning {
    */
   planes: Array<SectionPlane>;
 }
+/**
+ *
+ * @export
+ * @interface DashEndShape
+ */
+export interface DashEndShape {
+  /**
+   *
+   * @type {string}
+   * @memberof DashEndShape
+   */
+  type: DashEndShapeTypeEnum;
+  /**
+   * A numerical floating-point value indicating the width of the dash.
+   * @type {number}
+   * @memberof DashEndShape
+   */
+  width: number;
+}
+
+export const DashEndShapeTypeEnum = {
+  DashEnd: 'dash-end',
+} as const;
+
+export type DashEndShapeTypeEnum =
+  (typeof DashEndShapeTypeEnum)[keyof typeof DashEndShapeTypeEnum];
+
 /**
  * Create Part Assembly
  * @export
@@ -4142,6 +4522,19 @@ export type FileRelationshipDataTypeEnum =
   (typeof FileRelationshipDataTypeEnum)[keyof typeof FileRelationshipDataTypeEnum];
 
 /**
+ *
+ * @export
+ * @interface FillStyle
+ */
+export interface FillStyle {
+  /**
+   *
+   * @type {Color3}
+   * @memberof FillStyle
+   */
+  color: Color3;
+}
+/**
  * Describes how an attribute should be filtered.
  * @export
  * @interface FilterExpression
@@ -4190,6 +4583,45 @@ export interface FilterExpression {
    */
   contains?: string;
 }
+/**
+ *
+ * @export
+ * @interface FreeformItem2d
+ */
+export interface FreeformItem2d {
+  /**
+   *
+   * @type {string}
+   * @memberof FreeformItem2d
+   */
+  type: FreeformItem2dTypeEnum;
+  /**
+   *
+   * @type {StrokeStyle}
+   * @memberof FreeformItem2d
+   */
+  stroke: StrokeStyle;
+  /**
+   *
+   * @type {FillStyle}
+   * @memberof FreeformItem2d
+   */
+  fill: FillStyle;
+  /**
+   *
+   * @type {Array<Vector2>}
+   * @memberof FreeformItem2d
+   */
+  positions: Array<Vector2>;
+}
+
+export const FreeformItem2dTypeEnum = {
+  FreeformItem2d: 'freeform-item-2d',
+} as const;
+
+export type FreeformItem2dTypeEnum =
+  (typeof FreeformItem2dTypeEnum)[keyof typeof FreeformItem2dTypeEnum];
+
 /**
  *
  * @export
@@ -4471,6 +4903,63 @@ export interface HitResultDataRelationships {
    */
   sceneItem: RelationshipData;
 }
+/**
+ *
+ * @export
+ * @interface LineItem2d
+ */
+export interface LineItem2d {
+  /**
+   *
+   * @type {string}
+   * @memberof LineItem2d
+   */
+  type: LineItem2dTypeEnum;
+  /**
+   *
+   * @type {StrokeStyle}
+   * @memberof LineItem2d
+   */
+  stroke: StrokeStyle;
+  /**
+   *
+   * @type {FillStyle}
+   * @memberof LineItem2d
+   */
+  fill: FillStyle;
+  /**
+   *
+   * @type {Vector2}
+   * @memberof LineItem2d
+   */
+  startPosition: Vector2;
+  /**
+   *
+   * @type {Vector2}
+   * @memberof LineItem2d
+   */
+  endPosition: Vector2;
+  /**
+   *
+   * @type {ArrowEndShape | CircleEndShape | DashEndShape}
+   * @memberof LineItem2d
+   */
+  startShape?: ArrowEndShape | CircleEndShape | DashEndShape;
+  /**
+   *
+   * @type {ArrowEndShape | CircleEndShape | DashEndShape}
+   * @memberof LineItem2d
+   */
+  endShape?: ArrowEndShape | CircleEndShape | DashEndShape;
+}
+
+export const LineItem2dTypeEnum = {
+  LineItem2d: 'line-item-2d',
+} as const;
+
+export type LineItem2dTypeEnum =
+  (typeof LineItem2dTypeEnum)[keyof typeof LineItem2dTypeEnum];
+
 /**
  *
  * @export
@@ -4848,6 +5337,51 @@ export interface OrthographicCamera {
    */
   fovHeight: number;
 }
+/**
+ *
+ * @export
+ * @interface OvalItem2d
+ */
+export interface OvalItem2d {
+  /**
+   *
+   * @type {string}
+   * @memberof OvalItem2d
+   */
+  type: OvalItem2dTypeEnum;
+  /**
+   *
+   * @type {StrokeStyle}
+   * @memberof OvalItem2d
+   */
+  stroke: StrokeStyle;
+  /**
+   *
+   * @type {FillStyle}
+   * @memberof OvalItem2d
+   */
+  fill: FillStyle;
+  /**
+   *
+   * @type {Vector2}
+   * @memberof OvalItem2d
+   */
+  topLeft: Vector2;
+  /**
+   *
+   * @type {Vector2}
+   * @memberof OvalItem2d
+   */
+  bottomRight: Vector2;
+}
+
+export const OvalItem2dTypeEnum = {
+  OvalItem2d: 'oval-item-2d',
+} as const;
+
+export type OvalItem2dTypeEnum =
+  (typeof OvalItem2dTypeEnum)[keyof typeof OvalItem2dTypeEnum];
+
 /**
  *
  * @export
@@ -5738,6 +6272,51 @@ export interface PerspectiveCamera {
    */
   fovY?: number;
 }
+/**
+ *
+ * @export
+ * @interface PinItem2d
+ */
+export interface PinItem2d {
+  /**
+   *
+   * @type {string}
+   * @memberof PinItem2d
+   */
+  type: PinItem2dTypeEnum;
+  /**
+   *
+   * @type {Color3}
+   * @memberof PinItem2d
+   */
+  primaryColor: Color3;
+  /**
+   *
+   * @type {Color3}
+   * @memberof PinItem2d
+   */
+  accentColor: Color3;
+  /**
+   *
+   * @type {Vector3}
+   * @memberof PinItem2d
+   */
+  position: Vector3;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PinItem2d
+   */
+  sceneItemId?: string;
+}
+
+export const PinItem2dTypeEnum = {
+  PinItem2d: 'pin-item-2d',
+} as const;
+
+export type PinItem2dTypeEnum =
+  (typeof PinItem2dTypeEnum)[keyof typeof PinItem2dTypeEnum];
+
 /**
  *
  * @export
@@ -6842,6 +7421,12 @@ export interface ReplyDataAttributes {
    * @memberof ReplyDataAttributes
    */
   isDrafting: boolean;
+  /**
+   *
+   * @type {SceneReference}
+   * @memberof ReplyDataAttributes
+   */
+  reference?: SceneReference;
 }
 /**
  *
@@ -7983,6 +8568,12 @@ export interface SceneReference {
    * @memberof SceneReference
    */
   thumbnails: Array<ThumbnailData>;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof SceneReference
+   */
+  canvasId?: string;
 }
 
 export const SceneReferenceTypeEnum = {
@@ -8436,6 +9027,12 @@ export interface SceneViewStateData {
   attributes: SceneViewStateDataAttributes;
   /**
    *
+   * @type {SceneViewStateDataRelationships}
+   * @memberof SceneViewStateData
+   */
+  relationships?: SceneViewStateDataRelationships;
+  /**
+   *
    * @type {{ [key: string]: Link; }}
    * @memberof SceneViewStateData
    */
@@ -8489,6 +9086,19 @@ export interface SceneViewStateDataAttributes {
    * @memberof SceneViewStateDataAttributes
    */
   suppliedId?: string;
+}
+/**
+ *
+ * @export
+ * @interface SceneViewStateDataRelationships
+ */
+export interface SceneViewStateDataRelationships {
+  /**
+   *
+   * @type {CanvasRelationship}
+   * @memberof SceneViewStateDataRelationships
+   */
+  canvas?: CanvasRelationship;
 }
 /**
  *
@@ -8829,6 +9439,25 @@ export interface StreamKeyList {
    * @memberof StreamKeyList
    */
   links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface StrokeStyle
+ */
+export interface StrokeStyle {
+  /**
+   *
+   * @type {Color3}
+   * @memberof StrokeStyle
+   */
+  color: Color3;
+  /**
+   * A numerical floating-point value.
+   * @type {number}
+   * @memberof StrokeStyle
+   */
+  thickness: number;
 }
 /**
  *
@@ -10066,10 +10695,29 @@ export interface UpdateSceneViewStateRequestData {
   type: string;
   /**
    *
-   * @type {CreateSceneViewStateRequestDataAttributes}
+   * @type {UpdateSceneViewStateRequestDataAttributes}
    * @memberof UpdateSceneViewStateRequestData
    */
-  attributes: CreateSceneViewStateRequestDataAttributes;
+  attributes: UpdateSceneViewStateRequestDataAttributes;
+}
+/**
+ *
+ * @export
+ * @interface UpdateSceneViewStateRequestDataAttributes
+ */
+export interface UpdateSceneViewStateRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof UpdateSceneViewStateRequestDataAttributes
+   */
+  name?: string;
+  /**
+   * ID provided for correlation. For example, an existing ID from a PLM system.
+   * @type {string}
+   * @memberof UpdateSceneViewStateRequestDataAttributes
+   */
+  suppliedId?: string;
 }
 /**
  *
@@ -10577,6 +11225,25 @@ export const UserRelationshipDataTypeEnum = {
 export type UserRelationshipDataTypeEnum =
   (typeof UserRelationshipDataTypeEnum)[keyof typeof UserRelationshipDataTypeEnum];
 
+/**
+ * 2D Vector.
+ * @export
+ * @interface Vector2
+ */
+export interface Vector2 {
+  /**
+   * x-axis coordinate.
+   * @type {number}
+   * @memberof Vector2
+   */
+  x: number;
+  /**
+   * y-axis coordinate.
+   * @type {number}
+   * @memberof Vector2
+   */
+  y: number;
+}
 /**
  * 3D vector.
  * @export
@@ -11185,6 +11852,39 @@ export interface WebhookSubscriptionList {
 /**
  *
  * @export
+ * @interface WithCanvas
+ */
+export interface WithCanvas {
+  /**
+   *
+   * @type {string}
+   * @memberof WithCanvas
+   */
+  type: WithCanvasTypeEnum;
+  /**
+   *
+   * @type {CanvasDocument}
+   * @memberof WithCanvas
+   */
+  document: CanvasDocument;
+  /**
+   *
+   * @type {string}
+   * @memberof WithCanvas
+   */
+  suppliedId?: string;
+}
+
+export const WithCanvasTypeEnum = {
+  WithCanvas: 'with-canvas',
+} as const;
+
+export type WithCanvasTypeEnum =
+  (typeof WithCanvasTypeEnum)[keyof typeof WithCanvasTypeEnum];
+
+/**
+ *
+ * @export
  * @interface WithFileContent
  */
 export interface WithFileContent {
@@ -11254,6 +11954,12 @@ export interface WithSceneViewId {
    * @memberof WithSceneViewId
    */
   sceneViewId: string;
+  /**
+   *
+   * @type {WithCanvas}
+   * @memberof WithSceneViewId
+   */
+  withCanvas?: WithCanvas;
 }
 
 export const WithSceneViewIdTypeEnum = {
@@ -13827,6 +14533,166 @@ export class BatchesApi extends BaseAPI {
   ) {
     return BatchesApiFp(this.configuration)
       .getQueuedBatch(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * CanvasesApi - axios parameter creator
+ * @export
+ */
+export const CanvasesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Get a `canvas` by ID.
+     * @param {string} id The &#x60;canvas&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCanvas: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getCanvas', 'id', id);
+      const localVarPath = `/canvases/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * CanvasesApi - functional programming interface
+ * @export
+ */
+export const CanvasesApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = CanvasesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Get a `canvas` by ID.
+     * @param {string} id The &#x60;canvas&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getCanvas(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Canvas>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getCanvas(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * CanvasesApi - factory interface
+ * @export
+ */
+export const CanvasesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = CanvasesApiFp(configuration);
+  return {
+    /**
+     * Get a `canvas` by ID.
+     * @param {string} id The &#x60;canvas&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCanvas(id: string, options?: any): AxiosPromise<Canvas> {
+      return localVarFp
+        .getCanvas(id, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for getCanvas operation in CanvasesApi.
+ * @export
+ * @interface CanvasesApiGetCanvasRequest
+ */
+export interface CanvasesApiGetCanvasRequest {
+  /**
+   * The &#x60;canvas&#x60; ID.
+   * @type {string}
+   * @memberof CanvasesApiGetCanvas
+   */
+  readonly id: string;
+}
+
+/**
+ * CanvasesApi - object-oriented interface
+ * @export
+ * @class CanvasesApi
+ * @extends {BaseAPI}
+ */
+export class CanvasesApi extends BaseAPI {
+  /**
+   * Get a `canvas` by ID.
+   * @param {CanvasesApiGetCanvasRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CanvasesApi
+   */
+  public getCanvas(
+    requestParameters: CanvasesApiGetCanvasRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CanvasesApiFp(this.configuration)
+      .getCanvas(requestParameters.id, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
