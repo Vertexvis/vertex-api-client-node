@@ -783,16 +783,16 @@ export interface CalloutItem {
   type: CalloutItemTypeEnum;
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof CalloutItem
    */
-  primaryColor: Color3;
+  primaryColor: RGBA;
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof CalloutItem
    */
-  accentColor: Color3;
+  accentColor: RGBA;
   /**
    *
    * @type {string}
@@ -4529,10 +4529,10 @@ export type FileRelationshipDataTypeEnum =
 export interface FillStyle {
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof FillStyle
    */
-  color: Color3;
+  color: RGBA;
 }
 /**
  * Describes how an attribute should be filtered.
@@ -6286,16 +6286,16 @@ export interface PinItem2d {
   type: PinItem2dTypeEnum;
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof PinItem2d
    */
-  primaryColor: Color3;
+  primaryColor: RGBA;
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof PinItem2d
    */
-  accentColor: Color3;
+  accentColor: RGBA;
   /**
    *
    * @type {Vector3}
@@ -7282,6 +7282,37 @@ export interface QueuedTranslationJobList {
    * @memberof QueuedTranslationJobList
    */
   data: Array<QueuedTranslationJob>;
+}
+/**
+ * a color with red, green, blue and alpha channels.
+ * @export
+ * @interface RGBA
+ */
+export interface RGBA {
+  /**
+   * Color value from 0 to 255.
+   * @type {number}
+   * @memberof RGBA
+   */
+  r: number;
+  /**
+   * Color value from 0 to 255.
+   * @type {number}
+   * @memberof RGBA
+   */
+  g: number;
+  /**
+   * Color value from 0 to 255.
+   * @type {number}
+   * @memberof RGBA
+   */
+  b: number;
+  /**
+   * Color value from 0 to 255.
+   * @type {number}
+   * @memberof RGBA
+   */
+  a: number;
 }
 /**
  *
@@ -9448,10 +9479,10 @@ export interface StreamKeyList {
 export interface StrokeStyle {
   /**
    *
-   * @type {Color3}
+   * @type {RGBA}
    * @memberof StrokeStyle
    */
-  color: Color3;
+  color: RGBA;
   /**
    * A numerical floating-point value.
    * @type {number}
@@ -14941,6 +14972,77 @@ export const CollaborationContextsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Search the users associated to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {string} [filterQuery] Query users by e-mail or full name
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUsersForCollaborationContext: async (
+      id: string,
+      filterQuery?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getUsersForCollaborationContext', 'id', id);
+      const localVarPath = `/collaboration-contexts/{id}/users`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterQuery !== undefined) {
+        localVarQueryParameter['filter[query]'] = filterQuery;
+      }
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * List `collaboration-context`s
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15111,6 +15213,39 @@ export const CollaborationContextsApiFp = function (
       );
     },
     /**
+     * Search the users associated to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {string} [filterQuery] Query users by e-mail or full name
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getUsersForCollaborationContext(
+      id: string,
+      filterQuery?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getUsersForCollaborationContext(
+          id,
+          filterQuery,
+          pageCursor,
+          pageSize,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * List `collaboration-context`s
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15210,6 +15345,32 @@ export const CollaborationContextsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
+     * Search the users associated to a `collaboration-context`.
+     * @param {string} id The &#x60;collaboration-context&#x60; ID.
+     * @param {string} [filterQuery] Query users by e-mail or full name
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getUsersForCollaborationContext(
+      id: string,
+      filterQuery?: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<UserList> {
+      return localVarFp
+        .getUsersForCollaborationContext(
+          id,
+          filterQuery,
+          pageCursor,
+          pageSize,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * List `collaboration-context`s
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
@@ -15289,6 +15450,41 @@ export interface CollaborationContextsApiGetCollaborationContextRequest {
    * @memberof CollaborationContextsApiGetCollaborationContext
    */
   readonly id: string;
+}
+
+/**
+ * Request parameters for getUsersForCollaborationContext operation in CollaborationContextsApi.
+ * @export
+ * @interface CollaborationContextsApiGetUsersForCollaborationContextRequest
+ */
+export interface CollaborationContextsApiGetUsersForCollaborationContextRequest {
+  /**
+   * The &#x60;collaboration-context&#x60; ID.
+   * @type {string}
+   * @memberof CollaborationContextsApiGetUsersForCollaborationContext
+   */
+  readonly id: string;
+
+  /**
+   * Query users by e-mail or full name
+   * @type {string}
+   * @memberof CollaborationContextsApiGetUsersForCollaborationContext
+   */
+  readonly filterQuery?: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof CollaborationContextsApiGetUsersForCollaborationContext
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof CollaborationContextsApiGetUsersForCollaborationContext
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -15387,6 +15583,28 @@ export class CollaborationContextsApi extends BaseAPI {
   ) {
     return CollaborationContextsApiFp(this.configuration)
       .getCollaborationContext(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Search the users associated to a `collaboration-context`.
+   * @param {CollaborationContextsApiGetUsersForCollaborationContextRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CollaborationContextsApi
+   */
+  public getUsersForCollaborationContext(
+    requestParameters: CollaborationContextsApiGetUsersForCollaborationContextRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CollaborationContextsApiFp(this.configuration)
+      .getUsersForCollaborationContext(
+        requestParameters.id,
+        requestParameters.filterQuery,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -16526,7 +16744,10 @@ export const FileCollectionsApiFp = function (configuration?: Configuration) {
       updateFileCollectionRequest: UpdateFileCollectionRequest,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionMetadata>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.updateFileCollection(
@@ -16673,7 +16894,7 @@ export const FileCollectionsApiFactory = function (
       id: string,
       updateFileCollectionRequest: UpdateFileCollectionRequest,
       options?: any
-    ): AxiosPromise<void> {
+    ): AxiosPromise<FileCollectionMetadata> {
       return localVarFp
         .updateFileCollection(id, updateFileCollectionRequest, options)
         .then((request) => request(axios, basePath));

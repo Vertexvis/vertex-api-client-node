@@ -1481,6 +1481,95 @@ paths:
         - OAuth2: []
       tags:
         - collaboration-contexts
+  /collaboration-contexts/{id}/users:
+    get:
+      description: Search the users associated to a `collaboration-context`.
+      operationId: getUsersForCollaborationContext
+      parameters:
+        - description: The `collaboration-context` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Query users by e-mail or full name
+          explode: true
+          in: query
+          name: filter[query]
+          required: false
+          schema:
+            example: John Doe
+            type: string
+          style: form
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - collaboration-contexts
   /collaboration-contexts/{id}/user-groups:
     post:
       description: Create a `collaboration-context`.
@@ -2698,8 +2787,12 @@ paths:
               $ref: '#/components/schemas/UpdateFileCollectionRequest'
         required: true
       responses:
-        '204':
-          description: No Content
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionMetadata'
+          description: OK
         '400':
           content:
             application/vnd.api+json:
@@ -10929,6 +11022,16 @@ components:
         maxLength: 1024
         type: string
       style: form
+    CollaborationContextUserSearchFilter:
+      description: Query users by e-mail or full name
+      explode: true
+      in: query
+      name: filter[query]
+      required: false
+      schema:
+        example: John Doe
+        type: string
+      style: form
     CompletedAtFilter:
       description: The completion date and time to filter on.
       explode: true
@@ -11944,6 +12047,21 @@ components:
       required:
         - data
       type: object
+    UserList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/UserData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
     UserGroupIdsList:
       additionalProperties: false
       properties:
@@ -11985,21 +12103,6 @@ components:
           $ref: '#/components/schemas/UpdateThreadRequest_data'
       required:
         - data
-      type: object
-    UserList:
-      additionalProperties: false
-      properties:
-        data:
-          items:
-            $ref: '#/components/schemas/UserData'
-          type: array
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-        - links
       type: object
     ThreadStatus:
       enum:
@@ -13694,6 +13797,26 @@ components:
         - relationships
         - type
       type: object
+    UserData:
+      additionalProperties: false
+      properties:
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/UserData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
     UserGroupId:
       additionalProperties: false
       properties:
@@ -13776,26 +13899,6 @@ components:
         - attributes
         - id
         - relationships
-        - type
-      type: object
-    UserData:
-      additionalProperties: false
-      properties:
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/UserData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
         - type
       type: object
     FileMetadataData:
@@ -16557,9 +16660,9 @@ components:
             - callout-item
           type: string
         primaryColor:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
         accentColor:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
         text:
           example: some-string
           maxLength: 1024
@@ -16591,9 +16694,9 @@ components:
             - pin-item-2d
           type: string
         primaryColor:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
         accentColor:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
         position:
           $ref: '#/components/schemas/Vector3'
         sceneItemId:
@@ -16763,7 +16866,7 @@ components:
       additionalProperties: false
       properties:
         color:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
         thickness:
           description: A numerical floating-point value.
           type: number
@@ -16775,7 +16878,7 @@ components:
       additionalProperties: false
       properties:
         color:
-          $ref: '#/components/schemas/Color3'
+          $ref: '#/components/schemas/RGBA'
       required:
         - color
       type: object
@@ -16846,6 +16949,44 @@ components:
       required:
         - type
         - width
+      type: object
+    RGBA:
+      additionalProperties: false
+      description: a color with red, green, blue and alpha channels.
+      properties:
+        r:
+          description: Color value from 0 to 255.
+          example: 255
+          format: int32
+          maximum: 255
+          minimum: 0
+          type: integer
+        g:
+          description: Color value from 0 to 255.
+          example: 255
+          format: int32
+          maximum: 255
+          minimum: 0
+          type: integer
+        b:
+          description: Color value from 0 to 255.
+          example: 255
+          format: int32
+          maximum: 255
+          minimum: 0
+          type: integer
+        a:
+          description: Color value from 0 to 255.
+          example: 255
+          format: int32
+          maximum: 255
+          minimum: 0
+          type: integer
+      required:
+        - a
+        - b
+        - g
+        - r
       type: object
     CreateAccountRequest_data_attributes:
       properties:
@@ -18908,6 +19049,26 @@ components:
       required:
         - account
       type: object
+    UserData_attributes:
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        idpId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - createdAt
+        - email
+        - fullName
+      type: object
     ThreadData_attributes:
       properties:
         createdAt:
@@ -18957,26 +19118,6 @@ components:
       required:
         - collaborationContext
         - user
-      type: object
-    UserData_attributes:
-      properties:
-        fullName:
-          type: string
-        email:
-          type: string
-        createdAt:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        idpId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - createdAt
-        - email
-        - fullName
       type: object
     FileMetadataData_attributes:
       properties:

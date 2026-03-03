@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/api-client-node",
-  "version": "0.37.0",
+  "version": "0.38.0",
   "description": "The Vertex REST API client for Node.js.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertexvis.com> (https://developer.vertexvis.com)",
@@ -33,7 +33,7 @@
     "typescript"
   ],
   "dependencies": {
-    "axios": "^1.6.4",
+    "axios": "1.11.0",
     "p-limit": "^3"
   },
   "devDependencies": {
