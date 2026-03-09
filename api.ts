@@ -2368,7 +2368,7 @@ export interface CreateReplyRequestDataAttributes {
    * @type {string}
    * @memberof CreateReplyRequestDataAttributes
    */
-  body: string;
+  body?: string;
   /**
    *
    * @type {boolean}
@@ -2381,6 +2381,12 @@ export interface CreateReplyRequestDataAttributes {
    * @memberof CreateReplyRequestDataAttributes
    */
   reference?: CreateSceneReference;
+  /**
+   *
+   * @type {WithBodyDocument}
+   * @memberof CreateReplyRequestDataAttributes
+   */
+  withBodyDocument?: WithBodyDocument;
 }
 /**
  *
@@ -3391,6 +3397,12 @@ export interface CreateThreadRequestDataAttributes {
    * @memberof CreateThreadRequestDataAttributes
    */
   reference?: CreateSceneReference;
+  /**
+   *
+   * @type {WithBodyDocument}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  withBodyDocument?: WithBodyDocument;
 }
 /**
  *
@@ -4906,6 +4918,51 @@ export interface HitResultDataRelationships {
 /**
  *
  * @export
+ * @interface KnownUser
+ */
+export interface KnownUser {
+  /**
+   *
+   * @type {string}
+   * @memberof KnownUser
+   */
+  type: KnownUserTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof KnownUser
+   */
+  id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof KnownUser
+   */
+  idpId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof KnownUser
+   */
+  email: string;
+  /**
+   *
+   * @type {string}
+   * @memberof KnownUser
+   */
+  fullName: string;
+}
+
+export const KnownUserTypeEnum = {
+  KnownUser: 'known-user',
+} as const;
+
+export type KnownUserTypeEnum =
+  (typeof KnownUserTypeEnum)[keyof typeof KnownUserTypeEnum];
+
+/**
+ *
+ * @export
  * @interface LineItem2d
  */
 export interface LineItem2d {
@@ -5048,6 +5105,33 @@ export interface Matrix4Nullable {
    */
   r3: Vector4;
 }
+/**
+ *
+ * @export
+ * @interface MentionNode
+ */
+export interface MentionNode {
+  /**
+   *
+   * @type {string}
+   * @memberof MentionNode
+   */
+  type: MentionNodeTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof MentionNode
+   */
+  userId: string;
+}
+
+export const MentionNodeTypeEnum = {
+  MentionNode: 'mention-node',
+} as const;
+
+export type MentionNodeTypeEnum =
+  (typeof MentionNodeTypeEnum)[keyof typeof MentionNodeTypeEnum];
+
 /**
  *
  * @export
@@ -5381,6 +5465,33 @@ export const OvalItem2dTypeEnum = {
 
 export type OvalItem2dTypeEnum =
   (typeof OvalItem2dTypeEnum)[keyof typeof OvalItem2dTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface ParagraphNode
+ */
+export interface ParagraphNode {
+  /**
+   *
+   * @type {string}
+   * @memberof ParagraphNode
+   */
+  type: ParagraphNodeTypeEnum;
+  /**
+   * List of paragraph nodes
+   * @type {Array<TextNode | MentionNode>}
+   * @memberof ParagraphNode
+   */
+  content: Array<TextNode | MentionNode>;
+}
+
+export const ParagraphNodeTypeEnum = {
+  ParagraphNode: 'paragraph-node',
+} as const;
+
+export type ParagraphNodeTypeEnum =
+  (typeof ParagraphNodeTypeEnum)[keyof typeof ParagraphNodeTypeEnum];
 
 /**
  *
@@ -7445,9 +7556,9 @@ export interface ReplyDataAttributes {
    * @type {string}
    * @memberof ReplyDataAttributes
    */
-  body: string;
+  body?: string;
   /**
-   * Indicates whether or not the thread is in a drafted state
+   * Indicates whether or not the reply is in a drafted state
    * @type {boolean}
    * @memberof ReplyDataAttributes
    */
@@ -7458,6 +7569,18 @@ export interface ReplyDataAttributes {
    * @memberof ReplyDataAttributes
    */
   reference?: SceneReference;
+  /**
+   *
+   * @type {TextDocument}
+   * @memberof ReplyDataAttributes
+   */
+  bodyDocument?: TextDocument;
+  /**
+   * List of mentions in the reply
+   * @type {Array<KnownUser | UnknownUser>}
+   * @memberof ReplyDataAttributes
+   */
+  mentions: Array<KnownUser | UnknownUser>;
 }
 /**
  *
@@ -7548,6 +7671,33 @@ export interface RevokeOAuth2TokenRequestDataAttributes {
    */
   token: string;
 }
+/**
+ *
+ * @export
+ * @interface RootNode
+ */
+export interface RootNode {
+  /**
+   *
+   * @type {string}
+   * @memberof RootNode
+   */
+  type: RootNodeTypeEnum;
+  /**
+   * List of nodes
+   * @type {Array<ParagraphNode>}
+   * @memberof RootNode
+   */
+  content: Array<ParagraphNode>;
+}
+
+export const RootNodeTypeEnum = {
+  RootNode: 'root-node',
+} as const;
+
+export type RootNodeTypeEnum =
+  (typeof RootNodeTypeEnum)[keyof typeof RootNodeTypeEnum];
+
 /**
  *
  * @export
@@ -9493,6 +9643,60 @@ export interface StrokeStyle {
 /**
  *
  * @export
+ * @interface TextDocument
+ */
+export interface TextDocument {
+  /**
+   *
+   * @type {string}
+   * @memberof TextDocument
+   */
+  type: TextDocumentTypeEnum;
+  /**
+   *
+   * @type {RootNode}
+   * @memberof TextDocument
+   */
+  root: RootNode;
+}
+
+export const TextDocumentTypeEnum = {
+  TextDocumentV1: 'text-document-v1',
+} as const;
+
+export type TextDocumentTypeEnum =
+  (typeof TextDocumentTypeEnum)[keyof typeof TextDocumentTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface TextNode
+ */
+export interface TextNode {
+  /**
+   *
+   * @type {string}
+   * @memberof TextNode
+   */
+  type: TextNodeTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof TextNode
+   */
+  text: string;
+}
+
+export const TextNodeTypeEnum = {
+  TextNode: 'text-node',
+} as const;
+
+export type TextNodeTypeEnum =
+  (typeof TextNodeTypeEnum)[keyof typeof TextNodeTypeEnum];
+
+/**
+ *
+ * @export
  * @interface Thread
  */
 export interface Thread {
@@ -9626,6 +9830,18 @@ export interface ThreadDataAttributes {
    * @memberof ThreadDataAttributes
    */
   reference?: SceneReference;
+  /**
+   *
+   * @type {TextDocument}
+   * @memberof ThreadDataAttributes
+   */
+  bodyDocument?: TextDocument;
+  /**
+   * List of mentions in the thread
+   * @type {Array<KnownUser | UnknownUser>}
+   * @memberof ThreadDataAttributes
+   */
+  mentions: Array<KnownUser | UnknownUser>;
 }
 /**
  *
@@ -9825,6 +10041,33 @@ export interface TranslationInspectionJobDataAttributes {
    */
   missing: Array<string>;
 }
+/**
+ *
+ * @export
+ * @interface UnknownUser
+ */
+export interface UnknownUser {
+  /**
+   *
+   * @type {string}
+   * @memberof UnknownUser
+   */
+  type: UnknownUserTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof UnknownUser
+   */
+  id: string;
+}
+
+export const UnknownUserTypeEnum = {
+  UnknownUser: 'unknown-user',
+} as const;
+
+export type UnknownUserTypeEnum =
+  (typeof UnknownUserTypeEnum)[keyof typeof UnknownUserTypeEnum];
+
 /**
  *
  * @export
@@ -10300,6 +10543,12 @@ export interface UpdateReplyRequestDataAttributes {
    * @memberof UpdateReplyRequestDataAttributes
    */
   isDrafting?: boolean;
+  /**
+   *
+   * @type {WithBodyDocument}
+   * @memberof UpdateReplyRequestDataAttributes
+   */
+  withBodyDocument?: WithBodyDocument;
 }
 /**
  *
@@ -10812,6 +11061,12 @@ export interface UpdateThreadRequestDataAttributes {
    * @memberof UpdateThreadRequestDataAttributes
    */
   body?: string | null;
+  /**
+   *
+   * @type {WithBodyDocument}
+   * @memberof UpdateThreadRequestDataAttributes
+   */
+  withBodyDocument?: WithBodyDocument;
 }
 /**
  *
@@ -11880,6 +12135,33 @@ export interface WebhookSubscriptionList {
    */
   links: { [key: string]: Link };
 }
+/**
+ *
+ * @export
+ * @interface WithBodyDocument
+ */
+export interface WithBodyDocument {
+  /**
+   *
+   * @type {string}
+   * @memberof WithBodyDocument
+   */
+  type: WithBodyDocumentTypeEnum;
+  /**
+   *
+   * @type {TextDocument}
+   * @memberof WithBodyDocument
+   */
+  document: TextDocument;
+}
+
+export const WithBodyDocumentTypeEnum = {
+  WithBodyDocument: 'with-body-document',
+} as const;
+
+export type WithBodyDocumentTypeEnum =
+  (typeof WithBodyDocumentTypeEnum)[keyof typeof WithBodyDocumentTypeEnum];
+
 /**
  *
  * @export

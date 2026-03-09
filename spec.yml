@@ -13873,6 +13873,19 @@ components:
         - sceneId
         - type
       type: object
+    WithBodyDocument:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - with-body-document
+          type: string
+        document:
+          $ref: '#/components/schemas/TextDocument'
+      required:
+        - document
+        - type
+      type: object
     ThreadData:
       additionalProperties: false
       properties:
@@ -15704,6 +15717,19 @@ components:
         - sceneViewStateId
         - type
       type: object
+    TextDocument:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - text-document-v1
+          type: string
+        root:
+          $ref: '#/components/schemas/RootNode'
+      required:
+        - root
+        - type
+      type: object
     SceneReference:
       additionalProperties: false
       description: A reference to a scene for a thread.
@@ -15745,6 +15771,52 @@ components:
       required:
         - sceneId
         - thumbnails
+        - type
+      type: object
+    KnownUser:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - known-user
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        idpId:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        email:
+          type: string
+        fullName:
+          type: string
+      required:
+        - email
+        - fullName
+        - id
+        - idpId
+        - type
+      type: object
+    UnknownUser:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - unknown-user
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
         - type
       type: object
     CollaborationContextRelationship:
@@ -16711,6 +16783,29 @@ components:
         - primaryColor
         - type
       type: object
+    RootNode:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - root-node
+          type: string
+        content:
+          description: List of nodes
+          items:
+            description: An individual block node
+            discriminator:
+              mapping:
+                paragraph-node: '#/components/schemas/ParagraphNode'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/ParagraphNode'
+          maxItems: 100
+          type: array
+      required:
+        - content
+        - type
+      type: object
     SelectFileById:
       additionalProperties: false
       description: Queries a file by its unique ID.
@@ -16987,6 +17082,64 @@ components:
         - b
         - g
         - r
+      type: object
+    ParagraphNode:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - paragraph-node
+          type: string
+        content:
+          description: List of paragraph nodes
+          items:
+            description: An inline node
+            discriminator:
+              mapping:
+                text-node: '#/components/schemas/TextNode'
+                mention-node: '#/components/schemas/MentionNode'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/TextNode'
+              - $ref: '#/components/schemas/MentionNode'
+          maxItems: 100
+          type: array
+      required:
+        - content
+        - type
+      type: object
+    TextNode:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - text-node
+          type: string
+        text:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - text
+        - type
+      type: object
+    MentionNode:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - mention-node
+          type: string
+        userId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - type
+        - userId
       type: object
     CreateAccountRequest_data_attributes:
       properties:
@@ -17308,6 +17461,8 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/CreateSceneReference'
+        withBodyDocument:
+          $ref: '#/components/schemas/WithBodyDocument'
       required:
         - status
         - type
@@ -17338,6 +17493,8 @@ components:
         body:
           nullable: true
           type: string
+        withBodyDocument:
+          $ref: '#/components/schemas/WithBodyDocument'
       type: object
     UpdateThreadRequest_data:
       properties:
@@ -17571,6 +17728,8 @@ components:
           type: string
         isDrafting:
           type: boolean
+        withBodyDocument:
+          $ref: '#/components/schemas/WithBodyDocument'
       type: object
     UpdateReplyRequest_data:
       properties:
@@ -17596,8 +17755,8 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/CreateSceneReference'
-      required:
-        - body
+        withBodyDocument:
+          $ref: '#/components/schemas/WithBodyDocument'
       type: object
     CreateReplyRequest_data:
       properties:
@@ -19102,9 +19261,25 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/SceneReference'
+        bodyDocument:
+          $ref: '#/components/schemas/TextDocument'
+        mentions:
+          description: List of mentions in the thread
+          items:
+            description: An individual mention
+            discriminator:
+              mapping:
+                known-user: '#/components/schemas/KnownUser'
+                unknown-user: '#/components/schemas/UnknownUser'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/KnownUser'
+              - $ref: '#/components/schemas/UnknownUser'
+          type: array
       required:
         - createdAt
         - isDrafting
+        - mentions
         - modifiedAt
         - status
         - type
@@ -19224,17 +19399,32 @@ components:
         body:
           type: string
         isDrafting:
-          description: Indicates whether or not the thread is in a drafted state
+          description: Indicates whether or not the reply is in a drafted state
           type: boolean
         reference:
           discriminator:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/SceneReference'
+        bodyDocument:
+          $ref: '#/components/schemas/TextDocument'
+        mentions:
+          description: List of mentions in the reply
+          items:
+            description: An individual mention
+            discriminator:
+              mapping:
+                known-user: '#/components/schemas/KnownUser'
+                unknown-user: '#/components/schemas/UnknownUser'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/KnownUser'
+              - $ref: '#/components/schemas/UnknownUser'
+          type: array
       required:
-        - body
         - createdAt
         - isDrafting
+        - mentions
         - modifiedAt
       type: object
     ReplyData_relationships:
