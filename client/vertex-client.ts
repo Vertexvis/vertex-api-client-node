@@ -12,16 +12,21 @@ import {
   HitsApi,
   Oauth2Api,
   OAuth2Token,
+  PartRenditionsApi,
+  PartRevisionInstancesApi,
   PartRevisionsApi,
   PartsApi,
+  PermissionGrantsApi,
   PropertyEntriesApi,
   SceneAlterationsApi,
   SceneAnnotationsApi,
   SceneItemOverridesApi,
   SceneItemsApi,
   ScenesApi,
+  SceneSynchronizationsApi,
   SceneViewsApi,
   SceneViewStatesApi,
+  SearchSessionsApi,
   StreamKeysApi,
   TranslationInspectionsApi,
   UsersApi,
@@ -130,16 +135,21 @@ export class VertexClient {
   public geometrySets: GeometrySetsApi;
   public hits: HitsApi;
   public oAuth2: Oauth2Api;
+  public partRenditions: PartRenditionsApi;
   public partRevisions: PartRevisionsApi;
+  public partRevisionInstances: PartRevisionInstancesApi;
   public parts: PartsApi;
+  public permissionGrantsApi: PermissionGrantsApi;
   public propertyEntries: PropertyEntriesApi;
   public sceneAlterations: SceneAlterationsApi;
   public sceneAnnotations: SceneAnnotationsApi;
   public sceneItemOverrides: SceneItemOverridesApi;
   public sceneItems: SceneItemsApi;
   public scenes: ScenesApi;
+  public sceneSynchronizations: SceneSynchronizationsApi;
   public sceneViews: SceneViewsApi;
   public sceneViewStates: SceneViewStatesApi;
+  public searchSessions: SearchSessionsApi;
   public streamKeys: StreamKeysApi;
   public translationInspections: TranslationInspectionsApi;
   public users: UsersApi;
@@ -172,12 +182,27 @@ export class VertexClient {
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
     this.hits = new HitsApi(this.config, undefined, axiosInst);
+    this.partRenditions = new PartRenditionsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.partRevisions = new PartRevisionsApi(
       this.config,
       undefined,
       axiosInst
     );
+    this.partRevisionInstances = new PartRevisionInstancesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.parts = new PartsApi(this.config, undefined, axiosInst);
+    this.permissionGrantsApi = new PermissionGrantsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.propertyEntries = new PropertyEntriesApi(
       this.config,
       undefined,
@@ -200,8 +225,18 @@ export class VertexClient {
     );
     this.sceneItems = new SceneItemsApi(this.config, undefined, axiosInst);
     this.scenes = new ScenesApi(this.config, undefined, axiosInst);
+    this.sceneSynchronizations = new SceneSynchronizationsApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
     this.sceneViews = new SceneViewsApi(this.config, undefined, axiosInst);
     this.sceneViewStates = new SceneViewStatesApi(
+      this.config,
+      undefined,
+      axiosInst
+    );
+    this.searchSessions = new SearchSessionsApi(
       this.config,
       undefined,
       axiosInst
