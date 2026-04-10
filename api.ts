@@ -960,11 +960,39 @@ export interface CanvasDocument {
 }
 
 export const CanvasDocumentTypeEnum = {
-  CanvasDocumentV1: 'canvas-document-v1',
+  _3dV1: 'canvas-document-3d-v1',
+  V1: 'canvas-document-v1',
 } as const;
 
 export type CanvasDocumentTypeEnum =
   (typeof CanvasDocumentTypeEnum)[keyof typeof CanvasDocumentTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CanvasDocument2d
+ */
+export interface CanvasDocument2d {
+  /**
+   *
+   * @type {string}
+   * @memberof CanvasDocument2d
+   */
+  type: CanvasDocument2dTypeEnum;
+  /**
+   *
+   * @type {Array<LineItem2d | OvalItem2d | FreeformItem2d>}
+   * @memberof CanvasDocument2d
+   */
+  items: Array<LineItem2d | OvalItem2d | FreeformItem2d>;
+}
+
+export const CanvasDocument2dTypeEnum = {
+  CanvasDocument2dV1: 'canvas-document-2d-v1',
+} as const;
+
+export type CanvasDocument2dTypeEnum =
+  (typeof CanvasDocument2dTypeEnum)[keyof typeof CanvasDocument2dTypeEnum];
 
 /**
  * Relationship to a `canvas`.
@@ -1633,6 +1661,125 @@ export const CreateCollaborationContextRequestDataTypeEnum = {
 export type CreateCollaborationContextRequestDataTypeEnum =
   (typeof CreateCollaborationContextRequestDataTypeEnum)[keyof typeof CreateCollaborationContextRequestDataTypeEnum];
 
+/**
+ * Document annotation used when creating a document reference.
+ * @export
+ * @interface CreateDocumentAnnotation
+ */
+export interface CreateDocumentAnnotation {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateDocumentAnnotation
+   */
+  type: CreateDocumentAnnotationTypeEnum;
+  /**
+   * The content of the document annotation.
+   * @type {PdfMarkup}
+   * @memberof CreateDocumentAnnotation
+   */
+  content: PdfMarkup;
+}
+
+export const CreateDocumentAnnotationTypeEnum = {
+  DocumentAnnotation: 'document-annotation',
+} as const;
+
+export type CreateDocumentAnnotationTypeEnum =
+  (typeof CreateDocumentAnnotationTypeEnum)[keyof typeof CreateDocumentAnnotationTypeEnum];
+
+/**
+ * A reference to a document to be created for a thread or reply.
+ * @export
+ * @interface CreateDocumentReference
+ */
+export interface CreateDocumentReference {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateDocumentReference
+   */
+  type: CreateDocumentReferenceTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof CreateDocumentReference
+   */
+  documentId?: string;
+  /**
+   *
+   * @type {CreateDocumentAnnotation}
+   * @memberof CreateDocumentReference
+   */
+  documentAnnotation?: CreateDocumentAnnotation;
+}
+
+export const CreateDocumentReferenceTypeEnum = {
+  DocumentReference: 'document-reference',
+} as const;
+
+export type CreateDocumentReferenceTypeEnum =
+  (typeof CreateDocumentReferenceTypeEnum)[keyof typeof CreateDocumentReferenceTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateDocumentRequest
+ */
+export interface CreateDocumentRequest {
+  /**
+   *
+   * @type {CreateDocumentRequestData}
+   * @memberof CreateDocumentRequest
+   */
+  data: CreateDocumentRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreateDocumentRequestData
+ */
+export interface CreateDocumentRequestData {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateDocumentRequestData
+   */
+  type: CreateDocumentRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreateDocumentRequestDataAttributes}
+   * @memberof CreateDocumentRequestData
+   */
+  attributes: CreateDocumentRequestDataAttributes;
+}
+
+export const CreateDocumentRequestDataTypeEnum = {
+  Document: 'document',
+} as const;
+
+export type CreateDocumentRequestDataTypeEnum =
+  (typeof CreateDocumentRequestDataTypeEnum)[keyof typeof CreateDocumentRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreateDocumentRequestDataAttributes
+ */
+export interface CreateDocumentRequestDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof CreateDocumentRequestDataAttributes
+   */
+  fileId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateDocumentRequestDataAttributes
+   */
+  suppliedId?: string;
+}
 /**
  *
  * @export
@@ -2365,22 +2512,16 @@ export type CreateReplyRequestDataTypeEnum =
 export interface CreateReplyRequestDataAttributes {
   /**
    *
-   * @type {string}
-   * @memberof CreateReplyRequestDataAttributes
-   */
-  body?: string;
-  /**
-   *
    * @type {boolean}
    * @memberof CreateReplyRequestDataAttributes
    */
   isDrafting?: boolean;
   /**
    *
-   * @type {CreateSceneReference}
+   * @type {CreateSceneReference | CreateDocumentReference}
    * @memberof CreateReplyRequestDataAttributes
    */
-  reference?: CreateSceneReference;
+  reference?: CreateSceneReference | CreateDocumentReference;
   /**
    *
    * @type {WithBodyDocument}
@@ -3381,28 +3522,28 @@ export interface CreateThreadRequestDataAttributes {
   title?: string;
   /**
    *
-   * @type {string}
-   * @memberof CreateThreadRequestDataAttributes
-   */
-  body?: string;
-  /**
-   *
    * @type {boolean}
    * @memberof CreateThreadRequestDataAttributes
    */
   isDrafting?: boolean;
   /**
    *
-   * @type {CreateSceneReference}
+   * @type {CreateSceneReference | CreateDocumentReference}
    * @memberof CreateThreadRequestDataAttributes
    */
-  reference?: CreateSceneReference;
+  reference?: CreateSceneReference | CreateDocumentReference;
   /**
    *
    * @type {WithBodyDocument}
    * @memberof CreateThreadRequestDataAttributes
    */
   withBodyDocument?: WithBodyDocument;
+  /**
+   *
+   * @type {string}
+   * @memberof CreateThreadRequestDataAttributes
+   */
+  group?: string;
 }
 /**
  *
@@ -3857,6 +3998,130 @@ export interface Dimensions {
    */
   width: number;
 }
+/**
+ *
+ * @export
+ * @interface Document
+ */
+export interface Document {
+  /**
+   *
+   * @type {DocumentData}
+   * @memberof Document
+   */
+  data: DocumentData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof Document
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface DocumentData
+ */
+export interface DocumentData {
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentData
+   */
+  id: string;
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentData
+   */
+  type: DocumentDataTypeEnum;
+  /**
+   *
+   * @type {DocumentDataAttributes}
+   * @memberof DocumentData
+   */
+  attributes: DocumentDataAttributes;
+}
+
+export const DocumentDataTypeEnum = {
+  Document: 'document',
+} as const;
+
+export type DocumentDataTypeEnum =
+  (typeof DocumentDataTypeEnum)[keyof typeof DocumentDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface DocumentDataAttributes
+ */
+export interface DocumentDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentDataAttributes
+   */
+  fileId: string;
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentDataAttributes
+   */
+  documentType: DocumentDataAttributesDocumentTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentDataAttributes
+   */
+  createdAt: string;
+}
+
+export const DocumentDataAttributesDocumentTypeEnum = {
+  Pdf: 'PDF',
+} as const;
+
+export type DocumentDataAttributesDocumentTypeEnum =
+  (typeof DocumentDataAttributesDocumentTypeEnum)[keyof typeof DocumentDataAttributesDocumentTypeEnum];
+
+/**
+ * A reference to a document for a thread or reply.
+ * @export
+ * @interface DocumentReference
+ */
+export interface DocumentReference {
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentReference
+   */
+  type: DocumentReferenceTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof DocumentReference
+   */
+  documentId: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof DocumentReference
+   */
+  documentAnnotationId: string;
+}
+
+export const DocumentReferenceTypeEnum = {
+  DocumentReference: 'document-reference',
+} as const;
+
+export type DocumentReferenceTypeEnum =
+  (typeof DocumentReferenceTypeEnum)[keyof typeof DocumentReferenceTypeEnum];
+
 /**
  *
  * @export
@@ -6262,6 +6527,39 @@ export type PartsDomainSubjectDomainEnum =
   (typeof PartsDomainSubjectDomainEnum)[keyof typeof PartsDomainSubjectDomainEnum];
 
 /**
+ * PDF markup document annotation content used when creating 2d Markup for a PDF
+ * @export
+ * @interface PdfMarkup
+ */
+export interface PdfMarkup {
+  /**
+   *
+   * @type {string}
+   * @memberof PdfMarkup
+   */
+  type: PdfMarkupTypeEnum;
+  /**
+   *
+   * @type {number}
+   * @memberof PdfMarkup
+   */
+  pageNumber: number;
+  /**
+   *
+   * @type {CanvasDocument2d}
+   * @memberof PdfMarkup
+   */
+  canvas: CanvasDocument2d;
+}
+
+export const PdfMarkupTypeEnum = {
+  PdfMarkup: 'pdf-markup',
+} as const;
+
+export type PdfMarkupTypeEnum =
+  (typeof PdfMarkupTypeEnum)[keyof typeof PdfMarkupTypeEnum];
+
+/**
  *
  * @export
  * @interface PermissionGrant
@@ -7565,10 +7863,10 @@ export interface ReplyDataAttributes {
   isDrafting: boolean;
   /**
    *
-   * @type {SceneReference}
+   * @type {SceneReference | DocumentReference}
    * @memberof ReplyDataAttributes
    */
-  reference?: SceneReference;
+  reference?: SceneReference | DocumentReference;
   /**
    *
    * @type {TextDocument}
@@ -9826,16 +10124,22 @@ export interface ThreadDataAttributes {
   replyCount?: number;
   /**
    *
-   * @type {SceneReference}
+   * @type {SceneReference | DocumentReference}
    * @memberof ThreadDataAttributes
    */
-  reference?: SceneReference;
+  reference?: SceneReference | DocumentReference;
   /**
    *
    * @type {TextDocument}
    * @memberof ThreadDataAttributes
    */
   bodyDocument?: TextDocument;
+  /**
+   *
+   * @type {string}
+   * @memberof ThreadDataAttributes
+   */
+  group?: string;
   /**
    * List of mentions in the thread
    * @type {Array<KnownUser | UnknownUser>}
@@ -10533,12 +10837,6 @@ export interface UpdateReplyRequestData {
 export interface UpdateReplyRequestDataAttributes {
   /**
    *
-   * @type {string}
-   * @memberof UpdateReplyRequestDataAttributes
-   */
-  body?: string | null;
-  /**
-   *
    * @type {boolean}
    * @memberof UpdateReplyRequestDataAttributes
    */
@@ -11060,7 +11358,7 @@ export interface UpdateThreadRequestDataAttributes {
    * @type {string}
    * @memberof UpdateThreadRequestDataAttributes
    */
-  body?: string | null;
+  group?: string | null;
   /**
    *
    * @type {WithBodyDocument}
@@ -15907,6 +16205,178 @@ export class CollaborationContextsApi extends BaseAPI {
         requestParameters.pageSize,
         options
       )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * DocumentsApi - axios parameter creator
+ * @export
+ */
+export const DocumentsApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Creates a document. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateDocumentRequest} createDocumentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createDocument: async (
+      createDocumentRequest: CreateDocumentRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createDocumentRequest' is not null or undefined
+      assertParamExists(
+        'createDocument',
+        'createDocumentRequest',
+        createDocumentRequest
+      );
+      const localVarPath = `/documents`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createDocumentRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * DocumentsApi - functional programming interface
+ * @export
+ */
+export const DocumentsApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator =
+    DocumentsApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Creates a document. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateDocumentRequest} createDocumentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createDocument(
+      createDocumentRequest: CreateDocumentRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Document>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createDocument(
+        createDocumentRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * DocumentsApi - factory interface
+ * @export
+ */
+export const DocumentsApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = DocumentsApiFp(configuration);
+  return {
+    /**
+     * Creates a document. **Preview:** This is a preview API and is subject to change.
+     * @param {CreateDocumentRequest} createDocumentRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createDocument(
+      createDocumentRequest: CreateDocumentRequest,
+      options?: any
+    ): AxiosPromise<Document> {
+      return localVarFp
+        .createDocument(createDocumentRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createDocument operation in DocumentsApi.
+ * @export
+ * @interface DocumentsApiCreateDocumentRequest
+ */
+export interface DocumentsApiCreateDocumentRequest {
+  /**
+   *
+   * @type {CreateDocumentRequest}
+   * @memberof DocumentsApiCreateDocument
+   */
+  readonly createDocumentRequest: CreateDocumentRequest;
+}
+
+/**
+ * DocumentsApi - object-oriented interface
+ * @export
+ * @class DocumentsApi
+ * @extends {BaseAPI}
+ */
+export class DocumentsApi extends BaseAPI {
+  /**
+   * Creates a document. **Preview:** This is a preview API and is subject to change.
+   * @param {DocumentsApiCreateDocumentRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DocumentsApi
+   */
+  public createDocument(
+    requestParameters: DocumentsApiCreateDocumentRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return DocumentsApiFp(this.configuration)
+      .createDocument(requestParameters.createDocumentRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -33550,21 +34020,23 @@ export const ThreadsApiAxiosParamCreator = function (
     /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {Array<string>} [filterCollaborationContextId] Collaboration contexts to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<ThreadStatus>} [filterStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<string>} [filterGroup] The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getThreads: async (
       fieldsThread?: string,
-      filterCollaborationContextId?: string,
+      filterCollaborationContextId?: Array<string>,
       pageCursor?: string,
       pageSize?: number,
       include?: string,
-      filterThreadStatus?: Array<ThreadStatus>,
+      filterStatus?: Array<ThreadStatus>,
+      filterGroup?: Array<string>,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/threads`;
@@ -33596,7 +34068,7 @@ export const ThreadsApiAxiosParamCreator = function (
         localVarQueryParameter['fields[thread]'] = fieldsThread;
       }
 
-      if (filterCollaborationContextId !== undefined) {
+      if (filterCollaborationContextId) {
         localVarQueryParameter['filter[collaborationContextId]'] =
           filterCollaborationContextId;
       }
@@ -33613,9 +34085,16 @@ export const ThreadsApiAxiosParamCreator = function (
         localVarQueryParameter['include'] = include;
       }
 
-      if (filterThreadStatus) {
-        localVarQueryParameter['filter[threadStatus]'] =
-          filterThreadStatus.join(COLLECTION_FORMATS.csv);
+      if (filterStatus) {
+        localVarQueryParameter['filter[status]'] = filterStatus.join(
+          COLLECTION_FORMATS.csv
+        );
+      }
+
+      if (filterGroup) {
+        localVarQueryParameter['filter[group]'] = filterGroup.join(
+          COLLECTION_FORMATS.csv
+        );
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -33811,21 +34290,23 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
     /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {Array<string>} [filterCollaborationContextId] Collaboration contexts to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<ThreadStatus>} [filterStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<string>} [filterGroup] The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getThreads(
       fieldsThread?: string,
-      filterCollaborationContextId?: string,
+      filterCollaborationContextId?: Array<string>,
       pageCursor?: string,
       pageSize?: number,
       include?: string,
-      filterThreadStatus?: Array<ThreadStatus>,
+      filterStatus?: Array<ThreadStatus>,
+      filterGroup?: Array<string>,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<ThreadList>
@@ -33836,7 +34317,8 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
         pageCursor,
         pageSize,
         include,
-        filterThreadStatus,
+        filterStatus,
+        filterGroup,
         options
       );
       return createRequestFunction(
@@ -33945,21 +34427,23 @@ export const ThreadsApiFactory = function (
     /**
      * Get a page of `thread`s.
      * @param {string} [fieldsThread] Comma-separated list of fields to return in response. An empty value returns no fields. Due to its potential size, metadata is only returned if explicitly requested.
-     * @param {string} [filterCollaborationContextId] A collaboration context to filter on.
+     * @param {Array<string>} [filterCollaborationContextId] Collaboration contexts to filter on.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [include] Comma-separated list of relationships to include in response.
-     * @param {Array<ThreadStatus>} [filterThreadStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<ThreadStatus>} [filterStatus] The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
+     * @param {Array<string>} [filterGroup] The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getThreads(
       fieldsThread?: string,
-      filterCollaborationContextId?: string,
+      filterCollaborationContextId?: Array<string>,
       pageCursor?: string,
       pageSize?: number,
       include?: string,
-      filterThreadStatus?: Array<ThreadStatus>,
+      filterStatus?: Array<ThreadStatus>,
+      filterGroup?: Array<string>,
       options?: any
     ): AxiosPromise<ThreadList> {
       return localVarFp
@@ -33969,7 +34453,8 @@ export const ThreadsApiFactory = function (
           pageCursor,
           pageSize,
           include,
-          filterThreadStatus,
+          filterStatus,
+          filterGroup,
           options
         )
         .then((request) => request(axios, basePath));
@@ -34084,11 +34569,11 @@ export interface ThreadsApiGetThreadsRequest {
   readonly fieldsThread?: string;
 
   /**
-   * A collaboration context to filter on.
-   * @type {string}
+   * Collaboration contexts to filter on.
+   * @type {Array<string>}
    * @memberof ThreadsApiGetThreads
    */
-  readonly filterCollaborationContextId?: string;
+  readonly filterCollaborationContextId?: Array<string>;
 
   /**
    * The cursor for the next page of items.
@@ -34116,7 +34601,14 @@ export interface ThreadsApiGetThreadsRequest {
    * @type {Array<ThreadStatus>}
    * @memberof ThreadsApiGetThreads
    */
-  readonly filterThreadStatus?: Array<ThreadStatus>;
+  readonly filterStatus?: Array<ThreadStatus>;
+
+  /**
+   * The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
+   * @type {Array<string>}
+   * @memberof ThreadsApiGetThreads
+   */
+  readonly filterGroup?: Array<string>;
 }
 
 /**
@@ -34238,7 +34730,8 @@ export class ThreadsApi extends BaseAPI {
         requestParameters.pageCursor,
         requestParameters.pageSize,
         requestParameters.include,
-        requestParameters.filterThreadStatus,
+        requestParameters.filterStatus,
+        requestParameters.filterGroup,
         options
       )
       .then((request) => request(this.axios, this.basePath));
