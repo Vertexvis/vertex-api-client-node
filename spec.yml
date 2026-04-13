@@ -34,6 +34,7 @@ tags:
   - name: canvases
   - description: Requires Engage Module
     name: collaboration-contexts
+  - name: documents
   - name: exports
   - name: files
   - name: file-collections
@@ -1963,15 +1964,16 @@ paths:
             maxLength: 32
             type: string
           style: form
-        - description: A collaboration context to filter on.
+        - description: Collaboration contexts to filter on.
           explode: true
           in: query
           name: filter[collaborationContextId]
           required: false
           schema:
-            example: some-id-1
-            maxLength: 1024
-            type: string
+            items:
+              type: string
+            maxItems: 100
+            type: array
           style: form
         - description: The cursor for the next page of items.
           explode: true
@@ -2008,11 +2010,22 @@ paths:
             The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
           explode: false
           in: query
-          name: filter[threadStatus]
+          name: filter[status]
           required: false
           schema:
             items:
               $ref: '#/components/schemas/ThreadStatus'
+            type: array
+          style: form
+        - description: |
+            The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
+          explode: false
+          in: query
+          name: filter[group]
+          required: false
+          schema:
+            items:
+              type: string
             type: array
           style: form
       responses:
@@ -3113,6 +3126,67 @@ paths:
         - OAuth2: []
       tags:
         - file-jobs
+  /documents:
+    post:
+      description: |
+        Creates a document.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: createDocument
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreateDocumentRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - documents
   /geometry-sets:
     get:
       description: Get `geometry-sets`.
@@ -11012,15 +11086,16 @@ components:
         $ref: '#/components/schemas/Uuid'
       style: simple
     CollaborationContextIdFilter:
-      description: A collaboration context to filter on.
+      description: Collaboration contexts to filter on.
       explode: true
       in: query
       name: filter[collaborationContextId]
       required: false
       schema:
-        example: some-id-1
-        maxLength: 1024
-        type: string
+        items:
+          type: string
+        maxItems: 100
+        type: array
       style: form
     CollaborationContextUserSearchFilter:
       description: Query users by e-mail or full name
@@ -11524,11 +11599,23 @@ components:
         The statuses of a thread to filter by. Send as a CSV list, e.g. open,resolved.
       explode: false
       in: query
-      name: filter[threadStatus]
+      name: filter[status]
       required: false
       schema:
         items:
           $ref: '#/components/schemas/ThreadStatus'
+        type: array
+      style: form
+    ThreadGroupFilter:
+      description: |
+        The group prefixes to filter threads by. Send as a CSV list, e.g. file:123,file:456.
+      explode: false
+      in: query
+      name: filter[group]
+      required: false
+      schema:
+        items:
+          type: string
         type: array
       style: form
     PropertyEntriesResourceIdFilter:
@@ -12241,6 +12328,26 @@ components:
       properties:
         data:
           $ref: '#/components/schemas/CreateFileJobRequest_data'
+      required:
+        - data
+      type: object
+    CreateDocumentRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreateDocumentRequest_data'
+      required:
+        - data
+      type: object
+    Document:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/DocumentData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
       required:
         - data
       type: object
@@ -13873,6 +13980,25 @@ components:
         - sceneId
         - type
       type: object
+    CreateDocumentReference:
+      additionalProperties: false
+      description: A reference to a document to be created for a thread or reply.
+      properties:
+        type:
+          enum:
+            - document-reference
+          type: string
+        documentId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        documentAnnotation:
+          $ref: '#/components/schemas/CreateDocumentAnnotation'
+      required:
+        - type
+      type: object
     WithBodyDocument:
       additionalProperties: false
       properties:
@@ -14018,6 +14144,23 @@ components:
       required:
         - fileId
         - manifest
+        - type
+      type: object
+    DocumentData:
+      additionalProperties: false
+      properties:
+        id:
+          format: uuid
+          type: string
+        type:
+          enum:
+            - document
+          type: string
+        attributes:
+          $ref: '#/components/schemas/DocumentData_attributes'
+      required:
+        - attributes
+        - id
         - type
       type: object
     GeometrySetData:
@@ -15645,6 +15788,7 @@ components:
       properties:
         type:
           enum:
+            - canvas-document-3d-v1
             - canvas-document-v1
           type: string
         items:
@@ -15717,6 +15861,26 @@ components:
         - sceneViewStateId
         - type
       type: object
+    CreateDocumentAnnotation:
+      additionalProperties: false
+      description: Document annotation used when creating a document reference.
+      properties:
+        type:
+          enum:
+            - document-annotation
+          type: string
+        content:
+          description: The content of the document annotation.
+          discriminator:
+            mapping:
+              pdf-markup: '#/components/schemas/PdfMarkup'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/PdfMarkup'
+      required:
+        - content
+        - type
+      type: object
     TextDocument:
       additionalProperties: false
       properties:
@@ -15771,6 +15935,31 @@ components:
       required:
         - sceneId
         - thumbnails
+        - type
+      type: object
+    DocumentReference:
+      additionalProperties: false
+      description: A reference to a document for a thread or reply.
+      properties:
+        type:
+          enum:
+            - document-reference
+          type: string
+        documentId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        documentAnnotationId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - documentAnnotationId
+        - documentId
         - type
       type: object
     KnownUser:
@@ -16736,9 +16925,6 @@ components:
         accentColor:
           $ref: '#/components/schemas/RGBA'
         text:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
           type: string
         anchorPosition:
           $ref: '#/components/schemas/Vector3'
@@ -16781,6 +16967,26 @@ components:
         - accentColor
         - position
         - primaryColor
+        - type
+      type: object
+    PdfMarkup:
+      additionalProperties: false
+      description:
+        PDF markup document annotation content used when creating 2d Markup
+        for a PDF
+      properties:
+        type:
+          enum:
+            - pdf-markup
+          type: string
+        pageNumber:
+          format: int32
+          type: integer
+        canvas:
+          $ref: '#/components/schemas/CanvasDocument2d'
+      required:
+        - canvas
+        - pageNumber
         - type
       type: object
     RootNode:
@@ -17082,6 +17288,32 @@ components:
         - b
         - g
         - r
+      type: object
+    CanvasDocument2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - canvas-document-2d-v1
+          type: string
+        items:
+          items:
+            description: A 2D canvas item.
+            discriminator:
+              mapping:
+                line-item-2d: '#/components/schemas/LineItem2d'
+                oval-item-2d: '#/components/schemas/OvalItem2d'
+                freeform-item-2d: '#/components/schemas/FreeformItem2d'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/LineItem2d'
+              - $ref: '#/components/schemas/OvalItem2d'
+              - $ref: '#/components/schemas/FreeformItem2d'
+          maxItems: 1024
+          type: array
+      required:
+        - items
+        - type
       type: object
     ParagraphNode:
       additionalProperties: false
@@ -17452,8 +17684,6 @@ components:
           $ref: '#/components/schemas/ThreadStatus'
         title:
           type: string
-        body:
-          type: string
         isDrafting:
           type: boolean
         reference:
@@ -17461,8 +17691,12 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/CreateSceneReference'
+            - $ref: '#/components/schemas/CreateDocumentReference'
         withBodyDocument:
           $ref: '#/components/schemas/WithBodyDocument'
+        group:
+          maxLength: 1024
+          type: string
       required:
         - status
         - type
@@ -17490,7 +17724,8 @@ components:
           type: string
         isDrafting:
           type: boolean
-        body:
+        group:
+          maxLength: 1024
           nullable: true
           type: string
         withBodyDocument:
@@ -17701,6 +17936,28 @@ components:
         - attributes
         - type
       type: object
+    CreateDocumentRequest_data_attributes:
+      properties:
+        fileId:
+          format: uuid
+          type: string
+        suppliedId:
+          type: string
+      required:
+        - fileId
+      type: object
+    CreateDocumentRequest_data:
+      properties:
+        type:
+          enum:
+            - document
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreateDocumentRequest_data_attributes'
+      required:
+        - attributes
+        - type
+      type: object
     CreateGeometrySetRequest_data_relationships:
       properties:
         source:
@@ -17723,9 +17980,6 @@ components:
       type: object
     UpdateReplyRequest_data_attributes:
       properties:
-        body:
-          nullable: true
-          type: string
         isDrafting:
           type: boolean
         withBodyDocument:
@@ -17746,8 +18000,6 @@ components:
       type: object
     CreateReplyRequest_data_attributes:
       properties:
-        body:
-          type: string
         isDrafting:
           type: boolean
         reference:
@@ -17755,6 +18007,7 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/CreateSceneReference'
+            - $ref: '#/components/schemas/CreateDocumentReference'
         withBodyDocument:
           $ref: '#/components/schemas/WithBodyDocument'
       type: object
@@ -19261,8 +19514,11 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/SceneReference'
+            - $ref: '#/components/schemas/DocumentReference'
         bodyDocument:
           $ref: '#/components/schemas/TextDocument'
+        group:
+          type: string
         mentions:
           description: List of mentions in the thread
           items:
@@ -19382,6 +19638,25 @@ components:
       required:
         - created
       type: object
+    DocumentData_attributes:
+      properties:
+        fileId:
+          format: uuid
+          type: string
+        suppliedId:
+          type: string
+        documentType:
+          enum:
+            - PDF
+          type: string
+        createdAt:
+          format: date-time
+          type: string
+      required:
+        - createdAt
+        - documentType
+        - fileId
+      type: object
     ReplyData_attributes:
       properties:
         createdAt:
@@ -19406,6 +19681,7 @@ components:
             propertyName: type
           oneOf:
             - $ref: '#/components/schemas/SceneReference'
+            - $ref: '#/components/schemas/DocumentReference'
         bodyDocument:
           $ref: '#/components/schemas/TextDocument'
         mentions:
