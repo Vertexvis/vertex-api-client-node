@@ -1193,65 +1193,6 @@ paths:
         - OAuth2: []
       tags:
         - batches
-  /canvases/{id}:
-    get:
-      description: Get a `canvas` by ID.
-      operationId: getCanvas
-      parameters:
-        - description: The `canvas` ID.
-          explode: false
-          in: path
-          name: id
-          required: true
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: simple
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Canvas'
-          description: OK
-        '401':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '401'
-                    code: Unauthorized
-                    title: Invalid or missing credentials.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unauthorized
-        '404':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '404'
-                    code: NotFound
-                    title: The requested resource was not found.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Not Found
-        '415':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '415'
-                    code: UnsupportedMediaType
-                    title:
-                      The provided media type is not supported. Update the Content-Type
-                      header to application/vnd.api+json and try again.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Unsupported Media Type
-      security:
-        - OAuth2: []
-      tags:
-        - canvases
   /collaboration-contexts:
     get:
       description: List `collaboration-context`s
@@ -3127,6 +3068,78 @@ paths:
       tags:
         - file-jobs
   /documents:
+    get:
+      description: |
+        Get `documents`.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: getDocuments
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: Comma-separated list of supplied IDs to filter on.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/DocumentList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - documents
     post:
       description: |
         Creates a document.
@@ -3170,6 +3183,67 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - documents
+  /documents/{id}:
+    get:
+      description: |
+        Get a `document` by ID.
+        **Preview:** This is a preview API and is subject to change.
+      operationId: getDocument
+      parameters:
+        - description: The `document` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Document'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
         '415':
           content:
             application/vnd.api+json:
@@ -11149,6 +11223,15 @@ components:
       schema:
         $ref: '#/components/schemas/Uuid'
       style: simple
+    DocumentId:
+      description: The `document` ID.
+      explode: false
+      in: path
+      name: id
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: simple
     FileId:
       description: The `file` ID.
       explode: false
@@ -12087,18 +12170,6 @@ components:
       required:
         - vertexvis/batch:results
       type: object
-    Canvas:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/CanvasData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-      type: object
     CollaborationContextList:
       additionalProperties: false
       properties:
@@ -12330,6 +12401,21 @@ components:
           $ref: '#/components/schemas/CreateFileJobRequest_data'
       required:
         - data
+      type: object
+    DocumentList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/DocumentData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
       type: object
     CreateDocumentRequest:
       additionalProperties: false
@@ -13851,30 +13937,6 @@ components:
           minLength: 1
           type: string
       required:
-        - id
-        - type
-      type: object
-    CanvasData:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - canvas
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/CanvasData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
         - id
         - type
       type: object
@@ -15783,37 +15845,6 @@ components:
       required:
         - data
       type: object
-    CanvasDocument:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - canvas-document-3d-v1
-            - canvas-document-v1
-          type: string
-        items:
-          items:
-            description: A canvas item.
-            discriminator:
-              mapping:
-                line-item-2d: '#/components/schemas/LineItem2d'
-                oval-item-2d: '#/components/schemas/OvalItem2d'
-                freeform-item-2d: '#/components/schemas/FreeformItem2d'
-                callout-item: '#/components/schemas/CalloutItem'
-                pin-item-2d: '#/components/schemas/PinItem2d'
-              propertyName: type
-            oneOf:
-              - $ref: '#/components/schemas/LineItem2d'
-              - $ref: '#/components/schemas/OvalItem2d'
-              - $ref: '#/components/schemas/FreeformItem2d'
-              - $ref: '#/components/schemas/CalloutItem'
-              - $ref: '#/components/schemas/PinItem2d'
-          maxItems: 1024
-          type: array
-      required:
-        - items
-        - type
-      type: object
     AccountRelationship:
       additionalProperties: false
       description: Relationship to an `account`.
@@ -15957,6 +15988,8 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        documentAnnotation:
+          $ref: '#/components/schemas/DocumentAnnotation'
       required:
         - documentAnnotationId
         - documentId
@@ -16651,6 +16684,37 @@ components:
       required:
         - data
       type: object
+    CanvasDocument:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - canvas-document-3d-v1
+            - canvas-document-v1
+          type: string
+        items:
+          items:
+            description: A canvas item.
+            discriminator:
+              mapping:
+                line-item-2d: '#/components/schemas/LineItem2d'
+                oval-item-2d: '#/components/schemas/OvalItem2d'
+                freeform-item-2d: '#/components/schemas/FreeformItem2d'
+                callout-item: '#/components/schemas/CalloutItem'
+                pin-item-2d: '#/components/schemas/PinItem2d'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/LineItem2d'
+              - $ref: '#/components/schemas/OvalItem2d'
+              - $ref: '#/components/schemas/FreeformItem2d'
+              - $ref: '#/components/schemas/CalloutItem'
+              - $ref: '#/components/schemas/PinItem2d'
+          maxItems: 1024
+          type: array
+      required:
+        - items
+        - type
+      type: object
     HexColor:
       description: A hex color value.
       example: '#FFFFFF'
@@ -16834,141 +16898,6 @@ components:
       required:
         - domain
       type: object
-    LineItem2d:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - line-item-2d
-          type: string
-        stroke:
-          $ref: '#/components/schemas/StrokeStyle'
-        fill:
-          $ref: '#/components/schemas/FillStyle'
-        startPosition:
-          $ref: '#/components/schemas/Vector2'
-        endPosition:
-          $ref: '#/components/schemas/Vector2'
-        startShape:
-          discriminator:
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/ArrowEndShape'
-            - $ref: '#/components/schemas/CircleEndShape'
-            - $ref: '#/components/schemas/DashEndShape'
-        endShape:
-          discriminator:
-            propertyName: type
-          oneOf:
-            - $ref: '#/components/schemas/ArrowEndShape'
-            - $ref: '#/components/schemas/CircleEndShape'
-            - $ref: '#/components/schemas/DashEndShape'
-      required:
-        - endPosition
-        - fill
-        - startPosition
-        - stroke
-        - type
-      type: object
-    OvalItem2d:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - oval-item-2d
-          type: string
-        stroke:
-          $ref: '#/components/schemas/StrokeStyle'
-        fill:
-          $ref: '#/components/schemas/FillStyle'
-        topLeft:
-          $ref: '#/components/schemas/Vector2'
-        bottomRight:
-          $ref: '#/components/schemas/Vector2'
-      required:
-        - bottomRight
-        - fill
-        - stroke
-        - topLeft
-        - type
-      type: object
-    FreeformItem2d:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - freeform-item-2d
-          type: string
-        stroke:
-          $ref: '#/components/schemas/StrokeStyle'
-        fill:
-          $ref: '#/components/schemas/FillStyle'
-        positions:
-          items:
-            $ref: '#/components/schemas/Vector2'
-          type: array
-      required:
-        - fill
-        - positions
-        - stroke
-        - type
-      type: object
-    CalloutItem:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - callout-item
-          type: string
-        primaryColor:
-          $ref: '#/components/schemas/RGBA'
-        accentColor:
-          $ref: '#/components/schemas/RGBA'
-        text:
-          type: string
-        anchorPosition:
-          $ref: '#/components/schemas/Vector3'
-        textPosition:
-          $ref: '#/components/schemas/Vector2'
-        sceneItemId:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - accentColor
-        - anchorPosition
-        - primaryColor
-        - text
-        - textPosition
-        - type
-      type: object
-    PinItem2d:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - pin-item-2d
-          type: string
-        primaryColor:
-          $ref: '#/components/schemas/RGBA'
-        accentColor:
-          $ref: '#/components/schemas/RGBA'
-        position:
-          $ref: '#/components/schemas/Vector3'
-        sceneItemId:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - accentColor
-        - position
-        - primaryColor
-        - type
-      type: object
     PdfMarkup:
       additionalProperties: false
       description:
@@ -17008,6 +16937,26 @@ components:
               - $ref: '#/components/schemas/ParagraphNode'
           maxItems: 100
           type: array
+      required:
+        - content
+        - type
+      type: object
+    DocumentAnnotation:
+      additionalProperties: false
+      description: A resolved document annotation for a thread or reply reference.
+      properties:
+        type:
+          enum:
+            - document-annotation
+          type: string
+        content:
+          description: The content of the document annotation.
+          discriminator:
+            mapping:
+              pdf-markup: '#/components/schemas/PdfMarkup'
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/PdfMarkup'
       required:
         - content
         - type
@@ -17152,6 +17101,141 @@ components:
         - id
         - type
       type: object
+    LineItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - line-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        startPosition:
+          $ref: '#/components/schemas/Vector2'
+        endPosition:
+          $ref: '#/components/schemas/Vector2'
+        startShape:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/ArrowEndShape'
+            - $ref: '#/components/schemas/CircleEndShape'
+            - $ref: '#/components/schemas/DashEndShape'
+        endShape:
+          discriminator:
+            propertyName: type
+          oneOf:
+            - $ref: '#/components/schemas/ArrowEndShape'
+            - $ref: '#/components/schemas/CircleEndShape'
+            - $ref: '#/components/schemas/DashEndShape'
+      required:
+        - endPosition
+        - fill
+        - startPosition
+        - stroke
+        - type
+      type: object
+    OvalItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - oval-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        topLeft:
+          $ref: '#/components/schemas/Vector2'
+        bottomRight:
+          $ref: '#/components/schemas/Vector2'
+      required:
+        - bottomRight
+        - fill
+        - stroke
+        - topLeft
+        - type
+      type: object
+    FreeformItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - freeform-item-2d
+          type: string
+        stroke:
+          $ref: '#/components/schemas/StrokeStyle'
+        fill:
+          $ref: '#/components/schemas/FillStyle'
+        positions:
+          items:
+            $ref: '#/components/schemas/Vector2'
+          type: array
+      required:
+        - fill
+        - positions
+        - stroke
+        - type
+      type: object
+    CalloutItem:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - callout-item
+          type: string
+        primaryColor:
+          $ref: '#/components/schemas/RGBA'
+        accentColor:
+          $ref: '#/components/schemas/RGBA'
+        text:
+          type: string
+        anchorPosition:
+          $ref: '#/components/schemas/Vector3'
+        textPosition:
+          $ref: '#/components/schemas/Vector2'
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - accentColor
+        - anchorPosition
+        - primaryColor
+        - text
+        - textPosition
+        - type
+      type: object
+    PinItem2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - pin-item-2d
+          type: string
+        primaryColor:
+          $ref: '#/components/schemas/RGBA'
+        accentColor:
+          $ref: '#/components/schemas/RGBA'
+        position:
+          $ref: '#/components/schemas/Vector3'
+        sceneItemId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - accentColor
+        - position
+        - primaryColor
+        - type
+      type: object
     RelationshipLinks:
       additionalProperties: false
       example:
@@ -17162,6 +17246,57 @@ components:
           type: string
       required:
         - related
+      type: object
+    CanvasDocument2d:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - canvas-document-2d-v1
+          type: string
+        items:
+          items:
+            description: A 2D canvas item.
+            discriminator:
+              mapping:
+                line-item-2d: '#/components/schemas/LineItem2d'
+                oval-item-2d: '#/components/schemas/OvalItem2d'
+                freeform-item-2d: '#/components/schemas/FreeformItem2d'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/LineItem2d'
+              - $ref: '#/components/schemas/OvalItem2d'
+              - $ref: '#/components/schemas/FreeformItem2d'
+          maxItems: 1024
+          type: array
+      required:
+        - items
+        - type
+      type: object
+    ParagraphNode:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - paragraph-node
+          type: string
+        content:
+          description: List of paragraph nodes
+          items:
+            description: An inline node
+            discriminator:
+              mapping:
+                text-node: '#/components/schemas/TextNode'
+                mention-node: '#/components/schemas/MentionNode'
+              propertyName: type
+            oneOf:
+              - $ref: '#/components/schemas/TextNode'
+              - $ref: '#/components/schemas/MentionNode'
+          maxItems: 100
+          type: array
+      required:
+        - content
+        - type
       type: object
     StrokeStyle:
       additionalProperties: false
@@ -17288,57 +17423,6 @@ components:
         - b
         - g
         - r
-      type: object
-    CanvasDocument2d:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - canvas-document-2d-v1
-          type: string
-        items:
-          items:
-            description: A 2D canvas item.
-            discriminator:
-              mapping:
-                line-item-2d: '#/components/schemas/LineItem2d'
-                oval-item-2d: '#/components/schemas/OvalItem2d'
-                freeform-item-2d: '#/components/schemas/FreeformItem2d'
-              propertyName: type
-            oneOf:
-              - $ref: '#/components/schemas/LineItem2d'
-              - $ref: '#/components/schemas/OvalItem2d'
-              - $ref: '#/components/schemas/FreeformItem2d'
-          maxItems: 1024
-          type: array
-      required:
-        - items
-        - type
-      type: object
-    ParagraphNode:
-      additionalProperties: false
-      properties:
-        type:
-          enum:
-            - paragraph-node
-          type: string
-        content:
-          description: List of paragraph nodes
-          items:
-            description: An inline node
-            discriminator:
-              mapping:
-                text-node: '#/components/schemas/TextNode'
-                mention-node: '#/components/schemas/MentionNode'
-              propertyName: type
-            oneOf:
-              - $ref: '#/components/schemas/TextNode'
-              - $ref: '#/components/schemas/MentionNode'
-          maxItems: 100
-          type: array
-      required:
-        - content
-        - type
       type: object
     TextNode:
       additionalProperties: false
@@ -19422,28 +19506,6 @@ components:
       required:
         - created
         - status
-      type: object
-    CanvasData_attributes:
-      properties:
-        document:
-          $ref: '#/components/schemas/CanvasDocument'
-        createdAt:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        modifiedAt:
-          example: 2020-01-01T12:00:00Z
-          format: date-time
-          type: string
-        suppliedId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
-          type: string
-      required:
-        - createdAt
-        - document
-        - modifiedAt
       type: object
     CollaborationContextData_attributes:
       properties:

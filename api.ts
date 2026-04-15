@@ -851,95 +851,6 @@ export type CameraFitTypeEnum =
 /**
  *
  * @export
- * @interface Canvas
- */
-export interface Canvas {
-  /**
-   *
-   * @type {CanvasData}
-   * @memberof Canvas
-   */
-  data: CanvasData;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof Canvas
-   */
-  links?: { [key: string]: Link };
-}
-/**
- *
- * @export
- * @interface CanvasData
- */
-export interface CanvasData {
-  /**
-   *
-   * @type {string}
-   * @memberof CanvasData
-   */
-  type: CanvasDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof CanvasData
-   */
-  id: string;
-  /**
-   *
-   * @type {CanvasDataAttributes}
-   * @memberof CanvasData
-   */
-  attributes: CanvasDataAttributes;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof CanvasData
-   */
-  links?: { [key: string]: Link };
-}
-
-export const CanvasDataTypeEnum = {
-  Canvas: 'canvas',
-} as const;
-
-export type CanvasDataTypeEnum =
-  (typeof CanvasDataTypeEnum)[keyof typeof CanvasDataTypeEnum];
-
-/**
- *
- * @export
- * @interface CanvasDataAttributes
- */
-export interface CanvasDataAttributes {
-  /**
-   *
-   * @type {CanvasDocument}
-   * @memberof CanvasDataAttributes
-   */
-  document: CanvasDocument;
-  /**
-   *
-   * @type {string}
-   * @memberof CanvasDataAttributes
-   */
-  createdAt: string;
-  /**
-   *
-   * @type {string}
-   * @memberof CanvasDataAttributes
-   */
-  modifiedAt: string;
-  /**
-   *
-   * @type {string}
-   * @memberof CanvasDataAttributes
-   */
-  suppliedId?: string;
-}
-/**
- *
- * @export
  * @interface CanvasDocument
  */
 export interface CanvasDocument {
@@ -4018,6 +3929,33 @@ export interface Document {
   links?: { [key: string]: Link };
 }
 /**
+ * A resolved document annotation for a thread or reply reference.
+ * @export
+ * @interface DocumentAnnotation
+ */
+export interface DocumentAnnotation {
+  /**
+   *
+   * @type {string}
+   * @memberof DocumentAnnotation
+   */
+  type: DocumentAnnotationTypeEnum;
+  /**
+   * The content of the document annotation.
+   * @type {PdfMarkup}
+   * @memberof DocumentAnnotation
+   */
+  content: PdfMarkup;
+}
+
+export const DocumentAnnotationTypeEnum = {
+  DocumentAnnotation: 'document-annotation',
+} as const;
+
+export type DocumentAnnotationTypeEnum =
+  (typeof DocumentAnnotationTypeEnum)[keyof typeof DocumentAnnotationTypeEnum];
+
+/**
  *
  * @export
  * @interface DocumentData
@@ -4090,6 +4028,25 @@ export type DocumentDataAttributesDocumentTypeEnum =
   (typeof DocumentDataAttributesDocumentTypeEnum)[keyof typeof DocumentDataAttributesDocumentTypeEnum];
 
 /**
+ *
+ * @export
+ * @interface DocumentList
+ */
+export interface DocumentList {
+  /**
+   *
+   * @type {Array<DocumentData>}
+   * @memberof DocumentList
+   */
+  data: Array<DocumentData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof DocumentList
+   */
+  links: { [key: string]: Link };
+}
+/**
  * A reference to a document for a thread or reply.
  * @export
  * @interface DocumentReference
@@ -4113,6 +4070,12 @@ export interface DocumentReference {
    * @memberof DocumentReference
    */
   documentAnnotationId: string;
+  /**
+   *
+   * @type {DocumentAnnotation}
+   * @memberof DocumentReference
+   */
+  documentAnnotation?: DocumentAnnotation;
 }
 
 export const DocumentReferenceTypeEnum = {
@@ -15149,166 +15112,6 @@ export class BatchesApi extends BaseAPI {
 }
 
 /**
- * CanvasesApi - axios parameter creator
- * @export
- */
-export const CanvasesApiAxiosParamCreator = function (
-  configuration?: Configuration
-) {
-  return {
-    /**
-     * Get a `canvas` by ID.
-     * @param {string} id The &#x60;canvas&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getCanvas: async (
-      id: string,
-      options: AxiosRequestConfig = {}
-    ): Promise<RequestArgs> => {
-      // verify required parameter 'id' is not null or undefined
-      assertParamExists('getCanvas', 'id', id);
-      const localVarPath = `/canvases/{id}`.replace(
-        `{${'id'}}`,
-        encodeURIComponent(String(id))
-      );
-      // use dummy base URL string because the URL constructor only accepts absolute URLs.
-      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
-      let baseOptions;
-      if (configuration) {
-        baseOptions = configuration.baseOptions;
-      }
-
-      const localVarRequestOptions = {
-        method: 'GET',
-        ...baseOptions,
-        ...options,
-      };
-      const localVarHeaderParameter = {} as any;
-      const localVarQueryParameter = {} as any;
-
-      // authentication OAuth2 required
-      // oauth required
-      await setOAuthToObject(
-        localVarHeaderParameter,
-        'OAuth2',
-        [],
-        configuration
-      );
-
-      setSearchParams(localVarUrlObj, localVarQueryParameter);
-      let headersFromBaseOptions = baseOptions?.headers ?? {};
-      localVarRequestOptions.headers = {
-        ...localVarHeaderParameter,
-        ...headersFromBaseOptions,
-        ...options.headers,
-      };
-
-      return {
-        url: toPathString(localVarUrlObj),
-        options: localVarRequestOptions,
-      };
-    },
-  };
-};
-
-/**
- * CanvasesApi - functional programming interface
- * @export
- */
-export const CanvasesApiFp = function (configuration?: Configuration) {
-  const localVarAxiosParamCreator = CanvasesApiAxiosParamCreator(configuration);
-  return {
-    /**
-     * Get a `canvas` by ID.
-     * @param {string} id The &#x60;canvas&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    async getCanvas(
-      id: string,
-      options?: AxiosRequestConfig
-    ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Canvas>
-    > {
-      const localVarAxiosArgs = await localVarAxiosParamCreator.getCanvas(
-        id,
-        options
-      );
-      return createRequestFunction(
-        localVarAxiosArgs,
-        globalAxios,
-        BASE_PATH,
-        configuration
-      );
-    },
-  };
-};
-
-/**
- * CanvasesApi - factory interface
- * @export
- */
-export const CanvasesApiFactory = function (
-  configuration?: Configuration,
-  basePath?: string,
-  axios?: AxiosInstance
-) {
-  const localVarFp = CanvasesApiFp(configuration);
-  return {
-    /**
-     * Get a `canvas` by ID.
-     * @param {string} id The &#x60;canvas&#x60; ID.
-     * @param {*} [options] Override http request option.
-     * @throws {RequiredError}
-     */
-    getCanvas(id: string, options?: any): AxiosPromise<Canvas> {
-      return localVarFp
-        .getCanvas(id, options)
-        .then((request) => request(axios, basePath));
-    },
-  };
-};
-
-/**
- * Request parameters for getCanvas operation in CanvasesApi.
- * @export
- * @interface CanvasesApiGetCanvasRequest
- */
-export interface CanvasesApiGetCanvasRequest {
-  /**
-   * The &#x60;canvas&#x60; ID.
-   * @type {string}
-   * @memberof CanvasesApiGetCanvas
-   */
-  readonly id: string;
-}
-
-/**
- * CanvasesApi - object-oriented interface
- * @export
- * @class CanvasesApi
- * @extends {BaseAPI}
- */
-export class CanvasesApi extends BaseAPI {
-  /**
-   * Get a `canvas` by ID.
-   * @param {CanvasesApiGetCanvasRequest} requestParameters Request parameters.
-   * @param {*} [options] Override http request option.
-   * @throws {RequiredError}
-   * @memberof CanvasesApi
-   */
-  public getCanvas(
-    requestParameters: CanvasesApiGetCanvasRequest,
-    options?: AxiosRequestConfig
-  ) {
-    return CanvasesApiFp(this.configuration)
-      .getCanvas(requestParameters.id, options)
-      .then((request) => request(this.axios, this.basePath));
-  }
-}
-
-/**
  * CollaborationContextsApi - axios parameter creator
  * @export
  */
@@ -16278,6 +16081,123 @@ export const DocumentsApiAxiosParamCreator = function (
         options: localVarRequestOptions,
       };
     },
+    /**
+     * Get a `document` by ID. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;document&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDocument: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getDocument', 'id', id);
+      const localVarPath = `/documents/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `documents`. **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDocuments: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/documents`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
   };
 };
 
@@ -16303,6 +16223,58 @@ export const DocumentsApiFp = function (configuration?: Configuration) {
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.createDocument(
         createDocumentRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `document` by ID. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;document&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getDocument(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<Document>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getDocument(
+        id,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `documents`. **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getDocuments(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentList>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getDocuments(
+        pageCursor,
+        pageSize,
+        filterSuppliedId,
         options
       );
       return createRequestFunction(
@@ -16340,6 +16312,35 @@ export const DocumentsApiFactory = function (
         .createDocument(createDocumentRequest, options)
         .then((request) => request(axios, basePath));
     },
+    /**
+     * Get a `document` by ID. **Preview:** This is a preview API and is subject to change.
+     * @param {string} id The &#x60;document&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDocument(id: string, options?: any): AxiosPromise<Document> {
+      return localVarFp
+        .getDocument(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `documents`. **Preview:** This is a preview API and is subject to change.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getDocuments(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: string,
+      options?: any
+    ): AxiosPromise<DocumentList> {
+      return localVarFp
+        .getDocuments(pageCursor, pageSize, filterSuppliedId, options)
+        .then((request) => request(axios, basePath));
+    },
   };
 };
 
@@ -16355,6 +16356,48 @@ export interface DocumentsApiCreateDocumentRequest {
    * @memberof DocumentsApiCreateDocument
    */
   readonly createDocumentRequest: CreateDocumentRequest;
+}
+
+/**
+ * Request parameters for getDocument operation in DocumentsApi.
+ * @export
+ * @interface DocumentsApiGetDocumentRequest
+ */
+export interface DocumentsApiGetDocumentRequest {
+  /**
+   * The &#x60;document&#x60; ID.
+   * @type {string}
+   * @memberof DocumentsApiGetDocument
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for getDocuments operation in DocumentsApi.
+ * @export
+ * @interface DocumentsApiGetDocumentsRequest
+ */
+export interface DocumentsApiGetDocumentsRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof DocumentsApiGetDocuments
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof DocumentsApiGetDocuments
+   */
+  readonly pageSize?: number;
+
+  /**
+   * Comma-separated list of supplied IDs to filter on.
+   * @type {string}
+   * @memberof DocumentsApiGetDocuments
+   */
+  readonly filterSuppliedId?: string;
 }
 
 /**
@@ -16377,6 +16420,43 @@ export class DocumentsApi extends BaseAPI {
   ) {
     return DocumentsApiFp(this.configuration)
       .createDocument(requestParameters.createDocumentRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `document` by ID. **Preview:** This is a preview API and is subject to change.
+   * @param {DocumentsApiGetDocumentRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DocumentsApi
+   */
+  public getDocument(
+    requestParameters: DocumentsApiGetDocumentRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return DocumentsApiFp(this.configuration)
+      .getDocument(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `documents`. **Preview:** This is a preview API and is subject to change.
+   * @param {DocumentsApiGetDocumentsRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof DocumentsApi
+   */
+  public getDocuments(
+    requestParameters: DocumentsApiGetDocumentsRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return DocumentsApiFp(this.configuration)
+      .getDocuments(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
