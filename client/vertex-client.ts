@@ -6,6 +6,7 @@ import {
   BatchesApi,
   CollaborationContextsApi,
   Configuration,
+  DocumentsApi,
   ExportsApi,
   FilesApi,
   GeometrySetsApi,
@@ -130,6 +131,7 @@ export class VertexClient {
   public applications: ApplicationsApi;
   public batches: BatchesApi;
   public collaborationContexts: CollaborationContextsApi;
+  public documents: DocumentsApi;
   public exports: ExportsApi;
   public files: FilesApi;
   public geometrySets: GeometrySetsApi;
@@ -178,6 +180,7 @@ export class VertexClient {
       undefined,
       axiosInst
     );
+    this.documents = new DocumentsApi(this.config, undefined, axiosInst);
     this.exports = new ExportsApi(this.config, undefined, axiosInst);
     this.files = new FilesApi(this.config, undefined, axiosInst);
     this.geometrySets = new GeometrySetsApi(this.config, undefined, axiosInst);
