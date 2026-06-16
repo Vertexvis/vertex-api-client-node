@@ -16009,9 +16009,6 @@ components:
           maxLength: 36
           type: string
         idpId:
-          example: some-string
-          maxLength: 1024
-          minLength: 1
           type: string
         email:
           type: string
@@ -16021,7 +16018,6 @@ components:
         - email
         - fullName
         - id
-        - idpId
         - type
       type: object
     UnknownUser:

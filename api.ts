@@ -5166,7 +5166,7 @@ export interface KnownUser {
    * @type {string}
    * @memberof KnownUser
    */
-  idpId: string;
+  idpId?: string;
   /**
    *
    * @type {string}
