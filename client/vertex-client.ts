@@ -124,7 +124,7 @@ const SecToMs = 1000;
  * main();
  * ```
  *
- * @see {@link https://developer.vertexvis.com/docs/guides|Developer Guides} to get started.
+ * @see {@link https://developer.vertex3d.com/docs/guides|Developer Guides} to get started.
  */
 export class VertexClient {
   public accounts: AccountsApi;
@@ -268,7 +268,7 @@ export class VertexClient {
       throw new Error(
         '@vertexvis/api-client-node is not supported in browser environments. ' +
           'For details on how your application should communicate with the ' +
-          'Vertex platform, visit https://developer.vertexvis.com/docs/guides/platform-architecture.'
+          'Vertex platform, visit https://developer.vertex3d.com/docs/guides/platform-architecture.'
       );
     }
 

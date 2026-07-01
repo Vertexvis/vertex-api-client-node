@@ -5,7 +5,7 @@
 
 [TypeDoc Documentation](https://vertexvis.github.io/vertex-api-client-node/)
 
-If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with our [Developer Portal](https://developer.vertexvis.com/).
+If you're ready to integrate Vertex into your application, this is the place! For more background on the Vertex platform, start with our [Developer Portal](https://developer.vertex3d.com/).
 
 The Vertex REST API client for Node.js is generated using [`openapi-generator`](https://github.com/OpenAPITools/openapi-generator), so it's always up-to-date. On top of the generated code, we've added a higher-level client and helpers in the `./client` directory.
 
