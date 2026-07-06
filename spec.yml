@@ -1,18 +1,18 @@
 openapi: 3.0.3
 info:
   contact:
-    email: support@vertexvis.com
+    email: support@vertex3d.com
     name: Vertex API support
-    url: https://developer.vertexvis.com/docs/support
+    url: https://developer.vertex3d.com/docs/support
   description: |
     The Vertex distributed cloud rendering platform includes a set of APIs and SDKs, which together allow easily integrating 3D product data into your business application.
 
-    See our [Developer Guides](https://developer.vertexvis.com/docs/guides/render-your-first-scene) to get started.
+    See our [Developer Guides](https://developer.vertex3d.com/docs/guides/render-your-first-scene) to get started.
 
     Notes about the Postman collection and API Reference code samples:
       - They include all required and optional body parameters for completeness. Remove any optional parameters as desired.
       - They use auto-generated IDs and other values that may share the same value for ease of documentation only. In actual requests and responses, the IDs should uniquely identify their corresponding resource.
-  termsOfService: https://vertexvis.com/terms-of-use
+  termsOfService: https://vertex3d.com/terms-of-use
   title: Vertex Platform API
   version: '1.0'
   x-logo:
@@ -21,7 +21,7 @@ info:
     altText: Vertex Software
 externalDocs:
   description: Getting started guides
-  url: https://developer.vertexvis.com/docs/guides/render-your-first-scene
+  url: https://developer.vertex3d.com/docs/guides/render-your-first-scene
 servers:
   - url: https://platform.vertexvis.com
   - url: https://platform.platdev.vertexvis.io
@@ -2078,7 +2078,7 @@ paths:
     post:
       description:
         Create a `file`. Once created, upload file content via the uploadFile
-        API. For details including supported file formats, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
+        API. For details including supported file formats, see our [Import data](https://developer.vertex3d.com/docs/guides/import-data-with-api)
         guide.
       operationId: createFile
       requestBody:
@@ -3325,7 +3325,7 @@ paths:
     post:
       description:
         Create a `geometry-set`. Once created, create scenes via the createScene
-        API. For details, see our [Import data](https://developer.vertexvis.com/docs/guides/import-data-with-api)
+        API. For details, see our [Import data](https://developer.vertex3d.com/docs/guides/import-data-with-api)
         guide.
       operationId: createGeometrySet
       requestBody:
@@ -3983,7 +3983,7 @@ paths:
   /oauth2/token:
     post:
       description:
-        Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertexvis.com/docs/guides/authentication)
+        Create an OAuth2 access token. For details, see our [Authentication](https://developer.vertex3d.com/docs/guides/authentication)
         guide.
       operationId: createToken
       requestBody:
@@ -5048,7 +5048,7 @@ paths:
         likewise you can invoke this endpoint with a new revision id: `my-part-id/my-new-revision-id` and a new revision will be created for the
         existing part.
 
-        See our [Import Data](https://developer.vertexvis.com/docs/guides/import-data-with-api) guides for more
+        See our [Import Data](https://developer.vertex3d.com/docs/guides/import-data-with-api) guides for more
         information.
       operationId: createPart
       requestBody:
@@ -6773,7 +6773,7 @@ paths:
         Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`.
         Provide an existing `scene` using `relationship.source` to clone it.
         Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root.
-        This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes) guide.
+        This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
       operationId: createSceneItem
       parameters:
         - description: The `scene` ID.
@@ -6867,7 +6867,7 @@ paths:
         Get a `queued-scene-item`. The response is either the status if
         `running` or `error` or, upon completion, redirects to the created `scene-item`.
         Once created, commit the scene via the updateScene API. For details, see our
-        [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes)
         guide.
       operationId: getQueuedSceneItem
       parameters:
@@ -7654,7 +7654,7 @@ paths:
     post:
       description:
         Create a `scene`. Once created, add scene items via the createSceneItem
-        API. For details, see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes)
         guide.
       operationId: createScene
       requestBody:
@@ -7841,7 +7841,7 @@ paths:
       description:
         Update a `scene` camera and/or state. Once updated, view the scene
         via the renderScene API or with the Viewer SDK. For details, see our [Render
-        static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes)
         guide.
       operationId: updateScene
       parameters:
@@ -9481,7 +9481,7 @@ paths:
         Get a `queued-translation-job`. The response is either the status
         if `running` or `error` or, upon completion, the `part-revision` that was
         created. Once created, create scenes via the createScene API. For details,
-        see our [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes)
         guide.
       operationId: getQueuedTranslationJob
       parameters:
@@ -9636,7 +9636,7 @@ paths:
         - Get a `queued-translation`. The response is either the status if `running`
         or `error` or, upon completion, redirects to the created `part-revision`.
         Once created, create scenes via the createScene API. For details, see our
-        [Render static scenes](https://developer.vertexvis.com/docs/guides/render-static-scenes)
+        [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes)
         guide.
       operationId: getQueuedTranslation
       parameters:
@@ -14883,7 +14883,7 @@ components:
     Matrix4Nullable:
       additionalProperties: false
       description:
-        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
+        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertex3d.com/docs/guides/matrix-transformations)
         for details.
       example:
         r0:
@@ -14986,7 +14986,7 @@ components:
     Matrix4:
       additionalProperties: false
       description:
-        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertexvis.com/docs/guides/matrix-transformations)
+        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertex3d.com/docs/guides/matrix-transformations)
         for details.
       example:
         r0:
