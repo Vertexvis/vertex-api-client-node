@@ -2378,6 +2378,71 @@ export type CreatePermissionGrantDataAttributesCapabilityEnum =
 /**
  *
  * @export
+ * @interface CreatePropertyKeyPolicyRequest
+ */
+export interface CreatePropertyKeyPolicyRequest {
+  /**
+   *
+   * @type {CreatePropertyKeyPolicyRequestData}
+   * @memberof CreatePropertyKeyPolicyRequest
+   */
+  data: CreatePropertyKeyPolicyRequestData;
+}
+/**
+ *
+ * @export
+ * @interface CreatePropertyKeyPolicyRequestData
+ */
+export interface CreatePropertyKeyPolicyRequestData {
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePropertyKeyPolicyRequestData
+   */
+  type: CreatePropertyKeyPolicyRequestDataTypeEnum;
+  /**
+   *
+   * @type {CreatePropertyKeyPolicyRequestDataAttributes}
+   * @memberof CreatePropertyKeyPolicyRequestData
+   */
+  attributes?: CreatePropertyKeyPolicyRequestDataAttributes;
+}
+
+export const CreatePropertyKeyPolicyRequestDataTypeEnum = {
+  PropertyKeyPolicy: 'property-key-policy',
+} as const;
+
+export type CreatePropertyKeyPolicyRequestDataTypeEnum =
+  (typeof CreatePropertyKeyPolicyRequestDataTypeEnum)[keyof typeof CreatePropertyKeyPolicyRequestDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface CreatePropertyKeyPolicyRequestDataAttributes
+ */
+export interface CreatePropertyKeyPolicyRequestDataAttributes {
+  /**
+   * ID provided for correlation with external systems, e.g. a PLM system.
+   * @type {string}
+   * @memberof CreatePropertyKeyPolicyRequestDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CreatePropertyKeyPolicyRequestDataAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {PropertyKeyPolicyMode}
+   * @memberof CreatePropertyKeyPolicyRequestDataAttributes
+   */
+  mode?: PropertyKeyPolicyMode;
+}
+/**
+ *
+ * @export
  * @interface CreateReplyRequest
  */
 export interface CreateReplyRequest {
@@ -3360,6 +3425,12 @@ export interface CreateStreamKeyRequestDataAttributes {
    * @memberof CreateStreamKeyRequestDataAttributes
    */
   sceneViewStateId?: string;
+  /**
+   * An optional ID specifying the `property-key-policy` to apply to JWTs generated from this `stream-key`.
+   * @type {string}
+   * @memberof CreateStreamKeyRequestDataAttributes
+   */
+  propertyKeyPolicyId?: string;
   /**
    * Optionally enables or disables the creation of a search session for the view. The default creates a session for the scene-view
    * @type {boolean}
@@ -5272,7 +5343,7 @@ export interface MaterialOverride {
   value?: ColorMaterial;
 }
 /**
- * 4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertex3d.com/docs/guides/matrix-transformations) for details.
+ * 4x4 affine transformation matrix.
  * @export
  * @interface Matrix4
  */
@@ -6924,10 +6995,10 @@ export interface PropertyEntryDataAttributes {
     | PropertyDateType;
   /**
    *
-   * @type {PropertyKeyType}
+   * @type {PropertyKey}
    * @memberof PropertyEntryDataAttributes
    */
-  key: PropertyKeyType;
+  key: PropertyKey;
 }
 /**
  *
@@ -6951,16 +7022,268 @@ export interface PropertyEntryList {
 /**
  *
  * @export
- * @interface PropertyKeyType
+ * @interface PropertyKey
  */
-export interface PropertyKeyType {
+export interface PropertyKey {
   /**
    *
    * @type {string}
-   * @memberof PropertyKeyType
+   * @memberof PropertyKey
    */
   name: string;
 }
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicy
+ */
+export interface PropertyKeyPolicy {
+  /**
+   *
+   * @type {PropertyKeyPolicyData}
+   * @memberof PropertyKeyPolicy
+   */
+  data: PropertyKeyPolicyData;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyPolicy
+   */
+  links?: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyData
+ */
+export interface PropertyKeyPolicyData {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyPolicyData
+   */
+  type: PropertyKeyPolicyDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PropertyKeyPolicyData
+   */
+  id: string;
+  /**
+   *
+   * @type {PropertyKeyPolicyDataAttributes}
+   * @memberof PropertyKeyPolicyData
+   */
+  attributes: PropertyKeyPolicyDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyPolicyData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const PropertyKeyPolicyDataTypeEnum = {
+  PropertyKeyPolicy: 'property-key-policy',
+} as const;
+
+export type PropertyKeyPolicyDataTypeEnum =
+  (typeof PropertyKeyPolicyDataTypeEnum)[keyof typeof PropertyKeyPolicyDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyDataAttributes
+ */
+export interface PropertyKeyPolicyDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyPolicyDataAttributes
+   */
+  createdAt: string;
+  /**
+   * ID provided for correlation with external systems, e.g. a PLM system.
+   * @type {string}
+   * @memberof PropertyKeyPolicyDataAttributes
+   */
+  suppliedId?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyPolicyDataAttributes
+   */
+  name?: string;
+  /**
+   *
+   * @type {PropertyKeyPolicyMode}
+   * @memberof PropertyKeyPolicyDataAttributes
+   */
+  mode: PropertyKeyPolicyMode;
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyEntryData
+ */
+export interface PropertyKeyPolicyEntryData {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyPolicyEntryData
+   */
+  type: PropertyKeyPolicyEntryDataTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyPolicyEntryData
+   */
+  id: string;
+  /**
+   *
+   * @type {PropertyKeyPolicyEntryDataAttributes}
+   * @memberof PropertyKeyPolicyEntryData
+   */
+  attributes: PropertyKeyPolicyEntryDataAttributes;
+  /**
+   *
+   * @type {PropertyKeyPolicyEntryDataRelationships}
+   * @memberof PropertyKeyPolicyEntryData
+   */
+  relationships: PropertyKeyPolicyEntryDataRelationships;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyPolicyEntryData
+   */
+  links?: { [key: string]: Link };
+}
+
+export const PropertyKeyPolicyEntryDataTypeEnum = {
+  PropertyKeyPolicyEntry: 'property-key-policy-entry',
+} as const;
+
+export type PropertyKeyPolicyEntryDataTypeEnum =
+  (typeof PropertyKeyPolicyEntryDataTypeEnum)[keyof typeof PropertyKeyPolicyEntryDataTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyEntryDataAttributes
+ */
+export interface PropertyKeyPolicyEntryDataAttributes {
+  /**
+   *
+   * @type {PropertyKey}
+   * @memberof PropertyKeyPolicyEntryDataAttributes
+   */
+  key: PropertyKey;
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyEntryDataRelationships
+ */
+export interface PropertyKeyPolicyEntryDataRelationships {
+  /**
+   *
+   * @type {PropertyKeyPolicyRelationship}
+   * @memberof PropertyKeyPolicyEntryDataRelationships
+   */
+  propertyKeyPolicy: PropertyKeyPolicyRelationship;
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyEntryList
+ */
+export interface PropertyKeyPolicyEntryList {
+  /**
+   *
+   * @type {Array<PropertyKeyPolicyEntryData>}
+   * @memberof PropertyKeyPolicyEntryList
+   */
+  data: Array<PropertyKeyPolicyEntryData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyPolicyEntryList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyList
+ */
+export interface PropertyKeyPolicyList {
+  /**
+   *
+   * @type {Array<PropertyKeyPolicyData>}
+   * @memberof PropertyKeyPolicyList
+   */
+  data: Array<PropertyKeyPolicyData>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyPolicyList
+   */
+  links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @enum {string}
+ */
+
+export const PropertyKeyPolicyMode = {
+  Allowlist: 'allowlist',
+  Denylist: 'denylist',
+} as const;
+
+export type PropertyKeyPolicyMode =
+  (typeof PropertyKeyPolicyMode)[keyof typeof PropertyKeyPolicyMode];
+
+/**
+ * Relationship to a `property-key-policy`.
+ * @export
+ * @interface PropertyKeyPolicyRelationship
+ */
+export interface PropertyKeyPolicyRelationship {
+  /**
+   *
+   * @type {PropertyKeyPolicyRelationshipData}
+   * @memberof PropertyKeyPolicyRelationship
+   */
+  data: PropertyKeyPolicyRelationshipData;
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyPolicyRelationshipData
+ */
+export interface PropertyKeyPolicyRelationshipData {
+  /**
+   * Resource object type.
+   * @type {string}
+   * @memberof PropertyKeyPolicyRelationshipData
+   */
+  type: PropertyKeyPolicyRelationshipDataTypeEnum;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof PropertyKeyPolicyRelationshipData
+   */
+  id: string;
+}
+
+export const PropertyKeyPolicyRelationshipDataTypeEnum = {
+  PropertyKeyPolicy: 'property-key-policy',
+} as const;
+
+export type PropertyKeyPolicyRelationshipDataTypeEnum =
+  (typeof PropertyKeyPolicyRelationshipDataTypeEnum)[keyof typeof PropertyKeyPolicyRelationshipDataTypeEnum];
+
 /**
  *
  * @export
@@ -9862,6 +10185,12 @@ export interface StreamKeyDataAttributes {
    * @memberof StreamKeyDataAttributes
    */
   sceneViewStateId?: string;
+  /**
+   * ID of the resource.
+   * @type {string}
+   * @memberof StreamKeyDataAttributes
+   */
+  propertyKeyPolicyId?: string;
 }
 /**
  *
@@ -11469,6 +11798,19 @@ export interface UpsertPropertyEntriesRequestDataRelationships {
     | PartRevisionRelationship
     | SceneItemRelationship
     | PartInstanceRelationship;
+}
+/**
+ *
+ * @export
+ * @interface UpsertPropertyKeyPolicyEntriesRequest
+ */
+export interface UpsertPropertyKeyPolicyEntriesRequest {
+  /**
+   *
+   * @type {Array<PropertyKey>}
+   * @memberof UpsertPropertyKeyPolicyEntriesRequest
+   */
+  data: Array<PropertyKey>;
 }
 /**
  *
@@ -18655,14 +18997,22 @@ export const FilesApiAxiosParamCreator = function (
      * Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
+     * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getFiles: async (
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      sort?: string,
+      filterName?: FilterExpression,
+      filterFileId?: FilterExpression,
+      filterSuppliedId?: string | FilterExpression,
+      filterCreatedAt?: FilterExpression,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/files`;
@@ -18698,8 +19048,89 @@ export const FilesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
+      if (sort !== undefined) {
+        localVarQueryParameter['sort'] = sort;
+      }
+
+      if (filterName !== undefined) {
+        localVarQueryParameter['filter[name]'] = filterName;
+      }
+
+      if (filterFileId !== undefined) {
+        localVarQueryParameter['filter[fileId]'] = filterFileId;
+      }
+
       if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      if (filterCreatedAt !== undefined) {
+        localVarQueryParameter['filter[createdAt]'] = filterCreatedAt;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `file-collection` IDs associated with a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollectionsForFile: async (
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('listFileCollectionsForFile', 'id', id);
+      const localVarPath = `/files/{id}/file-collections`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -18979,14 +19410,22 @@ export const FilesApiFp = function (configuration?: Configuration) {
      * Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
+     * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getFiles(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      sort?: string,
+      filterName?: FilterExpression,
+      filterFileId?: FilterExpression,
+      filterSuppliedId?: string | FilterExpression,
+      filterCreatedAt?: FilterExpression,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<FileList>
@@ -18994,9 +19433,46 @@ export const FilesApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getFiles(
         pageCursor,
         pageSize,
+        sort,
+        filterName,
+        filterFileId,
         filterSuppliedId,
+        filterCreatedAt,
         options
       );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `file-collection` IDs associated with a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listFileCollectionsForFile(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<FileCollectionList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listFileCollectionsForFile(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -19142,18 +19618,53 @@ export const FilesApiFactory = function (
      * Get `files`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
+     * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getFiles(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      sort?: string,
+      filterName?: FilterExpression,
+      filterFileId?: FilterExpression,
+      filterSuppliedId?: string | FilterExpression,
+      filterCreatedAt?: FilterExpression,
       options?: any
     ): AxiosPromise<FileList> {
       return localVarFp
-        .getFiles(pageCursor, pageSize, filterSuppliedId, options)
+        .getFiles(
+          pageCursor,
+          pageSize,
+          sort,
+          filterName,
+          filterFileId,
+          filterSuppliedId,
+          filterCreatedAt,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `file-collection` IDs associated with a `file`.
+     * @param {string} id The &#x60;file&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listFileCollectionsForFile(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<FileCollectionList> {
+      return localVarFp
+        .listFileCollectionsForFile(id, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -19292,11 +19803,67 @@ export interface FilesApiGetFilesRequest {
   readonly pageSize?: number;
 
   /**
-   * Comma-separated list of supplied IDs to filter on.
+   * A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
    * @type {string}
    * @memberof FilesApiGetFiles
    */
-  readonly filterSuppliedId?: string;
+  readonly sort?: string;
+
+  /**
+   * A filter expression for the &#x60;name&#x60; to filter on.
+   * @type {FilterExpression}
+   * @memberof FilesApiGetFiles
+   */
+  readonly filterName?: FilterExpression;
+
+  /**
+   * A filter expression for the &#x60;fileId&#x60; to filter on.
+   * @type {FilterExpression}
+   * @memberof FilesApiGetFiles
+   */
+  readonly filterFileId?: FilterExpression;
+
+  /**
+   * A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+   * @type {string | FilterExpression}
+   * @memberof FilesApiGetFiles
+   */
+  readonly filterSuppliedId?: string | FilterExpression;
+
+  /**
+   * A filter expression for the &#x60;createdAt&#x60; to filter on.
+   * @type {FilterExpression}
+   * @memberof FilesApiGetFiles
+   */
+  readonly filterCreatedAt?: FilterExpression;
+}
+
+/**
+ * Request parameters for listFileCollectionsForFile operation in FilesApi.
+ * @export
+ * @interface FilesApiListFileCollectionsForFileRequest
+ */
+export interface FilesApiListFileCollectionsForFileRequest {
+  /**
+   * The &#x60;file&#x60; ID.
+   * @type {string}
+   * @memberof FilesApiListFileCollectionsForFile
+   */
+  readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof FilesApiListFileCollectionsForFile
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof FilesApiListFileCollectionsForFile
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -19451,7 +20018,32 @@ export class FilesApi extends BaseAPI {
       .getFiles(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.sort,
+        requestParameters.filterName,
+        requestParameters.filterFileId,
         requestParameters.filterSuppliedId,
+        requestParameters.filterCreatedAt,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `file-collection` IDs associated with a `file`.
+   * @param {FilesApiListFileCollectionsForFileRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof FilesApi
+   */
+  public listFileCollectionsForFile(
+    requestParameters: FilesApiListFileCollectionsForFileRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return FilesApiFp(this.configuration)
+      .listFileCollectionsForFile(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -25462,6 +26054,1082 @@ export class PropertyEntriesApi extends BaseAPI {
     return PropertyEntriesApiFp(this.configuration)
       .upsertPropertyEntries(
         requestParameters.upsertPropertyEntriesRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * PropertyKeyPoliciesApi - axios parameter creator
+ * @export
+ */
+export const PropertyKeyPoliciesApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     * Create a `property-key-policy`.
+     * @param {CreatePropertyKeyPolicyRequest} createPropertyKeyPolicyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPropertyKeyPolicy: async (
+      createPropertyKeyPolicyRequest: CreatePropertyKeyPolicyRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'createPropertyKeyPolicyRequest' is not null or undefined
+      assertParamExists(
+        'createPropertyKeyPolicy',
+        'createPropertyKeyPolicyRequest',
+        createPropertyKeyPolicyRequest
+      );
+      const localVarPath = `/property-key-policies`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createPropertyKeyPolicyRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePropertyKeyPolicy: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deletePropertyKeyPolicy', 'id', id);
+      const localVarPath = `/property-key-policies/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Delete entries from a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePropertyKeyPolicyEntries: async (
+      id: string,
+      filterId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('deletePropertyKeyPolicyEntries', 'id', id);
+      const localVarPath = `/property-key-policies/{id}/entries`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (filterId !== undefined) {
+        localVarQueryParameter['filter[id]'] = filterId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPropertyKeyPolicy: async (
+      id: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('getPropertyKeyPolicy', 'id', id);
+      const localVarPath = `/property-key-policies/{id}`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * List `property-key-policies`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpression} [filterSuppliedId] The supplied ID filter expression for property key policies.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPropertyKeyPolicies: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: FilterExpression,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/property-key-policies`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterSuppliedId !== undefined) {
+        localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
+     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPropertyKeyPolicyEntries: async (
+      pageCursor?: string,
+      pageSize?: number,
+      filterPropertyKeyPolicyId?: string,
+      filterPropertyKeyPolicySuppliedId?: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/property-key-policy-entries`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterPropertyKeyPolicyId !== undefined) {
+        localVarQueryParameter['filter[propertyKeyPolicy.id]'] =
+          filterPropertyKeyPolicyId;
+      }
+
+      if (filterPropertyKeyPolicySuppliedId !== undefined) {
+        localVarQueryParameter['filter[propertyKeyPolicy.suppliedId]'] =
+          filterPropertyKeyPolicySuppliedId;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     * Upsert entries for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    upsertPropertyKeyPolicyEntries: async (
+      id: string,
+      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('upsertPropertyKeyPolicyEntries', 'id', id);
+      // verify required parameter 'upsertPropertyKeyPolicyEntriesRequest' is not null or undefined
+      assertParamExists(
+        'upsertPropertyKeyPolicyEntries',
+        'upsertPropertyKeyPolicyEntriesRequest',
+        upsertPropertyKeyPolicyEntriesRequest
+      );
+      const localVarPath = `/property-key-policies/{id}/entries`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      // authentication OAuth2 required
+      // oauth required
+      await setOAuthToObject(
+        localVarHeaderParameter,
+        'OAuth2',
+        [],
+        configuration
+      );
+
+      localVarHeaderParameter['Content-Type'] = 'application/vnd.api+json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions = baseOptions?.headers ?? {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        upsertPropertyKeyPolicyEntriesRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * PropertyKeyPoliciesApi - functional programming interface
+ * @export
+ */
+export const PropertyKeyPoliciesApiFp = function (
+  configuration?: Configuration
+) {
+  const localVarAxiosParamCreator =
+    PropertyKeyPoliciesApiAxiosParamCreator(configuration);
+  return {
+    /**
+     * Create a `property-key-policy`.
+     * @param {CreatePropertyKeyPolicyRequest} createPropertyKeyPolicyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createPropertyKeyPolicy(
+      createPropertyKeyPolicyRequest: CreatePropertyKeyPolicyRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PropertyKeyPolicy>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.createPropertyKeyPolicy(
+          createPropertyKeyPolicyRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deletePropertyKeyPolicy(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deletePropertyKeyPolicy(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Delete entries from a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deletePropertyKeyPolicyEntries(
+      id: string,
+      filterId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.deletePropertyKeyPolicyEntries(
+          id,
+          filterId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getPropertyKeyPolicy(
+      id: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PropertyKeyPolicy>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.getPropertyKeyPolicy(id, options);
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * List `property-key-policies`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpression} [filterSuppliedId] The supplied ID filter expression for property key policies.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listPropertyKeyPolicies(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: FilterExpression,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PropertyKeyPolicyList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listPropertyKeyPolicies(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
+     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listPropertyKeyPolicyEntries(
+      pageCursor?: string,
+      pageSize?: number,
+      filterPropertyKeyPolicyId?: string,
+      filterPropertyKeyPolicySuppliedId?: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<PropertyKeyPolicyEntryList>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.listPropertyKeyPolicyEntries(
+          pageCursor,
+          pageSize,
+          filterPropertyKeyPolicyId,
+          filterPropertyKeyPolicySuppliedId,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Upsert entries for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async upsertPropertyKeyPolicyEntries(
+      id: string,
+      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.upsertPropertyKeyPolicyEntries(
+          id,
+          upsertPropertyKeyPolicyEntriesRequest,
+          options
+        );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * PropertyKeyPoliciesApi - factory interface
+ * @export
+ */
+export const PropertyKeyPoliciesApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = PropertyKeyPoliciesApiFp(configuration);
+  return {
+    /**
+     * Create a `property-key-policy`.
+     * @param {CreatePropertyKeyPolicyRequest} createPropertyKeyPolicyRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createPropertyKeyPolicy(
+      createPropertyKeyPolicyRequest: CreatePropertyKeyPolicyRequest,
+      options?: any
+    ): AxiosPromise<PropertyKeyPolicy> {
+      return localVarFp
+        .createPropertyKeyPolicy(createPropertyKeyPolicyRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePropertyKeyPolicy(id: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deletePropertyKeyPolicy(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Delete entries from a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {string} [filterId] Comma-separated list of IDs to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deletePropertyKeyPolicyEntries(
+      id: string,
+      filterId?: string,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .deletePropertyKeyPolicyEntries(id, filterId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getPropertyKeyPolicy(
+      id: string,
+      options?: any
+    ): AxiosPromise<PropertyKeyPolicy> {
+      return localVarFp
+        .getPropertyKeyPolicy(id, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * List `property-key-policies`.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpression} [filterSuppliedId] The supplied ID filter expression for property key policies.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPropertyKeyPolicies(
+      pageCursor?: string,
+      pageSize?: number,
+      filterSuppliedId?: FilterExpression,
+      options?: any
+    ): AxiosPromise<PropertyKeyPolicyList> {
+      return localVarFp
+        .listPropertyKeyPolicies(
+          pageCursor,
+          pageSize,
+          filterSuppliedId,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
+     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
+     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listPropertyKeyPolicyEntries(
+      pageCursor?: string,
+      pageSize?: number,
+      filterPropertyKeyPolicyId?: string,
+      filterPropertyKeyPolicySuppliedId?: string,
+      options?: any
+    ): AxiosPromise<PropertyKeyPolicyEntryList> {
+      return localVarFp
+        .listPropertyKeyPolicyEntries(
+          pageCursor,
+          pageSize,
+          filterPropertyKeyPolicyId,
+          filterPropertyKeyPolicySuppliedId,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Upsert entries for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
+     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    upsertPropertyKeyPolicyEntries(
+      id: string,
+      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      options?: any
+    ): AxiosPromise<void> {
+      return localVarFp
+        .upsertPropertyKeyPolicyEntries(
+          id,
+          upsertPropertyKeyPolicyEntriesRequest,
+          options
+        )
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * Request parameters for createPropertyKeyPolicy operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiCreatePropertyKeyPolicyRequest
+ */
+export interface PropertyKeyPoliciesApiCreatePropertyKeyPolicyRequest {
+  /**
+   *
+   * @type {CreatePropertyKeyPolicyRequest}
+   * @memberof PropertyKeyPoliciesApiCreatePropertyKeyPolicy
+   */
+  readonly createPropertyKeyPolicyRequest: CreatePropertyKeyPolicyRequest;
+}
+
+/**
+ * Request parameters for deletePropertyKeyPolicy operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyRequest
+ */
+export interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyRequest {
+  /**
+   * The &#x60;property-key-policy&#x60; ID.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicy
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for deletePropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest
+ */
+export interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest {
+  /**
+   * The &#x60;property-key-policy&#x60; ID.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntries
+   */
+  readonly id: string;
+
+  /**
+   * Comma-separated list of IDs to filter on.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntries
+   */
+  readonly filterId?: string;
+}
+
+/**
+ * Request parameters for getPropertyKeyPolicy operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiGetPropertyKeyPolicyRequest
+ */
+export interface PropertyKeyPoliciesApiGetPropertyKeyPolicyRequest {
+  /**
+   * The &#x60;property-key-policy&#x60; ID.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiGetPropertyKeyPolicy
+   */
+  readonly id: string;
+}
+
+/**
+ * Request parameters for listPropertyKeyPolicies operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiListPropertyKeyPoliciesRequest
+ */
+export interface PropertyKeyPoliciesApiListPropertyKeyPoliciesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicies
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicies
+   */
+  readonly pageSize?: number;
+
+  /**
+   * The supplied ID filter expression for property key policies.
+   * @type {FilterExpression}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicies
+   */
+  readonly filterSuppliedId?: FilterExpression;
+}
+
+/**
+ * Request parameters for listPropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest
+ */
+export interface PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest {
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   */
+  readonly pageSize?: number;
+
+  /**
+   * The &#x60;property-key-policy&#x60; ID to filter on.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   */
+  readonly filterPropertyKeyPolicyId?: string;
+
+  /**
+   * The &#x60;property-key-policy&#x60; supplied ID to filter on.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   */
+  readonly filterPropertyKeyPolicySuppliedId?: string;
+}
+
+/**
+ * Request parameters for upsertPropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * @export
+ * @interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest
+ */
+export interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest {
+  /**
+   * The &#x60;property-key-policy&#x60; ID.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntries
+   */
+  readonly id: string;
+
+  /**
+   *
+   * @type {UpsertPropertyKeyPolicyEntriesRequest}
+   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntries
+   */
+  readonly upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest;
+}
+
+/**
+ * PropertyKeyPoliciesApi - object-oriented interface
+ * @export
+ * @class PropertyKeyPoliciesApi
+ * @extends {BaseAPI}
+ */
+export class PropertyKeyPoliciesApi extends BaseAPI {
+  /**
+   * Create a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiCreatePropertyKeyPolicyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public createPropertyKeyPolicy(
+    requestParameters: PropertyKeyPoliciesApiCreatePropertyKeyPolicyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .createPropertyKeyPolicy(
+        requestParameters.createPropertyKeyPolicyRequest,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiDeletePropertyKeyPolicyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public deletePropertyKeyPolicy(
+    requestParameters: PropertyKeyPoliciesApiDeletePropertyKeyPolicyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .deletePropertyKeyPolicy(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Delete entries from a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public deletePropertyKeyPolicyEntries(
+    requestParameters: PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .deletePropertyKeyPolicyEntries(
+        requestParameters.id,
+        requestParameters.filterId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiGetPropertyKeyPolicyRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public getPropertyKeyPolicy(
+    requestParameters: PropertyKeyPoliciesApiGetPropertyKeyPolicyRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .getPropertyKeyPolicy(requestParameters.id, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * List `property-key-policies`.
+   * @param {PropertyKeyPoliciesApiListPropertyKeyPoliciesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public listPropertyKeyPolicies(
+    requestParameters: PropertyKeyPoliciesApiListPropertyKeyPoliciesRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .listPropertyKeyPolicies(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterSuppliedId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+   * @param {PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public listPropertyKeyPolicyEntries(
+    requestParameters: PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest = {},
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .listPropertyKeyPolicyEntries(
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        requestParameters.filterPropertyKeyPolicyId,
+        requestParameters.filterPropertyKeyPolicySuppliedId,
+        options
+      )
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Upsert entries for a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof PropertyKeyPoliciesApi
+   */
+  public upsertPropertyKeyPolicyEntries(
+    requestParameters: PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return PropertyKeyPoliciesApiFp(this.configuration)
+      .upsertPropertyKeyPolicyEntries(
+        requestParameters.id,
+        requestParameters.upsertPropertyKeyPolicyEntriesRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
