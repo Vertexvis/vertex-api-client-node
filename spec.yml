@@ -51,6 +51,7 @@ tags:
   - description: Requires Engage Module
     name: pmi
   - name: property-entries
+  - name: property-key-policies
   - description: Requires Engage Module
     name: replies
   - name: scene-alterations
@@ -2030,15 +2031,57 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Comma-separated list of supplied IDs to filter on.
+        - description:
+            A sort to apply to the collection. A "minus" prefixed before
+            the field name is used to specify descending sort order.
+          explode: true
+          in: query
+          name: sort
+          required: false
+          schema:
+            example: -age,name
+            type: string
+          style: form
+        - description: A filter expression for the `name` to filter on.
+          explode: true
+          in: query
+          name: filter[name]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description: A filter expression for the `fileId` to filter on.
+          explode: true
+          in: query
+          name: filter[fileId]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description:
+            A filter for the `suppliedId`. The canonical form is a filter
+            expression such as `filter[suppliedId][contains]=...`. The deprecated legacy
+            `filter[suppliedId]=id-1,id-2` exact-match CSV form is also accepted for
+            backwards compatibility.
           explode: true
           in: query
           name: filter[suppliedId]
           required: false
           schema:
-            example: some-id-1,some-id-2
-            maxLength: 1024
-            type: string
+            oneOf:
+              - deprecated: true
+                example: some-id-1,some-id-2
+                maxLength: 1024
+                type: string
+              - $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description: A filter expression for the `createdAt` to filter on.
+          explode: true
+          in: query
+          name: filter[createdAt]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
           style: form
       responses:
         '200':
@@ -2398,6 +2441,62 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - files
+  /files/{id}/file-collections:
+    get:
+      description: List `file-collection` IDs associated with a `file`.
+      operationId: listFileCollectionsForFile
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: The `file` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/FileCollectionList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
       security:
         - OAuth2: []
       tags:
@@ -5868,6 +5967,459 @@ paths:
         - OAuth2: []
       tags:
         - property-entries
+  /property-key-policies:
+    get:
+      description: List `property-key-policies`.
+      operationId: listPropertyKeyPolicies
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: The supplied ID filter expression for property key policies.
+          explode: true
+          in: query
+          name: filter[suppliedId]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyKeyPolicyList'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+    post:
+      description: Create a `property-key-policy`.
+      operationId: createPropertyKeyPolicy
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/CreatePropertyKeyPolicyRequest'
+        required: true
+      responses:
+        '201':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyKeyPolicy'
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '409':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '409'
+                    code: Conflict
+                    title: The state of the resource does not permit this operation.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Conflict
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+  /property-key-policies/{id}:
+    delete:
+      description: Delete a `property-key-policy`.
+      operationId: deletePropertyKeyPolicy
+      parameters:
+        - description: The `property-key-policy` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+    get:
+      description: Get a `property-key-policy`.
+      operationId: getPropertyKeyPolicy
+      parameters:
+        - description: The `property-key-policy` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyKeyPolicy'
+          description: OK
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+  /property-key-policy-entries:
+    get:
+      description:
+        Get `property-key-policy-entry` resources for a `property-key-policy`.
+        Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`.
+        When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+      operationId: listPropertyKeyPolicyEntries
+      parameters:
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+        - description: The `property-key-policy` ID to filter on.
+          explode: true
+          in: query
+          name: filter[propertyKeyPolicy.id]
+          required: false
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: form
+        - description: The `property-key-policy` supplied ID to filter on.
+          explode: true
+          in: query
+          name: filter[propertyKeyPolicy.suppliedId]
+          required: false
+          schema:
+            $ref: '#/components/schemas/NonEmptyString'
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyKeyPolicyEntryList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+  /property-key-policies/{id}/entries:
+    delete:
+      description: Delete entries from a `property-key-policy`.
+      operationId: deletePropertyKeyPolicyEntries
+      parameters:
+        - description: The `property-key-policy` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: Comma-separated list of IDs to filter on.
+          explode: true
+          in: query
+          name: filter[id]
+          required: false
+          schema:
+            example: some-id-1,some-id-2
+            type: string
+          style: form
+      responses:
+        '204':
+          description: No Content
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
+    post:
+      description: Upsert entries for a `property-key-policy`.
+      operationId: upsertPropertyKeyPolicyEntries
+      parameters:
+        - description: The `property-key-policy` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+      requestBody:
+        content:
+          application/vnd.api+json:
+            schema:
+              $ref: '#/components/schemas/UpsertPropertyKeyPolicyEntriesRequest'
+        required: true
+      responses:
+        '204':
+          description: No Content
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
   /scene-alterations/{id}:
     get:
       description: Get a `scene-alteration` by ID.
@@ -11190,6 +11742,15 @@ components:
       schema:
         $ref: '#/components/schemas/FilterExpression'
       style: form
+    PropertyKeyPolicySuppliedIdFilter:
+      description: The supplied ID filter expression for property key policies.
+      explode: true
+      in: query
+      name: filter[suppliedId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
     RelationshipIdFilter:
       description: A relationship id to filter attachments for
       explode: true
@@ -11724,6 +12285,24 @@ components:
         maxLength: 36
         type: string
       style: form
+    PropertyKeyPolicyEntryPropertyKeyPolicyIdFilter:
+      description: The `property-key-policy` ID to filter on.
+      explode: true
+      in: query
+      name: filter[propertyKeyPolicy.id]
+      required: false
+      schema:
+        $ref: '#/components/schemas/Uuid'
+      style: form
+    PropertyKeyPolicyEntryPropertyKeyPolicySuppliedIdFilter:
+      description: The `property-key-policy` supplied ID to filter on.
+      explode: true
+      in: query
+      name: filter[propertyKeyPolicy.suppliedId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/NonEmptyString'
+      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -11734,6 +12313,50 @@ components:
         example: some-id-1,some-id-2
         maxLength: 1024
         type: string
+      style: form
+    NameFilterExpression:
+      description: A filter expression for the `name` to filter on.
+      explode: true
+      in: query
+      name: filter[name]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
+    FileIdFilterExpression:
+      description: A filter expression for the `fileId` to filter on.
+      explode: true
+      in: query
+      name: filter[fileId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
+    FileSuppliedIdFilterExpression:
+      description:
+        A filter for the `suppliedId`. The canonical form is a filter expression
+        such as `filter[suppliedId][contains]=...`. The deprecated legacy `filter[suppliedId]=id-1,id-2`
+        exact-match CSV form is also accepted for backwards compatibility.
+      explode: true
+      in: query
+      name: filter[suppliedId]
+      required: false
+      schema:
+        oneOf:
+          - deprecated: true
+            example: some-id-1,some-id-2
+            maxLength: 1024
+            type: string
+          - $ref: '#/components/schemas/FilterExpression'
+      style: form
+    CreatedAtFilterExpression:
+      description: A filter expression for the `createdAt` to filter on.
+      explode: true
+      in: query
+      name: filter[createdAt]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
       style: form
     SceneItemsPartRevisionSourceFilter:
       description:
@@ -12286,6 +12909,32 @@ components:
         - data
         - links
       type: object
+    FilterExpression:
+      additionalProperties: false
+      description: Describes how an attribute should be filtered.
+      properties:
+        eq:
+          description: A value of a filter.
+          type: string
+        neq:
+          description: A value of a filter.
+          type: string
+        gt:
+          description: A value of a filter.
+          type: string
+        gte:
+          description: A value of a filter.
+          type: string
+        lt:
+          description: A value of a filter.
+          type: string
+        lte:
+          description: A value of a filter.
+          type: string
+        contains:
+          description: A value of a filter.
+          type: string
+      type: object
     FileList:
       additionalProperties: false
       properties:
@@ -12329,18 +12978,6 @@ components:
       required:
         - data
       type: object
-    DownloadUrl:
-      additionalProperties: false
-      properties:
-        data:
-          $ref: '#/components/schemas/DownloadUrlData'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - data
-      type: object
     FileCollectionList:
       additionalProperties: false
       properties:
@@ -12355,6 +12992,18 @@ components:
       required:
         - data
         - links
+      type: object
+    DownloadUrl:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/DownloadUrlData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
       type: object
     CreateFileCollectionRequest:
       additionalProperties: false
@@ -12871,6 +13520,71 @@ components:
       required:
         - data
       type: object
+    PropertyKeyPolicyList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PropertyKeyPolicyData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    CreatePropertyKeyPolicyRequest:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/CreatePropertyKeyPolicyRequestData'
+      required:
+        - data
+      type: object
+    PropertyKeyPolicy:
+      additionalProperties: false
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyKeyPolicyData'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+      type: object
+    NonEmptyString:
+      example: some-string
+      maxLength: 1024
+      minLength: 1
+      type: string
+    PropertyKeyPolicyEntryList:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PropertyKeyPolicyEntryData'
+          type: array
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - data
+        - links
+      type: object
+    UpsertPropertyKeyPolicyEntriesRequest:
+      additionalProperties: false
+      properties:
+        data:
+          items:
+            $ref: '#/components/schemas/PropertyKey'
+          type: array
+      required:
+        - data
+      type: object
     SceneAlteration:
       additionalProperties: false
       properties:
@@ -13354,32 +14068,6 @@ components:
       required:
         - data
       type: object
-    FilterExpression:
-      additionalProperties: false
-      description: Describes how an attribute should be filtered.
-      properties:
-        eq:
-          description: A value of a filter.
-          type: string
-        neq:
-          description: A value of a filter.
-          type: string
-        gt:
-          description: A value of a filter.
-          type: string
-        gte:
-          description: A value of a filter.
-          type: string
-        lt:
-          description: A value of a filter.
-          type: string
-        lte:
-          description: A value of a filter.
-          type: string
-        contains:
-          description: A value of a filter.
-          type: string
-      type: object
     QueuedJobList:
       additionalProperties: false
       properties:
@@ -13711,11 +14399,6 @@ components:
         - position
         - up
       type: object
-    NonEmptyString:
-      example: some-string
-      maxLength: 1024
-      minLength: 1
-      type: string
     DateTime:
       example: 2020-01-01T12:00:00Z
       format: date-time
@@ -14102,6 +14785,9 @@ components:
         - relationships
         - type
       type: object
+    FilterLiteral:
+      description: A value of a filter.
+      type: string
     FileMetadataData:
       additionalProperties: false
       properties:
@@ -14116,29 +14802,6 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/FileMetadataData_attributes'
-        links:
-          additionalProperties:
-            $ref: '#/components/schemas/Link'
-          type: object
-      required:
-        - attributes
-        - id
-        - type
-      type: object
-    DownloadUrlData:
-      additionalProperties: false
-      properties:
-        type:
-          example: download-url
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-        attributes:
-          $ref: '#/components/schemas/DownloadUrlData_attributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -14164,6 +14827,29 @@ components:
           type: string
         attributes:
           $ref: '#/components/schemas/FileCollectionMetadataData_attributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    DownloadUrlData:
+      additionalProperties: false
+      properties:
+        type:
+          example: download-url
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/DownloadUrlData_attributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -14782,6 +15468,81 @@ components:
       required:
         - data
       type: object
+    PropertyKeyPolicyData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - property-key-policy
+          example: property-key-policy
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PropertyKeyPolicyDataAttributes'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - type
+      type: object
+    CreatePropertyKeyPolicyRequestData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - property-key-policy
+          type: string
+        attributes:
+          $ref: '#/components/schemas/CreatePropertyKeyPolicyRequestDataAttributes'
+      required:
+        - type
+      type: object
+    PropertyKeyPolicyEntryData:
+      additionalProperties: false
+      properties:
+        type:
+          enum:
+            - property-key-policy-entry
+          example: property-key-policy-entry
+          type: string
+        id:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        attributes:
+          $ref: '#/components/schemas/PropertyKeyPolicyEntryDataAttributes'
+        relationships:
+          $ref: '#/components/schemas/PropertyKeyPolicyEntryDataRelationships'
+        links:
+          additionalProperties:
+            $ref: '#/components/schemas/Link'
+          type: object
+      required:
+        - attributes
+        - id
+        - relationships
+        - type
+      type: object
+    PropertyKey:
+      additionalProperties: false
+      properties:
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+      required:
+        - name
+      type: object
     SceneAlterationData:
       additionalProperties: false
       properties:
@@ -14985,9 +15746,7 @@ components:
       type: object
     Matrix4:
       additionalProperties: false
-      description:
-        4x4 affine transformation matrix, see [Matrix transformations](https://developer.vertex3d.com/docs/guides/matrix-transformations)
-        for details.
+      description: 4x4 affine transformation matrix.
       example:
         r0:
           x: 1.0
@@ -15495,9 +16254,6 @@ components:
         - relationships
         - type
       type: object
-    FilterLiteral:
-      description: A value of a filter.
-      type: string
     QueuedTranslationJobData:
       additionalProperties: false
       properties:
@@ -16194,16 +16950,66 @@ components:
       required:
         - ordinal
       type: object
-    PropertyKeyType:
+    PropertyKeyPolicyDataAttributes:
+      additionalProperties: false
       properties:
+        createdAt:
+          example: 2020-01-01T12:00:00Z
+          format: date-time
+          type: string
+        suppliedId:
+          description:
+            ID provided for correlation with external systems, e.g. a PLM
+            system.
+          example: GRP12345
+          maxLength: 1024
+          minLength: 1
+          type: string
         name:
           example: some-string
           maxLength: 1024
           minLength: 1
           type: string
+        mode:
+          $ref: '#/components/schemas/PropertyKeyPolicyMode'
       required:
-        - category
-        - name
+        - createdAt
+        - mode
+      type: object
+    CreatePropertyKeyPolicyRequestDataAttributes:
+      additionalProperties: false
+      properties:
+        suppliedId:
+          description:
+            ID provided for correlation with external systems, e.g. a PLM
+            system.
+          example: GRP12345
+          maxLength: 1024
+          minLength: 1
+          type: string
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
+        mode:
+          $ref: '#/components/schemas/PropertyKeyPolicyMode'
+      type: object
+    PropertyKeyPolicyEntryDataAttributes:
+      additionalProperties: false
+      properties:
+        key:
+          $ref: '#/components/schemas/PropertyKey'
+      required:
+        - key
+      type: object
+    PropertyKeyPolicyEntryDataRelationships:
+      additionalProperties: false
+      properties:
+        propertyKeyPolicy:
+          $ref: '#/components/schemas/PropertyKeyPolicyRelationship'
+      required:
+        - propertyKeyPolicy
       type: object
     QueryById:
       additionalProperties: false
@@ -16989,6 +17795,20 @@ components:
       required:
         - id
         - type
+      type: object
+    PropertyKeyPolicyMode:
+      enum:
+        - allowlist
+        - denylist
+      type: string
+    PropertyKeyPolicyRelationship:
+      additionalProperties: false
+      description: Relationship to a `property-key-policy`.
+      properties:
+        data:
+          $ref: '#/components/schemas/PropertyKeyPolicyRelationship_data'
+      required:
+        - data
       type: object
     QueryBySceneItemId:
       additionalProperties: false
@@ -19009,6 +19829,14 @@ components:
           format: uuid
           maxLength: 36
           type: string
+        propertyKeyPolicyId:
+          description:
+            An optional ID specifying the `property-key-policy` to apply
+            to JWTs generated from this `stream-key`.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
         withSearchSession:
           description:
             Optionally enables or disables the creation of a search session
@@ -19652,20 +20480,6 @@ components:
         - name
         - status
       type: object
-    DownloadUrlData_attributes:
-      properties:
-        downloadUrl:
-          deprecated: true
-          description: Deprecated. Use `uri` instead.
-          example: https://example.com/path/to/file.zip
-          type: string
-        uri:
-          example: https://example.com/path/to/file.zip
-          type: string
-      required:
-        - downloadUrl
-        - uri
-      type: object
     FileCollectionMetadataData_attributes:
       properties:
         name:
@@ -19695,6 +20509,20 @@ components:
           type: string
       required:
         - created
+      type: object
+    DownloadUrlData_attributes:
+      properties:
+        downloadUrl:
+          deprecated: true
+          description: Deprecated. Use `uri` instead.
+          example: https://example.com/path/to/file.zip
+          type: string
+        uri:
+          example: https://example.com/path/to/file.zip
+          type: string
+      required:
+        - downloadUrl
+        - uri
       type: object
     DocumentData_attributes:
       properties:
@@ -20061,7 +20889,7 @@ components:
             - $ref: '#/components/schemas/PropertyLongType'
             - $ref: '#/components/schemas/PropertyDateType'
         key:
-          $ref: '#/components/schemas/PropertyKeyType'
+          $ref: '#/components/schemas/PropertyKey'
       required:
         - key
         - value
@@ -20458,6 +21286,12 @@ components:
           minLength: 1
           type: string
         sceneViewStateId:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+        propertyKeyPolicyId:
           description: ID of the resource.
           example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
           format: uuid
@@ -20926,6 +21760,24 @@ components:
           $ref: '#/components/schemas/RelationshipLinks'
       required:
         - data
+      type: object
+    PropertyKeyPolicyRelationship_data:
+      properties:
+        type:
+          description: Resource object type.
+          enum:
+            - property-key-policy
+          example: property-key-policy
+          type: string
+        id:
+          description: ID of the resource.
+          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
+          format: uuid
+          maxLength: 36
+          type: string
+      required:
+        - id
+        - type
       type: object
   securitySchemes:
     OAuth2:

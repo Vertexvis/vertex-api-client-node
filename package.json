@@ -1,6 +1,6 @@
 {
   "name": "@vertexvis/api-client-node",
-  "version": "0.42.3",
+  "version": "0.43.0",
   "description": "The Vertex REST API client for Node.js.",
   "license": "MIT",
   "author": "Vertex Developers <support@vertex3d.com> (https://developer.vertex3d.com)",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0",
-    "@types/node": "^16",
+    "@types/node": "^18",
     "@vertexvis/eslint-config-vertexvis-typescript": "^0.5.1",
     "eslint": "^8.49.0",
     "eslint-plugin-promise": "^6.1.1",
@@ -48,8 +48,8 @@
     "pinst": "^2.1",
     "prettier": "^3.0.3",
     "ts-jest": "^29.1.1",
-    "typedoc": "^0.22",
-    "typescript": "4.5.x"
+    "typedoc": "^0.23",
+    "typescript": "4.9.x"
   },
   "scripts": {
     "build": "tsc --project tsconfig.json && tsc --project tsconfig-esm.json",
