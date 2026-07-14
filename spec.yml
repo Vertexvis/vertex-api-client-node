@@ -8089,25 +8089,28 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Comma-separated list of names to filter on.
+        - description:
+            A filter for the `name`. The canonical form is a filter expression
+            such as `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1,name-2`
+            exact-match CSV form is also accepted for backwards compatibility.
           explode: true
           in: query
           name: filter[name]
           required: false
           schema:
-            example: some-name-1,some-name-2
-            maxLength: 1024
-            type: string
+            $ref: '#/components/schemas/FilterExpression'
           style: form
-        - description: Comma-separated list of supplied IDs to filter on.
+        - description:
+            A filter for the `suppliedId`. The canonical form is a filter
+            expression such as `filter[suppliedId][contains]=...`. The deprecated legacy
+            `filter[suppliedId]=id-1,id-2` exact-match CSV form is also accepted for
+            backwards compatibility.
           explode: true
           in: query
           name: filter[suppliedId]
           required: false
           schema:
-            example: some-id-1,some-id-2
-            maxLength: 1024
-            type: string
+            $ref: '#/components/schemas/FilterExpression'
           style: form
         - description:
             Comma-separated list of fields to return in response. An empty
@@ -12323,11 +12326,35 @@ components:
       schema:
         $ref: '#/components/schemas/FilterExpression'
       style: form
+    SceneNameFilterExpression:
+      description:
+        A filter for the `name`. The canonical form is a filter expression
+        such as `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1,name-2`
+        exact-match CSV form is also accepted for backwards compatibility.
+      explode: true
+      in: query
+      name: filter[name]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
     FileIdFilterExpression:
       description: A filter expression for the `fileId` to filter on.
       explode: true
       in: query
       name: filter[fileId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
+    SceneSuppliedIdFilterExpression:
+      description:
+        A filter for the `suppliedId`. The canonical form is a filter expression
+        such as `filter[suppliedId][contains]=...`. The deprecated legacy `filter[suppliedId]=id-1,id-2`
+        exact-match CSV form is also accepted for backwards compatibility.
+      explode: true
+      in: query
+      name: filter[suppliedId]
       required: false
       schema:
         $ref: '#/components/schemas/FilterExpression'

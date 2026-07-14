@@ -33849,8 +33849,8 @@ export const ScenesApiAxiosParamCreator = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterName] Comma-separated list of names to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter for the &#x60;name&#x60;. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[name]&#x3D;name-1,name-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
@@ -33862,8 +33862,8 @@ export const ScenesApiAxiosParamCreator = function (
     getScenes: async (
       pageCursor?: string,
       pageSize?: number,
-      filterName?: string,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
       filterSceneItemsSourcePartRevision?: string,
@@ -34190,8 +34190,8 @@ export const ScenesApiFp = function (configuration?: Configuration) {
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterName] Comma-separated list of names to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter for the &#x60;name&#x60;. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[name]&#x3D;name-1,name-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
@@ -34203,8 +34203,8 @@ export const ScenesApiFp = function (configuration?: Configuration) {
     async getScenes(
       pageCursor?: string,
       pageSize?: number,
-      filterName?: string,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
       filterSceneItemsSourcePartRevision?: string,
@@ -34358,8 +34358,8 @@ export const ScenesApiFactory = function (
      * Get `scenes`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterName] Comma-separated list of names to filter on.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter for the &#x60;name&#x60;. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[name]&#x3D;name-1,name-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+     * @param {FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
      * @param {string} [fieldsScene] Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
      * @param {{ [key: string]: string; }} [filterMetadata] Filter scenes that contain all the given metadata key-value pairs. Should be specified in query parameter map notation: &#x60;filter[metadata][key1]&#x3D;value1&amp;filter[metadata][key]&#x3D;value2&#x60;.
      * @param {string} [filterSceneItemsSourcePartRevision] Comma-separated list of scene-item source part revision IDs to filter on.
@@ -34371,8 +34371,8 @@ export const ScenesApiFactory = function (
     getScenes(
       pageCursor?: string,
       pageSize?: number,
-      filterName?: string,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
       fieldsScene?: string,
       filterMetadata?: { [key: string]: string },
       filterSceneItemsSourcePartRevision?: string,
@@ -34516,18 +34516,18 @@ export interface ScenesApiGetScenesRequest {
   readonly pageSize?: number;
 
   /**
-   * Comma-separated list of names to filter on.
-   * @type {string}
+   * A filter for the &#x60;name&#x60;. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[name]&#x3D;name-1,name-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+   * @type {FilterExpression}
    * @memberof ScenesApiGetScenes
    */
-  readonly filterName?: string;
+  readonly filterName?: FilterExpression;
 
   /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
+   * A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
+   * @type {FilterExpression}
    * @memberof ScenesApiGetScenes
    */
-  readonly filterSuppliedId?: string;
+  readonly filterSuppliedId?: FilterExpression;
 
   /**
    * Comma-separated list of fields to return in response. An empty value returns no fields. &#x60;metadata&#x60; is only returned if explicitly requested.
