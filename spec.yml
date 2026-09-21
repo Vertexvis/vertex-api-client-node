@@ -45,6 +45,7 @@ tags:
   - name: oauth2
   - name: part-renditions
   - name: part-revisions
+  - name: part-revision-topology-exports
   - name: part-revision-instances
   - name: parts
   - name: permission-grants
@@ -907,6 +908,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/PresignedUrl'
           description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
         '401':
           content:
             application/vnd.api+json:
@@ -972,6 +976,9 @@ paths:
               schema:
                 $ref: '#/components/schemas/PresignedUrl'
           description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
         '401':
           content:
             application/vnd.api+json:
@@ -1842,6 +1849,27 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
       responses:
         '200':
           content:
@@ -2042,13 +2070,16 @@ paths:
             example: -age,name
             type: string
           style: form
-        - description: A filter expression for the `name` to filter on.
+        - description:
+            Filters by name. `filter[name]=value` and `filter[name][eq]=value`
+            perform exact matches, while `filter[name][contains]=value` performs a partial
+            substring match.
           explode: true
           in: query
           name: filter[name]
           required: false
           schema:
-            $ref: '#/components/schemas/FilterExpression'
+            $ref: '#/components/schemas/FilterExpressionOrLiteral'
           style: form
         - description: A filter expression for the `fileId` to filter on.
           explode: true
@@ -2075,7 +2106,9 @@ paths:
                 type: string
               - $ref: '#/components/schemas/FilterExpression'
           style: form
-        - description: A filter expression for the `createdAt` to filter on.
+        - description:
+            A filter expression for a resource's creation time. Use RFC 3339
+            timestamps, such as `filter[createdAt][gte]=2026-06-24T00:00:00Z`.
           explode: true
           in: query
           name: filter[createdAt]
@@ -2633,7 +2666,9 @@ paths:
         - files
   /file-collections:
     get:
-      description: List `file-collection`s by supplied ID.
+      description:
+        List `file-collection`s with optional partial name, supplied ID,
+        and creation time filters, sorted by name or creation time.
       operationId: listFileCollections
       parameters:
         - description: The cursor for the next page of items.
@@ -2657,14 +2692,50 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description: Comma-separated list of supplied IDs to filter on.
+        - description:
+            A filter expression for the `file-collection` name. The canonical
+            form is a filter expression such as `filter[name][contains]=...`.
+          explode: true
+          in: query
+          name: filter[name]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description:
+            A filter expression for the `file-collection` supplied ID. The
+            canonical form is a filter expression such as `filter[suppliedId][contains]=...`.
           explode: true
           in: query
           name: filter[suppliedId]
           required: false
           schema:
-            example: some-id-1,some-id-2
-            maxLength: 1024
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description:
+            A filter expression for a resource's creation time. Use RFC 3339
+            timestamps, such as `filter[createdAt][gte]=2026-06-24T00:00:00Z`.
+          explode: true
+          in: query
+          name: filter[createdAt]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpression'
+          style: form
+        - description:
+            A sort to apply to file collections. A "minus" prefix before
+            the field name specifies descending sort order.
+          explode: true
+          in: query
+          name: sort
+          required: false
+          schema:
+            enum:
+              - name
+              - -name
+              - created
+              - -created
+            example: -created
             type: string
           style: form
       responses:
@@ -2674,6 +2745,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/FileCollectionList'
           description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
         '401':
           content:
             application/vnd.api+json:
@@ -3078,7 +3160,10 @@ paths:
             application/vnd.api+json:
               schema:
                 $ref: '#/components/schemas/QueuedJob'
-          description: OK
+          description: Created
+          headers:
+            location:
+              $ref: '#/components/headers/Location'
         '401':
           content:
             application/vnd.api+json:
@@ -5073,6 +5158,17 @@ paths:
             minimum: 1
             type: integer
           style: form
+        - description:
+            Filters by name. `filter[name]=value` and `filter[name][eq]=value`
+            perform exact matches, while `filter[name][contains]=value` performs a partial
+            substring match.
+          explode: true
+          in: query
+          name: filter[name]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpressionOrLiteral'
+          style: form
         - description: Comma-separated list of supplied IDs to filter on.
           explode: true
           in: query
@@ -6218,77 +6314,10 @@ paths:
         - OAuth2: []
       tags:
         - property-key-policies
-  /property-key-policy-entries:
-    get:
-      description:
-        Get `property-key-policy-entry` resources for a `property-key-policy`.
-        Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`.
-        When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
-      operationId: listPropertyKeyPolicyEntries
-      parameters:
-        - description: The cursor for the next page of items.
-          explode: true
-          in: query
-          name: page[cursor]
-          required: false
-          schema:
-            example: cHJkMDVFR2RLag==
-            type: string
-          style: form
-        - description: The number of items to return.
-          explode: true
-          in: query
-          name: page[size]
-          required: false
-          schema:
-            example: 10
-            format: int32
-            maximum: 200
-            minimum: 1
-            type: integer
-          style: form
-        - description: The `property-key-policy` ID to filter on.
-          explode: true
-          in: query
-          name: filter[propertyKeyPolicy.id]
-          required: false
-          schema:
-            $ref: '#/components/schemas/Uuid'
-          style: form
-        - description: The `property-key-policy` supplied ID to filter on.
-          explode: true
-          in: query
-          name: filter[propertyKeyPolicy.suppliedId]
-          required: false
-          schema:
-            $ref: '#/components/schemas/NonEmptyString'
-          style: form
-      responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/PropertyKeyPolicyEntryList'
-          description: OK
-        '400':
-          content:
-            application/vnd.api+json:
-              example:
-                errors:
-                  - status: '400'
-                    code: BadRequest
-                    title: Invalid, missing, or out-of-range request parameters.
-              schema:
-                $ref: '#/components/schemas/Failure'
-          description: Bad Request
-      security:
-        - OAuth2: []
-      tags:
-        - property-key-policies
-  /property-key-policies/{id}/entries:
+  /property-key-policies/{id}/keys:
     delete:
-      description: Delete entries from a `property-key-policy`.
-      operationId: deletePropertyKeyPolicyEntries
+      description: Delete property keys from a `property-key-policy`.
+      operationId: deletePropertyKeyPolicyKeys
       parameters:
         - description: The `property-key-policy` ID.
           explode: false
@@ -6349,9 +6378,99 @@ paths:
         - OAuth2: []
       tags:
         - property-key-policies
+    get:
+      description: Get property keys for a `property-key-policy`.
+      operationId: listPropertyKeyPolicyKeys
+      parameters:
+        - description: The `property-key-policy` ID.
+          explode: false
+          in: path
+          name: id
+          required: true
+          schema:
+            $ref: '#/components/schemas/Uuid'
+          style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
+      responses:
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/PropertyKeyList'
+          description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '400'
+                    code: BadRequest
+                    title: Invalid, missing, or out-of-range request parameters.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Bad Request
+        '401':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '401'
+                    code: Unauthorized
+                    title: Invalid or missing credentials.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unauthorized
+        '404':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '404'
+                    code: NotFound
+                    title: The requested resource was not found.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Not Found
+        '415':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '415'
+                    code: UnsupportedMediaType
+                    title:
+                      The provided media type is not supported. Update the Content-Type
+                      header to application/vnd.api+json and try again.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: Unsupported Media Type
+      security:
+        - OAuth2: []
+      tags:
+        - property-key-policies
     post:
-      description: Upsert entries for a `property-key-policy`.
-      operationId: upsertPropertyKeyPolicyEntries
+      description: Upsert property keys for a `property-key-policy`.
+      operationId: upsertPropertyKeyPolicyKeys
       parameters:
         - description: The `property-key-policy` ID.
           explode: false
@@ -6365,7 +6484,7 @@ paths:
         content:
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/UpsertPropertyKeyPolicyEntriesRequest'
+              $ref: '#/components/schemas/UpsertPropertyKeyPolicyKeysRequest'
         required: true
       responses:
         '204':
@@ -6492,6 +6611,27 @@ paths:
           schema:
             $ref: '#/components/schemas/Uuid'
           style: simple
+        - description: The cursor for the next page of items.
+          explode: true
+          in: query
+          name: page[cursor]
+          required: false
+          schema:
+            example: cHJkMDVFR2RLag==
+            type: string
+          style: form
+        - description: The number of items to return.
+          explode: true
+          in: query
+          name: page[size]
+          required: false
+          schema:
+            example: 10
+            format: int32
+            maximum: 200
+            minimum: 1
+            type: integer
+          style: form
       responses:
         '200':
           content:
@@ -7204,6 +7344,17 @@ paths:
             minimum: 1
             type: integer
           style: form
+        - description:
+            Filters by name. `filter[name]=value` and `filter[name][eq]=value`
+            perform exact matches, while `filter[name][contains]=value` performs a partial
+            substring match.
+          explode: true
+          in: query
+          name: filter[name]
+          required: false
+          schema:
+            $ref: '#/components/schemas/FilterExpressionOrLiteral'
+          style: form
         - allowEmptyValue: true
           description: Source ID to filter on.
           explode: true
@@ -7322,9 +7473,10 @@ paths:
         - scene-items
     post:
       description: |-
-        Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`.
-        Provide an existing `scene` using `relationship.source` to clone it.
-        Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root.
+        Create a `scene-item` for a `scene`. Provide the source via a `part-revision`, `geometry-set`, `scene`, or `scene-item` UUID using `relationships.source`, or by supplied part-revision IDs using `attributes.source`.
+        Provide an existing `scene` using `relationships.source` to clone it.
+        Provide an existing `scene-item` using `relationships.source` to copy it. The source `scene-item` may belong to a different `scene`.
+        Provide the hierarchical parent either via `scene-item` UUID using `relationships.parent` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root.
         This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
       operationId: createSceneItem
       parameters:
@@ -9412,7 +9564,9 @@ paths:
         - scene-synchronizations
   /queued-scene-syncs/{id}:
     get:
-      description: Get a `queued-scene-sync-job`.
+      description:
+        Get a `queued-scene-sync-job`. The response is either the status
+        if `running` or `error` or, upon completion, redirects to the created `scene-sync`.
       operationId: getQueuedSceneSync
       parameters:
         - description: The `queued-scene-sync` ID.
@@ -9430,6 +9584,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/QueuedJob'
           description: OK
+        '301':
+          description: Moved Permanently
         '401':
           content:
             application/vnd.api+json:
@@ -10055,8 +10211,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/QueuedTranslationJob'
           description: OK
-        '301':
-          description: Moved Permanently
         '401':
           content:
             application/vnd.api+json:
@@ -10100,8 +10254,9 @@ paths:
     get:
       deprecated: true
       description:
-        This has been deprecated and replaced by **queued-translation-jobs**
-        - Get `queued-translation`s.
+        This has been deprecated and replaced by **queued-translation-jobs**.
+        This endpoint always redirects (301) to `queued-translation-jobs`, preserving
+        the pagination and filter query parameters.
       operationId: getQueuedTranslations
       parameters:
         - description: The cursor for the next page of items.
@@ -10136,12 +10291,6 @@ paths:
             type: string
           style: form
       responses:
-        '200':
-          content:
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/QueuedJobList'
-          description: OK
         '301':
           description: Moved Permanently
         '401':
@@ -10882,8 +11031,12 @@ paths:
             $ref: '#/components/schemas/Uuid'
           style: simple
       responses:
-        '204':
-          description: No Content
+        '200':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/UserGroup'
+          description: OK
         '401':
           content:
             application/vnd.api+json:
@@ -12288,24 +12441,6 @@ components:
         maxLength: 36
         type: string
       style: form
-    PropertyKeyPolicyEntryPropertyKeyPolicyIdFilter:
-      description: The `property-key-policy` ID to filter on.
-      explode: true
-      in: query
-      name: filter[propertyKeyPolicy.id]
-      required: false
-      schema:
-        $ref: '#/components/schemas/Uuid'
-      style: form
-    PropertyKeyPolicyEntryPropertyKeyPolicySuppliedIdFilter:
-      description: The `property-key-policy` supplied ID to filter on.
-      explode: true
-      in: query
-      name: filter[propertyKeyPolicy.suppliedId]
-      required: false
-      schema:
-        $ref: '#/components/schemas/NonEmptyString'
-      style: form
     SuppliedIdFilter:
       description: Comma-separated list of supplied IDs to filter on.
       explode: true
@@ -12318,13 +12453,16 @@ components:
         type: string
       style: form
     NameFilterExpression:
-      description: A filter expression for the `name` to filter on.
+      description:
+        Filters by name. `filter[name]=value` and `filter[name][eq]=value`
+        perform exact matches, while `filter[name][contains]=value` performs a partial
+        substring match.
       explode: true
       in: query
       name: filter[name]
       required: false
       schema:
-        $ref: '#/components/schemas/FilterExpression'
+        $ref: '#/components/schemas/FilterExpressionOrLiteral'
       style: form
     SceneNameFilterExpression:
       description:
@@ -12343,6 +12481,28 @@ components:
       explode: true
       in: query
       name: filter[fileId]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
+    FileCollectionNameFilterExpression:
+      description:
+        A filter expression for the `file-collection` name. The canonical
+        form is a filter expression such as `filter[name][contains]=...`.
+      explode: true
+      in: query
+      name: filter[name]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpression'
+      style: form
+    FileCollectionSuppliedIdFilterExpression:
+      description:
+        A filter expression for the `file-collection` supplied ID. The
+        canonical form is a filter expression such as `filter[suppliedId][contains]=...`.
+      explode: true
+      in: query
+      name: filter[suppliedId]
       required: false
       schema:
         $ref: '#/components/schemas/FilterExpression'
@@ -12377,7 +12537,9 @@ components:
           - $ref: '#/components/schemas/FilterExpression'
       style: form
     CreatedAtFilterExpression:
-      description: A filter expression for the `createdAt` to filter on.
+      description:
+        A filter expression for a resource's creation time. Use RFC 3339
+        timestamps, such as `filter[createdAt][gte]=2026-06-24T00:00:00Z`.
       explode: true
       in: query
       name: filter[createdAt]
@@ -12432,6 +12594,23 @@ components:
       required: false
       schema:
         example: -age,name
+        type: string
+      style: form
+    FileCollectionsSort:
+      description:
+        A sort to apply to file collections. A "minus" prefix before the
+        field name specifies descending sort order.
+      explode: true
+      in: query
+      name: sort
+      required: false
+      schema:
+        enum:
+          - name
+          - -name
+          - created
+          - -created
+        example: -created
         type: string
       style: form
     ReplyId:
@@ -12696,7 +12875,7 @@ components:
       additionalProperties: false
       properties:
         data:
-          $ref: '#/components/schemas/CreateAccountRequest_data'
+          $ref: '#/components/schemas/AdminCreateApplicationRequest_data'
       required:
         - data
       type: object
@@ -12936,9 +13115,16 @@ components:
         - data
         - links
       type: object
+    FilterExpressionOrLiteral:
+      oneOf:
+        - $ref: '#/components/schemas/FilterLiteral'
+        - $ref: '#/components/schemas/FilterExpression'
     FilterExpression:
       additionalProperties: false
-      description: Describes how an attribute should be filtered.
+      description: |
+        Describes how an attribute should be filtered. Logical operators accept
+        literals or nested filter expressions. Repeated `and` and `or` parameters
+        combine their values with the respective logical operator.
       properties:
         eq:
           description: A value of a filter.
@@ -12961,6 +13147,12 @@ components:
         contains:
           description: A value of a filter.
           type: string
+        and:
+          $ref: '#/components/schemas/FilterExpressionOrLiteral'
+        or:
+          $ref: '#/components/schemas/FilterExpressionOrLiteral'
+        not:
+          $ref: '#/components/schemas/FilterExpressionOrLiteral'
       type: object
     FileList:
       additionalProperties: false
@@ -13582,17 +13774,12 @@ components:
       required:
         - data
       type: object
-    NonEmptyString:
-      example: some-string
-      maxLength: 1024
-      minLength: 1
-      type: string
-    PropertyKeyPolicyEntryList:
+    PropertyKeyList:
       additionalProperties: false
       properties:
         data:
           items:
-            $ref: '#/components/schemas/PropertyKeyPolicyEntryData'
+            $ref: '#/components/schemas/PropertyKey'
           type: array
         links:
           additionalProperties:
@@ -13602,12 +13789,12 @@ components:
         - data
         - links
       type: object
-    UpsertPropertyKeyPolicyEntriesRequest:
+    UpsertPropertyKeyPolicyKeysRequest:
       additionalProperties: false
       properties:
         data:
           items:
-            $ref: '#/components/schemas/PropertyKey'
+            $ref: '#/components/schemas/PropertyEntryKey'
           type: array
       required:
         - data
@@ -14426,6 +14613,11 @@ components:
         - position
         - up
       type: object
+    NonEmptyString:
+      example: some-string
+      maxLength: 1024
+      minLength: 1
+      type: string
     DateTime:
       example: 2020-01-01T12:00:00Z
       format: date-time
@@ -15532,13 +15724,13 @@ components:
       required:
         - type
       type: object
-    PropertyKeyPolicyEntryData:
+    PropertyKey:
       additionalProperties: false
       properties:
         type:
           enum:
-            - property-key-policy-entry
-          example: property-key-policy-entry
+            - property-key
+          example: property-key
           type: string
         id:
           example: some-string
@@ -15546,9 +15738,7 @@ components:
           minLength: 1
           type: string
         attributes:
-          $ref: '#/components/schemas/PropertyKeyPolicyEntryDataAttributes'
-        relationships:
-          $ref: '#/components/schemas/PropertyKeyPolicyEntryDataRelationships'
+          $ref: '#/components/schemas/PropertyKeyDataAttributes'
         links:
           additionalProperties:
             $ref: '#/components/schemas/Link'
@@ -15556,10 +15746,9 @@ components:
       required:
         - attributes
         - id
-        - relationships
         - type
       type: object
-    PropertyKey:
+    PropertyEntryKey:
       additionalProperties: false
       properties:
         name:
@@ -15851,6 +16040,10 @@ components:
         value:
           $ref: '#/components/schemas/ColorMaterial'
       type: object
+    NullableObject:
+      maxProperties: 0
+      nullable: true
+      type: object
     GeometrySetRelationship:
       additionalProperties: false
       description: Relationship to a `geometry-set`.
@@ -15859,10 +16052,6 @@ components:
           $ref: '#/components/schemas/GeometrySetRelationshipData'
       required:
         - data
-      type: object
-    NullableObject:
-      maxProperties: 0
-      nullable: true
       type: object
     CreateSceneItemRequestData:
       additionalProperties: false
@@ -17022,21 +17211,16 @@ components:
         mode:
           $ref: '#/components/schemas/PropertyKeyPolicyMode'
       type: object
-    PropertyKeyPolicyEntryDataAttributes:
+    PropertyKeyDataAttributes:
       additionalProperties: false
       properties:
-        key:
-          $ref: '#/components/schemas/PropertyKey'
+        name:
+          example: some-string
+          maxLength: 1024
+          minLength: 1
+          type: string
       required:
-        - key
-      type: object
-    PropertyKeyPolicyEntryDataRelationships:
-      additionalProperties: false
-      properties:
-        propertyKeyPolicy:
-          $ref: '#/components/schemas/PropertyKeyPolicyRelationship'
-      required:
-        - propertyKeyPolicy
+        - name
       type: object
     QueryById:
       additionalProperties: false
@@ -17828,15 +18012,6 @@ components:
         - allowlist
         - denylist
       type: string
-    PropertyKeyPolicyRelationship:
-      additionalProperties: false
-      description: Relationship to a `property-key-policy`.
-      properties:
-        data:
-          $ref: '#/components/schemas/PropertyKeyPolicyRelationship_data'
-      required:
-        - data
-      type: object
     QueryBySceneItemId:
       additionalProperties: false
       properties:
@@ -18485,6 +18660,10 @@ components:
           maxLength: 1024
           minLength: 1
           type: string
+        scopes:
+          items:
+            $ref: '#/components/schemas/NonEmptyString'
+          type: array
         redirect_uris:
           items:
             $ref: '#/components/schemas/NonEmptyString'
@@ -19545,6 +19724,14 @@ components:
       type: object
     UpdateSceneItemRequest_data_relationships:
       properties:
+        parent:
+          anyOf:
+            - $ref: '#/components/schemas/SceneItemRelationship'
+            - $ref: '#/components/schemas/NullableObject'
+          description:
+            Relationship to the scene item's new parent. Set this relationship
+            to `null` to move the item to the scene root.
+          nullable: true
         source:
           anyOf:
             - $ref: '#/components/schemas/GeometrySetRelationship'
@@ -20694,6 +20881,10 @@ components:
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
             - $ref: '#/components/schemas/PartRenditionRelationship'
+            - $ref: '#/components/schemas/SceneItemRelationship'
+          description:
+            Relationship to a `geometry-set`, `part-revision`, `part-rendition`,
+            `scene`, or `scene-item`.
         parent:
           $ref: '#/components/schemas/SceneItemRelationship'
         partRendition:
@@ -20916,7 +21107,7 @@ components:
             - $ref: '#/components/schemas/PropertyLongType'
             - $ref: '#/components/schemas/PropertyDateType'
         key:
-          $ref: '#/components/schemas/PropertyKey'
+          $ref: '#/components/schemas/PropertyEntryKey'
       required:
         - key
         - value
@@ -21115,9 +21306,10 @@ components:
             - $ref: '#/components/schemas/PartRevisionRelationship'
             - $ref: '#/components/schemas/SceneRelationship'
             - $ref: '#/components/schemas/PartRenditionRelationship'
+            - $ref: '#/components/schemas/SceneItemRelationship'
           description:
             Relationship to a `geometry-set`, `part-revision`, `part-rendition`,
-            or `scene`.
+            `scene`, or `scene-item`.
         referenceTree:
           $ref: '#/components/schemas/SceneItemRelationship'
       type: object
@@ -21787,24 +21979,6 @@ components:
           $ref: '#/components/schemas/RelationshipLinks'
       required:
         - data
-      type: object
-    PropertyKeyPolicyRelationship_data:
-      properties:
-        type:
-          description: Resource object type.
-          enum:
-            - property-key-policy
-          example: property-key-policy
-          type: string
-        id:
-          description: ID of the resource.
-          example: f79d4760-0b71-44e4-ad0b-22743fdd4ca3
-          format: uuid
-          maxLength: 36
-          type: string
-      required:
-        - id
-        - type
       type: object
   securitySchemes:
     OAuth2:
