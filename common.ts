@@ -176,6 +176,6 @@ export const createRequestFunction = function (
       ...axiosArgs.options,
       url: (configuration?.basePath || basePath) + axiosArgs.url,
     };
-    return axios.request<T, R>(axiosRequestArgs);
+    return axios.request<T, R>(axiosRequestArgs) as Promise<R>;
   };
 };

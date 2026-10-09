@@ -21,6 +21,7 @@ sed_inplace "s/, setBearerAuthToObject, /, /" api.ts
 sed_inplace "s/baseOptions && baseOptions.headers ? baseOptions.headers :/baseOptions?.headers ??/" api.ts
 sed_inplace "s/AxiosPromise,//" base.ts
 sed_inplace "s/name: \"RequiredError\" = \"RequiredError\";/override name: \"RequiredError\" = \"RequiredError\";/" base.ts
+sed_inplace "s/return axios.request<T, R>(axiosRequestArgs);/return axios.request<T, R>(axiosRequestArgs) as Promise<R>;/" common.ts
 
 yarn generate:docs
 
