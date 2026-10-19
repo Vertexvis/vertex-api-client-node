@@ -15,7 +15,7 @@
 import { Configuration } from './configuration';
 import { RequiredError, RequestArgs } from './base';
 import { AxiosInstance, AxiosResponse } from 'axios';
-import { setNestedSearchParam } from './search-params';
+import { setNestedSearchParam } from './util/search-params';
 
 /**
  *
