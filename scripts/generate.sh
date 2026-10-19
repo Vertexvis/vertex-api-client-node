@@ -23,6 +23,14 @@ sed_inplace "s/AxiosPromise,//" base.ts
 sed_inplace "s/name: \"RequiredError\" = \"RequiredError\";/override name: \"RequiredError\" = \"RequiredError\";/" base.ts
 sed_inplace "s/return axios.request<T, R>(axiosRequestArgs);/return axios.request<T, R>(axiosRequestArgs) as Promise<R>;/" common.ts
 
+# Fix for object query parameters being incorrectly serialized as `[object Object]` due to usage of `toString`.
+# See https://github.com/OpenAPITools/openapi-generator/issues/7564 + https://github.com/OpenAPITools/openapi-generator/issues/12329.
+sed_inplace "/^import { AxiosInstance, AxiosResponse } from 'axios';/a\\
+import { setNestedSearchParam } from './search-params';
+" common.ts
+sed_inplace "s/searchParams.append(key, item);/setNestedSearchParam(searchParams, key, item, true);/" common.ts
+sed_inplace "s/searchParams.set(key, object\\[key\\]);/setNestedSearchParam(searchParams, key, object[key]);/" common.ts
+
 yarn generate:docs
 
 yarn format

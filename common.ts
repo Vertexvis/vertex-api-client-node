@@ -15,6 +15,7 @@
 import { Configuration } from './configuration';
 import { RequiredError, RequestArgs } from './base';
 import { AxiosInstance, AxiosResponse } from 'axios';
+import { setNestedSearchParam } from './search-params';
 
 /**
  *
@@ -121,10 +122,10 @@ export const setSearchParams = function (url: URL, ...objects: any[]) {
       if (Array.isArray(object[key])) {
         searchParams.delete(key);
         for (const item of object[key]) {
-          searchParams.append(key, item);
+          setNestedSearchParam(searchParams, key, item, true);
         }
       } else {
-        searchParams.set(key, object[key]);
+        setNestedSearchParam(searchParams, key, object[key]);
       }
     }
   }
