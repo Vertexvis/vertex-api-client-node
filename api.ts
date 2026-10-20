@@ -84,6 +84,12 @@ export interface AccountData {
  */
 export interface AccountDataAttributes {
   /**
+   * Root administrator configuration for the account\'s token-exchange OIDC userinfo endpoint. Must be an absolute HTTPS URL without credentials or a fragment. HTTP is accepted only in local development and platdev environments. If omitted on creation, token exchange uses the deployment fallback. If omitted on update, the existing value is preserved. See the [token exchange OIDC configuration guide](https://developer.vertex3d.com/docs/guides/token-exchange-oidc-configuration) for configuration details.
+   * @type {string}
+   * @memberof AccountDataAttributes
+   */
+  oidc_userinfo_endpoint?: string;
+  /**
    *
    * @type {string}
    * @memberof AccountDataAttributes
@@ -1125,6 +1131,27 @@ export type ClearRepOpTypeEnum =
 /**
  *
  * @export
+ * @interface ClearSuppliedIdsStrategy
+ */
+export interface ClearSuppliedIdsStrategy {
+  /**
+   *
+   * @type {string}
+   * @memberof ClearSuppliedIdsStrategy
+   */
+  type: ClearSuppliedIdsStrategyTypeEnum;
+}
+
+export const ClearSuppliedIdsStrategyTypeEnum = {
+  Clear: 'clear',
+} as const;
+
+export type ClearSuppliedIdsStrategyTypeEnum =
+  (typeof ClearSuppliedIdsStrategyTypeEnum)[keyof typeof ClearSuppliedIdsStrategyTypeEnum];
+
+/**
+ *
+ * @export
  * @interface ClearTransformOp
  */
 export interface ClearTransformOp {
@@ -1434,6 +1461,12 @@ export interface CreateAccountRequestData {
  */
 export interface CreateAccountRequestDataAttributes {
   /**
+   * Root administrator configuration for the account\'s token-exchange OIDC userinfo endpoint. Must be an absolute HTTPS URL without credentials or a fragment. HTTP is accepted only in local development and platdev environments. If omitted on creation, token exchange uses the deployment fallback. If omitted on update, the existing value is preserved. See the [token exchange OIDC configuration guide](https://developer.vertex3d.com/docs/guides/token-exchange-oidc-configuration) for configuration details.
+   * @type {string}
+   * @memberof CreateAccountRequestDataAttributes
+   */
+  oidc_userinfo_endpoint?: string;
+  /**
    *
    * @type {string}
    * @memberof CreateAccountRequestDataAttributes
@@ -1448,10 +1481,10 @@ export interface CreateAccountRequestDataAttributes {
 export interface CreateApplicationRequest {
   /**
    *
-   * @type {CreateAccountRequestData}
+   * @type {AdminCreateApplicationRequestData}
    * @memberof CreateApplicationRequest
    */
-  data: CreateAccountRequestData;
+  data: AdminCreateApplicationRequestData;
 }
 /**
  *
@@ -2844,6 +2877,15 @@ export interface CreateSceneItemRequestData {
  */
 export interface CreateSceneItemRequestDataAttributes {
   /**
+   * Defines the strategy to use for supplied IDs when child scene items are created as a result of this request, and has no effect if no child items are created. If omitted for a scene or  scene-item source, supplied IDs will be preserved if no supplied ID is provided, or prefixed with the provided supplied ID. For a part-revision, supplied IDs will be preserved for any children unless a specific strategy is provided. Geometry-set sources will ignore this attribute as no additional children are created from that workflow. Part-rendition sources are currently not supported.
+   * @type {PreserveSuppliedIdsStrategy | ClearSuppliedIdsStrategy | ReplaceOrAddSuppliedIdPrefixStrategy}
+   * @memberof CreateSceneItemRequestDataAttributes
+   */
+  sourceSuppliedIdStrategy?:
+    | PreserveSuppliedIdsStrategy
+    | ClearSuppliedIdsStrategy
+    | ReplaceOrAddSuppliedIdPrefixStrategy;
+  /**
    *
    * @type {ColorMaterial}
    * @memberof CreateSceneItemRequestDataAttributes
@@ -2959,15 +3001,16 @@ export interface CreateSceneItemRequestDataRelationships {
    */
   parent?: SceneItemRelationship;
   /**
-   * Relationship to a `geometry-set`, `part-revision`, `part-rendition`, or `scene`.
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship}
+   * Relationship to a `geometry-set`, `part-revision`, `part-rendition`, `scene`, or `scene-item`.
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship | SceneItemRelationship}
    * @memberof CreateSceneItemRequestDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
     | SceneRelationship
-    | PartRenditionRelationship;
+    | PartRenditionRelationship
+    | SceneItemRelationship;
   /**
    *
    * @type {SceneItemRelationship}
@@ -4846,7 +4889,7 @@ export interface FillStyle {
   color: RGBA;
 }
 /**
- * Describes how an attribute should be filtered.
+ * Describes how an attribute should be filtered. Logical operators accept literals or nested filter expressions. Repeated `and` and `or` parameters combine their values with the respective logical operator.
  * @export
  * @interface FilterExpression
  */
@@ -4893,7 +4936,31 @@ export interface FilterExpression {
    * @memberof FilterExpression
    */
   contains?: string;
+  /**
+   *
+   * @type {FilterExpressionOrLiteral}
+   * @memberof FilterExpression
+   */
+  and?: FilterExpressionOrLiteral;
+  /**
+   *
+   * @type {FilterExpressionOrLiteral}
+   * @memberof FilterExpression
+   */
+  or?: FilterExpressionOrLiteral;
+  /**
+   *
+   * @type {FilterExpressionOrLiteral}
+   * @memberof FilterExpression
+   */
+  not?: FilterExpressionOrLiteral;
 }
+/**
+ * @type FilterExpressionOrLiteral
+ * @export
+ */
+export type FilterExpressionOrLiteral = FilterExpression | string;
+
 /**
  *
  * @export
@@ -5559,10 +5626,10 @@ export interface ModelViewData {
   id: string;
   /**
    *
-   * @type {CreateAccountRequestDataAttributes}
+   * @type {NamedAttributes}
    * @memberof ModelViewData
    */
-  attributes: CreateAccountRequestDataAttributes;
+  attributes: NamedAttributes;
   /**
    *
    * @type {ModelViewDataRelationships}
@@ -5607,6 +5674,19 @@ export interface ModelViewList {
    * @memberof ModelViewList
    */
   links: { [key: string]: Link };
+}
+/**
+ *
+ * @export
+ * @interface NamedAttributes
+ */
+export interface NamedAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof NamedAttributes
+   */
+  name: string;
 }
 /**
  *
@@ -6780,10 +6860,10 @@ export interface PmiAnnotationData {
   id: string;
   /**
    *
-   * @type {CreateAccountRequestDataAttributes}
+   * @type {NamedAttributes}
    * @memberof PmiAnnotationData
    */
-  attributes: CreateAccountRequestDataAttributes;
+  attributes: NamedAttributes;
   /**
    *
    * @type {{ [key: string]: Link; }}
@@ -6829,6 +6909,27 @@ export interface Point {
    */
   dy: number;
 }
+/**
+ *
+ * @export
+ * @interface PreserveSuppliedIdsStrategy
+ */
+export interface PreserveSuppliedIdsStrategy {
+  /**
+   *
+   * @type {string}
+   * @memberof PreserveSuppliedIdsStrategy
+   */
+  type: PreserveSuppliedIdsStrategyTypeEnum;
+}
+
+export const PreserveSuppliedIdsStrategyTypeEnum = {
+  Preserve: 'preserve',
+} as const;
+
+export type PreserveSuppliedIdsStrategyTypeEnum =
+  (typeof PreserveSuppliedIdsStrategyTypeEnum)[keyof typeof PreserveSuppliedIdsStrategyTypeEnum];
+
 /**
  *
  * @export
@@ -6995,10 +7096,23 @@ export interface PropertyEntryDataAttributes {
     | PropertyDateType;
   /**
    *
-   * @type {PropertyKey}
+   * @type {PropertyEntryKey}
    * @memberof PropertyEntryDataAttributes
    */
-  key: PropertyKey;
+  key: PropertyEntryKey;
+}
+/**
+ *
+ * @export
+ * @interface PropertyEntryKey
+ */
+export interface PropertyEntryKey {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyEntryKey
+   */
+  name: string;
 }
 /**
  *
@@ -7030,7 +7144,65 @@ export interface PropertyKey {
    * @type {string}
    * @memberof PropertyKey
    */
+  type: PropertyKeyTypeEnum;
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKey
+   */
+  id: string;
+  /**
+   *
+   * @type {PropertyKeyDataAttributes}
+   * @memberof PropertyKey
+   */
+  attributes: PropertyKeyDataAttributes;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKey
+   */
+  links?: { [key: string]: Link };
+}
+
+export const PropertyKeyTypeEnum = {
+  PropertyKey: 'property-key',
+} as const;
+
+export type PropertyKeyTypeEnum =
+  (typeof PropertyKeyTypeEnum)[keyof typeof PropertyKeyTypeEnum];
+
+/**
+ *
+ * @export
+ * @interface PropertyKeyDataAttributes
+ */
+export interface PropertyKeyDataAttributes {
+  /**
+   *
+   * @type {string}
+   * @memberof PropertyKeyDataAttributes
+   */
   name: string;
+}
+/**
+ *
+ * @export
+ * @interface PropertyKeyList
+ */
+export interface PropertyKeyList {
+  /**
+   *
+   * @type {Array<PropertyKey>}
+   * @memberof PropertyKeyList
+   */
+  data: Array<PropertyKey>;
+  /**
+   *
+   * @type {{ [key: string]: Link; }}
+   * @memberof PropertyKeyList
+   */
+  links: { [key: string]: Link };
 }
 /**
  *
@@ -7124,96 +7296,6 @@ export interface PropertyKeyPolicyDataAttributes {
 /**
  *
  * @export
- * @interface PropertyKeyPolicyEntryData
- */
-export interface PropertyKeyPolicyEntryData {
-  /**
-   *
-   * @type {string}
-   * @memberof PropertyKeyPolicyEntryData
-   */
-  type: PropertyKeyPolicyEntryDataTypeEnum;
-  /**
-   *
-   * @type {string}
-   * @memberof PropertyKeyPolicyEntryData
-   */
-  id: string;
-  /**
-   *
-   * @type {PropertyKeyPolicyEntryDataAttributes}
-   * @memberof PropertyKeyPolicyEntryData
-   */
-  attributes: PropertyKeyPolicyEntryDataAttributes;
-  /**
-   *
-   * @type {PropertyKeyPolicyEntryDataRelationships}
-   * @memberof PropertyKeyPolicyEntryData
-   */
-  relationships: PropertyKeyPolicyEntryDataRelationships;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PropertyKeyPolicyEntryData
-   */
-  links?: { [key: string]: Link };
-}
-
-export const PropertyKeyPolicyEntryDataTypeEnum = {
-  PropertyKeyPolicyEntry: 'property-key-policy-entry',
-} as const;
-
-export type PropertyKeyPolicyEntryDataTypeEnum =
-  (typeof PropertyKeyPolicyEntryDataTypeEnum)[keyof typeof PropertyKeyPolicyEntryDataTypeEnum];
-
-/**
- *
- * @export
- * @interface PropertyKeyPolicyEntryDataAttributes
- */
-export interface PropertyKeyPolicyEntryDataAttributes {
-  /**
-   *
-   * @type {PropertyKey}
-   * @memberof PropertyKeyPolicyEntryDataAttributes
-   */
-  key: PropertyKey;
-}
-/**
- *
- * @export
- * @interface PropertyKeyPolicyEntryDataRelationships
- */
-export interface PropertyKeyPolicyEntryDataRelationships {
-  /**
-   *
-   * @type {PropertyKeyPolicyRelationship}
-   * @memberof PropertyKeyPolicyEntryDataRelationships
-   */
-  propertyKeyPolicy: PropertyKeyPolicyRelationship;
-}
-/**
- *
- * @export
- * @interface PropertyKeyPolicyEntryList
- */
-export interface PropertyKeyPolicyEntryList {
-  /**
-   *
-   * @type {Array<PropertyKeyPolicyEntryData>}
-   * @memberof PropertyKeyPolicyEntryList
-   */
-  data: Array<PropertyKeyPolicyEntryData>;
-  /**
-   *
-   * @type {{ [key: string]: Link; }}
-   * @memberof PropertyKeyPolicyEntryList
-   */
-  links: { [key: string]: Link };
-}
-/**
- *
- * @export
  * @interface PropertyKeyPolicyList
  */
 export interface PropertyKeyPolicyList {
@@ -7243,46 +7325,6 @@ export const PropertyKeyPolicyMode = {
 
 export type PropertyKeyPolicyMode =
   (typeof PropertyKeyPolicyMode)[keyof typeof PropertyKeyPolicyMode];
-
-/**
- * Relationship to a `property-key-policy`.
- * @export
- * @interface PropertyKeyPolicyRelationship
- */
-export interface PropertyKeyPolicyRelationship {
-  /**
-   *
-   * @type {PropertyKeyPolicyRelationshipData}
-   * @memberof PropertyKeyPolicyRelationship
-   */
-  data: PropertyKeyPolicyRelationshipData;
-}
-/**
- *
- * @export
- * @interface PropertyKeyPolicyRelationshipData
- */
-export interface PropertyKeyPolicyRelationshipData {
-  /**
-   * Resource object type.
-   * @type {string}
-   * @memberof PropertyKeyPolicyRelationshipData
-   */
-  type: PropertyKeyPolicyRelationshipDataTypeEnum;
-  /**
-   * ID of the resource.
-   * @type {string}
-   * @memberof PropertyKeyPolicyRelationshipData
-   */
-  id: string;
-}
-
-export const PropertyKeyPolicyRelationshipDataTypeEnum = {
-  PropertyKeyPolicy: 'property-key-policy',
-} as const;
-
-export type PropertyKeyPolicyRelationshipDataTypeEnum =
-  (typeof PropertyKeyPolicyRelationshipDataTypeEnum)[keyof typeof PropertyKeyPolicyRelationshipDataTypeEnum];
 
 /**
  *
@@ -8041,6 +8083,33 @@ export interface RelationshipLinks {
    */
   related: string;
 }
+/**
+ *
+ * @export
+ * @interface ReplaceOrAddSuppliedIdPrefixStrategy
+ */
+export interface ReplaceOrAddSuppliedIdPrefixStrategy {
+  /**
+   *
+   * @type {string}
+   * @memberof ReplaceOrAddSuppliedIdPrefixStrategy
+   */
+  type: ReplaceOrAddSuppliedIdPrefixStrategyTypeEnum;
+  /**
+   * Prefix to replace or add to each existing supplied ID. Accepts up to 36 characters to accommodate a UUID prefix. The resulting supplied ID must fit within the 1024-character limit.
+   * @type {string}
+   * @memberof ReplaceOrAddSuppliedIdPrefixStrategy
+   */
+  prefix: string;
+}
+
+export const ReplaceOrAddSuppliedIdPrefixStrategyTypeEnum = {
+  ReplaceOrAddPrefix: 'replace-or-add-prefix',
+} as const;
+
+export type ReplaceOrAddSuppliedIdPrefixStrategyTypeEnum =
+  (typeof ReplaceOrAddSuppliedIdPrefixStrategyTypeEnum)[keyof typeof ReplaceOrAddSuppliedIdPrefixStrategyTypeEnum];
+
 /**
  *
  * @export
@@ -8913,15 +8982,16 @@ export interface SceneItemDataAttributes {
  */
 export interface SceneItemDataRelationships {
   /**
-   *
-   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship}
+   * Relationship to a `geometry-set`, `part-revision`, `part-rendition`, `scene`, or `scene-item`.
+   * @type {GeometrySetRelationship | PartRevisionRelationship | SceneRelationship | PartRenditionRelationship | SceneItemRelationship}
    * @memberof SceneItemDataRelationships
    */
   source?:
     | GeometrySetRelationship
     | PartRevisionRelationship
     | SceneRelationship
-    | PartRenditionRelationship;
+    | PartRenditionRelationship
+    | SceneItemRelationship;
   /**
    *
    * @type {SceneItemRelationship}
@@ -10709,6 +10779,12 @@ export interface UpdateAccountRequestDataAttributes {
    */
   status?: UpdateAccountRequestDataAttributesStatusEnum;
   /**
+   * Root administrator configuration for the account\'s token-exchange OIDC userinfo endpoint. Must be an absolute HTTPS URL without credentials or a fragment. HTTP is accepted only in local development and platdev environments. If omitted on creation, token exchange uses the deployment fallback. If omitted on update, the existing value is preserved. Set to null to clear the account-specific endpoint and use the deployment fallback. See the [token exchange OIDC configuration guide](https://developer.vertex3d.com/docs/guides/token-exchange-oidc-configuration) for configuration details.
+   * @type {string}
+   * @memberof UpdateAccountRequestDataAttributes
+   */
+  oidc_userinfo_endpoint?: string | null;
+  /**
    *
    * @type {string}
    * @memberof UpdateAccountRequestDataAttributes
@@ -10774,6 +10850,12 @@ export interface UpdateApplicationRequestDataAttributes {
    * @memberof UpdateApplicationRequestDataAttributes
    */
   name?: string;
+  /**
+   *
+   * @type {Array<string>}
+   * @memberof UpdateApplicationRequestDataAttributes
+   */
+  scopes?: Array<string>;
   /**
    *
    * @type {Array<string>}
@@ -11379,6 +11461,12 @@ export interface UpdateSceneItemRequestDataAttributes {
  */
 export interface UpdateSceneItemRequestDataRelationships {
   /**
+   * Relationship to the scene item\'s new parent. Set this relationship to `null` to move the item to the scene root.
+   * @type {SceneItemRelationship | object}
+   * @memberof UpdateSceneItemRequestDataRelationships
+   */
+  parent?: SceneItemRelationship | object | null;
+  /**
    * Relationship to a `geometry-set` or `part-revision`.
    * @type {GeometrySetRelationship | PartRevisionRelationship | object}
    * @memberof UpdateSceneItemRequestDataRelationships
@@ -11802,15 +11890,15 @@ export interface UpsertPropertyEntriesRequestDataRelationships {
 /**
  *
  * @export
- * @interface UpsertPropertyKeyPolicyEntriesRequest
+ * @interface UpsertPropertyKeyPolicyKeysRequest
  */
-export interface UpsertPropertyKeyPolicyEntriesRequest {
+export interface UpsertPropertyKeyPolicyKeysRequest {
   /**
    *
-   * @type {Array<PropertyKey>}
-   * @memberof UpsertPropertyKeyPolicyEntriesRequest
+   * @type {Array<PropertyEntryKey>}
+   * @memberof UpsertPropertyKeyPolicyKeysRequest
    */
-  data: Array<PropertyKey>;
+  data: Array<PropertyEntryKey>;
 }
 /**
  *
@@ -17513,17 +17601,23 @@ export const FileCollectionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * List `file-collection`s by supplied ID.
+     * List `file-collection`s with optional partial name, supplied ID, and creation time filters, sorted by name or creation time.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;file-collection&#x60; name. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterSuppliedId] A filter expression for the &#x60;file-collection&#x60; supplied ID. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
+     * @param {'name' | '-name' | 'created' | '-created'} [sort] A sort to apply to file collections. A \&quot;minus\&quot; prefix before the field name specifies descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listFileCollections: async (
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
+      filterCreatedAt?: FilterExpression,
+      sort?: 'name' | '-name' | 'created' | '-created',
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       const localVarPath = `/file-collections`;
@@ -17559,8 +17653,20 @@ export const FileCollectionsApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
+      if (filterName !== undefined) {
+        localVarQueryParameter['filter[name]'] = filterName;
+      }
+
       if (filterSuppliedId !== undefined) {
         localVarQueryParameter['filter[suppliedId]'] = filterSuppliedId;
+      }
+
+      if (filterCreatedAt !== undefined) {
+        localVarQueryParameter['filter[createdAt]'] = filterCreatedAt;
+      }
+
+      if (sort !== undefined) {
+        localVarQueryParameter['sort'] = sort;
       }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
@@ -17847,17 +17953,23 @@ export const FileCollectionsApiFp = function (configuration?: Configuration) {
       );
     },
     /**
-     * List `file-collection`s by supplied ID.
+     * List `file-collection`s with optional partial name, supplied ID, and creation time filters, sorted by name or creation time.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;file-collection&#x60; name. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterSuppliedId] A filter expression for the &#x60;file-collection&#x60; supplied ID. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
+     * @param {'name' | '-name' | 'created' | '-created'} [sort] A sort to apply to file collections. A \&quot;minus\&quot; prefix before the field name specifies descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async listFileCollections(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
+      filterCreatedAt?: FilterExpression,
+      sort?: 'name' | '-name' | 'created' | '-created',
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -17869,7 +17981,10 @@ export const FileCollectionsApiFp = function (configuration?: Configuration) {
         await localVarAxiosParamCreator.listFileCollections(
           pageCursor,
           pageSize,
+          filterName,
           filterSuppliedId,
+          filterCreatedAt,
+          sort,
           options
         );
       return createRequestFunction(
@@ -18024,21 +18139,35 @@ export const FileCollectionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * List `file-collection`s by supplied ID.
+     * List `file-collection`s with optional partial name, supplied ID, and creation time filters, sorted by name or creation time.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
+     * @param {FilterExpression} [filterName] A filter expression for the &#x60;file-collection&#x60; name. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterSuppliedId] A filter expression for the &#x60;file-collection&#x60; supplied ID. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
+     * @param {'name' | '-name' | 'created' | '-created'} [sort] A sort to apply to file collections. A \&quot;minus\&quot; prefix before the field name specifies descending sort order.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     listFileCollections(
       pageCursor?: string,
       pageSize?: number,
-      filterSuppliedId?: string,
+      filterName?: FilterExpression,
+      filterSuppliedId?: FilterExpression,
+      filterCreatedAt?: FilterExpression,
+      sort?: 'name' | '-name' | 'created' | '-created',
       options?: any
     ): AxiosPromise<FileCollectionList> {
       return localVarFp
-        .listFileCollections(pageCursor, pageSize, filterSuppliedId, options)
+        .listFileCollections(
+          pageCursor,
+          pageSize,
+          filterName,
+          filterSuppliedId,
+          filterCreatedAt,
+          sort,
+          options
+        )
         .then((request) => request(axios, basePath));
     },
     /**
@@ -18188,11 +18317,32 @@ export interface FileCollectionsApiListFileCollectionsRequest {
   readonly pageSize?: number;
 
   /**
-   * Comma-separated list of supplied IDs to filter on.
-   * @type {string}
+   * A filter expression for the &#x60;file-collection&#x60; name. The canonical form is a filter expression such as &#x60;filter[name][contains]&#x3D;...&#x60;.
+   * @type {FilterExpression}
    * @memberof FileCollectionsApiListFileCollections
    */
-  readonly filterSuppliedId?: string;
+  readonly filterName?: FilterExpression;
+
+  /**
+   * A filter expression for the &#x60;file-collection&#x60; supplied ID. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;.
+   * @type {FilterExpression}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly filterSuppliedId?: FilterExpression;
+
+  /**
+   * A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
+   * @type {FilterExpression}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly filterCreatedAt?: FilterExpression;
+
+  /**
+   * A sort to apply to file collections. A \&quot;minus\&quot; prefix before the field name specifies descending sort order.
+   * @type {'name' | '-name' | 'created' | '-created'}
+   * @memberof FileCollectionsApiListFileCollections
+   */
+  readonly sort?: 'name' | '-name' | 'created' | '-created';
 }
 
 /**
@@ -18337,7 +18487,7 @@ export class FileCollectionsApi extends BaseAPI {
   }
 
   /**
-   * List `file-collection`s by supplied ID.
+   * List `file-collection`s with optional partial name, supplied ID, and creation time filters, sorted by name or creation time.
    * @param {FileCollectionsApiListFileCollectionsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -18351,7 +18501,10 @@ export class FileCollectionsApi extends BaseAPI {
       .listFileCollections(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterName,
         requestParameters.filterSuppliedId,
+        requestParameters.filterCreatedAt,
+        requestParameters.sort,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -18998,10 +19151,10 @@ export const FilesApiAxiosParamCreator = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
-     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
      * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
-     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -19009,7 +19162,7 @@ export const FilesApiAxiosParamCreator = function (
       pageCursor?: string,
       pageSize?: number,
       sort?: string,
-      filterName?: FilterExpression,
+      filterName?: FilterExpressionOrLiteral,
       filterFileId?: FilterExpression,
       filterSuppliedId?: string | FilterExpression,
       filterCreatedAt?: FilterExpression,
@@ -19411,10 +19564,10 @@ export const FilesApiFp = function (configuration?: Configuration) {
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
-     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
      * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
-     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -19422,7 +19575,7 @@ export const FilesApiFp = function (configuration?: Configuration) {
       pageCursor?: string,
       pageSize?: number,
       sort?: string,
-      filterName?: FilterExpression,
+      filterName?: FilterExpressionOrLiteral,
       filterFileId?: FilterExpression,
       filterSuppliedId?: string | FilterExpression,
       filterCreatedAt?: FilterExpression,
@@ -19619,10 +19772,10 @@ export const FilesApiFactory = function (
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [sort] A sort to apply to the collection. A \&quot;minus\&quot; prefixed before the field name is used to specify descending sort order.
-     * @param {FilterExpression} [filterName] A filter expression for the &#x60;name&#x60; to filter on.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {FilterExpression} [filterFileId] A filter expression for the &#x60;fileId&#x60; to filter on.
      * @param {string | FilterExpression} [filterSuppliedId] A filter for the &#x60;suppliedId&#x60;. The canonical form is a filter expression such as &#x60;filter[suppliedId][contains]&#x3D;...&#x60;. The deprecated legacy &#x60;filter[suppliedId]&#x3D;id-1,id-2&#x60; exact-match CSV form is also accepted for backwards compatibility.
-     * @param {FilterExpression} [filterCreatedAt] A filter expression for the &#x60;createdAt&#x60; to filter on.
+     * @param {FilterExpression} [filterCreatedAt] A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
@@ -19630,7 +19783,7 @@ export const FilesApiFactory = function (
       pageCursor?: string,
       pageSize?: number,
       sort?: string,
-      filterName?: FilterExpression,
+      filterName?: FilterExpressionOrLiteral,
       filterFileId?: FilterExpression,
       filterSuppliedId?: string | FilterExpression,
       filterCreatedAt?: FilterExpression,
@@ -19810,11 +19963,11 @@ export interface FilesApiGetFilesRequest {
   readonly sort?: string;
 
   /**
-   * A filter expression for the &#x60;name&#x60; to filter on.
-   * @type {FilterExpression}
+   * Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
+   * @type {FilterExpressionOrLiteral}
    * @memberof FilesApiGetFiles
    */
-  readonly filterName?: FilterExpression;
+  readonly filterName?: FilterExpressionOrLiteral;
 
   /**
    * A filter expression for the &#x60;fileId&#x60; to filter on.
@@ -19831,7 +19984,7 @@ export interface FilesApiGetFilesRequest {
   readonly filterSuppliedId?: string | FilterExpression;
 
   /**
-   * A filter expression for the &#x60;createdAt&#x60; to filter on.
+   * A filter expression for a resource\&#39;s creation time. Use RFC 3339 timestamps, such as &#x60;filter[createdAt][gte]&#x3D;2026-06-24T00:00:00Z&#x60;.
    * @type {FilterExpression}
    * @memberof FilesApiGetFiles
    */
@@ -24231,6 +24384,7 @@ export const PartsApiAxiosParamCreator = function (
      * Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
@@ -24239,6 +24393,7 @@ export const PartsApiAxiosParamCreator = function (
     getParts: async (
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSuppliedId?: string,
       filterOwnerId?: string,
       options: AxiosRequestConfig = {}
@@ -24274,6 +24429,10 @@ export const PartsApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterName !== undefined) {
+        localVarQueryParameter['filter[name]'] = filterName;
       }
 
       if (filterSuppliedId !== undefined) {
@@ -24500,6 +24659,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
      * Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
@@ -24508,6 +24668,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
     async getParts(
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSuppliedId?: string,
       filterOwnerId?: string,
       options?: AxiosRequestConfig
@@ -24517,6 +24678,7 @@ export const PartsApiFp = function (configuration?: Configuration) {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getParts(
         pageCursor,
         pageSize,
+        filterName,
         filterSuppliedId,
         filterOwnerId,
         options
@@ -24630,6 +24792,7 @@ export const PartsApiFactory = function (
      * Get `parts`.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterOwnerId] Owner ID to filter on.
      * @param {*} [options] Override http request option.
@@ -24638,6 +24801,7 @@ export const PartsApiFactory = function (
     getParts(
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSuppliedId?: string,
       filterOwnerId?: string,
       options?: any
@@ -24646,6 +24810,7 @@ export const PartsApiFactory = function (
         .getParts(
           pageCursor,
           pageSize,
+          filterName,
           filterSuppliedId,
           filterOwnerId,
           options
@@ -24750,6 +24915,13 @@ export interface PartsApiGetPartsRequest {
    * @memberof PartsApiGetParts
    */
   readonly pageSize?: number;
+
+  /**
+   * Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
+   * @type {FilterExpressionOrLiteral}
+   * @memberof PartsApiGetParts
+   */
+  readonly filterName?: FilterExpressionOrLiteral;
 
   /**
    * Comma-separated list of supplied IDs to filter on.
@@ -24871,6 +25043,7 @@ export class PartsApi extends BaseAPI {
       .getParts(
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterName,
         requestParameters.filterSuppliedId,
         requestParameters.filterOwnerId,
         options
@@ -26183,20 +26356,20 @@ export const PropertyKeyPoliciesApiAxiosParamCreator = function (
       };
     },
     /**
-     * Delete entries from a `property-key-policy`.
+     * Delete property keys from a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePropertyKeyPolicyEntries: async (
+    deletePropertyKeyPolicyKeys: async (
       id: string,
       filterId?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
-      assertParamExists('deletePropertyKeyPolicyEntries', 'id', id);
-      const localVarPath = `/property-key-policies/{id}/entries`.replace(
+      assertParamExists('deletePropertyKeyPolicyKeys', 'id', id);
+      const localVarPath = `/property-key-policies/{id}/keys`.replace(
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
@@ -26359,22 +26532,25 @@ export const PropertyKeyPoliciesApiAxiosParamCreator = function (
       };
     },
     /**
-     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * Get property keys for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
-     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listPropertyKeyPolicyEntries: async (
+    listPropertyKeyPolicyKeys: async (
+      id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterPropertyKeyPolicyId?: string,
-      filterPropertyKeyPolicySuppliedId?: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      const localVarPath = `/property-key-policy-entries`;
+      // verify required parameter 'id' is not null or undefined
+      assertParamExists('listPropertyKeyPolicyKeys', 'id', id);
+      const localVarPath = `/property-key-policies/{id}/keys`.replace(
+        `{${'id'}}`,
+        encodeURIComponent(String(id))
+      );
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -26407,16 +26583,6 @@ export const PropertyKeyPoliciesApiAxiosParamCreator = function (
         localVarQueryParameter['page[size]'] = pageSize;
       }
 
-      if (filterPropertyKeyPolicyId !== undefined) {
-        localVarQueryParameter['filter[propertyKeyPolicy.id]'] =
-          filterPropertyKeyPolicyId;
-      }
-
-      if (filterPropertyKeyPolicySuppliedId !== undefined) {
-        localVarQueryParameter['filter[propertyKeyPolicy.suppliedId]'] =
-          filterPropertyKeyPolicySuppliedId;
-      }
-
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions?.headers ?? {};
       localVarRequestOptions.headers = {
@@ -26431,26 +26597,26 @@ export const PropertyKeyPoliciesApiAxiosParamCreator = function (
       };
     },
     /**
-     * Upsert entries for a `property-key-policy`.
+     * Upsert property keys for a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
-     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {UpsertPropertyKeyPolicyKeysRequest} upsertPropertyKeyPolicyKeysRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    upsertPropertyKeyPolicyEntries: async (
+    upsertPropertyKeyPolicyKeys: async (
       id: string,
-      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      upsertPropertyKeyPolicyKeysRequest: UpsertPropertyKeyPolicyKeysRequest,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
-      assertParamExists('upsertPropertyKeyPolicyEntries', 'id', id);
-      // verify required parameter 'upsertPropertyKeyPolicyEntriesRequest' is not null or undefined
+      assertParamExists('upsertPropertyKeyPolicyKeys', 'id', id);
+      // verify required parameter 'upsertPropertyKeyPolicyKeysRequest' is not null or undefined
       assertParamExists(
-        'upsertPropertyKeyPolicyEntries',
-        'upsertPropertyKeyPolicyEntriesRequest',
-        upsertPropertyKeyPolicyEntriesRequest
+        'upsertPropertyKeyPolicyKeys',
+        'upsertPropertyKeyPolicyKeysRequest',
+        upsertPropertyKeyPolicyKeysRequest
       );
-      const localVarPath = `/property-key-policies/{id}/entries`.replace(
+      const localVarPath = `/property-key-policies/{id}/keys`.replace(
         `{${'id'}}`,
         encodeURIComponent(String(id))
       );
@@ -26488,7 +26654,7 @@ export const PropertyKeyPoliciesApiAxiosParamCreator = function (
         ...options.headers,
       };
       localVarRequestOptions.data = serializeDataIfNeeded(
-        upsertPropertyKeyPolicyEntriesRequest,
+        upsertPropertyKeyPolicyKeysRequest,
         localVarRequestOptions,
         configuration
       );
@@ -26560,13 +26726,13 @@ export const PropertyKeyPoliciesApiFp = function (
       );
     },
     /**
-     * Delete entries from a `property-key-policy`.
+     * Delete property keys from a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async deletePropertyKeyPolicyEntries(
+    async deletePropertyKeyPolicyKeys(
       id: string,
       filterId?: string,
       options?: AxiosRequestConfig
@@ -26574,7 +26740,7 @@ export const PropertyKeyPoliciesApiFp = function (
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.deletePropertyKeyPolicyEntries(
+        await localVarAxiosParamCreator.deletePropertyKeyPolicyKeys(
           id,
           filterId,
           options
@@ -26644,32 +26810,29 @@ export const PropertyKeyPoliciesApiFp = function (
       );
     },
     /**
-     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * Get property keys for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
-     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async listPropertyKeyPolicyEntries(
+    async listPropertyKeyPolicyKeys(
+      id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterPropertyKeyPolicyId?: string,
-      filterPropertyKeyPolicySuppliedId?: string,
       options?: AxiosRequestConfig
     ): Promise<
       (
         axios?: AxiosInstance,
         basePath?: string
-      ) => AxiosPromise<PropertyKeyPolicyEntryList>
+      ) => AxiosPromise<PropertyKeyList>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.listPropertyKeyPolicyEntries(
+        await localVarAxiosParamCreator.listPropertyKeyPolicyKeys(
+          id,
           pageCursor,
           pageSize,
-          filterPropertyKeyPolicyId,
-          filterPropertyKeyPolicySuppliedId,
           options
         );
       return createRequestFunction(
@@ -26680,23 +26843,23 @@ export const PropertyKeyPoliciesApiFp = function (
       );
     },
     /**
-     * Upsert entries for a `property-key-policy`.
+     * Upsert property keys for a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
-     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {UpsertPropertyKeyPolicyKeysRequest} upsertPropertyKeyPolicyKeysRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async upsertPropertyKeyPolicyEntries(
+    async upsertPropertyKeyPolicyKeys(
       id: string,
-      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      upsertPropertyKeyPolicyKeysRequest: UpsertPropertyKeyPolicyKeysRequest,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.upsertPropertyKeyPolicyEntries(
+        await localVarAxiosParamCreator.upsertPropertyKeyPolicyKeys(
           id,
-          upsertPropertyKeyPolicyEntriesRequest,
+          upsertPropertyKeyPolicyKeysRequest,
           options
         );
       return createRequestFunction(
@@ -26746,19 +26909,19 @@ export const PropertyKeyPoliciesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Delete entries from a `property-key-policy`.
+     * Delete property keys from a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [filterId] Comma-separated list of IDs to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    deletePropertyKeyPolicyEntries(
+    deletePropertyKeyPolicyKeys(
       id: string,
       filterId?: string,
       options?: any
     ): AxiosPromise<void> {
       return localVarFp
-        .deletePropertyKeyPolicyEntries(id, filterId, options)
+        .deletePropertyKeyPolicyKeys(id, filterId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -26799,47 +26962,39 @@ export const PropertyKeyPoliciesApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
+     * Get property keys for a `property-key-policy`.
+     * @param {string} id The &#x60;property-key-policy&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
-     * @param {string} [filterPropertyKeyPolicyId] The &#x60;property-key-policy&#x60; ID to filter on.
-     * @param {string} [filterPropertyKeyPolicySuppliedId] The &#x60;property-key-policy&#x60; supplied ID to filter on.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    listPropertyKeyPolicyEntries(
+    listPropertyKeyPolicyKeys(
+      id: string,
       pageCursor?: string,
       pageSize?: number,
-      filterPropertyKeyPolicyId?: string,
-      filterPropertyKeyPolicySuppliedId?: string,
       options?: any
-    ): AxiosPromise<PropertyKeyPolicyEntryList> {
+    ): AxiosPromise<PropertyKeyList> {
       return localVarFp
-        .listPropertyKeyPolicyEntries(
-          pageCursor,
-          pageSize,
-          filterPropertyKeyPolicyId,
-          filterPropertyKeyPolicySuppliedId,
-          options
-        )
+        .listPropertyKeyPolicyKeys(id, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
-     * Upsert entries for a `property-key-policy`.
+     * Upsert property keys for a `property-key-policy`.
      * @param {string} id The &#x60;property-key-policy&#x60; ID.
-     * @param {UpsertPropertyKeyPolicyEntriesRequest} upsertPropertyKeyPolicyEntriesRequest
+     * @param {UpsertPropertyKeyPolicyKeysRequest} upsertPropertyKeyPolicyKeysRequest
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    upsertPropertyKeyPolicyEntries(
+    upsertPropertyKeyPolicyKeys(
       id: string,
-      upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest,
+      upsertPropertyKeyPolicyKeysRequest: UpsertPropertyKeyPolicyKeysRequest,
       options?: any
     ): AxiosPromise<void> {
       return localVarFp
-        .upsertPropertyKeyPolicyEntries(
+        .upsertPropertyKeyPolicyKeys(
           id,
-          upsertPropertyKeyPolicyEntriesRequest,
+          upsertPropertyKeyPolicyKeysRequest,
           options
         )
         .then((request) => request(axios, basePath));
@@ -26876,22 +27031,22 @@ export interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyRequest {
 }
 
 /**
- * Request parameters for deletePropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * Request parameters for deletePropertyKeyPolicyKeys operation in PropertyKeyPoliciesApi.
  * @export
- * @interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest
+ * @interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeysRequest
  */
-export interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest {
+export interface PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeysRequest {
   /**
    * The &#x60;property-key-policy&#x60; ID.
    * @type {string}
-   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntries
+   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeys
    */
   readonly id: string;
 
   /**
    * Comma-separated list of IDs to filter on.
    * @type {string}
-   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntries
+   * @memberof PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeys
    */
   readonly filterId?: string;
 }
@@ -26939,59 +27094,52 @@ export interface PropertyKeyPoliciesApiListPropertyKeyPoliciesRequest {
 }
 
 /**
- * Request parameters for listPropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * Request parameters for listPropertyKeyPolicyKeys operation in PropertyKeyPoliciesApi.
  * @export
- * @interface PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest
+ * @interface PropertyKeyPoliciesApiListPropertyKeyPolicyKeysRequest
  */
-export interface PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest {
+export interface PropertyKeyPoliciesApiListPropertyKeyPolicyKeysRequest {
+  /**
+   * The &#x60;property-key-policy&#x60; ID.
+   * @type {string}
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyKeys
+   */
+  readonly id: string;
+
   /**
    * The cursor for the next page of items.
    * @type {string}
-   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyKeys
    */
   readonly pageCursor?: string;
 
   /**
    * The number of items to return.
    * @type {number}
-   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
+   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyKeys
    */
   readonly pageSize?: number;
-
-  /**
-   * The &#x60;property-key-policy&#x60; ID to filter on.
-   * @type {string}
-   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
-   */
-  readonly filterPropertyKeyPolicyId?: string;
-
-  /**
-   * The &#x60;property-key-policy&#x60; supplied ID to filter on.
-   * @type {string}
-   * @memberof PropertyKeyPoliciesApiListPropertyKeyPolicyEntries
-   */
-  readonly filterPropertyKeyPolicySuppliedId?: string;
 }
 
 /**
- * Request parameters for upsertPropertyKeyPolicyEntries operation in PropertyKeyPoliciesApi.
+ * Request parameters for upsertPropertyKeyPolicyKeys operation in PropertyKeyPoliciesApi.
  * @export
- * @interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest
+ * @interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeysRequest
  */
-export interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest {
+export interface PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeysRequest {
   /**
    * The &#x60;property-key-policy&#x60; ID.
    * @type {string}
-   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntries
+   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeys
    */
   readonly id: string;
 
   /**
    *
-   * @type {UpsertPropertyKeyPolicyEntriesRequest}
-   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntries
+   * @type {UpsertPropertyKeyPolicyKeysRequest}
+   * @memberof PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeys
    */
-  readonly upsertPropertyKeyPolicyEntriesRequest: UpsertPropertyKeyPolicyEntriesRequest;
+  readonly upsertPropertyKeyPolicyKeysRequest: UpsertPropertyKeyPolicyKeysRequest;
 }
 
 /**
@@ -27037,18 +27185,18 @@ export class PropertyKeyPoliciesApi extends BaseAPI {
   }
 
   /**
-   * Delete entries from a `property-key-policy`.
-   * @param {PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * Delete property keys from a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeysRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PropertyKeyPoliciesApi
    */
-  public deletePropertyKeyPolicyEntries(
-    requestParameters: PropertyKeyPoliciesApiDeletePropertyKeyPolicyEntriesRequest,
+  public deletePropertyKeyPolicyKeys(
+    requestParameters: PropertyKeyPoliciesApiDeletePropertyKeyPolicyKeysRequest,
     options?: AxiosRequestConfig
   ) {
     return PropertyKeyPoliciesApiFp(this.configuration)
-      .deletePropertyKeyPolicyEntries(
+      .deletePropertyKeyPolicyKeys(
         requestParameters.id,
         requestParameters.filterId,
         options
@@ -27094,42 +27242,41 @@ export class PropertyKeyPoliciesApi extends BaseAPI {
   }
 
   /**
-   * Get `property-key-policy-entry` resources for a `property-key-policy`. Accepts `filter[propertyKeyPolicy.id]` and `filter[propertyKeyPolicy.suppliedId]`. When both are provided, `filter[propertyKeyPolicy.id]` takes precedence.
-   * @param {PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * Get property keys for a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiListPropertyKeyPolicyKeysRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PropertyKeyPoliciesApi
    */
-  public listPropertyKeyPolicyEntries(
-    requestParameters: PropertyKeyPoliciesApiListPropertyKeyPolicyEntriesRequest = {},
+  public listPropertyKeyPolicyKeys(
+    requestParameters: PropertyKeyPoliciesApiListPropertyKeyPolicyKeysRequest,
     options?: AxiosRequestConfig
   ) {
     return PropertyKeyPoliciesApiFp(this.configuration)
-      .listPropertyKeyPolicyEntries(
+      .listPropertyKeyPolicyKeys(
+        requestParameters.id,
         requestParameters.pageCursor,
         requestParameters.pageSize,
-        requestParameters.filterPropertyKeyPolicyId,
-        requestParameters.filterPropertyKeyPolicySuppliedId,
         options
       )
       .then((request) => request(this.axios, this.basePath));
   }
 
   /**
-   * Upsert entries for a `property-key-policy`.
-   * @param {PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest} requestParameters Request parameters.
+   * Upsert property keys for a `property-key-policy`.
+   * @param {PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeysRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
    * @memberof PropertyKeyPoliciesApi
    */
-  public upsertPropertyKeyPolicyEntries(
-    requestParameters: PropertyKeyPoliciesApiUpsertPropertyKeyPolicyEntriesRequest,
+  public upsertPropertyKeyPolicyKeys(
+    requestParameters: PropertyKeyPoliciesApiUpsertPropertyKeyPolicyKeysRequest,
     options?: AxiosRequestConfig
   ) {
     return PropertyKeyPoliciesApiFp(this.configuration)
-      .upsertPropertyKeyPolicyEntries(
+      .upsertPropertyKeyPolicyKeys(
         requestParameters.id,
-        requestParameters.upsertPropertyKeyPolicyEntriesRequest,
+        requestParameters.upsertPropertyKeyPolicyKeysRequest,
         options
       )
       .then((request) => request(this.axios, this.basePath));
@@ -28098,11 +28245,15 @@ export const SceneAlterationsApiAxiosParamCreator = function (
     /**
      * Get `scene-alterations` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneAlterations: async (
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -28134,6 +28285,14 @@ export const SceneAlterationsApiAxiosParamCreator = function (
         [],
         configuration
       );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions?.headers ?? {};
@@ -28236,11 +28395,15 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
     /**
      * Get `scene-alterations` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getSceneAlterations(
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options?: AxiosRequestConfig
     ): Promise<
       (
@@ -28249,7 +28412,12 @@ export const SceneAlterationsApiFp = function (configuration?: Configuration) {
       ) => AxiosPromise<SceneAlterationList>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getSceneAlterations(id, options);
+        await localVarAxiosParamCreator.getSceneAlterations(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -28324,15 +28492,19 @@ export const SceneAlterationsApiFactory = function (
     /**
      * Get `scene-alterations` for a `scene-view`.
      * @param {string} id The &#x60;scene-view&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getSceneAlterations(
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options?: any
     ): AxiosPromise<SceneAlterationList> {
       return localVarFp
-        .getSceneAlterations(id, options)
+        .getSceneAlterations(id, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -28401,6 +28573,20 @@ export interface SceneAlterationsApiGetSceneAlterationsRequest {
    * @memberof SceneAlterationsApiGetSceneAlterations
    */
   readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof SceneAlterationsApiGetSceneAlterations
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof SceneAlterationsApiGetSceneAlterations
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -28474,7 +28660,12 @@ export class SceneAlterationsApi extends BaseAPI {
     options?: AxiosRequestConfig
   ) {
     return SceneAlterationsApiFp(this.configuration)
-      .getSceneAlterations(requestParameters.id, options)
+      .getSceneAlterations(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 }
@@ -29959,7 +30150,7 @@ export const SceneItemsApiAxiosParamCreator = function (
 ) {
   return {
     /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
+     * Create a `scene-item` for a `scene`. Provide the source via a `part-revision`, `geometry-set`, `scene`, or `scene-item` UUID using `relationships.source`, or by supplied part-revision IDs using `attributes.source`. Provide an existing `scene` using `relationships.source` to clone it. Provide an existing `scene-item` using `relationships.source` to copy it. The source `scene-item` may belong to a different `scene`. Provide the hierarchical parent either via `scene-item` UUID using `relationships.parent` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -30249,6 +30440,7 @@ export const SceneItemsApiAxiosParamCreator = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
@@ -30262,6 +30454,7 @@ export const SceneItemsApiAxiosParamCreator = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
@@ -30306,6 +30499,10 @@ export const SceneItemsApiAxiosParamCreator = function (
 
       if (pageSize !== undefined) {
         localVarQueryParameter['page[size]'] = pageSize;
+      }
+
+      if (filterName !== undefined) {
+        localVarQueryParameter['filter[name]'] = filterName;
       }
 
       if (filterSource !== undefined) {
@@ -30425,7 +30622,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
     SceneItemsApiAxiosParamCreator(configuration);
   return {
     /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
+     * Create a `scene-item` for a `scene`. Provide the source via a `part-revision`, `geometry-set`, `scene`, or `scene-item` UUID using `relationships.source`, or by supplied part-revision IDs using `attributes.source`. Provide an existing `scene` using `relationships.source` to clone it. Provide an existing `scene-item` using `relationships.source` to copy it. The source `scene-item` may belong to a different `scene`. Provide the hierarchical parent either via `scene-item` UUID using `relationships.parent` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -30546,6 +30743,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
@@ -30559,6 +30757,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
@@ -30573,6 +30772,7 @@ export const SceneItemsApiFp = function (configuration?: Configuration) {
         id,
         pageCursor,
         pageSize,
+        filterName,
         filterSource,
         filterSuppliedId,
         filterParent,
@@ -30629,7 +30829,7 @@ export const SceneItemsApiFactory = function (
   const localVarFp = SceneItemsApiFp(configuration);
   return {
     /**
-     * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
+     * Create a `scene-item` for a `scene`. Provide the source via a `part-revision`, `geometry-set`, `scene`, or `scene-item` UUID using `relationships.source`, or by supplied part-revision IDs using `attributes.source`. Provide an existing `scene` using `relationships.source` to clone it. Provide an existing `scene-item` using `relationships.source` to copy it. The source `scene-item` may belong to a different `scene`. Provide the hierarchical parent either via `scene-item` UUID using `relationships.parent` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {CreateSceneItemRequest} createSceneItemRequest
      * @param {*} [options] Override http request option.
@@ -30701,6 +30901,7 @@ export const SceneItemsApiFactory = function (
      * @param {string} id The &#x60;scene&#x60; ID.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
+     * @param {FilterExpressionOrLiteral} [filterName] Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
      * @param {string} [filterSource] Source ID to filter on.
      * @param {string} [filterSuppliedId] Comma-separated list of supplied IDs to filter on.
      * @param {string} [filterParent] Parent ID to filter on. Sending null will return items without a parent.
@@ -30714,6 +30915,7 @@ export const SceneItemsApiFactory = function (
       id: string,
       pageCursor?: string,
       pageSize?: number,
+      filterName?: FilterExpressionOrLiteral,
       filterSource?: string,
       filterSuppliedId?: string,
       filterParent?: string,
@@ -30727,6 +30929,7 @@ export const SceneItemsApiFactory = function (
           id,
           pageCursor,
           pageSize,
+          filterName,
           filterSource,
           filterSuppliedId,
           filterParent,
@@ -30868,6 +31071,13 @@ export interface SceneItemsApiGetSceneItemsRequest {
   readonly pageSize?: number;
 
   /**
+   * Filters by name. &#x60;filter[name]&#x3D;value&#x60; and &#x60;filter[name][eq]&#x3D;value&#x60; perform exact matches, while &#x60;filter[name][contains]&#x3D;value&#x60; performs a partial substring match.
+   * @type {FilterExpressionOrLiteral}
+   * @memberof SceneItemsApiGetSceneItems
+   */
+  readonly filterName?: FilterExpressionOrLiteral;
+
+  /**
    * Source ID to filter on.
    * @type {string}
    * @memberof SceneItemsApiGetSceneItems
@@ -30939,7 +31149,7 @@ export interface SceneItemsApiUpdateSceneItemRequest {
  */
 export class SceneItemsApi extends BaseAPI {
   /**
-   * Create a `scene-item` for a `scene`. Provide the source geometry either via `part-revision` or `geometry-set` UUID using `relationship.source` or by supplied IDs using `attributes.source`. Provide an existing `scene` using `relationship.source` to clone it. Provide the hierarchical parent either via `scene-item` UUID using `relationship.source` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
+   * Create a `scene-item` for a `scene`. Provide the source via a `part-revision`, `geometry-set`, `scene`, or `scene-item` UUID using `relationships.source`, or by supplied part-revision IDs using `attributes.source`. Provide an existing `scene` using `relationships.source` to clone it. Provide an existing `scene-item` using `relationships.source` to copy it. The source `scene-item` may belong to a different `scene`. Provide the hierarchical parent either via `scene-item` UUID using `relationships.parent` or by supplied ID using `attributes.parent`. To reduce the time taken creating many hierarchical `scene-items`, make a best effort to create parents before children. One way to do this is by sorting the items by depth and starting at the root. This API is asynchronous, returning the location of a `queued-scene-item`. Check the status via the getQueuedSceneItem API. For details, see our [Render static scenes](https://developer.vertex3d.com/docs/guides/render-static-scenes) guide.
    * @param {SceneItemsApiCreateSceneItemRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -31042,6 +31252,7 @@ export class SceneItemsApi extends BaseAPI {
         requestParameters.id,
         requestParameters.pageCursor,
         requestParameters.pageSize,
+        requestParameters.filterName,
         requestParameters.filterSource,
         requestParameters.filterSuppliedId,
         requestParameters.filterParent,
@@ -31151,7 +31362,7 @@ export const SceneSynchronizationsApiAxiosParamCreator = function (
       };
     },
     /**
-     * Get a `queued-scene-sync-job`.
+     * Get a `queued-scene-sync-job`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-sync`.
      * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -31367,7 +31578,7 @@ export const SceneSynchronizationsApiFp = function (
       );
     },
     /**
-     * Get a `queued-scene-sync-job`.
+     * Get a `queued-scene-sync-job`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-sync`.
      * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -31477,7 +31688,7 @@ export const SceneSynchronizationsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * Get a `queued-scene-sync-job`.
+     * Get a `queued-scene-sync-job`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-sync`.
      * @param {string} id The &#x60;queued-scene-sync&#x60; ID.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
@@ -31639,7 +31850,7 @@ export class SceneSynchronizationsApi extends BaseAPI {
   }
 
   /**
-   * Get a `queued-scene-sync-job`.
+   * Get a `queued-scene-sync-job`. The response is either the status if `running` or `error` or, upon completion, redirects to the created `scene-sync`.
    * @param {SceneSynchronizationsApiGetQueuedSceneSyncRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @throws {RequiredError}
@@ -35715,11 +35926,15 @@ export const ThreadsApiAxiosParamCreator = function (
     /**
      * Get a `thread`s `user`s.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     getThreadParticipants: async (
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'id' is not null or undefined
@@ -35751,6 +35966,14 @@ export const ThreadsApiAxiosParamCreator = function (
         [],
         configuration
       );
+
+      if (pageCursor !== undefined) {
+        localVarQueryParameter['page[cursor]'] = pageCursor;
+      }
+
+      if (pageSize !== undefined) {
+        localVarQueryParameter['page[size]'] = pageSize;
+      }
 
       setSearchParams(localVarUrlObj, localVarQueryParameter);
       let headersFromBaseOptions = baseOptions?.headers ?? {};
@@ -36017,17 +36240,26 @@ export const ThreadsApiFp = function (configuration?: Configuration) {
     /**
      * Get a `thread`s `user`s.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
     async getThreadParticipants(
       id: string,
+      pageCursor?: string,
+      pageSize?: number,
       options?: AxiosRequestConfig
     ): Promise<
       (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserList>
     > {
       const localVarAxiosArgs =
-        await localVarAxiosParamCreator.getThreadParticipants(id, options);
+        await localVarAxiosParamCreator.getThreadParticipants(
+          id,
+          pageCursor,
+          pageSize,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -36164,12 +36396,19 @@ export const ThreadsApiFactory = function (
     /**
      * Get a `thread`s `user`s.
      * @param {string} id The &#x60;thread&#x60; ID.
+     * @param {string} [pageCursor] The cursor for the next page of items.
+     * @param {number} [pageSize] The number of items to return.
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getThreadParticipants(id: string, options?: any): AxiosPromise<UserList> {
+    getThreadParticipants(
+      id: string,
+      pageCursor?: string,
+      pageSize?: number,
+      options?: any
+    ): AxiosPromise<UserList> {
       return localVarFp
-        .getThreadParticipants(id, options)
+        .getThreadParticipants(id, pageCursor, pageSize, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -36301,6 +36540,20 @@ export interface ThreadsApiGetThreadParticipantsRequest {
    * @memberof ThreadsApiGetThreadParticipants
    */
   readonly id: string;
+
+  /**
+   * The cursor for the next page of items.
+   * @type {string}
+   * @memberof ThreadsApiGetThreadParticipants
+   */
+  readonly pageCursor?: string;
+
+  /**
+   * The number of items to return.
+   * @type {number}
+   * @memberof ThreadsApiGetThreadParticipants
+   */
+  readonly pageSize?: number;
 }
 
 /**
@@ -36456,7 +36709,12 @@ export class ThreadsApi extends BaseAPI {
     options?: AxiosRequestConfig
   ) {
     return ThreadsApiFp(this.configuration)
-      .getThreadParticipants(requestParameters.id, options)
+      .getThreadParticipants(
+        requestParameters.id,
+        requestParameters.pageCursor,
+        requestParameters.pageSize,
+        options
+      )
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -36812,7 +37070,7 @@ export const TranslationInspectionsApiAxiosParamCreator = function (
       };
     },
     /**
-     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * This has been deprecated and replaced by **queued-translation-jobs**. This endpoint always redirects (301) to `queued-translation-jobs`, preserving the pagination and filter query parameters.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
@@ -37084,7 +37342,7 @@ export const TranslationInspectionsApiFp = function (
       );
     },
     /**
-     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * This has been deprecated and replaced by **queued-translation-jobs**. This endpoint always redirects (301) to `queued-translation-jobs`, preserving the pagination and filter query parameters.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
@@ -37098,7 +37356,7 @@ export const TranslationInspectionsApiFp = function (
       filterStatus?: string,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<QueuedJobList>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
     > {
       const localVarAxiosArgs =
         await localVarAxiosParamCreator.getQueuedTranslations(
@@ -37242,7 +37500,7 @@ export const TranslationInspectionsApiFactory = function (
         .then((request) => request(axios, basePath));
     },
     /**
-     * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+     * This has been deprecated and replaced by **queued-translation-jobs**. This endpoint always redirects (301) to `queued-translation-jobs`, preserving the pagination and filter query parameters.
      * @param {string} [pageCursor] The cursor for the next page of items.
      * @param {number} [pageSize] The number of items to return.
      * @param {string} [filterStatus] Status to filter on.
@@ -37255,7 +37513,7 @@ export const TranslationInspectionsApiFactory = function (
       pageSize?: number,
       filterStatus?: string,
       options?: any
-    ): AxiosPromise<QueuedJobList> {
+    ): AxiosPromise<void> {
       return localVarFp
         .getQueuedTranslations(pageCursor, pageSize, filterStatus, options)
         .then((request) => request(axios, basePath));
@@ -37516,7 +37774,7 @@ export class TranslationInspectionsApi extends BaseAPI {
   }
 
   /**
-   * This has been deprecated and replaced by **queued-translation-jobs** - Get `queued-translation`s.
+   * This has been deprecated and replaced by **queued-translation-jobs**. This endpoint always redirects (301) to `queued-translation-jobs`, preserving the pagination and filter query parameters.
    * @param {TranslationInspectionsApiGetQueuedTranslationsRequest} requestParameters Request parameters.
    * @param {*} [options] Override http request option.
    * @deprecated
@@ -37811,7 +38069,7 @@ export const UserGroupsApiFp = function (configuration?: Configuration) {
       id: string,
       options?: AxiosRequestConfig
     ): Promise<
-      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserGroup>
     > {
       const localVarAxiosArgs = await localVarAxiosParamCreator.getUserGroup(
         id,
@@ -37874,7 +38132,7 @@ export const UserGroupsApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    getUserGroup(id: string, options?: any): AxiosPromise<void> {
+    getUserGroup(id: string, options?: any): AxiosPromise<UserGroup> {
       return localVarFp
         .getUserGroup(id, options)
         .then((request) => request(axios, basePath));
