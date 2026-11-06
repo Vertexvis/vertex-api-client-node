@@ -5158,10 +5158,23 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description:
-            Filters by name. `filter[name]=value` and `filter[name][eq]=value`
-            perform exact matches, while `filter[name][contains]=value` performs a partial
-            substring match.
+        - description: |
+            Filters parts by name. `filter[name]=value` and `filter[name][eq]=value`
+            match the whole name exactly and are case-sensitive. For example,
+            `filter[name]=Dornier-standard` and `filter[name][eq]=Dornier-standard`
+            match only the name `Dornier-standard`.
+
+            `filter[name][contains]=value` matches part of the name, ignoring case.
+            The term is a pattern: `_` matches any single character, `%` matches any
+            sequence of characters, and `\` makes the next character literal,
+            including `_`, `%`, or `\` itself. URL-encode special characters in query
+            values, including `%` as `%25` and `\` as `%5C`.
+            For example, `filter[name][contains]=DORNIER` and
+            `filter[name][contains]=ier_sta` both match `Dornier-standard`.
+
+            A `contains` term must have at least 3 characters and include at least
+            3 consecutive letters or digits. Invalid terms return HTTP 400; for
+            example, `filter[name][contains]=ab` is too short.
           explode: true
           in: query
           name: filter[name]
@@ -5169,7 +5182,24 @@ paths:
           schema:
             $ref: '#/components/schemas/FilterExpressionOrLiteral'
           style: form
-        - description: Comma-separated list of supplied IDs to filter on.
+        - description: |
+            Filters parts by supplied ID. The plain `filter[suppliedId]` form is a
+            comma-separated list of exact, case-sensitive supplied IDs; for example,
+            `filter[suppliedId]=some-id-1,some-id-2` matches either supplied ID.
+            Use `filter[suppliedId][eq]` for a supplied ID that contains `,` or `%`.
+            When that list is provided, it takes precedence over filter expressions
+            for supplied ID. Otherwise, use `filter[suppliedId][eq]=some-id-1` for
+            an exact, case-sensitive match on the whole supplied ID, or
+            `filter[suppliedId][contains]=SOME-ID` to match part of a supplied ID,
+            ignoring case (for example, `some-id-1`).
+
+            `contains` uses the same pattern rules as the part name filter: `_`
+            matches any single character, `%` matches any sequence of characters,
+            and `\` makes the next character literal, including `_`, `%`, or `\`
+            itself. URL-encode special characters in query values, including `%`
+            as `%25` and `\` as `%5C`. The term must have at least 3 characters and
+            include at least 3 consecutive letters or digits; otherwise the API
+            returns HTTP 400.
           explode: true
           in: query
           name: filter[suppliedId]
@@ -5197,6 +5227,15 @@ paths:
               schema:
                 $ref: '#/components/schemas/PartList'
           description: OK
+        '400':
+          content:
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description:
+            Invalid request parameters, including a `contains` filter term
+            shorter than 3 characters or without at least 3 consecutive letters or
+            digits. The error `detail` describes the problem.
         '401':
           content:
             application/vnd.api+json:
@@ -5221,6 +5260,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/Failure'
           description: Unsupported Media Type
+        '504':
+          content:
+            application/vnd.api+json:
+              example:
+                errors:
+                  - status: '504'
+                    code: GatewayTimeout
+                    title: Request timed out.
+              schema:
+                $ref: '#/components/schemas/Failure'
+          description: GatewayTimeout
       security:
         - OAuth2: []
       tags:
@@ -8241,10 +8291,21 @@ paths:
             minimum: 1
             type: integer
           style: form
-        - description:
-            A filter for the `name`. The canonical form is a filter expression
-            such as `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1,name-2`
-            exact-match CSV form is also accepted for backwards compatibility.
+        - description: |
+            A filter for the `name`. The canonical form is a filter expression such as
+            `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1`
+            exact-match form is also accepted for a single value for backwards
+            compatibility. It is not a CSV list: a comma-separated value such as
+            `filter[name]=name-1,name-2` is treated as one literal name containing a
+            comma, not as two names, and will not match either `name-1` or `name-2`.
+
+            To match against multiple values, repeat the filter under the `or` operator.
+            For example, `filter[name][or]=foo&filter[name][or]=bar` matches scenes whose
+            name is exactly `foo` or `bar`. The same pattern works with `contains`:
+            `filter[name][or][contains]=foo&filter[name][or][contains]=bar` matches scenes
+            whose name contains `foo` or contains `bar`. Repeating a filter without `or`
+            combines the values with `and` instead, which is unlikely to be satisfiable
+            for a single scalar attribute like `name`.
           explode: true
           in: query
           name: filter[name]
@@ -8252,11 +8313,22 @@ paths:
           schema:
             $ref: '#/components/schemas/FilterExpression'
           style: form
-        - description:
-            A filter for the `suppliedId`. The canonical form is a filter
-            expression such as `filter[suppliedId][contains]=...`. The deprecated legacy
-            `filter[suppliedId]=id-1,id-2` exact-match CSV form is also accepted for
-            backwards compatibility.
+        - description: |
+            A filter for the `suppliedId`. The canonical form is a filter expression such
+            as `filter[suppliedId][contains]=...`. The deprecated legacy
+            `filter[suppliedId]=id-1` exact-match form is also accepted for a single value
+            for backwards compatibility. It is not a CSV list: a comma-separated value
+            such as `filter[suppliedId]=id-1,id-2` is treated as one literal supplied ID
+            containing a comma, not as two supplied IDs, and will not match either `id-1`
+            or `id-2`.
+
+            To match multiple supplied IDs, repeat the filter under the `or` operator.
+            For example, `filter[suppliedId][or]=id-1&filter[suppliedId][or]=id-2` matches
+            scenes whose supplied ID is exactly `id-1` or `id-2`. The same pattern works
+            with `contains`: `filter[suppliedId][or][contains]=id-1&filter[suppliedId][or][contains]=id-2`
+            matches scenes whose supplied ID contains `id-1` or contains `id-2`. Repeating
+            a filter without `or` combines the values with `and` instead, which is unlikely
+            to be satisfiable for a single scalar attribute like `suppliedId`.
           explode: true
           in: query
           name: filter[suppliedId]
@@ -8272,7 +8344,7 @@ paths:
           name: fields[scene]
           required: false
           schema:
-            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,metadata
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,worldOrientation,expiresAt,metadata
             type: string
           style: form
         - description: |
@@ -8495,7 +8567,7 @@ paths:
           name: fields[scene]
           required: false
           schema:
-            example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
+            example: camera,state,created,suppliedId,name,treeEnabled,modified,worldOrientation,sceneItemCount,expiresAt,metadata
             type: string
           style: form
       responses:
@@ -12221,7 +12293,7 @@ components:
       name: fields[scene]
       required: false
       schema:
-        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,sceneItemCount,metadata
+        example: camera,state,created,suppliedId,name,treeEnabled,modified,worldOrientation,sceneItemCount,expiresAt,metadata
         type: string
       style: form
     ListScenesFields:
@@ -12233,7 +12305,7 @@ components:
       name: fields[scene]
       required: false
       schema:
-        example: camera,state,created,suppliedId,name,treeEnabled,modified,up,metadata
+        example: camera,state,created,suppliedId,name,treeEnabled,modified,worldOrientation,expiresAt,metadata
         type: string
       style: form
     MetadataFilter:
@@ -12464,11 +12536,75 @@ components:
       schema:
         $ref: '#/components/schemas/FilterExpressionOrLiteral'
       style: form
+    PartNameFilterExpression:
+      description: |
+        Filters parts by name. `filter[name]=value` and `filter[name][eq]=value`
+        match the whole name exactly and are case-sensitive. For example,
+        `filter[name]=Dornier-standard` and `filter[name][eq]=Dornier-standard`
+        match only the name `Dornier-standard`.
+
+        `filter[name][contains]=value` matches part of the name, ignoring case.
+        The term is a pattern: `_` matches any single character, `%` matches any
+        sequence of characters, and `\` makes the next character literal,
+        including `_`, `%`, or `\` itself. URL-encode special characters in query
+        values, including `%` as `%25` and `\` as `%5C`.
+        For example, `filter[name][contains]=DORNIER` and
+        `filter[name][contains]=ier_sta` both match `Dornier-standard`.
+
+        A `contains` term must have at least 3 characters and include at least
+        3 consecutive letters or digits. Invalid terms return HTTP 400; for
+        example, `filter[name][contains]=ab` is too short.
+      explode: true
+      in: query
+      name: filter[name]
+      required: false
+      schema:
+        $ref: '#/components/schemas/FilterExpressionOrLiteral'
+      style: form
+    PartSuppliedIdFilterExpression:
+      description: |
+        Filters parts by supplied ID. The plain `filter[suppliedId]` form is a
+        comma-separated list of exact, case-sensitive supplied IDs; for example,
+        `filter[suppliedId]=some-id-1,some-id-2` matches either supplied ID.
+        Use `filter[suppliedId][eq]` for a supplied ID that contains `,` or `%`.
+        When that list is provided, it takes precedence over filter expressions
+        for supplied ID. Otherwise, use `filter[suppliedId][eq]=some-id-1` for
+        an exact, case-sensitive match on the whole supplied ID, or
+        `filter[suppliedId][contains]=SOME-ID` to match part of a supplied ID,
+        ignoring case (for example, `some-id-1`).
+
+        `contains` uses the same pattern rules as the part name filter: `_`
+        matches any single character, `%` matches any sequence of characters,
+        and `\` makes the next character literal, including `_`, `%`, or `\`
+        itself. URL-encode special characters in query values, including `%`
+        as `%25` and `\` as `%5C`. The term must have at least 3 characters and
+        include at least 3 consecutive letters or digits; otherwise the API
+        returns HTTP 400.
+      explode: true
+      in: query
+      name: filter[suppliedId]
+      required: false
+      schema:
+        example: some-id-1,some-id-2
+        maxLength: 1024
+        type: string
+      style: form
     SceneNameFilterExpression:
-      description:
-        A filter for the `name`. The canonical form is a filter expression
-        such as `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1,name-2`
-        exact-match CSV form is also accepted for backwards compatibility.
+      description: |
+        A filter for the `name`. The canonical form is a filter expression such as
+        `filter[name][contains]=...`. The deprecated legacy `filter[name]=name-1`
+        exact-match form is also accepted for a single value for backwards
+        compatibility. It is not a CSV list: a comma-separated value such as
+        `filter[name]=name-1,name-2` is treated as one literal name containing a
+        comma, not as two names, and will not match either `name-1` or `name-2`.
+
+        To match against multiple values, repeat the filter under the `or` operator.
+        For example, `filter[name][or]=foo&filter[name][or]=bar` matches scenes whose
+        name is exactly `foo` or `bar`. The same pattern works with `contains`:
+        `filter[name][or][contains]=foo&filter[name][or][contains]=bar` matches scenes
+        whose name contains `foo` or contains `bar`. Repeating a filter without `or`
+        combines the values with `and` instead, which is unlikely to be satisfiable
+        for a single scalar attribute like `name`.
       explode: true
       in: query
       name: filter[name]
@@ -12508,10 +12644,22 @@ components:
         $ref: '#/components/schemas/FilterExpression'
       style: form
     SceneSuppliedIdFilterExpression:
-      description:
-        A filter for the `suppliedId`. The canonical form is a filter expression
-        such as `filter[suppliedId][contains]=...`. The deprecated legacy `filter[suppliedId]=id-1,id-2`
-        exact-match CSV form is also accepted for backwards compatibility.
+      description: |
+        A filter for the `suppliedId`. The canonical form is a filter expression such
+        as `filter[suppliedId][contains]=...`. The deprecated legacy
+        `filter[suppliedId]=id-1` exact-match form is also accepted for a single value
+        for backwards compatibility. It is not a CSV list: a comma-separated value
+        such as `filter[suppliedId]=id-1,id-2` is treated as one literal supplied ID
+        containing a comma, not as two supplied IDs, and will not match either `id-1`
+        or `id-2`.
+
+        To match multiple supplied IDs, repeat the filter under the `or` operator.
+        For example, `filter[suppliedId][or]=id-1&filter[suppliedId][or]=id-2` matches
+        scenes whose supplied ID is exactly `id-1` or `id-2`. The same pattern works
+        with `contains`: `filter[suppliedId][or][contains]=id-1&filter[suppliedId][or][contains]=id-2`
+        matches scenes whose supplied ID contains `id-1` or contains `id-2`. Repeating
+        a filter without `or` combines the values with `and` instead, which is unlikely
+        to be satisfiable for a single scalar attribute like `suppliedId`.
       explode: true
       in: query
       name: filter[suppliedId]
@@ -13124,7 +13272,11 @@ components:
       description: |
         Describes how an attribute should be filtered. Logical operators accept
         literals or nested filter expressions. Repeated `and` and `or` parameters
-        combine their values with the respective logical operator.
+        combine their values with the respective logical operator. For example,
+        `filter[name][or]=foo&filter[name][or]=bar` matches either value, and
+        `filter[name][or][contains]=foo&filter[name][or][contains]=bar` matches
+        either value as a partial, substring match. Repeating a filter without an
+        explicit operator defaults to `and`.
       properties:
         eq:
           description: A value of a filter.
@@ -16189,12 +16341,16 @@ components:
       type: object
     Orientation:
       additionalProperties: false
-      description: Normals describing up & front directions
+      description:
+        Vectors describing the up & front directions and the handedness
+        of the orientation. By default, isLeftHanded = false.
       properties:
         up:
           $ref: '#/components/schemas/Vector3'
         front:
           $ref: '#/components/schemas/Vector3'
+        isLeftHanded:
+          type: boolean
       required:
         - front
         - up
